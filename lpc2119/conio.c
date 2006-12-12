@@ -4,31 +4,58 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.1 2006-12-12 21:57:48 cvs Exp $
+// $Id: conio.c,v 1.2 2006-12-12 23:17:21 cvs Exp $
 
+#include <lpc2119.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "conio.h"
 
+unsigned int CPUFREQ = 19660800*3;
+
 /* Initialize serial console */
 
 void conio_init(unsigned long int baudrate)
 {
+  unsigned short int b;
+
+  PINSEL0 = 0x05;			// Enable UART 0 I/O pins
+
+  b = CPUFREQ/16/baudrate - 1;
+
+  U0IER = 0x00;				// Disable UART interrupts
+  U0LCR = 0x80;
+  U0DLM = b / 256;
+  U0DLL = b % 256;
+  U0LCR = 0x03;				// Always 8 bits no parity 1 stop
+  U0FCR = 0x01;				// Enable FIFO's
 }
 
 /* Send 1 character */
 
 void putch(unsigned char c)
 {
+  if (c == '\n') putch('\r');
+
+  while ((U0LSR & 0x20) == 0);
+  U0THR = c;
 }
 
 /* Receive 1 character */
 
-int getch(void)
+unsigned char getch(void)
 {
+  while ((U0LSR & 0x01) == 0);
+  return U0RBR;
+}
 
-  return 0;
+/* Send a string */
+
+void cputs(char *s)
+{
+  while (*s)
+    putch(*s++);
 }
 
 /* Override fgets() with a version that does line editing */
