@@ -4,13 +4,13 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.2 2006-12-12 23:17:21 cvs Exp $
+// $Id: conio.c,v 1.3 2006-12-14 00:40:48 cvs Exp $
 
-#include <lpc2119.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "conio.h"
+#include "io.h"
 
 unsigned int CPUFREQ = 19660800*3;
 
