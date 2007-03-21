@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.1 2007-02-07 22:46:10 cvs Exp $
+// $Id: test_timer1.c,v 1.2 2007-03-21 23:34:51 cvs Exp $
 
 #include <lpc2119/conio.h>
 #include <lpc2119/interrupt.h>
@@ -18,7 +18,7 @@ __attribute__ ((__interrupt__)) void Timer1ISR(void)
 {
   Timer1Flag = TRUE;
   T1IR = 0x01;
-  VICVectAddrRead = 0;
+  VICVectAddr = 0;
 }
 
 int main(void)
@@ -47,8 +47,8 @@ int main(void)
   DISABLE_INTERRUPTS(IRQ);
 
   VICIntSelect &= ~(1 << INT_TIMER1);	// TIMER1 uses IRQ
-  VICVectCntl[0] = 0x20 + INT_TIMER1;	// TIMER1 uses vector 0
-  VICVectAddr[0] = Timer1ISR;		// Save ISR address
+  VICVectCntl0 = 0x20 + INT_TIMER1;	// TIMER1 uses vector 0
+  VICVectAddr0 = (unsigned long) Timer1ISR; // Save ISR address
   VICIntEnable = 1 << INT_TIMER1;	// Enable TIMER1 interrupt
 
   ENABLE_INTERRUPTS(IRQ);

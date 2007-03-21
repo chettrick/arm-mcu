@@ -1,6 +1,6 @@
 /* Simple analog to digital converter test program */
 
-// $Id: test_adc.c,v 1.1 2007-02-07 22:46:09 cvs Exp $
+// $Id: test_adc.c,v 1.2 2007-03-21 23:34:51 cvs Exp $
 
 #include <lpc2119/conio.h>
 #include <lpc2119/io.h>
@@ -15,11 +15,11 @@
 
 unsigned int SampleADC(int channel)
 {
-  A2DCR = ADCSTART + (1 << channel);	// Start conversion
+  ADCR = ADCSTART + (1 << channel);	// Start conversion
 
-  while (!(A2DDR & ADCDONE));		// Wait until done
+  while (!(ADDR & ADCDONE));		// Wait until done
 
-  return A2DDR & 0xFFFF;
+  return ADDR & 0xFFFF;
 }
 
 int main(void)

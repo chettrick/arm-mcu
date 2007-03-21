@@ -1,378 +1,369 @@
-// Register definitions for LPC2119
+/***********************************************************************/
+/*  This file is part of the uVision/ARM development tools             */
+/*  Copyright KEIL ELEKTRONIK GmbH 2002-2005                           */
+/***********************************************************************/
+/*                                                                     */
+/*  LPC21XX.H:  Header file for Philips LPC2114 / LPC2119              */
+/*                                      LPC2124 / LPC2129              */
+/*                                      LPC2194                        */
+/*                                                                     */
+/***********************************************************************/
 
-// $Id: io.h,v 1.1 2006-12-14 00:40:48 cvs Exp $
+#ifndef __LPC21xx_H
+#define __LPC21xx_H
 
-#ifndef LPC2119_IO__H
-#define LPC2119_IO__H
+/* Vectored Interrupt Controller (VIC) */
+#define VICIRQStatus   (*((volatile unsigned long *) 0xFFFFF000))
+#define VICFIQStatus   (*((volatile unsigned long *) 0xFFFFF004))
+#define VICRawIntr     (*((volatile unsigned long *) 0xFFFFF008))
+#define VICIntSelect   (*((volatile unsigned long *) 0xFFFFF00C))
+#define VICIntEnable   (*((volatile unsigned long *) 0xFFFFF010))
+#define VICIntEnClr    (*((volatile unsigned long *) 0xFFFFF014))
+#define VICSoftInt     (*((volatile unsigned long *) 0xFFFFF018))
+#define VICSoftIntClr  (*((volatile unsigned long *) 0xFFFFF01C))
+#define VICProtection  (*((volatile unsigned long *) 0xFFFFF020))
+#define VICVectAddr    (*((volatile unsigned long *) 0xFFFFF030))
+#define VICDefVectAddr (*((volatile unsigned long *) 0xFFFFF034))
+#define VICVectAddr0   (*((volatile unsigned long *) 0xFFFFF100))
+#define VICVectAddr1   (*((volatile unsigned long *) 0xFFFFF104))
+#define VICVectAddr2   (*((volatile unsigned long *) 0xFFFFF108))
+#define VICVectAddr3   (*((volatile unsigned long *) 0xFFFFF10C))
+#define VICVectAddr4   (*((volatile unsigned long *) 0xFFFFF110))
+#define VICVectAddr5   (*((volatile unsigned long *) 0xFFFFF114))
+#define VICVectAddr6   (*((volatile unsigned long *) 0xFFFFF118))
+#define VICVectAddr7   (*((volatile unsigned long *) 0xFFFFF11C))
+#define VICVectAddr8   (*((volatile unsigned long *) 0xFFFFF120))
+#define VICVectAddr9   (*((volatile unsigned long *) 0xFFFFF124))
+#define VICVectAddr10  (*((volatile unsigned long *) 0xFFFFF128))
+#define VICVectAddr11  (*((volatile unsigned long *) 0xFFFFF12C))
+#define VICVectAddr12  (*((volatile unsigned long *) 0xFFFFF130))
+#define VICVectAddr13  (*((volatile unsigned long *) 0xFFFFF134))
+#define VICVectAddr14  (*((volatile unsigned long *) 0xFFFFF138))
+#define VICVectAddr15  (*((volatile unsigned long *) 0xFFFFF13C))
+#define VICVectCntl0   (*((volatile unsigned long *) 0xFFFFF200))
+#define VICVectCntl1   (*((volatile unsigned long *) 0xFFFFF204))
+#define VICVectCntl2   (*((volatile unsigned long *) 0xFFFFF208))
+#define VICVectCntl3   (*((volatile unsigned long *) 0xFFFFF20C))
+#define VICVectCntl4   (*((volatile unsigned long *) 0xFFFFF210))
+#define VICVectCntl5   (*((volatile unsigned long *) 0xFFFFF214))
+#define VICVectCntl6   (*((volatile unsigned long *) 0xFFFFF218))
+#define VICVectCntl7   (*((volatile unsigned long *) 0xFFFFF21C))
+#define VICVectCntl8   (*((volatile unsigned long *) 0xFFFFF220))
+#define VICVectCntl9   (*((volatile unsigned long *) 0xFFFFF224))
+#define VICVectCntl10  (*((volatile unsigned long *) 0xFFFFF228))
+#define VICVectCntl11  (*((volatile unsigned long *) 0xFFFFF22C))
+#define VICVectCntl12  (*((volatile unsigned long *) 0xFFFFF230))
+#define VICVectCntl13  (*((volatile unsigned long *) 0xFFFFF234))
+#define VICVectCntl14  (*((volatile unsigned long *) 0xFFFFF238))
+#define VICVectCntl15  (*((volatile unsigned long *) 0xFFFFF23C))
 
-// WD
+/* Pin Connect Block */
+#define PINSEL0        (*((volatile unsigned long *) 0xE002C000))
+#define PINSEL1        (*((volatile unsigned long *) 0xE002C004))
+#define PINSEL2        (*((volatile unsigned long *) 0xE002C014))
 
-extern volatile unsigned char WDMOD;
-extern volatile unsigned int WDTC;
-extern volatile unsigned char WDFEED;
-extern volatile const unsigned int WDTV;
+/* General Purpose Input/Output (GPIO) */
+#define IOPIN0         (*((volatile unsigned long *) 0xE0028000))
+#define IOSET0         (*((volatile unsigned long *) 0xE0028004))
+#define IODIR0         (*((volatile unsigned long *) 0xE0028008))
+#define IOCLR0         (*((volatile unsigned long *) 0xE002800C))
+#define IOPIN1         (*((volatile unsigned long *) 0xE0028010))
+#define IOSET1         (*((volatile unsigned long *) 0xE0028014))
+#define IODIR1         (*((volatile unsigned long *) 0xE0028018))
+#define IOCLR1         (*((volatile unsigned long *) 0xE002801C))
+#define IO0PIN         (*((volatile unsigned long *) 0xE0028000))
+#define IO0SET         (*((volatile unsigned long *) 0xE0028004))
+#define IO0DIR         (*((volatile unsigned long *) 0xE0028008))
+#define IO0CLR         (*((volatile unsigned long *) 0xE002800C))
+#define IO1PIN         (*((volatile unsigned long *) 0xE0028010))
+#define IO1SET         (*((volatile unsigned long *) 0xE0028014))
+#define IO1DIR         (*((volatile unsigned long *) 0xE0028018))
+#define IO1CLR         (*((volatile unsigned long *) 0xE002801C))
 
-// TIMER0
+/* Memory Accelerator Module (MAM) */
+#define MAMCR          (*((volatile unsigned char *) 0xE01FC000))
+#define MAMTIM         (*((volatile unsigned char *) 0xE01FC004))
+#define MEMMAP         (*((volatile unsigned char *) 0xE01FC040))
 
-extern volatile unsigned char T0IR;
-extern volatile unsigned char T0TCR;
-extern volatile unsigned int T0TC;
-extern volatile unsigned int T0PR;
-extern volatile unsigned int T0PC;
-extern volatile unsigned short T0MCR;
-extern volatile unsigned int T0MR0;
-extern volatile unsigned int T0MR1;
-extern volatile unsigned int T0MR2;
-extern volatile unsigned int T0MR3;
-extern volatile unsigned short T0CCR;
-extern volatile const unsigned int T0CR0;
-extern volatile const unsigned int T0CR1;
-extern volatile const unsigned int T0CR2;
-extern volatile unsigned short T0EMR;
+/* Phase Locked Loop (PLL) */
+#define PLLCON         (*((volatile unsigned char *) 0xE01FC080))
+#define PLLCFG         (*((volatile unsigned char *) 0xE01FC084))
+#define PLLSTAT        (*((volatile unsigned short*) 0xE01FC088))
+#define PLLFEED        (*((volatile unsigned char *) 0xE01FC08C))
 
-// TIMER1
+/* VPB Divider */
+#define VPBDIV         (*((volatile unsigned char *) 0xE01FC100))
 
-extern volatile unsigned char T1IR;
-extern volatile unsigned char T1TCR;
-extern volatile unsigned int T1TC;
-extern volatile unsigned int T1PR;
-extern volatile unsigned int T1PC;
-extern volatile unsigned short T1MCR;
-extern volatile unsigned int T1MR0;
-extern volatile unsigned int T1MR1;
-extern volatile unsigned int T1MR2;
-extern volatile unsigned int T1MR3;
-extern volatile unsigned short T1CCR;
-extern volatile const unsigned int T1CR0;
-extern volatile const unsigned int T1CR1;
-extern volatile const unsigned int T1CR2;
-extern volatile const unsigned int T1CR3;
-extern volatile unsigned short T1EMR;
+/* Power Control */
+#define PCON           (*((volatile unsigned char *) 0xE01FC0C0))
+#define PCONP          (*((volatile unsigned long *) 0xE01FC0C4))
 
-// UART0
+/* External Interrupts */
+#define EXTINT         (*((volatile unsigned char *) 0xE01FC140))
+#define EXTWAKE        (*((volatile unsigned char *) 0xE01FC144))
+#define EXTMODE        (*((volatile unsigned char *) 0xE01FC148))
+#define EXTPOLAR       (*((volatile unsigned char *) 0xE01FC14C))
 
-extern volatile const unsigned char U0RBR;
-extern volatile unsigned char U0THR;
-extern volatile unsigned char U0DLL;
-extern volatile unsigned char U0IER;
-extern volatile unsigned char U0DLM;
-extern volatile const unsigned char U0IIR;
-extern volatile unsigned char U0FCR;
-extern volatile unsigned char U0LCR;
-extern volatile const unsigned char U0LSR;
-extern volatile unsigned char U0SCR;
+/* Timer 0 */
+#define T0IR           (*((volatile unsigned long *) 0xE0004000))
+#define T0TCR          (*((volatile unsigned long *) 0xE0004004))
+#define T0TC           (*((volatile unsigned long *) 0xE0004008))
+#define T0PR           (*((volatile unsigned long *) 0xE000400C))
+#define T0PC           (*((volatile unsigned long *) 0xE0004010))
+#define T0MCR          (*((volatile unsigned long *) 0xE0004014))
+#define T0MR0          (*((volatile unsigned long *) 0xE0004018))
+#define T0MR1          (*((volatile unsigned long *) 0xE000401C))
+#define T0MR2          (*((volatile unsigned long *) 0xE0004020))
+#define T0MR3          (*((volatile unsigned long *) 0xE0004024))
+#define T0CCR          (*((volatile unsigned long *) 0xE0004028))
+#define T0CR0          (*((volatile unsigned long *) 0xE000402C))
+#define T0CR1          (*((volatile unsigned long *) 0xE0004030))
+#define T0CR2          (*((volatile unsigned long *) 0xE0004034))
+#define T0CR3          (*((volatile unsigned long *) 0xE0004038))
+#define T0EMR          (*((volatile unsigned long *) 0xE000403C))
 
-// UART1
+/* Timer 1 */
+#define T1IR           (*((volatile unsigned long *) 0xE0008000))
+#define T1TCR          (*((volatile unsigned long *) 0xE0008004))
+#define T1TC           (*((volatile unsigned long *) 0xE0008008))
+#define T1PR           (*((volatile unsigned long *) 0xE000800C))
+#define T1PC           (*((volatile unsigned long *) 0xE0008010))
+#define T1MCR          (*((volatile unsigned long *) 0xE0008014))
+#define T1MR0          (*((volatile unsigned long *) 0xE0008018))
+#define T1MR1          (*((volatile unsigned long *) 0xE000801C))
+#define T1MR2          (*((volatile unsigned long *) 0xE0008020))
+#define T1MR3          (*((volatile unsigned long *) 0xE0008024))
+#define T1CCR          (*((volatile unsigned long *) 0xE0008028))
+#define T1CR0          (*((volatile unsigned long *) 0xE000802C))
+#define T1CR1          (*((volatile unsigned long *) 0xE0008030))
+#define T1CR2          (*((volatile unsigned long *) 0xE0008034))
+#define T1CR3          (*((volatile unsigned long *) 0xE0008038))
+#define T1EMR          (*((volatile unsigned long *) 0xE000803C))
 
-extern volatile const unsigned char U1RBR;
-extern volatile unsigned char U1THR;
-extern volatile unsigned char U1DLL;
-extern volatile unsigned char U1IER;
-extern volatile unsigned char U1DLM;
-extern volatile const unsigned char U1IIR;
-extern volatile unsigned char U1FCR;
-extern volatile unsigned char U1LCR;
-extern volatile unsigned char U1MCR;
-extern volatile const unsigned char U1LSR;
-extern volatile const unsigned char U1MSR;
-extern volatile unsigned char U1SCR;
+/* Pulse Width Modulator (PWM) */
+#define PWMIR          (*((volatile unsigned long *) 0xE0014000))
+#define PWMTCR         (*((volatile unsigned long *) 0xE0014004))
+#define PWMTC          (*((volatile unsigned long *) 0xE0014008))
+#define PWMPR          (*((volatile unsigned long *) 0xE001400C))
+#define PWMPC          (*((volatile unsigned long *) 0xE0014010))
+#define PWMMCR         (*((volatile unsigned long *) 0xE0014014))
+#define PWMMR0         (*((volatile unsigned long *) 0xE0014018))
+#define PWMMR1         (*((volatile unsigned long *) 0xE001401C))
+#define PWMMR2         (*((volatile unsigned long *) 0xE0014020))
+#define PWMMR3         (*((volatile unsigned long *) 0xE0014024))
+#define PWMMR4         (*((volatile unsigned long *) 0xE0014040))
+#define PWMMR5         (*((volatile unsigned long *) 0xE0014044))
+#define PWMMR6         (*((volatile unsigned long *) 0xE0014048))
+#define PWMPCR         (*((volatile unsigned long *) 0xE001404C))
+#define PWMLER         (*((volatile unsigned long *) 0xE0014050))
 
-// PWM
+/* Universal Asynchronous Receiver Transmitter 0 (UART0) */
+#define U0RBR          (*((volatile unsigned char *) 0xE000C000))
+#define U0THR          (*((volatile unsigned char *) 0xE000C000))
+#define U0IER          (*((volatile unsigned char *) 0xE000C004))
+#define U0IIR          (*((volatile unsigned char *) 0xE000C008))
+#define U0FCR          (*((volatile unsigned char *) 0xE000C008))
+#define U0LCR          (*((volatile unsigned char *) 0xE000C00C))
+#define U0LSR          (*((volatile unsigned char *) 0xE000C014))
+#define U0SCR          (*((volatile unsigned char *) 0xE000C01C))
+#define U0DLL          (*((volatile unsigned char *) 0xE000C000))
+#define U0DLM          (*((volatile unsigned char *) 0xE000C004))
 
-extern volatile unsigned short PWMIR;
-extern volatile unsigned char PWMTCR;
-extern volatile unsigned int PWMTC;
-extern volatile unsigned int PWMPR;
-extern volatile unsigned int PWMPC;
-extern volatile unsigned int PWMMCR;
-extern volatile unsigned int PWMMR0;
-extern volatile unsigned int PWMMR1;
-extern volatile unsigned int PWMMR2;
-extern volatile unsigned int PWMMR3;
-extern volatile unsigned int PWMMR4;
-extern volatile unsigned int PWMMR5;
-extern volatile unsigned int PWMMR6;
-extern volatile unsigned short PWMPCR;
-extern volatile unsigned char PWMLER;
+/* Universal Asynchronous Receiver Transmitter 1 (UART1) */
+#define U1RBR          (*((volatile unsigned char *) 0xE0010000))
+#define U1THR          (*((volatile unsigned char *) 0xE0010000))
+#define U1IER          (*((volatile unsigned char *) 0xE0010004))
+#define U1IIR          (*((volatile unsigned char *) 0xE0010008))
+#define U1FCR          (*((volatile unsigned char *) 0xE0010008))
+#define U1LCR          (*((volatile unsigned char *) 0xE001000C))
+#define U1MCR          (*((volatile unsigned char *) 0xE0010010))
+#define U1LSR          (*((volatile unsigned char *) 0xE0010014))
+#define U1MSR          (*((volatile unsigned char *) 0xE0010018))
+#define U1SCR          (*((volatile unsigned char *) 0xE001001C))
+#define U1DLL          (*((volatile unsigned char *) 0xE0010000))
+#define U1DLM          (*((volatile unsigned char *) 0xE0010004))
 
-// IIC
+/* I2C Interface */
+#define I2CONSET       (*((volatile unsigned char *) 0xE001C000))
+#define I2STAT         (*((volatile unsigned char *) 0xE001C004))
+#define I2DAT          (*((volatile unsigned char *) 0xE001C008))
+#define I2ADR          (*((volatile unsigned char *) 0xE001C00C))
+#define I2SCLH         (*((volatile unsigned short*) 0xE001C010))
+#define I2SCLL         (*((volatile unsigned short*) 0xE001C014))
+#define I2CONCLR       (*((volatile unsigned char *) 0xE001C018))
 
-extern volatile unsigned char I2CONSET;
-extern volatile const unsigned char I2STAT;
-extern volatile unsigned char I2DAT;
-extern volatile unsigned char I2ADR;
-extern volatile unsigned short I2SCLH;
-extern volatile unsigned short I2SCLL;
-extern volatile unsigned char I2CONCLR;
+/* SPI0 (Serial Peripheral Interface 0) */
+#define S0SPCR         (*((volatile unsigned char *) 0xE0020000))
+#define S0SPSR         (*((volatile unsigned char *) 0xE0020004))
+#define S0SPDR         (*((volatile unsigned char *) 0xE0020008))
+#define S0SPCCR        (*((volatile unsigned char *) 0xE002000C))
+#define S0SPINT        (*((volatile unsigned char *) 0xE002001C))
 
-// SPI/SPI0
+/* SPI1 (Serial Peripheral Interface 1) */
+#define S1SPCR         (*((volatile unsigned char *) 0xE0030000))
+#define S1SPSR         (*((volatile unsigned char *) 0xE0030004))
+#define S1SPDR         (*((volatile unsigned char *) 0xE0030008))
+#define S1SPCCR        (*((volatile unsigned char *) 0xE003000C))
+#define S1SPINT        (*((volatile unsigned char *) 0xE003001C))
 
-extern volatile unsigned char S0PCR;
-extern volatile const unsigned char S0PSR;
-extern volatile unsigned char S0PPR;
-extern volatile unsigned char S0PCCR;
-extern volatile unsigned char S0PINT;
+/* Real Time Clock */
+#define ILR            (*((volatile unsigned char *) 0xE0024000))
+#define CTC            (*((volatile unsigned short*) 0xE0024004))
+#define CCR            (*((volatile unsigned char *) 0xE0024008))
+#define CIIR           (*((volatile unsigned char *) 0xE002400C))
+#define AMR            (*((volatile unsigned char *) 0xE0024010))
+#define CTIME0         (*((volatile unsigned long *) 0xE0024014))
+#define CTIME1         (*((volatile unsigned long *) 0xE0024018))
+#define CTIME2         (*((volatile unsigned long *) 0xE002401C))
+#define SEC            (*((volatile unsigned char *) 0xE0024020))
+#define MIN            (*((volatile unsigned char *) 0xE0024024))
+#define HOUR           (*((volatile unsigned char *) 0xE0024028))
+#define DOM            (*((volatile unsigned char *) 0xE002402C))
+#define DOW            (*((volatile unsigned char *) 0xE0024030))
+#define DOY            (*((volatile unsigned short*) 0xE0024034))
+#define MONTH          (*((volatile unsigned char *) 0xE0024038))
+#define YEAR           (*((volatile unsigned short*) 0xE002403C))
+#define ALSEC          (*((volatile unsigned char *) 0xE0024060))
+#define ALMIN          (*((volatile unsigned char *) 0xE0024064))
+#define ALHOUR         (*((volatile unsigned char *) 0xE0024068))
+#define ALDOM          (*((volatile unsigned char *) 0xE002406C))
+#define ALDOW          (*((volatile unsigned char *) 0xE0024070))
+#define ALDOY          (*((volatile unsigned short*) 0xE0024074))
+#define ALMON          (*((volatile unsigned char *) 0xE0024078))
+#define ALYEAR         (*((volatile unsigned short*) 0xE002407C))
+#define PREINT         (*((volatile unsigned short*) 0xE0024080))
+#define PREFRAC        (*((volatile unsigned short*) 0xE0024084))
 
-// Synonyms for compatibility with the 210x series
+/* A/D Converter */
+#define ADCR           (*((volatile unsigned long *) 0xE0034000))
+#define ADDR           (*((volatile unsigned long *) 0xE0034004))
 
-extern volatile unsigned char SPCR;
-extern volatile const unsigned char SPSR;
-extern volatile unsigned char SPPR;
-extern volatile unsigned char SPCCR;
-extern volatile unsigned char SPINT;
+/* CAN Acceptance Filter RAM */
+#define AFRAM          (*((volatile unsigned long *) 0xE0038000))
 
-// RTC
+/* CAN Acceptance Filter */
+#define AFMR           (*((volatile unsigned long *) 0xE003C000))
+#define SFF_sa         (*((volatile unsigned long *) 0xE003C004))
+#define SFF_GRP_sa     (*((volatile unsigned long *) 0xE003C008))
+#define EFF_sa         (*((volatile unsigned long *) 0xE003C00C))
+#define EFF_GRP_sa     (*((volatile unsigned long *) 0xE003C010))
+#define ENDofTable     (*((volatile unsigned long *) 0xE003C014))
+#define LUTerrAd       (*((volatile unsigned long *) 0xE003C018))
+#define LUTerr         (*((volatile unsigned long *) 0xE003C01C))
 
-extern volatile unsigned char ILR;
-extern volatile const unsigned char CTC;
-extern volatile unsigned char CCR;
-extern volatile unsigned char CIIR;
-extern volatile unsigned char AMR;
-extern volatile unsigned int CTIME0;
-extern volatile unsigned int CTIME1;
-extern volatile unsigned int CTIME2;
-extern volatile unsigned char SEC;
-extern volatile unsigned char MINUTE;	// MIN conflicts with linker
-extern volatile unsigned char HOUR;
-extern volatile unsigned char DOM;
-extern volatile unsigned char DOW;
-extern volatile unsigned short DOY;
-extern volatile unsigned MONTH;
-extern volatile unsigned short YEAR;
-extern volatile unsigned char ALSEC;
-extern volatile unsigned char ALMIN;
-extern volatile unsigned char ALHOUR;
-extern volatile unsigned char ALDOM;
-extern volatile unsigned char ALDOW;
-extern volatile unsigned short ALDOY;
-extern volatile unsigned char ALMON;
-extern volatile unsigned short ALYEAR;
-extern volatile unsigned short PREINT;
-extern volatile unsigned short PREFRAC;
+/* CAN Central Registers */
+#define CANTxSR        (*((volatile unsigned long *) 0xE0040000))
+#define CANRxSR        (*((volatile unsigned long *) 0xE0040004))
+#define CANMSR         (*((volatile unsigned long *) 0xE0040008))
 
-// GPIO PORT0
+/* CAN Controller 1 (CAN1) */
+#define C1MOD          (*((volatile unsigned long *) 0xE0044000))
+#define C1CMR          (*((volatile unsigned long *) 0xE0044004))
+#define C1GSR          (*((volatile unsigned long *) 0xE0044008))
+#define C1ICR          (*((volatile unsigned long *) 0xE004400C))
+#define C1IER          (*((volatile unsigned long *) 0xE0044010))
+#define C1BTR          (*((volatile unsigned long *) 0xE0044014))
+#define C1EWL          (*((volatile unsigned long *) 0xE0044018))
+#define C1SR           (*((volatile unsigned long *) 0xE004401C))
+#define C1RFS          (*((volatile unsigned long *) 0xE0044020))
+#define C1RID          (*((volatile unsigned long *) 0xE0044024))
+#define C1RDA          (*((volatile unsigned long *) 0xE0044028))
+#define C1RDB          (*((volatile unsigned long *) 0xE004402C))
+#define C1TFI1         (*((volatile unsigned long *) 0xE0044030))
+#define C1TID1         (*((volatile unsigned long *) 0xE0044034))
+#define C1TDA1         (*((volatile unsigned long *) 0xE0044038))
+#define C1TDB1         (*((volatile unsigned long *) 0xE004403C))
+#define C1TFI2         (*((volatile unsigned long *) 0xE0044040))
+#define C1TID2         (*((volatile unsigned long *) 0xE0044044))
+#define C1TDA2         (*((volatile unsigned long *) 0xE0044048))
+#define C1TDB2         (*((volatile unsigned long *) 0xE004404C))
+#define C1TFI3         (*((volatile unsigned long *) 0xE0044050))
+#define C1TID3         (*((volatile unsigned long *) 0xE0044054))
+#define C1TDA3         (*((volatile unsigned long *) 0xE0044058))
+#define C1TDB3         (*((volatile unsigned long *) 0xE004405C))
 
-extern volatile unsigned int IO0PIN;
-extern volatile unsigned int IO0DIR;
-extern volatile unsigned int IO0CLR;
-extern volatile unsigned int IO0SET;
+/* CAN Controller 2 (CAN2) */
+#define C2MOD          (*((volatile unsigned long *) 0xE0048000))
+#define C2CMR          (*((volatile unsigned long *) 0xE0048004))
+#define C2GSR          (*((volatile unsigned long *) 0xE0048008))
+#define C2ICR          (*((volatile unsigned long *) 0xE004800C))
+#define C2IER          (*((volatile unsigned long *) 0xE0048010))
+#define C2BTR          (*((volatile unsigned long *) 0xE0048014))
+#define C2EWL          (*((volatile unsigned long *) 0xE0048018))
+#define C2SR           (*((volatile unsigned long *) 0xE004801C))
+#define C2RFS          (*((volatile unsigned long *) 0xE0048020))
+#define C2RID          (*((volatile unsigned long *) 0xE0048024))
+#define C2RDA          (*((volatile unsigned long *) 0xE0048028))
+#define C2RDB          (*((volatile unsigned long *) 0xE004802C))
+#define C2TFI1         (*((volatile unsigned long *) 0xE0048030))
+#define C2TID1         (*((volatile unsigned long *) 0xE0048034))
+#define C2TDA1         (*((volatile unsigned long *) 0xE0048038))
+#define C2TDB1         (*((volatile unsigned long *) 0xE004803C))
+#define C2TFI2         (*((volatile unsigned long *) 0xE0048040))
+#define C2TID2         (*((volatile unsigned long *) 0xE0048044))
+#define C2TDA2         (*((volatile unsigned long *) 0xE0048048))
+#define C2TDB2         (*((volatile unsigned long *) 0xE004804C))
+#define C2TFI3         (*((volatile unsigned long *) 0xE0048050))
+#define C2TID3         (*((volatile unsigned long *) 0xE0048054))
+#define C2TDA3         (*((volatile unsigned long *) 0xE0048058))
+#define C2TDB3         (*((volatile unsigned long *) 0xE004805C))
 
-// Synonyms for compatibility with the 210x series
+/* CAN Controller 3 (CAN3) */
+#define C3MOD          (*((volatile unsigned long *) 0xE004C000))
+#define C3CMR          (*((volatile unsigned long *) 0xE004C004))
+#define C3GSR          (*((volatile unsigned long *) 0xE004C008))
+#define C3ICR          (*((volatile unsigned long *) 0xE004C00C))
+#define C3IER          (*((volatile unsigned long *) 0xE004C010))
+#define C3BTR          (*((volatile unsigned long *) 0xE004C014))
+#define C3EWL          (*((volatile unsigned long *) 0xE004C018))
+#define C3SR           (*((volatile unsigned long *) 0xE004C01C))
+#define C3RFS          (*((volatile unsigned long *) 0xE004C020))
+#define C3RID          (*((volatile unsigned long *) 0xE004C024))
+#define C3RDA          (*((volatile unsigned long *) 0xE004C028))
+#define C3RDB          (*((volatile unsigned long *) 0xE004C02C))
+#define C3TFI1         (*((volatile unsigned long *) 0xE004C030))
+#define C3TID1         (*((volatile unsigned long *) 0xE004C034))
+#define C3TDA1         (*((volatile unsigned long *) 0xE004C038))
+#define C3TDB1         (*((volatile unsigned long *) 0xE004C03C))
+#define C3TFI2         (*((volatile unsigned long *) 0xE004C040))
+#define C3TID2         (*((volatile unsigned long *) 0xE004C044))
+#define C3TDA2         (*((volatile unsigned long *) 0xE004C048))
+#define C3TDB2         (*((volatile unsigned long *) 0xE004C04C))
+#define C3TFI3         (*((volatile unsigned long *) 0xE004C050))
+#define C3TID3         (*((volatile unsigned long *) 0xE004C054))
+#define C3TDA3         (*((volatile unsigned long *) 0xE004C058))
+#define C3TDB3         (*((volatile unsigned long *) 0xE004C05C))
 
-extern volatile unsigned int IOPIN;
-extern volatile unsigned int IODIR;
-extern volatile unsigned int IOCLR;
-extern volatile unsigned int IOSET;
+/* CAN Controller 4 (CAN4) */
+#define C4MOD          (*((volatile unsigned long *) 0xE0050000))
+#define C4CMR          (*((volatile unsigned long *) 0xE0050004))
+#define C4GSR          (*((volatile unsigned long *) 0xE0050008))
+#define C4ICR          (*((volatile unsigned long *) 0xE005000C))
+#define C4IER          (*((volatile unsigned long *) 0xE0050010))
+#define C4BTR          (*((volatile unsigned long *) 0xE0050014))
+#define C4EWL          (*((volatile unsigned long *) 0xE0050018))
+#define C4SR           (*((volatile unsigned long *) 0xE005001C))
+#define C4RFS          (*((volatile unsigned long *) 0xE0050020))
+#define C4RID          (*((volatile unsigned long *) 0xE0050024))
+#define C4RDA          (*((volatile unsigned long *) 0xE0050028))
+#define C4RDB          (*((volatile unsigned long *) 0xE005002C))
+#define C4TFI1         (*((volatile unsigned long *) 0xE0050030))
+#define C4TID1         (*((volatile unsigned long *) 0xE0050034))
+#define C4TDA1         (*((volatile unsigned long *) 0xE0050038))
+#define C4TDB1         (*((volatile unsigned long *) 0xE005003C))
+#define C4TFI2         (*((volatile unsigned long *) 0xE0050040))
+#define C4TID2         (*((volatile unsigned long *) 0xE0050044))
+#define C4TDA2         (*((volatile unsigned long *) 0xE0050048))
+#define C4TDB2         (*((volatile unsigned long *) 0xE005004C))
+#define C4TFI3         (*((volatile unsigned long *) 0xE0050050))
+#define C4TID3         (*((volatile unsigned long *) 0xE0050054))
+#define C4TDA3         (*((volatile unsigned long *) 0xE0050058))
+#define C4TDB3         (*((volatile unsigned long *) 0xE005005C))
 
-// GPIO PORT1
+/* Watchdog */
+#define WDMOD          (*((volatile unsigned char *) 0xE0000000))
+#define WDTC           (*((volatile unsigned long *) 0xE0000004))
+#define WDFEED         (*((volatile unsigned char *) 0xE0000008))
+#define WDTV           (*((volatile unsigned long *) 0xE000000C))
 
-extern volatile unsigned int IO1PIN;
-extern volatile unsigned int IO1DIR;
-extern volatile unsigned int IO1CLR;
-extern volatile unsigned int IO1SET;
-
-// GPIO PORT2
-
-extern volatile unsigned int IO2PIN;
-extern volatile unsigned int IO2DIR;
-extern volatile unsigned int IO2CLR;
-extern volatile unsigned int IO2SET;
-
-// GPIO PORT3
-
-extern volatile unsigned int IO3PIN;
-extern volatile unsigned int IO3DIR;
-extern volatile unsigned int IO3CLR;
-extern volatile unsigned int IO3SET;
-
-// PIN CONNECT BLOCK
-
-extern volatile unsigned int PINSEL0;
-extern volatile unsigned int PINSEL1;
-extern volatile unsigned int PINSEL2;
-
-// SPI1
-
-extern volatile unsigned char S1PCR;
-extern volatile const unsigned char S1PSR;
-extern volatile unsigned char S1PPR;
-extern volatile unsigned char S1PCCR;
-extern volatile unsigned char S1PINT;
-
-// ADC
-// Renamed from AD... to prevent ld conflict
-
-extern volatile unsigned int A2DCR;
-extern volatile unsigned int A2DDR;
-
-// CAN
-
-extern volatile unsigned int CAN_RECV[0x200];
-extern volatile unsigned int AFMR;
-extern volatile unsigned int SFF_sa;
-extern volatile unsigned int SFF_GRP_sa;
-extern volatile unsigned int EFF_sa;
-extern volatile unsigned int EFF_GRP_sa;
-extern volatile unsigned int ENDofTable;
-extern const volatile unsigned int LUTerrAd;
-extern const volatile unsigned int LUTerr;
-extern const volatile unsigned int CANTxSR;
-extern const volatile unsigned int CANRxSR;
-extern const volatile unsigned int CANMSR;
-
-// CAN1 Interface
-
-extern volatile unsigned int C1MOD;
-extern volatile unsigned int C1CMR;
-extern const volatile unsigned int C1GSR;
-extern const volatile unsigned int C1ICR;
-extern volatile unsigned int C1IER;
-extern volatile unsigned int C1BTR;
-extern volatile unsigned int C1EWL;
-extern const volatile unsigned int C1SR;
-extern volatile unsigned int C1RFS;
-extern volatile unsigned int C1RID;
-extern volatile unsigned int C1RDA;
-extern volatile unsigned int C1RDB;
-extern volatile unsigned int C1TFI1;
-extern volatile unsigned int C1TID1;
-extern volatile unsigned int C1TDA1;
-extern volatile unsigned int C1TDB1;
-extern volatile unsigned int C1TFI2;
-extern volatile unsigned int C1TID2;
-extern volatile unsigned int C1TDA2;
-extern volatile unsigned int C1TDB2;
-extern volatile unsigned int C1TFI3;
-extern volatile unsigned int C1TID3;
-extern volatile unsigned int C1TDA3;
-extern volatile unsigned int C1TDB3;
-
-// CAN2 Interface
-
-extern volatile unsigned int C2MOD;
-extern volatile unsigned int C2CMR;
-extern const volatile unsigned int C2GSR;
-extern const volatile unsigned int C2ICR;
-extern volatile unsigned int C2IER;
-extern volatile unsigned int C2BTR;
-extern volatile unsigned int C2EWL;
-extern const volatile unsigned int C2SR;
-extern volatile unsigned int C2RFS;
-extern volatile unsigned int C2RID;
-extern volatile unsigned int C2RDA;
-extern volatile unsigned int C2RDB;
-extern volatile unsigned int C2TFI1;
-extern volatile unsigned int C2TID1;
-extern volatile unsigned int C2TDA1;
-extern volatile unsigned int C2TDB1;
-extern volatile unsigned int C2TFI2;
-extern volatile unsigned int C2TID2;
-extern volatile unsigned int C2TDA2;
-extern volatile unsigned int C2TDB2;
-extern volatile unsigned int C2TFI3;
-extern volatile unsigned int C2TID3;
-extern volatile unsigned int C2TDA3;
-extern volatile unsigned int C2TDB3;
-
-// CAN3 Interface
-
-extern volatile unsigned int C3MOD;
-extern volatile unsigned int C3CMR;
-extern const volatile unsigned int C3GSR;
-extern const volatile unsigned int C3ICR;
-extern volatile unsigned int C3IER;
-extern volatile unsigned int C3BTR;
-extern volatile unsigned int C3EWL;
-extern const volatile unsigned int C3SR;
-extern volatile unsigned int C3RFS;
-extern volatile unsigned int C3RID;
-extern volatile unsigned int C3RDA;
-extern volatile unsigned int C3RDB;
-extern volatile unsigned int C3TFI1;
-extern volatile unsigned int C3TID1;
-extern volatile unsigned int C3TDA1;
-extern volatile unsigned int C3TDB1;
-extern volatile unsigned int C3TFI2;
-extern volatile unsigned int C3TID2;
-extern volatile unsigned int C3TDA2;
-extern volatile unsigned int C3TDB2;
-extern volatile unsigned int C3TFI3;
-extern volatile unsigned int C3TID3;
-extern volatile unsigned int C3TDA3;
-extern volatile unsigned int C3TDB3;
-
-// CAN4 Interface
-
-extern volatile unsigned int C4MOD;
-extern volatile unsigned int C4CMR;
-extern const volatile unsigned int C4GSR;
-extern const volatile unsigned int C4ICR;
-extern volatile unsigned int C4IER;
-extern volatile unsigned int C4BTR;
-extern volatile unsigned int C4EWL;
-extern const volatile unsigned int C4SR;
-extern volatile unsigned int C4RFS;
-extern volatile unsigned int C4RID;
-extern volatile unsigned int C4RDA;
-extern volatile unsigned int C4RDB;
-extern volatile unsigned int C4TFI1;
-extern volatile unsigned int C4TID1;
-extern volatile unsigned int C4TDA1;
-extern volatile unsigned int C4TDB1;
-extern volatile unsigned int C4TFI2;
-extern volatile unsigned int C4TID2;
-extern volatile unsigned int C4TDA2;
-extern volatile unsigned int C4TDB2;
-extern volatile unsigned int C4TFI3;
-extern volatile unsigned int C4TID3;
-extern volatile unsigned int C4TDA3;
-extern volatile unsigned int C4TDB3;
-
-// SYSTEM CONTROL BLOCK
-
-// MAM
-
-extern volatile unsigned char MAMCR;
-extern volatile unsigned char MAMTIM;
-extern volatile unsigned char MEMAP;
-
-// PLL
-
-extern volatile unsigned char PLLCON;
-extern volatile unsigned char PLLCFG;
-extern volatile const unsigned short PLLSTAT;
-extern volatile unsigned char PLLFEED;
-
-// POWER CONTROL
-
-extern volatile unsigned char PCON;
-extern volatile unsigned short PCONP;
-
-// VPB
-
-extern volatile unsigned char VPBDIV;
-
-// EXTERNAL INTERUPT/WAKE
-
-extern volatile unsigned char EXTINT;
-extern volatile unsigned char EXTWAKE;
-extern volatile unsigned char EXTMODE;
-extern volatile unsigned char EXTPOLAR;
-
-// Vector Interrupt Controller (VIC)
-
-extern volatile const unsigned int VICIRQStatus;
-extern volatile const unsigned int VICFIQStatus;
-extern volatile const unsigned int VICRawIntr;
-extern volatile unsigned int VICIntSelect;
-extern volatile unsigned int VICIntEnable;
-extern volatile unsigned int VICIntEnClr;
-extern volatile unsigned int VICSoftInt;
-extern volatile unsigned int VICSoftIntClear;
-extern volatile unsigned int VICProtection;
-extern void (* volatile VICVectAddrRead)( void);
-extern void (* volatile VICDefVectAddr)( void);
-extern void (* volatile VICVectAddr[16])(void);
-extern volatile unsigned int VICVectCntl[16];
-
-#endif // LPC2119_IO__H
+#endif  // __LPC21xx_H
