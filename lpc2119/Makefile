@@ -1,17 +1,14 @@
 # Make processor dependent startup and libraries for LPC2119
 
-# $Id: Makefile,v 1.3 2007-02-07 23:22:45 cvs Exp $
+# $Id: Makefile,v 1.4 2007-03-22 20:58:55 cvs Exp $
 
 ARMSRC	= ..
 MCU	= lpc2119
 
-lpc2119: crt0.o libmunts.a
-
 # Build support library
 
-libmunts.a: conio.o syscalls.o
-	$(AR) crs libmunts.a conio.o
-	$(AR) crs libmunts.a syscalls.o
+lib$(MCU).a: crt0.o conio.o syscalls.o
+	$(AR) crs lib$(MCU).a conio.o
+	$(AR) crs lib$(MCU).a syscalls.o
 
 include $(ARMSRC)/ARM.mk
-include flash.mk
