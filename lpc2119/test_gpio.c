@@ -1,14 +1,12 @@
 /* Simple bit twiddler test program */
 
-// $Id: test_gpio.c,v 1.1 2007-02-07 22:46:10 cvs Exp $
+// $Id: test_gpio.c,v 1.2 2007-03-22 16:38:20 cvs Exp $
 
 #include <lpc2119/io.h>
 
 int main(void)
 {
-  unsigned char a;
-  unsigned int i;
-  unsigned volatile char dummy;
+  unsigned long int i;
 
   MAMCR = 2;			// MAM functions fully enabled
 
@@ -30,11 +28,9 @@ int main(void)
   IO0DIR = 0xFFFFFFFF;	// Every pin is an output
   IO1DIR = 0xFFFFFFFF;
 
-  for (a = 0;; a++)
+  for (i = 0;; i++)
   {
-    for (i = 0; i < 10000; i++) dummy++;
-
-    IO0PIN = (a << 24) + (a << 16) + (a << 8) + a;
-    IO1PIN = (a << 24) + (a << 16) + (a << 8) + a;
+    IO0PIN = i;
+    IO1PIN = i;
   }
 }
