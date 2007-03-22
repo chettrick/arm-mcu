@@ -1,6 +1,6 @@
 /* Linker script for LPC2119 microcontroller */
 
-/* $Id: linker.ld,v 1.2 2007-03-21 23:34:51 cvs Exp $ */
+/* $Id: linker.ld,v 1.3 2007-03-22 20:57:58 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0, LENGTH = 120K
@@ -73,7 +73,7 @@ SECTIONS {
 
 /*  Libraries to link against.					*/
 
-INPUT( -lc -lgcc -lmunts )
+INPUT( -lc -lgcc -llpc2119 )
 
 /*  Provide a default vector for any unhandled interrupts.	*/
 
