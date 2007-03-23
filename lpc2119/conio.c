@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.3 2006-12-14 00:40:48 cvs Exp $
+// $Id: conio.c,v 1.4 2007-03-23 21:15:48 cvs Exp $
 
 #include <stdio.h>
 #include <string.h>
@@ -22,7 +22,7 @@ void conio_init(unsigned long int baudrate)
 
   PINSEL0 = 0x05;			// Enable UART 0 I/O pins
 
-  b = CPUFREQ/16/baudrate - 1;
+  b = CPUFREQ/16/baudrate;
 
   U0IER = 0x00;				// Disable UART interrupts
   U0LCR = 0x80;
