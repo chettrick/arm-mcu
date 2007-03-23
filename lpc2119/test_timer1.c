@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.2 2007-03-21 23:34:51 cvs Exp $
+// $Id: test_timer1.c,v 1.3 2007-03-23 22:22:14 cvs Exp $
 
 #include <lpc2119/conio.h>
 #include <lpc2119/interrupt.h>
@@ -41,7 +41,7 @@ int main(void)
   puts("\033[H\033[2JLPC2119 Watchdog and Timer 1 Interrupt Test\n");
 
   T1PR = 0;			// Timer 1 increments every pclk
-  T1MR0 = 58982400;		// Match every second
+  T1MR0 = CPUFREQ;		// Match every second
   T1MCR = 0x003;		// Interrupt and reset at match
 
   DISABLE_INTERRUPTS(IRQ);
@@ -55,7 +55,7 @@ int main(void)
 
   T1TCR = 1;			// Start Timer 1
 
-  WDTC = 73728000;		// 5 second watchdog timeout
+  WDTC = CPUFREQ/4*5;		// 5 second watchdog timeout
 
   WDMOD = 0x03;			// Watchdog timer issues reset
 
