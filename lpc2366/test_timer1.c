@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.1 2007-03-26 18:33:25 cvs Exp $
+// $Id: test_timer1.c,v 1.2 2007-03-26 20:18:54 cvs Exp $
 
 #include <lpc2366/conio.h>
 #include <lpc2366/interrupt.h>
@@ -64,6 +64,7 @@ int main(void)
   DISABLE_INTERRUPTS(IRQ);
 
   VICIntSelect &= ~(1 << INT_TIMER1);		// Timer 1 uses IRQ
+  VICVectPriority5 = 0;
   VICVectAddr5 = (unsigned long) Timer1ISR;	// Timer 1 ISR address
   VICIntEnable = 1 << INT_TIMER1;		// Enable timer 1 interrupt
 
