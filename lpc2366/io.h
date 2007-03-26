@@ -1096,6 +1096,40 @@ Reset, and Code Security/Debugging */
 #define MAC_POWERDOWN       (*(volatile unsigned long *)(MAC_BASE_ADDR + 0xFF4)) /* Power-down reg */
 #define MAC_MODULEID        (*(volatile unsigned long *)(MAC_BASE_ADDR + 0xFFC)) /* Module ID reg (RO) */
 
+// Keil decided to use old (LPC2xxx) register names for some reason.
+// The following aliases match the LPC3xxx user manual.
+
+#define VICVectPriority0	VICVectCntl0
+#define VICVectPriority1	VICVectCntl1
+#define VICVectPriority2	VICVectCntl2
+#define VICVectPriority3	VICVectCntl3
+#define VICVectPriority4	VICVectCntl4
+#define VICVectPriority5	VICVectCntl5
+#define VICVectPriority6	VICVectCntl6
+#define VICVectPriority7	VICVectCntl7
+#define VICVectPriority8	VICVectCntl8
+#define VICVectPriority9	VICVectCntl9
+#define VICVectPriority10	VICVectCntl10
+#define VICVectPriority11	VICVectCntl11
+#define VICVectPriority12	VICVectCntl12
+#define VICVectPriority13	VICVectCntl13
+#define VICVectPriority14	VICVectCntl14
+#define VICVectPriority15	VICVectCntl15
+#define VICVectPriority16	VICVectCntl16
+#define VICVectPriority17	VICVectCntl17
+#define VICVectPriority18	VICVectCntl18
+#define VICVectPriority19	VICVectCntl19
+#define VICVectPriority20	VICVectCntl20
+#define VICVectPriority21	VICVectCntl21
+#define VICVectPriority22	VICVectCntl22
+#define VICVectPriority23	VICVectCntl23
+#define VICVectPriority24	VICVectCntl24
+#define VICVectPriority25	VICVectCntl25
+#define VICVectPriority26	VICVectCntl26
+#define VICVectPriority27	VICVectCntl27
+#define VICVectPriority28	VICVectCntl28
+#define VICVectPriority29	VICVectCntl29
+#define VICVectPriority30	VICVectCntl30
+#define VICVectPriority31	VICVectCntl31
 
 #endif  // __LPC23xx_H
-
