@@ -1,13 +1,13 @@
 // Interrupt definitions for LPC2366
 
-// $Id: interrupt.h,v 1.1 2007-03-26 18:33:25 cvs Exp $
+// $Id: interrupt.h,v 1.2 2007-05-10 22:40:32 cvs Exp $
 
 #ifndef LPC2366_INTERRUPT__H
 #define LPC2366_INTERRUPT__H
 
 // Interrupt sources
 
-#define INT_WDT 	0	// Watchdog timer
+#define INT_WDT		0	// Watchdog timer
 #define INT_SW		1	// Software interrupt
 #define INT_DBGCOMMRX	2	// Debug comm receive
 #define INT_DBGCOMMTX	3	// Debug comm transmit
@@ -40,6 +40,11 @@
 #define INT_UART3	29	// UART 3
 #define INT_I2C2	30	// IIC 2
 #define INT_I2S		31	// I2S
+
+#define VIC_SIZE	32
+
+#define VECT_ADDR_INDEX	0x100
+#define VECT_CNTL_INDEX	0x200
 
 // Read CPSR
 
