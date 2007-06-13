@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.3 2007-03-23 22:22:14 cvs Exp $
+// $Id: test_timer1.c,v 1.4 2007-06-13 14:36:14 cvs Exp $
 
 #include <lpc2119/conio.h>
 #include <lpc2119/interrupt.h>
@@ -57,7 +57,9 @@ int main(void)
 
   WDTC = CPUFREQ/4*5;		// 5 second watchdog timeout
 
+#ifndef DISABLE_WATCHDOG
   WDMOD = 0x03;			// Watchdog timer issues reset
+#endif
 
   WDFEED = 0xAA;		// Start watchdog timer
   WDFEED = 0x55;
