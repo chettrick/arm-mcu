@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.2 2007-03-26 20:18:54 cvs Exp $
+// $Id: test_timer1.c,v 1.3 2007-06-13 14:39:05 cvs Exp $
 
 #include <lpc2366/conio.h>
 #include <lpc2366/interrupt.h>
@@ -74,6 +74,7 @@ int main(void)
 
 /* Start watchdog timer */
 
+#ifndef DISABLE_WATCHDOG
   WDCLKSEL = 0x01;		// Watchdog timer runs on PCLK
   WDTC = CPUFREQ/16*5;		// 5 second watchdog timeout
   WDMOD = 0x03;			// Watchdog timer issues reset
@@ -82,6 +83,7 @@ int main(void)
   WDFEED = 0xAA;		// Start watchdog timer
   WDFEED = 0x55;
   ENABLE_INTERRUPTS(IRQ);
+#endif
 
   for (;;)
     if (Timer1Flag)
@@ -90,9 +92,11 @@ int main(void)
       puts("Tick...");
       fflush(stdout);
 
+#ifndef DISABLE_WATCHDOG
       DISABLE_INTERRUPTS(IRQ);
       WDFEED = 0xAA;		// Reset watchdog timer
       WDFEED = 0x55;
       ENABLE_INTERRUPTS(IRQ);
+#endif
     }
 }
