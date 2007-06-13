@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.4 2007-06-13 14:36:14 cvs Exp $
+// $Id: test_timer1.c,v 1.5 2007-06-13 14:41:30 cvs Exp $
 
 #include <lpc2119/conio.h>
 #include <lpc2119/interrupt.h>
@@ -59,10 +59,12 @@ int main(void)
 
 #ifndef DISABLE_WATCHDOG
   WDMOD = 0x03;			// Watchdog timer issues reset
-#endif
 
+  DISABLE_INTERRUPTS(IRQ);
   WDFEED = 0xAA;		// Start watchdog timer
   WDFEED = 0x55;
+  ENABLE_INTERRUPTS(IRQ);
+#endif
 
   for (;;)
     if (Timer1Flag)
@@ -71,7 +73,11 @@ int main(void)
       puts("Tick...");
       fflush(stdout);
 
+#ifndef DISABLE_WATCHDOG
+      DISABLE_INTERRUPTS(IRQ);
       WDFEED = 0xAA;		// Reset watchdog timer
       WDFEED = 0x55;
+      ENABLE_INTERRUPTS(IRQ);
+#endif
     }
 }
