@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.2 2007-04-20 19:04:54 cvs Exp $
+// $Id: conio.c,v 1.3 2007-08-17 20:17:36 cvs Exp $
 
 #include <stdio.h>
 #include <string.h>
@@ -16,7 +16,7 @@ unsigned int CPUFREQ = 72000000;
 
 /* Define relocatable UART register definitions */
 
-unsigned int UARTBASE = UART1_BASE_ADDR;
+unsigned int UARTBASE = UART0_BASE_ADDR;
 
 #define UxRBR          (*(volatile unsigned long *)(UARTBASE + 0x00))
 #define UxTHR          (*(volatile unsigned long *)(UARTBASE + 0x00))
