@@ -4,22 +4,17 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: syscalls.c,v 1.1 2007-03-26 18:33:25 cvs Exp $
+// $Id: syscalls.c,v 1.2 2007-10-02 20:36:06 cvs Exp $
 
 #include <unistd.h>
 #include <sys/stat.h>
 
 #include "conio.h"
 
-int isatty(int desc)
-{
-  return 1;
-}
-
 extern char end[];
 static char *heap_ptr;
 
-void *_sbrk_r(struct _reent *_s_r, ptrdiff_t nbytes)
+caddr_t _sbrk(int nbytes)
 {
   char  *base;
 
@@ -27,46 +22,51 @@ void *_sbrk_r(struct _reent *_s_r, ptrdiff_t nbytes)
 
   if (!heap_ptr) heap_ptr = end;
 
-  base = heap_ptr;	/*  Point to end of heap.			*/
-  heap_ptr += nbytes;	/*  Increase heap.				*/
+  base = heap_ptr;      /*  Point to end of heap.                       */
+  heap_ptr += nbytes;   /*  Increase heap.                              */
 
-  return base;		/*  Return pointer to start of new heap area.	*/
+  return base;          /*  Return pointer to start of new heap area.   */
 }
 
-int _open_r(void *reent, const char *file, int flags, int mode)
+int _open(const char *path, int flags, ...)
 {
   return 1;
 }
 
-int _close_r(void *reent, int fd)
+int _close(int fd)
 {
   return 0;
 }
 
-off_t _lseek_r(void *reent, int fd, off_t pos, int whence)
+int _fstat(int fd, struct stat *st)
+{
+  st->st_mode = S_IFCHR;
+  return 0;
+}
+
+int isatty(int fd)
+{
+  return 1;
+}
+
+int _lseek(int fd, int offset, int whence)
 {
   return 0;
 }
 
-long _read_r(void *reent, int fd, char *buf, size_t cnt)
+int _read(int fd, char *buf, int len)
 {
-  buf[0] = getch();
+  *buf = getch();
 
   return 1;
 }
 
-long _write_r(void *reent, int fd, const char *buf, size_t cnt)
+int _write(int fd, const char *buf, int len)
 {
   int i;
 
-  for (i = 0; i < cnt; i++)
+  for (i = 0; i < len; i++)
     putch(buf[i]);
 
-  return cnt;
-}
-
-int _fstat_r(void *reent, int file, struct stat *pstat)
-{
-  pstat->st_mode = S_IFCHR;
-  return 0;
+  return len;
 }
