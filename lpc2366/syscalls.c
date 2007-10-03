@@ -4,9 +4,8 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: syscalls.c,v 1.2 2007-10-02 20:36:06 cvs Exp $
+// $Id: syscalls.c,v 1.3 2007-10-03 04:46:54 cvs Exp $
 
-#include <unistd.h>
 #include <sys/stat.h>
 
 #include "conio.h"
@@ -14,7 +13,7 @@
 extern char end[];
 static char *heap_ptr;
 
-caddr_t _sbrk(int nbytes)
+void * _sbrk(ptrdiff_t incr)
 {
   char  *base;
 
@@ -23,7 +22,7 @@ caddr_t _sbrk(int nbytes)
   if (!heap_ptr) heap_ptr = end;
 
   base = heap_ptr;      /*  Point to end of heap.                       */
-  heap_ptr += nbytes;   /*  Increase heap.                              */
+  heap_ptr += incr;     /*  Increase heap.                              */
 
   return base;          /*  Return pointer to start of new heap area.   */
 }
@@ -49,24 +48,24 @@ int isatty(int fd)
   return 1;
 }
 
-int _lseek(int fd, int offset, int whence)
+int _lseek(int fd, off_t pos, int whence)
 {
   return 0;
 }
 
-int _read(int fd, char *buf, int len)
+int _read(int fd, char *buf, size_t cnt)
 {
   *buf = getch();
 
   return 1;
 }
 
-int _write(int fd, const char *buf, int len)
+int _write(int fd, const char *buf, size_t cnt)
 {
   int i;
 
-  for (i = 0; i < len; i++)
+  for (i = 0; i < cnt; i++)
     putch(buf[i]);
 
-  return len;
+  return cnt;
 }
