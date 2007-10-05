@@ -4,15 +4,14 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.3 2007-08-17 20:17:36 cvs Exp $
+// $Id: conio.c,v 1.4 2007-10-05 15:57:30 cvs Exp $
 
 #include <stdio.h>
 #include <string.h>
 
 #include "conio.h"
+#include "cpu.h"
 #include "io.h"
-
-unsigned int CPUFREQ = 72000000;
 
 /* Define relocatable UART register definitions */
 
