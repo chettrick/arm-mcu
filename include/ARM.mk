@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.3 2007-10-10 03:59:20 cvs Exp $
+# $Id: ARM.mk,v 1.4 2007-10-10 15:22:37 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -57,7 +57,7 @@ default:
 
 .elf.debug:
 	$(MAKE) startocd
-	$(GDB) -w $<
+	$(GDB) -x $(MCUDEPENDENT)/debug.gdb -w $<
 	$(MAKE) stopocd
 
 .elf.hex:
