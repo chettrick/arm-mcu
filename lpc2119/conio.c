@@ -4,19 +4,16 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.5 2007-03-23 21:27:43 cvs Exp $
+// $Id: conio.c,v 1.6 2007-10-10 03:24:05 cvs Exp $
 
+#include <conio.h>
+#include <cpu.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "conio.h"
-#include "io.h"
-
-unsigned int CPUFREQ = 19660800*3;
-
 /* Initialize serial console */
 
-void conio_init(unsigned long int baudrate)
+void conio_init(unsigned long int uartaddr, unsigned long int baudrate)
 {
   unsigned short int b;
 

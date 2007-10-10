@@ -1,9 +1,8 @@
 /* Simple bit twiddler test program */
 
-// $Id: test_gpio.c,v 1.3 2007-10-10 02:54:07 cvs Exp $
+// $Id: test_gpio.c,v 1.4 2007-10-10 03:24:05 cvs Exp $
 
-#include <lpc2366/cpu.h>
-#include <lpc2366/io.h>
+#include <cpu.h>
 
 int main(void)
 {

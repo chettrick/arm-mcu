@@ -4,11 +4,10 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: syscalls.c,v 1.3 2007-10-03 04:46:54 cvs Exp $
+// $Id: syscalls.c,v 1.4 2007-10-10 03:24:05 cvs Exp $
 
+#include <conio.h>
 #include <sys/stat.h>
-
-#include "conio.h"
 
 extern char end[];
 static char *heap_ptr;

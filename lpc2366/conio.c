@@ -4,14 +4,12 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.5 2007-10-10 02:49:30 cvs Exp $
+// $Id: conio.c,v 1.6 2007-10-10 03:24:05 cvs Exp $
 
+#include <cpu.h>
+#include <conio.h>
 #include <stdio.h>
 #include <string.h>
-
-#include "conio.h"
-#include "cpu.h"
-#include "io.h"
 
 /* Define relocatable UART register definitions */
 

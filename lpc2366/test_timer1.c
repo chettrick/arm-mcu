@@ -1,12 +1,9 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.5 2007-10-10 02:54:07 cvs Exp $
+// $Id: test_timer1.c,v 1.6 2007-10-10 03:24:05 cvs Exp $
 
-#include <lpc2366/conio.h>
-#include <lpc2366/cpu.h>
-#include <lpc2366/interrupt.h>
-#include <lpc2366/io.h>
-
+#include <conio.h>
+#include <cpu.h>
 #include <stdio.h>
 #include <string.h>
 

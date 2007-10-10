@@ -1,10 +1,8 @@
 /* Initialize CPU core */
 
-// $Id: cpu.c,v 1.2 2007-10-10 02:50:46 cvs Exp $
+// $Id: cpu.c,v 1.3 2007-10-10 03:24:05 cvs Exp $
 
-#include <lpc2366/cpu.h>
-#include <lpc2366/io.h>
-
+#include <cpu.h>
 #include <stdio.h>
 #include <string.h>
 

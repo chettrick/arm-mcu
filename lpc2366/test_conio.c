@@ -1,11 +1,9 @@
 /* Simple serial console I/O test program */
 
-// $Id: test_conio.c,v 1.3 2007-10-10 02:54:07 cvs Exp $
+// $Id: test_conio.c,v 1.4 2007-10-10 03:24:05 cvs Exp $
 
-#include <lpc2366/conio.h>
-#include <lpc2366/cpu.h>
-#include <lpc2366/io.h>
-
+#include <conio.h>
+#include <cpu.h>
 #include <stdio.h>
 #include <string.h>
 

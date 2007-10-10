@@ -1,25 +1,14 @@
 /* Simple bit twiddler test program */
 
-// $Id: test_gpio.c,v 1.2 2007-03-22 16:38:20 cvs Exp $
+// $Id: test_gpio.c,v 1.3 2007-10-10 03:24:05 cvs Exp $
 
-#include <lpc2119/io.h>
+#include <cpu.h>
 
 int main(void)
 {
   unsigned long int i;
 
-  MAMCR = 2;			// MAM functions fully enabled
-
-  VPBDIV = 0x01;		// pclk = cclk
-
-  PLLCFG = (0x01 << 5) + 0x02;	// M=3, P=2
-  PLLCON = 1;
-  PLLFEED = 0xAA;
-  PLLFEED = 0x55;
-  while((PLLSTAT & 0x400) == 0);
-  PLLCON = 3;
-  PLLFEED = 0xAA;
-  PLLFEED = 0x55;
+  cpu_init(58982400);
 
   PINSEL0 = 0x00000000;	// Every pin is a GPIO
   PINSEL1 = 0x00000000;
