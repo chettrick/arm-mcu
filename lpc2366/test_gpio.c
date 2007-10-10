@@ -1,6 +1,6 @@
 /* Simple bit twiddler test program */
 
-// $Id: test_gpio.c,v 1.2 2007-10-05 15:57:30 cvs Exp $
+// $Id: test_gpio.c,v 1.3 2007-10-10 02:54:07 cvs Exp $
 
 #include <lpc2366/cpu.h>
 #include <lpc2366/io.h>
@@ -9,7 +9,7 @@ int main(void)
 {
   unsigned long int i;
 
-  cpu_init();
+  cpu_init(48000000);
 
 /* Configure P0 pins */
 

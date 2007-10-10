@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.4 2007-10-05 15:57:30 cvs Exp $
+// $Id: test_timer1.c,v 1.5 2007-10-10 02:54:07 cvs Exp $
 
 #include <lpc2366/conio.h>
 #include <lpc2366/cpu.h>
@@ -24,8 +24,9 @@ __attribute__ ((__interrupt__)) void Timer1ISR(void)
 
 int main(void)
 {
-  cpu_init();
-  conio_init(19200);
+  cpu_init(48000000);
+  conio_init(UART0_BASE_ADDR, 19200);
+
   puts("\033[H\033[2JLPC2366 Watchdog and Timer 1 Interrupt Test\n");
 
 /* Configure timer 1 to interrupt once every second */
