@@ -4,12 +4,29 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.6 2007-10-10 03:24:05 cvs Exp $
+// $Id: conio.c,v 1.7 2007-10-10 09:03:33 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
 #include <stdio.h>
 #include <string.h>
+
+/* Define relocatable UART register definitions */
+
+static unsigned int UARTBASE = UART0_BASE_ADDR;
+
+#define UxRBR          (*(volatile unsigned long *)(UARTBASE + 0x00))
+#define UxTHR          (*(volatile unsigned long *)(UARTBASE + 0x00))
+#define UxIER          (*(volatile unsigned long *)(UARTBASE + 0x04))
+#define UxIIR          (*(volatile unsigned long *)(UARTBASE + 0x08))
+#define UxFCR          (*(volatile unsigned long *)(UARTBASE + 0x08))
+#define UxLCR          (*(volatile unsigned long *)(UARTBASE + 0x0C))
+#define UxMCR          (*(volatile unsigned long *)(UARTBASE + 0x10))
+#define UxLSR          (*(volatile unsigned long *)(UARTBASE + 0x14))
+#define UxMSR          (*(volatile unsigned long *)(UARTBASE + 0x18))
+#define UxSCR          (*(volatile unsigned long *)(UARTBASE + 0x1C))
+#define UxDLL          (*(volatile unsigned long *)(UARTBASE + 0x00))
+#define UxDLM          (*(volatile unsigned long *)(UARTBASE + 0x04))
 
 /* Initialize serial console */
 
@@ -17,17 +34,29 @@ void conio_init(unsigned long int uartaddr, unsigned long int baudrate)
 {
   unsigned short int b;
 
-  PINSEL0 &= 0xFFFFFFF0;		// Enable UART 0 I/O pins
-  PINSEL0 |= 0x00000005;
+  UARTBASE = uartaddr;
+
+  switch(UARTBASE)
+  {
+    case UART0_BASE_ADDR:
+      PINSEL0 &= 0xFFFFFFF0;		// Enable UART 0 I/O pins
+      PINSEL0 |= 0x00000005;
+      break;
+
+    case UART1_BASE_ADDR:
+      PINSEL0 &= 0xFFF0FFFF;		// Enable UART 1 I/O pins
+      PINSEL0 |= 0x00050000;
+      break;
+  }
 
   b = CPUFREQ/16/baudrate;
 
-  U0IER = 0x00;				// Disable UART interrupts
-  U0LCR = 0x80;
-  U0DLM = b / 256;
-  U0DLL = b % 256;
-  U0LCR = 0x03;				// Always 8 bits no parity 1 stop
-  U0FCR = 0x01;				// Enable FIFO's
+  UxIER = 0x00;				// Disable UART interrupts
+  UxLCR = 0x80;
+  UxDLM = b / 256;
+  UxDLL = b % 256;
+  UxLCR = 0x03;				// Always 8 bits no parity 1 stop
+  UxFCR = 0x01;				// Enable FIFO's
 }
 
 /* Send 1 character */
@@ -36,16 +65,16 @@ void putch(unsigned char c)
 {
   if (c == '\n') putch('\r');
 
-  while ((U0LSR & 0x20) == 0);
-  U0THR = c;
+  while ((UxLSR & 0x20) == 0);
+  UxTHR = c;
 }
 
 /* Receive 1 character */
 
 unsigned char getch(void)
 {
-  while ((U0LSR & 0x01) == 0);
-  return U0RBR;
+  while ((UxLSR & 0x01) == 0);
+  return UxRBR;
 }
 
 /* Send a string */

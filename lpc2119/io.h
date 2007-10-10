@@ -158,6 +158,7 @@
 #define PWMLER         (*((volatile unsigned long *) 0xE0014050))
 
 /* Universal Asynchronous Receiver Transmitter 0 (UART0) */
+#define UART0_BASE_ADDR 0xE000C000
 #define U0RBR          (*((volatile unsigned char *) 0xE000C000))
 #define U0THR          (*((volatile unsigned char *) 0xE000C000))
 #define U0IER          (*((volatile unsigned char *) 0xE000C004))
@@ -170,6 +171,7 @@
 #define U0DLM          (*((volatile unsigned char *) 0xE000C004))
 
 /* Universal Asynchronous Receiver Transmitter 1 (UART1) */
+#define UART1_BASE_ADDR 0xE0010000
 #define U1RBR          (*((volatile unsigned char *) 0xE0010000))
 #define U1THR          (*((volatile unsigned char *) 0xE0010000))
 #define U1IER          (*((volatile unsigned char *) 0xE0010004))
