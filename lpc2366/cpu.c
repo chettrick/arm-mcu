@@ -1,6 +1,6 @@
 /* Initialize CPU core */
 
-// $Id: cpu.c,v 1.1 2007-10-05 15:57:30 cvs Exp $
+// $Id: cpu.c,v 1.2 2007-10-10 02:50:46 cvs Exp $
 
 #include <lpc2366/cpu.h>
 #include <lpc2366/io.h>
@@ -8,8 +8,11 @@
 #include <stdio.h>
 #include <string.h>
 
-void cpu_init(void)
+unsigned long int CPUFREQ;
+
+void cpu_init(unsigned long int frequency)
 {
+  CPUFREQ = frequency;
 
 /* Initialize MAM--See Errata MAM.1 */
 
