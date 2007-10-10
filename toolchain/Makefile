@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.1 2007-10-10 02:21:20 cvs Exp $
+# $Id: Makefile,v 1.2 2007-10-10 03:59:20 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -121,9 +121,21 @@ else
 endif
 	touch lpc21isp.done
 
+################################################################################
+
+# Install OpenOCD
+
+openocd.done: lpc21isp.done
+ifeq ($(shell uname), CYGWIN_NT-5.1)
+	install -csm 0755 openocd*.exe $(INSTBASE)/bin
+endif
+	touch openocd.done
+
+################################################################################
+
 # Create installation tarball
 
-$(TARBALL): binutils.done gcc.done newlib.done gdb.done lpc21isp.done
+$(TARBALL): binutils.done gcc.done newlib.done gdb.done lpc21isp.done openocd.done
 	echo "GNU ARM microcontroller toolchain"	>$(INSTBASE)/README
 	echo " "					>>$(INSTBASE)/README
 	echo "Built on `date` from:"			>>$(INSTBASE)/README
