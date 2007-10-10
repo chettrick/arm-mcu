@@ -1,6 +1,6 @@
 /* Simple serial console I/O test program */
 
-// $Id: test_conio.c,v 1.2 2007-10-10 03:24:05 cvs Exp $
+// $Id: test_conio.c,v 1.3 2007-10-10 03:47:49 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
@@ -11,7 +11,7 @@ int main(void)
 {
   char buf[32];
 
-  cpu_init(58982400);
+  cpu_init(DEFAULT_CPU_FREQ);
   conio_init(U0RBR, 19200);
 
   puts("\033[H\033[2JLPC2119 Console I/O Test\n");
