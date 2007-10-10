@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.4 2007-10-05 15:57:30 cvs Exp $
+// $Id: conio.c,v 1.5 2007-10-10 02:49:30 cvs Exp $
 
 #include <stdio.h>
 #include <string.h>
@@ -15,7 +15,7 @@
 
 /* Define relocatable UART register definitions */
 
-unsigned int UARTBASE = UART0_BASE_ADDR;
+static unsigned int UARTBASE = UART0_BASE_ADDR;
 
 #define UxRBR          (*(volatile unsigned long *)(UARTBASE + 0x00))
 #define UxTHR          (*(volatile unsigned long *)(UARTBASE + 0x00))
@@ -36,9 +36,11 @@ unsigned int UARTBASE = UART0_BASE_ADDR;
 
 /* Initialize serial console */
 
-void conio_init(unsigned long int baudrate)
+void conio_init(unsigned long int uartaddr, unsigned long int baudrate)
 {
   unsigned short int b;
+
+  UARTBASE = uartaddr;
 
   switch (UARTBASE)
   {
