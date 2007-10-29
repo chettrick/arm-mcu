@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.6 2007-10-10 03:24:05 cvs Exp $
+// $Id: conio.c,v 1.7 2007-10-29 16:12:18 cvs Exp $
 
 #include <cpu.h>
 #include <conio.h>
@@ -96,6 +96,13 @@ unsigned char getch(void)
 {
   while ((UxLSR & 0x01) == 0);
   return UxRBR;
+}
+
+/* Return 1 if key pressed */
+
+unsigned char keypressed(void)
+{
+  return (UxLSR & 0x01);
 }
 
 /* Send a string */
