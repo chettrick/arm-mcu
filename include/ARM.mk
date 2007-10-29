@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.5 2007-10-29 15:51:08 cvs Exp $
+# $Id: ARM.mk,v 1.6 2007-10-29 15:57:12 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -25,12 +25,13 @@ LDFLAGS		= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDEPENDENT) -l$(MCU)
 
 # Define default target placeholder
 
-default:
-	@echo You must explicitly specify the target
+default_catch:
+	@echo ERROR: You must explicitly specify the target!
+	@exit 1
 
 # These targets are not files
 
-.PHONY: default update clean startocd stopocd
+.PHONY: default_catch update clean startocd stopocd
 
 # These are the target suffixes
 
