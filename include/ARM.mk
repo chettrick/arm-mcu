@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.6 2007-10-29 15:57:12 cvs Exp $
+# $Id: ARM.mk,v 1.7 2007-11-12 13:32:38 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -71,7 +71,7 @@ default_catch:
 
 startocd:
 ifeq ($(OS), Windows_NT)
-	$(OPENOCD) -f `cygpath -a -w $(MCUDEPENDENT)/debug.ocd` &
+	$(OPENOCD) -f "`cygpath -a -w $(MCUDEPENDENT)/debug.ocd`" &
 else
 	$(OPENOCD) -f $(MCUDEPENDENT)/debug.ocd &
 endif
