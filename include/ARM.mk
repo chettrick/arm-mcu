@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.7 2007-11-12 13:32:38 cvs Exp $
+# $Id: ARM.mk,v 1.8 2007-11-13 12:09:09 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -11,9 +11,6 @@ OBJCOPY		= $(ARMTOOLS)/bin/arm-elf-objcopy
 OBJDUMP		= $(ARMTOOLS)/bin/arm-elf-objdump
 GDB		= $(ARMTOOLS)/bin/arm-elf-gdb
 OPENOCD		= $(ARMTOOLS)/bin/openocd-ftd2xx
-
-ARCH		?= arm7tdmi
-MCU		?= lpc2119
 
 ARMSRC		?= .
 MCUDEPENDENT	?= $(ARMSRC)/$(MCU)
