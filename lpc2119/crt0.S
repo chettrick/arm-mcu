@@ -1,34 +1,6 @@
-/**************************** crt0.s ************************************/
-/* Copyright 2003/12/28 Aeolus Development				*/
-/*									*/
-/* Freely modifiable and redistributable.  Modify to suit your own needs*/
-/* Please remove Aeolus Development copyright for any significant	*/
-/* modifications or add explanatory notes to explain the mods and	*/
-/* list authour(s).							*/
-/*									*/
-/* THIS SOFTWARE IS PROVIDED BY THE AEOULUS DEVELOPMENT "AS IS" AND ANY	*/
-/* EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE	*/
-/* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR	*/
-/* PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AEOLUS DEVELOPMENT BE	*/
-/* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR	*/
-/* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF	*/
-/* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 	*/
-/* BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,*/
-/* WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE */
-/* OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 	*/
-/* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.			*/
-/*									*/
-/*  Startup for LPC210X.  Use with associated linker script and newlib.	*/
-/* Developed from source and hints from multiple startup modules 	*/
-/* developed by others for various ARM systems.				*/
-/************************************************************************/
-/*
-*   TLIB revision history:
-*   1 crt0.s 30-Dec-2003,10:32:32,`RADSETT' First archival version.
-*   2 crt0.s 03-Mar-2004,15:56:50,`RADSETT' Add stack setup for each CPU mode to
-*        allow support of interrupts.
-*   TLIB revision history ends.
-*/
+// Startup for LPC2119 ARM microcontroller
+
+// $Id: crt0.S,v 1.3 2007-11-20 13:32:56 cvs Exp $
 
 	.extern	main 		/*  Usual C startup.			*/
 
@@ -156,7 +128,6 @@ endless_loop:
 
 	/*  defaults are defined in the link script.  The reserved	*/
 	/* exception should be overridden by the download program 	*/
-	/* (see LPC210X documentation).					*/
 
 .section .startup,"ax" 
 	.code 32 
