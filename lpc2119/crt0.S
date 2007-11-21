@@ -1,6 +1,6 @@
 // Startup for LPC2119 ARM microcontroller
 
-// $Id: crt0.S,v 1.3 2007-11-20 13:32:56 cvs Exp $
+// $Id: crt0.S,v 1.4 2007-11-21 15:02:23 cvs Exp $
 
 	.extern	main 		/*  Usual C startup.			*/
 
@@ -138,7 +138,6 @@ endless_loop:
 	b	software_interrupt_exception
 	b	prefetch_abort_exception
 	b	data_abort_exception
-	b	reserved_exception
-/*	b	interrupt_exception*/
+	nop
 	ldr	pc,[pc,#-0xFF0]	    	/* Vector via VIC		*/
 	b	fast_interrupt_exception

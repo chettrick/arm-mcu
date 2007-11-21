@@ -1,6 +1,6 @@
 /* Linker script for LPC2119 microcontroller */
 
-/* $Id: linker.ld,v 1.3 2007-03-22 20:57:58 cvs Exp $ */
+/* $Id: linker.ld,v 1.4 2007-11-21 15:02:24 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0, LENGTH = 120K
@@ -81,6 +81,4 @@ PROVIDE( undefined_instruction_exception = endless_loop);
 PROVIDE( software_interrupt_exception = endless_loop);
 PROVIDE( prefetch_abort_exception = endless_loop);
 PROVIDE( data_abort_exception = endless_loop);
-PROVIDE( reserved_exception = endless_loop);
-PROVIDE( interrupt_exception = endless_loop);
 PROVIDE( fast_interrupt_exception = endless_loop);
