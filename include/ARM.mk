@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.9 2007-11-22 19:38:23 cvs Exp $
+# $Id: ARM.mk,v 1.10 2007-11-23 08:36:40 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -17,9 +17,9 @@ MCUDEPENDENT	?= $(ARMSRC)/$(MCU)
 STARTUP		?= $(MCUDEPENDENT)/crt0.o
 LINKERSCRIPT	?= $(MCUDEPENDENT)/linker.ld
 
-OPTIMIZE	?= -O
-
-CFLAGS		= -g $(OPTIMIZE) -Wall -I$(ARMSRC) -I$(ARMSRC)/include -mcpu=$(ARCH) -DMCU_$(MCU) $(EXTRAFLAGS) $(DEBUG)
+GDBFLAGS	?= -g
+OPTFLAGS	?= -O
+CFLAGS		= -Wall -I$(ARMSRC) -I$(ARMSRC)/include -mcpu=$(ARCH) -DMCU_$(MCU) $(GDBFLAGS) $(OPTFLAGS) $(EXTRAFLAGS) $(DEBUG)
 LDFLAGS		= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDEPENDENT) -l$(MCU)
 
 # Define default target placeholder
