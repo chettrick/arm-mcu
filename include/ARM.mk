@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.10 2007-11-23 08:36:40 cvs Exp $
+# $Id: ARM.mk,v 1.11 2007-12-10 10:58:23 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -80,6 +80,13 @@ endif
 stopocd:
 	killall $(OPENOCD)
 
+# Reset target using OpenOCD
+
+resetocd:
+	echo "reset run" >reset.script
+	echo "shutdown" >> reset.script
+	$(OPENOCD) -f "`cygpath -a -w $(MCUDEPENDENT)/reset.ocd`"
+
 # Update from CVS repository
 
 update:
@@ -88,7 +95,7 @@ update:
 # Clean out working files
 
 clean:
-	rm -f *.asm *.bin *.elf *.hex *.o *.a flashocd.script $(MCUDEPENDENT)/*.o $(MCUDEPENDENT)/*.a
+	rm -f *.asm *.bin *.elf *.hex *.o *.a *.script $(MCUDEPENDENT)/*.o $(MCUDEPENDENT)/*.a
 
 # Include flash programming support
 
