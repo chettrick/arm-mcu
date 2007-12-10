@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.11 2007-12-10 10:58:23 cvs Exp $
+# $Id: ARM.mk,v 1.12 2007-12-10 11:01:24 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -30,7 +30,7 @@ default_catch:
 
 # These targets are not files
 
-.PHONY: default_catch update clean startocd stopocd
+.PHONY: default_catch update clean startocd stopocd resetocd
 
 # These are the target suffixes
 
