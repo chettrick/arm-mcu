@@ -1,11 +1,10 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.7 2007-10-10 03:47:49 cvs Exp $
+// $Id: test_timer1.c,v 1.8 2007-12-10 11:55:46 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
 #include <stdio.h>
-#include <string.h>
 
 #define TRUE	1
 #define	FALSE	0

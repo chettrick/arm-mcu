@@ -1,10 +1,8 @@
 /* Initialize CPU core */
 
-// $Id: cpu.c,v 1.4 2007-12-10 10:20:15 cvs Exp $
+// $Id: cpu.c,v 1.5 2007-12-10 11:55:46 cvs Exp $
 
 #include <cpu.h>
-#include <stdio.h>
-#include <string.h>
 
 unsigned long int CPUFREQ;
 
