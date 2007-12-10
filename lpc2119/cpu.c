@@ -1,6 +1,6 @@
 /* Initialize CPU core */
 
-// $Id: cpu.c,v 1.1 2007-10-10 03:24:05 cvs Exp $
+// $Id: cpu.c,v 1.2 2007-12-10 10:20:15 cvs Exp $
 
 #include <cpu.h>
 #include <stdio.h>
@@ -10,7 +10,7 @@ unsigned long int CPUFREQ;
 
 void cpu_init(unsigned long int frequency)
 {
-  CPUFREQ = frequency;
+  CPUFREQ = DEFAULT_CPU_FREQ;	// Not currently changeable
 
   MAMCR = 2;			// MAM functions fully enabled
 
