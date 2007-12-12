@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.12 2007-12-10 11:01:24 cvs Exp $
+# $Id: ARM.mk,v 1.13 2007-12-12 07:41:11 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -90,7 +90,7 @@ resetocd:
 # Update from CVS repository
 
 update:
-	p4update.sh
+	cvs -q update
 
 # Clean out working files
 
