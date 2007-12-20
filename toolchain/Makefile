@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.4 2007-12-20 13:00:15 cvs Exp $
+# $Id: Makefile,v 1.5 2007-12-20 20:47:18 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -32,7 +32,12 @@ GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
 GDBSRC		= insight-$(GDBVER)
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
-CFLAGS		= -mno-cygwin
+D2XXURL		= http://www.ftdichip.com/Driver/CDM/CDM 2.02.04 WHQL Certified.zip
+D2XXDIST	= $(TEMP)/CDM 2.02.04 WHQL Certified.zip
+D2XXSRC		= D2XX
+endif
+
+ifeq ($(shell uname), CYGWIN_NT-5.1)
 TARBALL		= $(PKGNAME)-cygwin.tgz
 else
 TARBALL		= $(PKGNAME)-$(shell uname -s)-$(shell uname -i).tgz
@@ -112,7 +117,7 @@ gdb.done: $(GDBDIST)
 
 # Compile lpc21isp
 
-lpc21isp.done: newlib.done lpc21isp.c
+lpc21isp.done: lpc21isp.c
 	gcc -Wall -o lpc21isp lpc21isp.c
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 	install -csm 0755 lpc21isp.exe $(INSTBASE)/bin
@@ -123,11 +128,25 @@ endif
 
 ################################################################################
 
+# Download FT2232 driver
+
+$(D2XXSRC):
+	wget -P $(TEMP) '$(D2XXURL)'
+	unzip '$(D2XXDIST)'
+	mv CDM* $(D2XXSRC)
+	cd $(D2XXSRC) && ln -s i386/ftd2xx.lib
+
 # Install OpenOCD
 
-openocd.done: lpc21isp.done
+openocd.done: $(D2XXSRC)
+	svn checkout http://svn.berlios.de/svnroot/repos/openocd/trunk
+	cd trunk && ./bootstrap
+	cd trunk && ./configure --enable-ft2232_ftd2xx --disable-ft2232_libftdi --disable-amtjtagaccel --disable-ep93xx --disable-parport --disable-parport_ppdev --with-ftd2xx=`pwd`/../$(D2XXSRC)
+	cd trunk && make
 ifeq ($(shell uname), CYGWIN_NT-5.1)
-	install -csm 0755 openocd*.exe $(INSTBASE)/bin
+	install -csm 0755 trunk/src/openocd.exe $(INSTBASE)/bin
+else
+	install -csm 0755 trunk/src/openocd $(INSTBASE)/bin
 endif
 	touch openocd.done
 
