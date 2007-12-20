@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.2 2007-10-10 03:59:20 cvs Exp $
+# $Id: Makefile,v 1.3 2007-12-20 08:36:29 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -13,19 +13,19 @@ BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.2.1
+GCCVER		= 4.2.2
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
 
-NEWLIBVER	= 1.15.0
+NEWLIBVER	= 1.16.0
 NEWLIBSERVER	= ftp://sources.redhat.com/pub/newlib
 NEWLIBDIST	= $(TEMP)/newlib-$(NEWLIBVER).tar.gz
 NEWLIBURL	= $(NEWLIBSERVER)/`basename $(NEWLIBDIST)`
 NEWLIBSRC	= newlib-$(NEWLIBVER)
 
-GDBVER		= 6.6
+GDBVER		= 6.7.1
 GDBSERVER	= ftp://sourceware.org/pub/insight/releases
 GDBDIST		= $(TEMP)/insight-$(GDBVER).tar.bz2
 GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
