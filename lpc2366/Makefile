@@ -1,10 +1,10 @@
 # Make processor dependent startup and libraries for LPC2366
 
-# $Id: Makefile,v 1.4 2007-11-13 12:09:54 cvs Exp $
+# $Id: Makefile,v 1.5 2007-12-20 13:23:57 cvs Exp $
 
 ARMSRC	= ..
 
-ARCH	= arm7tdmi
+ARCH	= arm7tdmi-s
 MCU	= lpc2366
 
 # Build support library

@@ -1,10 +1,10 @@
 # Make processor dependent startup and libraries for LPC2119
 
-# $Id: Makefile,v 1.7 2007-11-13 12:09:54 cvs Exp $
+# $Id: Makefile,v 1.8 2007-12-20 13:22:19 cvs Exp $
 
 ARMSRC	= ..
 
-ARCH	= arm7tdmi
+ARCH	= arm7tdmi-s
 MCU	= lpc2119
 
 # Build support library
