@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.14 2007-12-17 14:47:53 cvs Exp $
+# $Id: ARM.mk,v 1.15 2007-12-20 20:34:11 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -10,7 +10,7 @@ STRIP		= $(ARMTOOLS)/bin/arm-elf-strip
 OBJCOPY		= $(ARMTOOLS)/bin/arm-elf-objcopy
 OBJDUMP		= $(ARMTOOLS)/bin/arm-elf-objdump
 GDB		= $(ARMTOOLS)/bin/arm-elf-gdb
-OPENOCD		= $(ARMTOOLS)/bin/openocd-ftd2xx
+OPENOCD		= $(ARMTOOLS)/bin/openocd
 
 ARMSRC		?= .
 MCUDEPENDENT	?= $(ARMSRC)/$(MCU)
@@ -69,11 +69,7 @@ default_catch:
 # Start OpenOCD debug server
 
 startocd:
-ifeq ($(OS), Windows_NT)
-	$(OPENOCD) -f "`cygpath -a -w $(MCUDEPENDENT)/debug.ocd`" &
-else
 	$(OPENOCD) -f $(MCUDEPENDENT)/debug.ocd &
-endif
 
 # Stop OpenOCD debug server
 
