@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.3 2007-12-20 08:36:29 cvs Exp $
+# $Id: Makefile,v 1.4 2007-12-20 13:00:15 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -144,6 +144,7 @@ $(TARBALL): binutils.done gcc.done newlib.done gdb.done lpc21isp.done openocd.do
 	echo "$(GCCSRC)"				>>$(INSTBASE)/README
 	echo "$(NEWLIBSRC)"				>>$(INSTBASE)/README
 	echo "$(GDBSRC)"				>>$(INSTBASE)/README
+	awk '/define VERSION/ { printf("lpc21isp-%s\n", substr($$3, 2, length($$3)-2)); }' lpc21isp.c >>$(INSTBASE)/README
 	chmod -R ugo-w $(INSTBASE)
 ifeq ($(shell uname), Linux)
 	sudo chown -R 0.0 $(INSTBASE)
