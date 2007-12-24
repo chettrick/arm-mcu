@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.5 2007-12-20 20:47:18 cvs Exp $
+# $Id: Makefile,v 1.6 2007-12-24 21:52:54 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -34,8 +34,14 @@ GDBSRC		= insight-$(GDBVER)
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 D2XXURL		= http://www.ftdichip.com/Driver/CDM/CDM 2.02.04 WHQL Certified.zip
 D2XXDIST	= $(TEMP)/CDM 2.02.04 WHQL Certified.zip
-D2XXSRC		= D2XX
 endif
+ifeq ($(shell uname), Linux)
+D2XXURL		= http://www.ftdichip.com/Drivers/D2XX/Linux/libftd2xx0.4.13.tar.gz
+D2XXDIST	= $(TEMP)/libftd2xx0.4.13.tar.gz
+endif
+D2XXSRC		= D2XX
+
+OPENOCDSRC	= trunk
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 TARBALL		= $(PKGNAME)-cygwin.tgz
@@ -132,21 +138,33 @@ endif
 
 $(D2XXSRC):
 	wget -P $(TEMP) '$(D2XXURL)'
+ifeq ($(shell uname), CYGWIN_NT-5.1)
 	unzip '$(D2XXDIST)'
 	mv CDM* $(D2XXSRC)
 	cd $(D2XXSRC) && ln -s i386/ftd2xx.lib
+endif
+ifeq ($(shell uname), Linux)
+	mkdir $(D2XXSRC)
+	cd $(D2XXSRC) && tar xzf $(D2XXDIST)
+	cd $(D2XXSRC)/static_lib && ln -s lib* libftd2xx.a
+endif
 
 # Install OpenOCD
 
 openocd.done: $(D2XXSRC)
 	svn checkout http://svn.berlios.de/svnroot/repos/openocd/trunk
-	cd trunk && ./bootstrap
-	cd trunk && ./configure --enable-ft2232_ftd2xx --disable-ft2232_libftdi --disable-amtjtagaccel --disable-ep93xx --disable-parport --disable-parport_ppdev --with-ftd2xx=`pwd`/../$(D2XXSRC)
-	cd trunk && make
+	cd $(OPENOCDSRC) && ./bootstrap
+	cd $(OPENOCDSRC) && ./configure --enable-ft2232_ftd2xx --disable-ft2232_libftdi --disable-amtjtagaccel --disable-ep93xx --disable-parport --disable-parport_ppdev --with-ftd2xx=`pwd`/../$(D2XXSRC)
 ifeq ($(shell uname), CYGWIN_NT-5.1)
-	install -csm 0755 trunk/src/openocd.exe $(INSTBASE)/bin
+	$(MAKE) -C $(OPENOCDSRC)
+endif
+ifeq ($(shell uname), Linux)
+	$(MAKE) -C $(OPENOCDSRC) LDFLAGS="-L`pwd`/$(D2XXSRC)/static_lib" LIBS=" -lpthread -ldl --static"
+endif
+ifeq ($(shell uname), CYGWIN_NT-5.1)
+	install -csm 0755 $(OPENOCDSRC)/src/openocd.exe $(INSTBASE)/bin
 else
-	install -csm 0755 trunk/src/openocd $(INSTBASE)/bin
+	sudo install -csm 0755 $(OPENOCDSRC)/src/openocd $(INSTBASE)/bin
 endif
 	touch openocd.done
 
@@ -201,3 +219,5 @@ clean:
 	rm -rf $(GCCSRC)
 	rm -rf $(NEWLIBSRC)
 	rm -rf $(GDBSRC)
+	rm -rf $(D2XXSRC)
+	rm -rf $(OPENOCDSRC)
