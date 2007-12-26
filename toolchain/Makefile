@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.6 2007-12-24 21:52:54 cvs Exp $
+# $Id: Makefile,v 1.7 2007-12-26 11:51:13 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -125,11 +125,7 @@ gdb.done: $(GDBDIST)
 
 lpc21isp.done: lpc21isp.c
 	gcc -Wall -o lpc21isp lpc21isp.c
-ifeq ($(shell uname), CYGWIN_NT-5.1)
-	install -csm 0755 lpc21isp.exe $(INSTBASE)/bin
-else
 	install -csm 0755 lpc21isp $(INSTBASE)/bin
-endif
 	touch lpc21isp.done
 
 ################################################################################
@@ -161,11 +157,7 @@ endif
 ifeq ($(shell uname), Linux)
 	$(MAKE) -C $(OPENOCDSRC) LDFLAGS="-L`pwd`/$(D2XXSRC)/static_lib" LIBS=" -lpthread -ldl --static"
 endif
-ifeq ($(shell uname), CYGWIN_NT-5.1)
 	install -csm 0755 $(OPENOCDSRC)/src/openocd.exe $(INSTBASE)/bin
-else
-	sudo install -csm 0755 $(OPENOCDSRC)/src/openocd $(INSTBASE)/bin
-endif
 	touch openocd.done
 
 ################################################################################
