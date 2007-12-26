@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.7 2007-12-26 11:51:13 cvs Exp $
+# $Id: Makefile,v 1.8 2007-12-26 14:08:49 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -157,7 +157,7 @@ endif
 ifeq ($(shell uname), Linux)
 	$(MAKE) -C $(OPENOCDSRC) LDFLAGS="-L`pwd`/$(D2XXSRC)/static_lib" LIBS=" -lpthread -ldl --static"
 endif
-	install -csm 0755 $(OPENOCDSRC)/src/openocd.exe $(INSTBASE)/bin
+	install -csm 0755 $(OPENOCDSRC)/src/openocd $(INSTBASE)/bin
 	touch openocd.done
 
 ################################################################################
