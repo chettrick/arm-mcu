@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.18 2008-01-03 10:39:11 cvs Exp $
+# $Id: ARM.mk,v 1.19 2008-01-03 10:40:37 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -82,7 +82,7 @@ resetocd:
 	@echo "reset run" >reset.script
 	@echo "shutdown" >> reset.script
 	$(OPENOCD) -f $(MCUDEPENDENT)/reset.ocd
-	rm reset.script
+	@rm reset.script
 
 # Update from CVS repository
 
