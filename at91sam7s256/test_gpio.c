@@ -1,0 +1,31 @@
+/* Simple bit twiddler test program */
+
+// $Id: test_gpio.c,v 1.1 2008-01-10 12:06:51 cvs Exp $
+
+#include <cpu.h>
+
+int main(void)
+{
+  unsigned short int i;
+  static volatile unsigned int j;
+
+  cpu_init(DEFAULT_CPU_FREQ);
+
+/* Configure GPIO's */
+
+  *AT91C_PIOA_PER	= 0xFFFFFFFF;	// Port A is all GPIO
+  *AT91C_PIOA_OER	= 0xFFFFFFFF;	// Port A is all output
+  *AT91C_PIOA_OWER	= 0xFFFFFFFF;	// Port A all ODSR enabled
+  *AT91C_PIOA_MDDR	= 0xFFFFFFFF;	// Port A all push pull
+
+/* Trivial main program */
+
+  for (i = 0;; i++)
+  {
+    *AT91C_WDTC_WDCR = 0xA5000001;	// Reset watchdog timer
+
+    *AT91C_PIOA_ODSR = i;		// Update PORT B outputs
+
+    for (j = 0; j < 10; j++);		// Wait awhile
+  }
+}
