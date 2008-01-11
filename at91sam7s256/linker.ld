@@ -1,15 +1,15 @@
 /* Linker script for AT91SAM7S256 microcontroller */
 
-/* $Id: linker.ld,v 1.3 2008-01-11 08:24:24 cvs Exp $ */
+/* $Id: linker.ld,v 1.4 2008-01-11 10:23:46 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 256K
   ram : ORIGIN = 0x00200000, LENGTH = 64K
   }
 
-__rom_start__ = 0x00000000
-__rom_size__ = 256K
-__ram_start__ = 0x00200000
+__rom_start__ = 0x00000000;
+__rom_size__ = 256K;
+__ram_start__ = 0x00200000;
 __ram_size__ = 64K;
 
 __STACK_SIZE_FIQ__ = 0x100;

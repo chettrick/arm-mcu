@@ -1,15 +1,15 @@
 /* Linker script for LPC2119 microcontroller */
 
-/* $Id: linker.ld,v 1.5 2008-01-11 08:21:37 cvs Exp $ */
+/* $Id: linker.ld,v 1.6 2008-01-11 10:23:46 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 120K
   ram : ORIGIN = 0x40000000, LENGTH = 16K
   }
 
-__rom_start__ = 0x00000000
-__rom_size__ = 120K
-__ram_start__ = 0x40000000
+__rom_start__ = 0x00000000;
+__rom_size__ = 120K;
+__ram_start__ = 0x40000000;
 __ram_size__ = 16K;
 
 __STACK_SIZE_FIQ__ = 0x100;
