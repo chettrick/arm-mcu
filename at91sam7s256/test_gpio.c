@@ -1,13 +1,12 @@
 /* Simple bit twiddler test program */
 
-// $Id: test_gpio.c,v 1.2 2008-01-11 08:24:24 cvs Exp $
+// $Id: test_gpio.c,v 1.3 2008-01-11 11:18:50 cvs Exp $
 
 #include <cpu.h>
 
 int main(void)
 {
   volatile unsigned int i;
-  volatile unsigned int j;
 
   cpu_init(DEFAULT_CPU_FREQ);
 
@@ -23,9 +22,5 @@ int main(void)
 /* Trivial main program */
 
   for (i = 0xFFFFFFFF;; i++)
-  {
     *AT91C_PIOA_ODSR = i;		// Update PORT B outputs
-
-//    for (j = 0; j < 1000; j++);		// Wait awhile
-  }
 }
