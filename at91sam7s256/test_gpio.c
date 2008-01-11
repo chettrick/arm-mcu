@@ -1,17 +1,19 @@
 /* Simple bit twiddler test program */
 
-// $Id: test_gpio.c,v 1.1 2008-01-10 12:06:51 cvs Exp $
+// $Id: test_gpio.c,v 1.2 2008-01-11 08:24:24 cvs Exp $
 
 #include <cpu.h>
 
 int main(void)
 {
-  unsigned short int i;
-  static volatile unsigned int j;
+  volatile unsigned int i;
+  volatile unsigned int j;
 
   cpu_init(DEFAULT_CPU_FREQ);
 
 /* Configure GPIO's */
+
+  *AT91C_PMC_PCER	= 0x00000004;	// Enable Port A peripheral clock
 
   *AT91C_PIOA_PER	= 0xFFFFFFFF;	// Port A is all GPIO
   *AT91C_PIOA_OER	= 0xFFFFFFFF;	// Port A is all output
@@ -20,12 +22,10 @@ int main(void)
 
 /* Trivial main program */
 
-  for (i = 0;; i++)
+  for (i = 0xFFFFFFFF;; i++)
   {
-    *AT91C_WDTC_WDCR = 0xA5000001;	// Reset watchdog timer
-
     *AT91C_PIOA_ODSR = i;		// Update PORT B outputs
 
-    for (j = 0; j < 10; j++);		// Wait awhile
+//    for (j = 0; j < 1000; j++);		// Wait awhile
   }
 }
