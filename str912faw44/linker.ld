@@ -1,14 +1,16 @@
 /* Linker script for STR912FA microcontroller */
 
-/* $Id: linker.ld,v 1.2 2007-11-22 10:11:23 cvs Exp $ */
+/* $Id: linker.ld,v 1.3 2008-01-11 08:15:34 cvs Exp $ */
 
 MEMORY {
-  flash : ORIGIN = 0, LENGTH = 512K
+  flash : ORIGIN = 0x00000000, LENGTH = 512K
   ram : ORIGIN = 0x04000000, LENGTH = 96K
   }
 
-__ram_size__ = 96K;
+__rom_start__ = 0x00000000;
 __rom_size__ = 512K;
+__ram_start__ = 0x04000000;
+__ram_size__ = 96K;
 
 __STACK_SIZE_FIQ__ = 0x100;
 __STACK_SIZE_IRQ__ = 0x100;
@@ -16,17 +18,17 @@ __STACK_SIZE_SUPERVISOR__ = 0x4;
 __STACK_SIZE_ABORT__ = 0x4;
 __STACK_SIZE_UNDEFINED__ = 0x4;
 
-__stack_end__ = 0x40000000 + __ram_size__ - 4 - __STACK_SIZE_FIQ__ - 
+__stack_end__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__ - 
 	__STACK_SIZE_IRQ__ - __STACK_SIZE_SUPERVISOR__ - __STACK_SIZE_ABORT__ -
 	__STACK_SIZE_UNDEFINED__;
-__stack_end_undefined__ = 0x40000000 + __ram_size__ - 4 - __STACK_SIZE_FIQ__ - 
+__stack_end_undefined__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__ - 
 	__STACK_SIZE_IRQ__ - __STACK_SIZE_SUPERVISOR__ - __STACK_SIZE_ABORT__;
-__stack_end_abort__ = 0x40000000 + __ram_size__ - 4 - __STACK_SIZE_FIQ__ - 
+__stack_end_abort__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__ - 
 	__STACK_SIZE_IRQ__ - __STACK_SIZE_SUPERVISOR__;
-__stack_end_supervisor__ = 0x40000000 + __ram_size__ - 4 - __STACK_SIZE_FIQ__ - 
+__stack_end_supervisor__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__ - 
 	__STACK_SIZE_IRQ__;
-__stack_end_irq__ = 0x40000000 + __ram_size__ - 4 - __STACK_SIZE_FIQ__;
-__stack_end_fiq__ = 0x40000000 + __ram_size__ - 4;
+__stack_end_irq__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__;
+__stack_end_fiq__ = __ram_start__ + __ram_size__ - 4;
 
 
 SECTIONS {
