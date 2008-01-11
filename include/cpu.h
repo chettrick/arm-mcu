@@ -1,6 +1,6 @@
 /* Initialize CPU core */
 
-// $Id: cpu.h,v 1.3 2007-11-21 08:08:58 cvs Exp $
+// $Id: cpu.h,v 1.4 2008-01-11 08:40:03 cvs Exp $
 
 extern unsigned long int CPUFREQ;
 
@@ -8,6 +8,11 @@ extern void cpu_init(unsigned long int frequency);
 
 #ifdef MCU_at91sam7a3
 #include <at91sam7a3/io.h>
+#define DEFAULT_CPU_FREQ 48000000
+#endif
+
+#ifdef MCU_at91sam7s256
+#include <at91sam7s256/io.h>
 #define DEFAULT_CPU_FREQ 48000000
 #endif
 
