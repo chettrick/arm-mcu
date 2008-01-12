@@ -1,6 +1,6 @@
 # Make processor dependent startup and libraries for AT91SAM7S256
 
-# $Id: Makefile,v 1.1 2008-01-09 21:04:06 cvs Exp $
+# $Id: Makefile,v 1.2 2008-01-12 21:23:06 cvs Exp $
 
 ARMSRC	= ..
 
@@ -9,7 +9,8 @@ MCU	= at91sam7s256
 
 # Build support library
 
-lib$(MCU).a: crt0.o cpu.o syscalls.o
+lib$(MCU).a: crt0.o conio.o cpu.o syscalls.o
+	$(AR) crs lib$(MCU).a conio.o
 	$(AR) crs lib$(MCU).a cpu.o
 	$(AR) crs lib$(MCU).a syscalls.o
 
