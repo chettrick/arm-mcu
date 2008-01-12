@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.8 2007-10-29 16:12:18 cvs Exp $
+// $Id: conio.c,v 1.9 2008-01-12 21:21:15 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
@@ -13,7 +13,7 @@
 
 /* Define relocatable UART register definitions */
 
-static unsigned int UARTBASE = UART0_BASE_ADDR;
+static unsigned long int UARTBASE = UART0_BASE_ADDR;
 
 #define UxRBR          (*(volatile unsigned long *)(UARTBASE + 0x00))
 #define UxTHR          (*(volatile unsigned long *)(UARTBASE + 0x00))
