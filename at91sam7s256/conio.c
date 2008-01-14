@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.1 2008-01-13 21:00:50 cvs Exp $
+// $Id: conio.c,v 1.2 2008-01-14 11:13:38 cvs Exp $
 
 #include <cpu.h>
 #include <conio.h>
@@ -24,21 +24,22 @@ static unsigned long int UARTBASE = (unsigned long int) AT91C_BASE_US0;
 
 /* Initialize serial console */
 
-void conio_init(unsigned long int uartaddr, unsigned long int baudrate)
+void conio_init(unsigned port, unsigned long int baudrate)
 {
-  UARTBASE = uartaddr;
 
 // Configure peripheral clock and I/O pins for UART
 
-  switch (UARTBASE)
+  switch (port)
   {
-    case 0xFFFC0000 :
+    case 0 :
+      UARTBASE = (unsigned long int) AT91C_BASE_US0;
       *AT91C_PMC_PCER = 0x00000040;
       *AT91C_PIOA_ASR = 0x00000060;
       *AT91C_PIOA_PDR = 0x00000060;
       break;
 
-    case 0xFFFC4000 :
+    case 1 :
+      UARTBASE = (unsigned long int) AT91C_BASE_US1;
       *AT91C_PMC_PCER = 0x00000080;
       *AT91C_PIOA_ASR = 0x00600000;
       *AT91C_PIOA_PDR = 0x00600000;

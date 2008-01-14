@@ -4,9 +4,9 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.h,v 1.2 2007-10-29 16:12:18 cvs Exp $
+// $Id: conio.h,v 1.3 2008-01-14 11:13:38 cvs Exp $
 
-void conio_init(unsigned long int uartaddr, unsigned long int baudrate);
+void conio_init(unsigned port, unsigned long int baudrate);
 
 void putch(unsigned char c);
 

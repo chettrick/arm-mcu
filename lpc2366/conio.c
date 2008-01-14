@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.8 2008-01-12 21:21:15 cvs Exp $
+// $Id: conio.c,v 1.9 2008-01-14 11:13:38 cvs Exp $
 
 #include <cpu.h>
 #include <conio.h>
@@ -34,32 +34,34 @@ static unsigned long int UARTBASE = UART0_BASE_ADDR;
 
 /* Initialize serial console */
 
-void conio_init(unsigned long int uartaddr, unsigned long int baudrate)
+void conio_init(unsigned port, unsigned long int baudrate)
 {
   unsigned short int b;
 
-  UARTBASE = uartaddr;
-
-  switch (UARTBASE)
+  switch (port)
   {
-    case UART0_BASE_ADDR :
+    case 0 :
+      UARTBASE = UART0_BASE_ADDR;
       PINSEL0 &= 0xFFFFFF0F;		// Enable UART 0 I/O pins
       PINSEL0 |= 0x00000050;
       break;
 
-    case UART1_BASE_ADDR :
+    case 1 :
+      UARTBASE = UART1_BASE_ADDR;
       PINSEL0 &= 0x3FFFFFFF;		// Enable UART 1 I/O pins
       PINSEL0 |= 0x40000000;
       PINSEL1 &= 0xFFFFFFFC;
       PINSEL1 |= 0x00000001;
       break;
 
-    case UART2_BASE_ADDR :
+    case 2 :
+      UARTBASE = UART2_BASE_ADDR;
       PINSEL0 &= 0xFF0FFFFF;		// Enable UART 2 I/O pins
       PINSEL0 |= 0x00500000;
       break;
 
-    case UART3_BASE_ADDR :
+    case 3 :
+      UARTBASE = UART3_BASE_ADDR;
       PINSEL0 &= 0xFFFFFFF0;		// Enable UART 3 I/O pins
       PINSEL0 |= 0x0000000A;
       break;
