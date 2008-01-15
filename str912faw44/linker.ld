@@ -1,6 +1,6 @@
-/* Linker script for STR912FA microcontroller */
+/* Linker script for STR912FAW44 microcontroller */
 
-/* $Id: linker.ld,v 1.4 2008-01-15 10:31:55 cvs Exp $ */
+/* $Id: linker.ld,v 1.5 2008-01-15 10:57:35 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 512K
