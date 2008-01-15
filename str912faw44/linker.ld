@@ -1,6 +1,6 @@
 /* Linker script for STR912FA microcontroller */
 
-/* $Id: linker.ld,v 1.3 2008-01-11 08:15:34 cvs Exp $ */
+/* $Id: linker.ld,v 1.4 2008-01-15 10:31:55 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 512K
@@ -76,7 +76,7 @@ SECTIONS {
 
 /*  Libraries to link against.					*/
 
-INPUT( -lc -lgcc -lstr912fa )
+INPUT( -lc -lgcc -lstr912faw44 )
 
 /*  Provide a default vector for any unhandled interrupts.	*/
 
