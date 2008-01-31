@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.9 2008-01-02 08:23:34 cvs Exp $
+# $Id: Makefile,v 1.10 2008-01-31 08:59:13 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -41,7 +41,8 @@ D2XXDIST	= $(TEMP)/libftd2xx0.4.13.tar.gz
 endif
 D2XXDIR		= D2XX
 
-OPENOCDSRC	= trunk
+OPENOCDVER	= 247
+OPENOCDSRC	= openocd-$(OPENOCDVER)
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 TARBALL		= $(PKGNAME)-cygwin.tgz
@@ -153,7 +154,7 @@ endif
 # Compile OpenOCD
 
 openocd.done: d2xx.done
-	svn checkout http://svn.berlios.de/svnroot/repos/openocd/trunk
+	svn checkout -r $(OPENOCDVER) http://svn.berlios.de/svnroot/repos/openocd/trunk $(OPENOCDSRC)
 	cd $(OPENOCDSRC) && ./bootstrap
 	cd $(OPENOCDSRC) && ./configure --enable-ft2232_ftd2xx --disable-ft2232_libftdi --disable-amtjtagaccel --disable-ep93xx --disable-parport --disable-parport_ppdev --with-ftd2xx=`pwd`/../$(D2XXDIR)
 ifeq ($(shell uname), CYGWIN_NT-5.1)
@@ -178,6 +179,7 @@ $(TARBALL): binutils.done gcc.done newlib.done gdb.done lpc21isp.done openocd.do
 	echo "$(GCCSRC)"				>>$(INSTBASE)/README
 	echo "$(NEWLIBSRC)"				>>$(INSTBASE)/README
 	echo "$(GDBSRC)"				>>$(INSTBASE)/README
+	echo "$(OPENOCDSRC)"				>>$(INSTBASE)/README
 	awk '/define VERSION/ { printf("lpc21isp-%s\n", substr($$3, 2, length($$3)-2)); }' lpc21isp.c >>$(INSTBASE)/README
 	chmod -R ugo-w $(INSTBASE)
 ifeq ($(shell uname), Linux)
