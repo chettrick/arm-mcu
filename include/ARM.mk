@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.19 2008-01-03 10:40:37 cvs Exp $
+# $Id: ARM.mk,v 1.20 2008-02-04 12:52:41 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -16,6 +16,10 @@ ARMSRC		?= .
 MCUDEPENDENT	?= $(ARMSRC)/$(MCU)
 STARTUP		?= $(MCUDEPENDENT)/crt0.o
 LINKERSCRIPT	?= $(MCUDEPENDENT)/linker.ld
+
+DEBUGGDB	?= $(MCUDEPENDENT)/debug.gdb
+DEBUGOCD	?= $(MCUDEPENDENT)/debug.ocd
+RESETOCD	?= $(MCUDEPENDENT)/reset.ocd
 
 GDBFLAGS	?= -g
 OPTFLAGS	?= -O
@@ -57,7 +61,7 @@ default_catch:
 
 .elf.debug:
 	$(MAKE) startocd
-	$(GDB) -x $(MCUDEPENDENT)/debug.gdb -w $<
+	$(GDB) -x $(DEBUGGDB) -w $<
 	$(MAKE) stopocd
 
 .elf.hex:
@@ -69,7 +73,7 @@ default_catch:
 # Start OpenOCD debug server
 
 startocd:
-	$(OPENOCD) -f $(MCUDEPENDENT)/debug.ocd &
+	$(OPENOCD) -f $(DEBUGOCD) &
 
 # Stop OpenOCD debug server
 
@@ -81,7 +85,7 @@ stopocd:
 resetocd:
 	@echo "reset run" >reset.script
 	@echo "shutdown" >> reset.script
-	$(OPENOCD) -f $(MCUDEPENDENT)/reset.ocd
+	$(OPENOCD) -f $(RESETOCD)
 	@rm reset.script
 
 # Update from CVS repository
