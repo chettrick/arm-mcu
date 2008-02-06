@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.20 2008-02-04 12:52:41 cvs Exp $
+# $Id: ARM.mk,v 1.21 2008-02-06 14:12:00 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -16,10 +16,8 @@ ARMSRC		?= .
 MCUDEPENDENT	?= $(ARMSRC)/$(MCU)
 STARTUP		?= $(MCUDEPENDENT)/crt0.o
 LINKERSCRIPT	?= $(MCUDEPENDENT)/linker.ld
-
+OPENOCDCFG	?= $(MCUDEPENDENT)/openocd.cfg
 DEBUGGDB	?= $(MCUDEPENDENT)/debug.gdb
-DEBUGOCD	?= $(MCUDEPENDENT)/debug.ocd
-RESETOCD	?= $(MCUDEPENDENT)/reset.ocd
 
 GDBFLAGS	?= -g
 OPTFLAGS	?= -O
@@ -34,7 +32,7 @@ default_catch:
 
 # These targets are not files
 
-.PHONY: default_catch update clean startocd stopocd resetocd
+.PHONY: default_catch update clean
 
 # These are the target suffixes
 
@@ -60,33 +58,15 @@ default_catch:
 	$(OBJCOPY) -S -O binary --gap-fill=0 $< $@
 
 .elf.debug:
-	$(MAKE) startocd
+	$(OPENOCD) -f $(OPENOCDCFG) &
 	$(GDB) -x $(DEBUGGDB) -w $<
-	$(MAKE) stopocd
+	killall openocd
 
 .elf.hex:
 	$(OBJCOPY) -S -O ihex --gap-fill=0 $< $@
 
 .S.o:
 	$(CC) $(CFLAGS) -o $@ -c $<
-
-# Start OpenOCD debug server
-
-startocd:
-	$(OPENOCD) -f $(DEBUGOCD) &
-
-# Stop OpenOCD debug server
-
-stopocd:
-	killall $(OPENOCD)
-
-# Reset target using OpenOCD
-
-resetocd:
-	@echo "reset run" >reset.script
-	@echo "shutdown" >> reset.script
-	$(OPENOCD) -f $(RESETOCD)
-	@rm reset.script
 
 # Update from CVS repository
 
