@@ -1,14 +1,14 @@
 /* Linker script for LPC2366 microcontroller */
 
-/* $Id: linker.ld,v 1.4 2008-01-11 10:23:46 cvs Exp $ */
+/* $Id: linker.ld,v 1.5 2008-02-12 13:50:18 cvs Exp $ */
 
 MEMORY {
-  flash : ORIGIN = 0x00000000, LENGTH = 248K
+  flash : ORIGIN = 0x00000000, LENGTH = 256K
   ram : ORIGIN = 0x40000000, LENGTH = 32K
   }
 
 __rom_start__ = 0x00000000;
-__rom_size__ = 248K;
+__rom_size__ = 256K;
 __ram_start__ = 0x40000000;
 __ram_size__ = 32K;
 
