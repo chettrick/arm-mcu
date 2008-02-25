@@ -1,6 +1,6 @@
 /* Linker script for AT91SAM7S256 microcontroller */
 
-/* $Id: linker.ld,v 1.4 2008-01-11 10:23:46 cvs Exp $ */
+/* $Id: linker.ld,v 1.5 2008-02-25 12:58:51 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 256K
@@ -76,7 +76,7 @@ SECTIONS {
 
 /*  Libraries to link against.					*/
 
-INPUT( -lc -lgcc -lat91sam7s256 )
+INPUT( -lat91sam7s256 )
 
 /*  Provide a default vector for any unhandled interrupts.	*/
 

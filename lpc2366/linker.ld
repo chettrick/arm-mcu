@@ -1,6 +1,6 @@
 /* Linker script for LPC2366 microcontroller */
 
-/* $Id: linker.ld,v 1.5 2008-02-12 13:50:18 cvs Exp $ */
+/* $Id: linker.ld,v 1.6 2008-02-25 12:58:51 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 256K
@@ -76,7 +76,7 @@ SECTIONS {
 
 /*  Libraries to link against.					*/
 
-INPUT( -lc -lgcc -llpc2366 )
+INPUT( -llpc2366 )
 
 /*  Provide a default vector for any unhandled interrupts.	*/
 
