@@ -2,7 +2,7 @@
 
 # expect script for programming STR912FAW44 flash
 
-# $Id: flash.exp,v 1.1 2008-02-06 14:13:00 cvs Exp $
+# $Id: flash.exp,v 1.2 2008-02-26 12:09:10 cvs Exp $
 
 # Script arguments:
 
@@ -50,5 +50,9 @@ expect $prompt
 send "reset run\n"
 expect $prompt
 
+exp_sleep 1
+
 send "shutdown\n"
 expect $prompt
+
+exp_sleep 1
