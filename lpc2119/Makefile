@@ -1,17 +1,17 @@
 # Make processor dependent startup and libraries for LPC2119
 
-# $Id: Makefile,v 1.8 2007-12-20 13:22:19 cvs Exp $
+# $Id: Makefile,v 1.9 2008-02-26 12:36:04 cvs Exp $
 
-ARMSRC	= ..
+ARMSRC		= ..
 
-ARCH	= arm7tdmi-s
-MCU	= lpc2119
+ARCH		= arm7tdmi-s
+MCU		= lpc2119
+
+LIBOBJS		= conio.o cpu.o syscalls.o
 
 # Build support library
 
-lib$(MCU).a: crt0.o conio.o cpu.o syscalls.o
-	$(AR) crs lib$(MCU).a conio.o
-	$(AR) crs lib$(MCU).a cpu.o
-	$(AR) crs lib$(MCU).a syscalls.o
+lib$(MCU).a: $(LIBOBJS)
+	$(AR) crs lib$(MCU).a $(LIBOBJS)
 
 include $(ARMSRC)/include/ARM.mk
