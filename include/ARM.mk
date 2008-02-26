@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.23 2008-02-25 13:10:58 cvs Exp $
+# $Id: ARM.mk,v 1.24 2008-02-26 12:30:33 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -48,7 +48,7 @@ default_catch:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 .o.elf:
-	cd $(MCUDEPENDENT) ; $(MAKE) lib$(MCU).a
+	cd $(MCUDEPENDENT) ; $(MAKE) crt0.o lib$(MCU).a
 	$(CC) $(CFLAGS) -o $@ $(STARTUP) $< $(LDFLAGS) $(EXTRAOBJS)
 
 .elf.asm:
