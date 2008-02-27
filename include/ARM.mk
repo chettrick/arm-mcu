@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.25 2008-02-27 08:20:31 cvs Exp $
+# $Id: ARM.mk,v 1.26 2008-02-27 08:41:57 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -21,8 +21,8 @@ DEBUGGDB	?= $(MCUDEPENDENT)/debug.gdb
 
 GDBFLAGS	?= -g
 OPTFLAGS	?= -O
-CFLAGS		+= -Wall -I$(ARMSRC) -I$(ARMSRC)/include -mcpu=$(ARCH) -DMCU_$(MCU) $(GDBFLAGS) $(OPTFLAGS) $(EXTRAFLAGS) $(DEBUG)
-LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDEPENDENT) -l$(MCU) -Wl,-Map=$*.map,--cref
+CFLAGS		+= -Wall -I$(ARMSRC) -I$(ARMSRC)/include -mcpu=$(ARCH) -DMCU_$(MCU) $(GDBFLAGS) $(OPTFLAGS) $(DEBUG) $(EXTRAFLAGS)
+LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDEPENDENT) -l$(MCU) -Wl,-Map=$*.map,--cref $(EXTRAOBJS)
 
 # Define default target placeholder
 
@@ -49,7 +49,7 @@ default_catch:
 
 .o.elf:
 	cd $(MCUDEPENDENT) ; $(MAKE) crt0.o lib$(MCU).a
-	$(CC) $(CFLAGS) -o $@ $(STARTUP) $< $(LDFLAGS) $(EXTRAOBJS)
+	$(CC) $(CFLAGS) -o $@ $(STARTUP) $< $(LDFLAGS)
 
 .elf.asm:
 	$(OBJDUMP) -S -d $< >$@
