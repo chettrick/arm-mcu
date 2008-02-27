@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.24 2008-02-26 12:30:33 cvs Exp $
+# $Id: ARM.mk,v 1.25 2008-02-27 08:20:31 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 CC		= $(ARMTOOLS)/bin/arm-elf-gcc
@@ -64,6 +64,9 @@ default_catch:
 
 .elf.hex:
 	$(OBJCOPY) -S -O ihex --gap-fill=0 $< $@
+
+.s.o:
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 .S.o:
 	$(CC) $(CFLAGS) -o $@ -c $<
