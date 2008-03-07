@@ -1,15 +1,15 @@
 #include <cpu.h>
 
-void myDelay(unsigned long delay )
-{ 
-  while(delay) delay--;
-}
-
-int main(void)
+void main(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
+  volatile unsigned long i;
+
+// Initialize CPU core
 
   cpu_init(DEFAULT_CPU_FREQ);
+
+// Enable peripheral clock
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOA, ENABLE);
@@ -25,8 +25,8 @@ int main(void)
   for (;;)
   {
     GPIOC->BRR |= 0x00001000;
-    myDelay(500000);
+    for (i = 0; i < 500000; i++);
     GPIOC->BSRR |= 0x00001000;
-    myDelay(500000);
+    for (i = 0; i < 500000; i++);
   }
 }
