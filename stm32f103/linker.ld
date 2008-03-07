@@ -1,3 +1,7 @@
+/* Linker script for STM32F103 Cortex-M3 microcontroller */
+
+/* $Id: linker.ld,v 1.3 2008-03-07 20:50:40 cvs Exp $ */
+
 MEMORY
 {
   rom (rx)  : ORIGIN = 0x00000000, LENGTH = 128K
