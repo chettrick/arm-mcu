@@ -1,24 +1,41 @@
 MEMORY
 {
+  rom (rx)  : ORIGIN = 0x00000000, LENGTH = 128K
   ram (rwx) : ORIGIN = 0x20000000, LENGTH = 20K
-  rom (rx) : ORIGIN = 0x00000000, LENGTH = 128K
 }
 
 SECTIONS
 {
-  . = 0x0;		/* From 0x00000000 */
+  . = 0x00000000;
   .text : {
-  *(vectors)		/* Vector table */
-  *(.text)		/* Program code */
-  *(.rodata)		/* Read only data */
+  *(.text)				/* Program code */
+  *(.rodata)				/* Read only data */
+  *(.rodata*)
+  *(.glue_7)
+  *(.glue_7t)
+  . = ALIGN(4);
+  __text_end__ = .;			/* Used in crt0.S */
   } >rom
-  . = 0x20000000;	/* From 0x20000000 */      
+
+  . = 0x20000000;
   .data : {
-  *(.data)		/* Data memory */
+  . = ALIGN(4);
+  __data_beg__ = .;			/* Used in crt0.S */
+  *(.data)				/* Initialized datay */
+  . = ALIGN(4);
+  __data_end__ = .;			/* Used in crt0.S */
   } >ram AT > rom 
+
   .bss : {
-  *(.bss)		/* Zero-filled run time allocate data memory */
-  } >ram AT > rom
+  . = ALIGN(4);
+  __bss_beg__ = .;			/* Used in crt0.S */
+  *(.bss)				/* Uninitialized data */
+  . = ALIGN(4);
+  __bss_end__ = .;			/* Used in crt0.S */
+  } >ram
+
+  . = ALIGN(4);
+  end = .;
 }  
 
 /*  Libraries to link against. */

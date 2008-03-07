@@ -1,6 +1,6 @@
 /* Startup for STM32F103 Cortex-M3 ARM microcontroller */
 
-// $Id: crt0.S,v 1.1 2008-03-07 13:51:19 cvs Exp $
+// $Id: crt0.S,v 1.2 2008-03-07 20:35:31 cvs Exp $
 
 		.equ		STACK_TOP, 0x20000800
 		.text
@@ -10,6 +10,12 @@
 		.code		16
 		.syntax 	unified
 		.type		_reset, function
+
+		.extern		__bss_beg__
+		.extern		__bss_end__
+		.extern		__data_beg__
+		.extern		__data_end__
+		.extern		__text_end__
 
 // Exception vector table
 
@@ -122,11 +128,58 @@ _start: 	.word		STACK_TOP
 		.extern		USBWakeUp_IRQHandler
 		.word		USBWakeUp_IRQHandler
 
-// Reset vector
-
-_reset:		b		main
-
 // Default exception handler; does nothing
 
 _default_handler: bx		lr
+
+// Reset vector: Set up environment to call C main()
+
+_reset:
+
+// Copy initialized data from flash to RAM
+
+copy_data:	ldr		r1, DATA_BEG
+		ldr 		r2, TEXT_END
+		ldr 		r3, DATA_END
+		subs		r3, r3, r1		// Length of initialized data
+		beq		zero_bss		// Skip if none
+
+copy_data_loop: ldrb		r4, [r2], #1		// Read byte from flash
+		strb		r4, [r1], #1  		// Store byte to RAM
+		subs		r3, r3, #1  		// Decrement counter
+		bgt 		copy_data_loop		// Repeat until done
+
+// Zero uninitialized data (bss)
+
+zero_bss: 	ldr 		r1, BSS_BEG
+		ldr 		r3, BSS_END
+		subs 		r3, r3, r1		// Length of uninitialized data
+		beq		call_main		// Skip if none
+
+		mov 		r2, #0
+
+zero_bss_loop: 	strb		r2, [r1], #1		// Store zero
+		subs		r3, r3, #1		// Decrement counter
+		bgt		zero_bss_loop		// Repeat until done
+
+// Call main()
+
+call_main:	mov		r0, #0			// argc=0
+		mov		r1, #0			// argv=NULL
+
+		bl		main 
+
+// main() should never return, but if it does just do nothing forever
+// Should probably put processor into sleep mode instead.
+
+endless_loop:	b		endless_loop
+
+// These are filled in by the linker
+	
+TEXT_END:	.word		__text_end__
+DATA_BEG:	.word		__data_beg__
+DATA_END:	.word		__data_end__
+BSS_BEG:	.word		__bss_beg__ 
+BSS_END:	.word		__bss_end__
+
 		.end
