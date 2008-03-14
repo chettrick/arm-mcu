@@ -1,11 +1,13 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.10 2008-01-31 08:59:13 cvs Exp $
+# $Id: Makefile,v 1.11 2008-03-14 15:18:50 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 
 TEMP		= /tmp
+
+TARGETNAME	= arm-eabi
 
 BINUTILVER	= 2.18
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
@@ -13,11 +15,12 @@ BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.2.2
+GCCVER		= 4.3.0
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
+GCCOBJ		= gcc-$(GCCVER).obj
 
 NEWLIBVER	= 1.16.0
 NEWLIBSERVER	= ftp://sources.redhat.com/pub/newlib
@@ -64,7 +67,7 @@ $(BINUTILDIST):
 binutils.done: $(BINUTILDIST)
 	rm -rf $(BINUTILSRC)
 	tar xzf $(BINUTILDIST)
-	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=arm-elf --enable-interwork --enable-multilib
+	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared
 	$(MAKE) -C $(BINUTILSRC)
 	$(MAKE) -C $(BINUTILSRC) install
 	touch binutils.done
@@ -80,10 +83,12 @@ $(GCCDIST):
 
 gcc.done: binutils.done $(GCCDIST)
 	rm -rf $(GCCSRC)
+	rm -rf $(GCCOBJ)
 	tar xjf $(GCCDIST)
-	cd $(GCCSRC) && ./configure --prefix=$(INSTBASE) --target=arm-elf --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCSRC)
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCSRC) install
+	mkdir -p $(GCCOBJ)
+	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) install
 	touch gcc.done
 
 ################################################################################
@@ -98,7 +103,7 @@ $(NEWLIBDIST):
 newlib.done: gcc.done $(NEWLIBDIST)
 	rm -rf $(NEWLIBSRC)
 	tar xzf $(NEWLIBDIST)
-	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBSRC) && ./configure --prefix=$(INSTBASE) --target=arm-elf --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls
+	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls --disable-nls --disable-shared
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC) install
 	touch newlib.done
@@ -115,7 +120,7 @@ $(GDBDIST):
 gdb.done: $(GDBDIST)
 	rm -rf $(GDBSRC)
 	tar xjf $(GDBDIST)
-	cd $(GDBSRC) && ./configure --prefix=$(INSTBASE) --target=arm-elf --enable-interwork --enable-multilib --disable-libssp
+	cd $(GDBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared
 	$(MAKE) -C $(GDBSRC)
 	$(MAKE) -C $(GDBSRC) install
 	touch gdb.done
@@ -216,6 +221,7 @@ clean:
 	rm -rf $(INSTBASE)
 	rm -rf $(BINUTILSRC)
 	rm -rf $(GCCSRC)
+	rm -rf $(GCCOBJ)
 	rm -rf $(NEWLIBSRC)
 	rm -rf $(GDBSRC)
 	rm -rf $(D2XXDIR)
