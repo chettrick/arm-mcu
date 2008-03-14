@@ -1,15 +1,15 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.30 2008-03-14 09:40:49 cvs Exp $
+# $Id: ARM.mk,v 1.31 2008-03-14 15:16:38 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
-CC		= $(ARMTOOLS)/bin/arm-elf-gcc
-LD		= $(ARMTOOLS)/bin/arm-elf-ld
-AR		= $(ARMTOOLS)/bin/arm-elf-ar
-STRIP		= $(ARMTOOLS)/bin/arm-elf-strip
-OBJCOPY		= $(ARMTOOLS)/bin/arm-elf-objcopy
-OBJDUMP		= $(ARMTOOLS)/bin/arm-elf-objdump
-GDB		= $(ARMTOOLS)/bin/arm-elf-gdb
+CC		= $(ARMTOOLS)/bin/arm-eabi-gcc
+LD		= $(ARMTOOLS)/bin/arm-eabi-ld
+AR		= $(ARMTOOLS)/bin/arm-eabi-ar
+STRIP		= $(ARMTOOLS)/bin/arm-eabi-strip
+OBJCOPY		= $(ARMTOOLS)/bin/arm-eabi-objcopy
+OBJDUMP		= $(ARMTOOLS)/bin/arm-eabi-objdump
+GDB		= $(ARMTOOLS)/bin/arm-eabi-gdb
 OPENOCD		= $(ARMTOOLS)/bin/openocd
 
 ARMSRC		?= .
