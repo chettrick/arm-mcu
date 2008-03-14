@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: syscalls.c,v 1.1 2008-03-07 13:51:19 cvs Exp $
+// $Id: syscalls.c,v 1.2 2008-03-14 21:38:31 cvs Exp $
 
 #include <conio.h>
 #include <sys/stat.h>
@@ -67,19 +67,4 @@ int _write(int fd, const char *buf, size_t cnt)
     putch(buf[i]);
 
   return cnt;
-}
-
-void _exit(int code)
-{
-  for (;;);
-}
-
-int _kill()
-{
-  return 0;
-}
-
-int _getpid()
-{
-  return 1;
 }
