@@ -1,8 +1,7 @@
 /* Startup for STM32F103 Cortex-M3 ARM microcontroller */
 
-// $Id: crt0.S,v 1.2 2008-03-07 20:35:31 cvs Exp $
+// $Id: crt0.S,v 1.3 2008-03-15 06:01:26 cvs Exp $
 
-		.equ		STACK_TOP, 0x20000800
 		.text
 		.extern		main
 		.global		 _start
@@ -16,6 +15,7 @@
 		.extern		__data_beg__
 		.extern		__data_end__
 		.extern		__text_end__
+		.extern		STACK_TOP
 
 // Exception vector table
 

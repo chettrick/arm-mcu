@@ -1,12 +1,21 @@
 /* Linker script for STM32F103 Cortex-M3 microcontroller */
 
-/* $Id: linker.ld,v 1.3 2008-03-07 20:50:40 cvs Exp $ */
+/* $Id: linker.ld,v 1.4 2008-03-15 06:01:26 cvs Exp $ */
 
 MEMORY
 {
   rom (rx)  : ORIGIN = 0x00000000, LENGTH = 128K
   ram (rwx) : ORIGIN = 0x20000000, LENGTH = 20K
 }
+
+__rom_start__	= 0x00000000;
+__rom_size__	= 0x00020000;
+__ram_start__	= 0x20000000;
+__ram_size__	= 0x00005000;
+
+__stack_top__	= __ram_start__ + __ram_size__;
+
+PROVIDE(STACK_TOP = __stack_top__);
 
 SECTIONS
 {
