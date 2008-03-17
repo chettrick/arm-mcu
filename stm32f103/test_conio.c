@@ -1,6 +1,6 @@
 /* Simple serial console I/O test program */
 
-// $Id: test_conio.c,v 1.2 2008-03-15 07:05:48 cvs Exp $
+// $Id: test_conio.c,v 1.3 2008-03-17 21:16:16 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
@@ -12,7 +12,7 @@ int main(void)
   char buf[32];
 
   cpu_init(DEFAULT_CPU_FREQ);
-  conio_init(USART2_BASE, 19200);
+  conio_init(2, 19200);
 
   puts("\033[H\033[2JSTM32F103 Console I/O Test\n");
 
