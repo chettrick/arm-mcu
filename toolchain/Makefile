@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.13 2008-03-18 10:28:00 cvs Exp $
+# $Id: Makefile,v 1.14 2008-03-18 13:00:32 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -71,6 +71,7 @@ binutils.done: $(BINUTILDIST)
 	tar xzf $(BINUTILDIST)
 	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared
 	$(MAKE) -C $(BINUTILSRC)
+ifeq ($(shell uname), Linux)
 	rm $(BINUTILSRC)/binutils/ar
 	rm $(BINUTILSRC)/binutils/addr2line
 	rm $(BINUTILSRC)/binutils/cxxfilt
@@ -86,6 +87,7 @@ binutils.done: $(BINUTILDIST)
 	rm $(BINUTILSRC)/gprof/gprof
 	rm $(BINUTILSRC)/ld/ld-new
 	$(MAKE) -C $(BINUTILSRC) LDFLAGS=-all-static
+endif
 	$(MAKE) -C $(BINUTILSRC) install
 	touch binutils.done
 
@@ -139,6 +141,16 @@ gdb.done: $(GDBDIST)
 	tar xjf $(GDBDIST)
 	cd $(GDBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared
 	$(MAKE) -C $(GDBSRC)
+ifeq ($(shell uname), Linux)
+	cd $(GDBSRC) ; patch -p0 <../gdb.patch
+	rm $(GDBSRC)/gdb/gdb
+	rm $(GDBSRC)/gdb/gdbtui
+	rm $(GDBSRC)/gdb/insight
+	rm $(GDBSRC)/sim/arm/run
+	rm $(GDBSRC)/tcl/unix/tclsh
+	rm $(GDBSRC)/tk/unix/wish
+	$(MAKE) -C $(GDBSRC)
+endif
 	$(MAKE) -C $(GDBSRC) install
 	touch gdb.done
 
