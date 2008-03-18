@@ -1,12 +1,10 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.11 2008-03-14 15:18:50 cvs Exp $
+# $Id: Makefile,v 1.12 2008-03-18 10:20:14 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
-
 TEMP		= /tmp
-
 TARGETNAME	= arm-eabi
 
 BINUTILVER	= 2.18
@@ -47,6 +45,10 @@ D2XXDIR		= D2XX
 OPENOCDVER	= 247
 OPENOCDSRC	= openocd-$(OPENOCDVER)
 
+LPC21ISPVER	= 155
+LPC21ISPSRC	= lpc21isp_$(LPC21ISPVER)
+LPC21ISPDIST	= $(LPC21ISPSRC).zip
+
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 TARBALL		= $(PKGNAME)-cygwin.tgz
 else
@@ -69,6 +71,21 @@ binutils.done: $(BINUTILDIST)
 	tar xzf $(BINUTILDIST)
 	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared
 	$(MAKE) -C $(BINUTILSRC)
+	rm $(BINUTILSRC)/binutils/ar
+	rm $(BINUTILSRC)/binutils/addr2line
+	rm $(BINUTILSRC)/binutils/cxxfilt
+	rm $(BINUTILSRC)/binutils/nm-new
+	rm $(BINUTILSRC)/binutils/objcopy
+	rm $(BINUTILSRC)/binutils/objdump
+	rm $(BINUTILSRC)/binutils/ranlib
+	rm $(BINUTILSRC)/binutils/readelf
+	rm $(BINUTILSRC)/binutils/size
+	rm $(BINUTILSRC)/binutils/strings
+	rm $(BINUTILSRC)/binutils/strip-new
+	rm $(BINUTILSRC)/gas/as-new
+	rm $(BINUTILSRC)/gprof/gprof
+	rm $(BINUTILSRC)/ld/ld-new
+	$(MAKE) -C $(BINUTILSRC) LDFLAGS=-all-static
 	$(MAKE) -C $(BINUTILSRC) install
 	touch binutils.done
 
@@ -87,7 +104,7 @@ gcc.done: binutils.done $(GCCDIST)
 	tar xjf $(GCCDIST)
 	mkdir -p $(GCCOBJ)
 	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) LDFLAGS=-static
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) install
 	touch gcc.done
 
@@ -129,9 +146,12 @@ gdb.done: $(GDBDIST)
 
 # Compile lpc21isp
 
-lpc21isp.done: lpc21isp.c
-	gcc -Wall -o lpc21isp lpc21isp.c
-	install -csm 0755 lpc21isp $(INSTBASE)/bin
+lpc21isp.done: $(LPC21ISPDIST)
+	rm -rf $(LPC21ISPSRC)
+	mkdir -p $(LPC21ISPSRC)
+	unzip $(LPC21ISPDIST) -d $(LPC21ISPSRC)
+	$(MAKE) -C $(LPC21ISPSRC) -f Makefile.gnu CFLAGS="-Wall -static"
+	install -csm 0755 $(LPC21ISPSRC)/lpc21isp $(INSTBASE)/bin
 	touch lpc21isp.done
 
 ################################################################################
@@ -163,10 +183,10 @@ openocd.done: d2xx.done
 	cd $(OPENOCDSRC) && ./bootstrap
 	cd $(OPENOCDSRC) && ./configure --enable-ft2232_ftd2xx --disable-ft2232_libftdi --disable-amtjtagaccel --disable-ep93xx --disable-parport --disable-parport_ppdev --with-ftd2xx=`pwd`/../$(D2XXDIR)
 ifeq ($(shell uname), CYGWIN_NT-5.1)
-	$(MAKE) -C $(OPENOCDSRC)
+	$(MAKE) -C $(OPENOCDSRC) LDFLAGS=-static
 endif
 ifeq ($(shell uname), Linux)
-	$(MAKE) -C $(OPENOCDSRC) LDFLAGS="-L`pwd`/$(D2XXDIR)/static_lib" LIBS=" -lpthread -ldl --static"
+	$(MAKE) -C $(OPENOCDSRC) LDFLAGS="-L`pwd`/$(D2XXDIR)/static_lib" LIBS=" -lpthread -ldl -static"
 endif
 	install -csm 0755 $(OPENOCDSRC)/src/openocd $(INSTBASE)/bin
 	touch openocd.done
@@ -215,8 +235,6 @@ uninstall:
 
 clean:
 	-rm *.done
-	-rm lpc21isp
-	-rm lpc21isp.exe
 	-rm $(PKGNAME)*.tgz
 	rm -rf $(INSTBASE)
 	rm -rf $(BINUTILSRC)
@@ -224,5 +242,6 @@ clean:
 	rm -rf $(GCCOBJ)
 	rm -rf $(NEWLIBSRC)
 	rm -rf $(GDBSRC)
+	rm -rf $(LPC21ISPSRC)
 	rm -rf $(D2XXDIR)
 	rm -rf $(OPENOCDSRC)
