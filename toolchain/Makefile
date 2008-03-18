@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.14 2008-03-18 13:00:32 cvs Exp $
+# $Id: Makefile,v 1.15 2008-03-18 13:19:37 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -72,6 +72,7 @@ binutils.done: $(BINUTILDIST)
 	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared
 	$(MAKE) -C $(BINUTILSRC)
 ifeq ($(shell uname), Linux)
+# Force static linking
 	rm $(BINUTILSRC)/binutils/ar
 	rm $(BINUTILSRC)/binutils/addr2line
 	rm $(BINUTILSRC)/binutils/cxxfilt
@@ -142,6 +143,7 @@ gdb.done: $(GDBDIST)
 	cd $(GDBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared
 	$(MAKE) -C $(GDBSRC)
 ifeq ($(shell uname), Linux)
+# Force static linking
 	cd $(GDBSRC) ; patch -p0 <../gdb.patch
 	rm $(GDBSRC)/gdb/gdb
 	rm $(GDBSRC)/gdb/gdbtui
