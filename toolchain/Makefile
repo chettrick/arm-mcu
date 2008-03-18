@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.12 2008-03-18 10:20:14 cvs Exp $
+# $Id: Makefile,v 1.13 2008-03-18 10:28:00 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -26,6 +26,10 @@ NEWLIBDIST	= $(TEMP)/newlib-$(NEWLIBVER).tar.gz
 NEWLIBURL	= $(NEWLIBSERVER)/`basename $(NEWLIBDIST)`
 NEWLIBSRC	= newlib-$(NEWLIBVER)
 
+LPC21ISPVER	= 1.55
+LPC21ISPSRC	= lpc21isp-$(LPC21ISPVER)
+LPC21ISPDIST	= $(LPC21ISPSRC).zip
+
 GDBVER		= 6.7.1
 GDBSERVER	= ftp://sourceware.org/pub/insight/releases
 GDBDIST		= $(TEMP)/insight-$(GDBVER).tar.bz2
@@ -44,10 +48,6 @@ D2XXDIR		= D2XX
 
 OPENOCDVER	= 247
 OPENOCDSRC	= openocd-$(OPENOCDVER)
-
-LPC21ISPVER	= 155
-LPC21ISPSRC	= lpc21isp_$(LPC21ISPVER)
-LPC21ISPDIST	= $(LPC21ISPSRC).zip
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 TARBALL		= $(PKGNAME)-cygwin.tgz
@@ -144,18 +144,6 @@ gdb.done: $(GDBDIST)
 
 ################################################################################
 
-# Compile lpc21isp
-
-lpc21isp.done: $(LPC21ISPDIST)
-	rm -rf $(LPC21ISPSRC)
-	mkdir -p $(LPC21ISPSRC)
-	unzip $(LPC21ISPDIST) -d $(LPC21ISPSRC)
-	$(MAKE) -C $(LPC21ISPSRC) -f Makefile.gnu CFLAGS="-Wall -static"
-	install -csm 0755 $(LPC21ISPSRC)/lpc21isp $(INSTBASE)/bin
-	touch lpc21isp.done
-
-################################################################################
-
 # Download FT2232 driver
 
 $(D2XXDIST):
@@ -193,9 +181,21 @@ endif
 
 ################################################################################
 
+# Compile lpc21isp
+
+lpc21isp.done: $(LPC21ISPDIST)
+	rm -rf $(LPC21ISPSRC)
+	mkdir -p $(LPC21ISPSRC)
+	unzip $(LPC21ISPDIST) -d $(LPC21ISPSRC)
+	$(MAKE) -C $(LPC21ISPSRC) -f Makefile.gnu CFLAGS="-Wall -static"
+	install -csm 0755 $(LPC21ISPSRC)/lpc21isp $(INSTBASE)/bin
+	touch lpc21isp.done
+
+################################################################################
+
 # Create installation tarball
 
-$(TARBALL): binutils.done gcc.done newlib.done gdb.done lpc21isp.done openocd.done
+$(TARBALL): binutils.done gcc.done newlib.done gdb.done openocd.done lpc21isp.done
 	echo "GNU ARM microcontroller toolchain"	>$(INSTBASE)/README
 	echo " "					>>$(INSTBASE)/README
 	echo "Built on `date` from:"			>>$(INSTBASE)/README
@@ -205,7 +205,7 @@ $(TARBALL): binutils.done gcc.done newlib.done gdb.done lpc21isp.done openocd.do
 	echo "$(NEWLIBSRC)"				>>$(INSTBASE)/README
 	echo "$(GDBSRC)"				>>$(INSTBASE)/README
 	echo "$(OPENOCDSRC)"				>>$(INSTBASE)/README
-	awk '/define VERSION/ { printf("lpc21isp-%s\n", substr($$3, 2, length($$3)-2)); }' lpc21isp.c >>$(INSTBASE)/README
+	echo "$(LPC21ISPSRC)"				>>$(INSTBASE)/README
 	chmod -R ugo-w $(INSTBASE)
 ifeq ($(shell uname), Linux)
 	sudo chown -R 0.0 $(INSTBASE)
