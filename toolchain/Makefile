@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.15 2008-03-18 13:19:37 cvs Exp $
+# $Id: Makefile,v 1.16 2008-03-22 07:16:05 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -107,7 +107,12 @@ gcc.done: binutils.done $(GCCDIST)
 	tar xjf $(GCCDIST)
 	mkdir -p $(GCCOBJ)
 	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib
+ifeq ($(shell uname), Linux)
+# Force static linking
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) LDFLAGS=-static
+else
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
+endif
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) install
 	touch gcc.done
 
@@ -185,7 +190,7 @@ openocd.done: d2xx.done
 	cd $(OPENOCDSRC) && ./bootstrap
 	cd $(OPENOCDSRC) && ./configure --enable-ft2232_ftd2xx --disable-ft2232_libftdi --disable-amtjtagaccel --disable-ep93xx --disable-parport --disable-parport_ppdev --with-ftd2xx=`pwd`/../$(D2XXDIR)
 ifeq ($(shell uname), CYGWIN_NT-5.1)
-	$(MAKE) -C $(OPENOCDSRC) LDFLAGS=-static
+	$(MAKE) -C $(OPENOCDSRC)
 endif
 ifeq ($(shell uname), Linux)
 	$(MAKE) -C $(OPENOCDSRC) LDFLAGS="-L`pwd`/$(D2XXDIR)/static_lib" LIBS=" -lpthread -ldl -static"
