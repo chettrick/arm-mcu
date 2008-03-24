@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.9 2008-01-14 11:13:38 cvs Exp $
+// $Id: conio.c,v 1.10 2008-03-24 11:17:21 cvs Exp $
 
 #include <cpu.h>
 #include <conio.h>
@@ -115,9 +115,9 @@ void cputs(char *s)
     putch(*s++);
 }
 
-/* Override fgets() with a version that does line editing */
+/* Receive a string, with rudimentary line editing */
 
-char *fgets(char *s, int bufsize, FILE *f)
+void cgets(char *s, int bufsize)
 {
   char *p;
   int c;
@@ -128,32 +128,40 @@ char *fgets(char *s, int bufsize, FILE *f)
 
   for (p = s; p < s + bufsize-1;)
   {
-    c = getchar();
+    c = getch();
     switch (c)
     {
       case '\r' :
       case '\n' :
-        putchar('\r');
-        putchar('\n');
+        putch('\r');
+        putch('\n');
         *p = '\n';
-        return s;
+        return;
 
       case '\b' :
         if (p > s)
         {
           *p-- = 0;
-          putchar('\b');
-          putchar(' ');
-          putchar('\b');
+          putch('\b');
+          putch(' ');
+          putch('\b');
         }
         break;
 
       default :
-        putchar(c);
+        putch(c);
         *p++ = c;
         break;
     }
   }
 
+  return;
+}
+
+/* Override fgets() with a version that does line editing */
+
+char *fgets(char *s, int bufsize, FILE *f)
+{
+  cgets(s, bufsize);
   return s;
 }
