@@ -4,30 +4,102 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.1 2008-03-07 13:51:19 cvs Exp $
+// $Id: conio.c,v 1.2 2008-03-24 08:44:19 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
 #include <stdio.h>
 #include <string.h>
 
-#define UART0_BASE_ADDR 0x40013800
-
-static unsigned long int UARTBASE = UART0_BASE_ADDR;
-
-/* Define relocatable UART registers */
-
-#define UxDR	(*((volatile unsigned short int *) (UARTBASE + 0x00)))
-#define	UxFR	(*((volatile unsigned short int *) (UARTBASE + 0x18)))
-#define UxIBRD	(*((volatile unsigned short int *) (UARTBASE + 0x24)))
-#define UxFBRD	(*((volatile unsigned short int *) (UARTBASE + 0x28)))
-#define UxLCR	(*((volatile unsigned short int *) (UARTBASE + 0x2C)))
-#define UxCR	(*((volatile unsigned short int *) (UARTBASE + 0x30)))
+static USART_TypeDef *UART = (USART_TypeDef *) USART1_BASE;
 
 /* Initialize serial console */
 
 void conio_init(unsigned port, unsigned long int baudrate)
 {
+  USART_InitTypeDef USART_config;
+  GPIO_InitTypeDef GPIO_config;
+  
+// Turn on USART
+
+  switch (port)
+  {
+    case 1 :
+      UART = (USART_TypeDef *) USART1_BASE;
+
+// Turn on peripheral clocks
+
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_AFIO, ENABLE);
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+
+// Configure TX pin
+
+      GPIO_config.GPIO_Pin = GPIO_Pin_9;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOA, &GPIO_config);
+
+// Configure RX pin
+
+      GPIO_config.GPIO_Pin = GPIO_Pin_10;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+      GPIO_Init(GPIOA, &GPIO_config);
+      break;
+ 
+    case 2 :
+      UART = (USART_TypeDef *) USART2_BASE;
+
+// Turn on peripheral clocks
+
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_AFIO, ENABLE);
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+
+// Configure TX pin
+
+      GPIO_config.GPIO_Pin = GPIO_Pin_2;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOA, &GPIO_config);
+
+// Configure RX pin
+
+      GPIO_config.GPIO_Pin = GPIO_Pin_3;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+      GPIO_Init(GPIOA, &GPIO_config);
+      break;
+ 
+    case 3 :
+      UART = (USART_TypeDef *) USART3_BASE;
+
+// Turn on peripheral clocks
+
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB|RCC_APB2Periph_AFIO, ENABLE);
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+
+// Configure TX pin
+
+      GPIO_config.GPIO_Pin = GPIO_Pin_10;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOA, &GPIO_config);
+
+// Configure RX pin
+
+      GPIO_config.GPIO_Pin = GPIO_Pin_11;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+      GPIO_Init(GPIOB, &GPIO_config);
+      break;
+  }
+
+// Configure USART
+
+  USART_StructInit(&USART_config);
+  USART_config.USART_BaudRate = baudrate;
+  USART_Init(UART, &USART_config);
+  USART_Cmd(UART, ENABLE);
 }
 
 /* Send 1 character */
@@ -36,23 +108,23 @@ void putch(unsigned char c)
 {
   if (c == '\n') putch('\r');
 
-  while (UxFR & 0x20);
-  UxDR = c;
+  while (!(UART->SR & USART_FLAG_TXE));
+  UART->DR = c;
 }
 
 /* Receive 1 character */
 
 unsigned char getch(void)
 {
-  while (UxFR & 0x10);
-  return UxDR;
+  while (!(UART->SR & USART_FLAG_RXNE));
+  return UART->DR;
 }
 
 /* Return 1 if key pressed */
 
 unsigned char keypressed(void)
 {
-  return !(UxFR & 0x10);
+  return (UART->SR & USART_FLAG_RXNE);
 }
 
 /* Send a string */
