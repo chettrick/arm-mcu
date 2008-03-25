@@ -1,6 +1,6 @@
 /* Linker script for STM32F103 Cortex-M3 microcontroller */
 
-/* $Id: linker.ld,v 1.4 2008-03-15 06:01:26 cvs Exp $ */
+/* $Id: linker.ld,v 1.5 2008-03-25 09:16:19 cvs Exp $ */
 
 MEMORY
 {
@@ -43,6 +43,7 @@ SECTIONS
   . = ALIGN(4);
   __bss_beg__ = .;			/* Used in crt0.S */
   *(.bss)				/* Uninitialized data */
+  *(COMMON)				/* Common data */
   . = ALIGN(4);
   __bss_end__ = .;			/* Used in crt0.S */
   } >ram
