@@ -1,6 +1,6 @@
 /* Linker script for LPC2119 microcontroller */
 
-/* $Id: linker.ld,v 1.7 2008-02-25 12:58:51 cvs Exp $ */
+/* $Id: linker.ld,v 1.8 2008-03-25 09:17:16 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 120K
@@ -57,22 +57,17 @@ SECTIONS {
 	/*  Unitialized data, located in ram, no copy in flash needed	*/
 	/* since startup will zero associated area in RAM.		*/
  .bss : { 
+	. = ALIGN(4);
 	__bss_beg__ = .;	/*  Used by startup to find start of	*/
 				/* unitialized variables.		*/
  	*(.bss)
+	*(COMMON)
+	. = ALIGN(4);
+	__bss_end__ = .;
  	} >ram
-   /* Align here to ensure that the .bss section occupies space up to
-      _end.  Align after .bss to ensure correct alignment even if the
-      .bss section disappears because there are no input sections.  */
-   . = ALIGN(32 / 8);
-  }
-  . = ALIGN(32 / 8);
-
-/* Used by startup to find end of unitialized variables.	*/
-
-  _end = .;
-  _bss_end__ = . ; __bss_end__ = . ; __end__ = . ;	
-  PROVIDE (end = .);
+. = ALIGN(4);
+end = .;
+}
 
 /*  Libraries to link against.					*/
 
