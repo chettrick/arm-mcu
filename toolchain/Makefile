@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.17 2008-04-14 06:51:40 cvs Exp $
+# $Id: Makefile,v 1.18 2008-04-14 08:02:12 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -46,7 +46,7 @@ D2XXDIST	= $(TEMP)/libftd2xx0.4.13.tar.gz
 endif
 D2XXDIR		= D2XX
 
-OPENOCDVER	= 247
+OPENOCDVER	= 520
 OPENOCDSRC	= openocd-$(OPENOCDVER)
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)

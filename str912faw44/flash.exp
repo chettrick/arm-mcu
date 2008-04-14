@@ -2,7 +2,7 @@
 
 # expect script for programming STR912FAW44 flash
 
-# $Id: flash.exp,v 1.2 2008-02-26 12:09:10 cvs Exp $
+# $Id: flash.exp,v 1.3 2008-04-14 08:02:12 cvs Exp $
 
 # Script arguments:
 
@@ -38,10 +38,10 @@ expect $prompt
 send "flash protect 0 0 7 off\n"
 expect $prompt
 
-send "flash erase 0 0 7\n"
-expect -timeout 60 $prompt
+send "flash auto_erase on\n"
+expect $prompt
 
-send "flash write_binary 0 $file 0\n"
+send "flash write_image $file 0 bin\n"
 expect -timeout 120 $prompt
 
 send "flash protect 0 0 7 on\n"
