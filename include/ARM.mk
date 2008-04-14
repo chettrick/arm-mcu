@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.32 2008-03-17 13:09:33 cvs Exp $
+# $Id: ARM.mk,v 1.33 2008-04-14 17:42:21 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 GCCARCH		?= arm-eabi
@@ -62,6 +62,7 @@ default_catch:
 
 .elf.debug:
 	$(OPENOCD) -f $(OPENOCDCFG) &
+	sleep 1
 	$(GDB) -x $(DEBUGGDB) -w $<
 	killall openocd
 
