@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.16 2008-03-22 07:16:05 cvs Exp $
+# $Id: Makefile,v 1.17 2008-04-14 06:51:40 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -147,17 +147,6 @@ gdb.done: $(GDBDIST)
 	tar xjf $(GDBDIST)
 	cd $(GDBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared
 	$(MAKE) -C $(GDBSRC)
-ifeq ($(shell uname), Linux)
-# Force static linking
-	cd $(GDBSRC) ; patch -p0 <../gdb.patch
-	rm $(GDBSRC)/gdb/gdb
-	rm $(GDBSRC)/gdb/gdbtui
-	rm $(GDBSRC)/gdb/insight
-	rm $(GDBSRC)/sim/arm/run
-	rm $(GDBSRC)/tcl/unix/tclsh
-	rm $(GDBSRC)/tk/unix/wish
-	$(MAKE) -C $(GDBSRC)
-endif
 	$(MAKE) -C $(GDBSRC) install
 	touch gdb.done
 
