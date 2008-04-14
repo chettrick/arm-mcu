@@ -2,7 +2,7 @@
 
 # expect script for programming LPC2119 flash
 
-# $Id: flash.exp,v 1.3 2008-04-14 08:02:12 cvs Exp $
+# $Id: flash.exp,v 1.4 2008-04-14 18:12:38 cvs Exp $
 
 # Script arguments:
 
@@ -32,7 +32,7 @@ expect $prompt
 send "flash probe 0\n"
 expect $prompt
 
-send "flash auto_erase on
+send "flash auto_erase on\n"
 expect $prompt
 
 send "flash write_image $file 0 bin\n"
