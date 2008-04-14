@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.10 2008-01-14 11:13:38 cvs Exp $
+// $Id: test_timer1.c,v 1.11 2008-04-14 18:19:03 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
@@ -23,7 +23,8 @@ int main(void)
   cpu_init(DEFAULT_CPU_FREQ);
   conio_init(0, 19200);
 
-  puts("\033[H\033[2JLPC2119 Watchdog and Timer 1 Interrupt Test\n");
+  puts("\033[H\033[2JLPC2119 Watchdog and Timer 1 Interrupt Test ("
+       __DATE__ " " __TIME__ ")\n");
 
   T1PR = 0;			// Timer 1 increments every pclk
   T1MR0 = CPUFREQ;		// Match every second
