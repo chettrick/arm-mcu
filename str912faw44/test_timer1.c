@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.3 2008-01-15 10:57:35 cvs Exp $
+// $Id: test_timer1.c,v 1.4 2008-04-15 07:35:04 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
@@ -31,7 +31,7 @@ int main(void)
   cpu_init(DEFAULT_CPU_FREQ);
   conio_init(0, 19200);
 
-  puts("\033[H\033[2JSTR912FAW44 Timer 1 Interrupt Test\n");
+  puts("\033[H\033[2JSTR912FAW44 Timer 1 Interrupt Test (" __DATE__ " " __TIME__ ")\n");
 
 /* Configure timer 1 to interrupt 10 times a second */
 
