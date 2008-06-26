@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.34 2008-04-14 17:55:59 cvs Exp $
+# $Id: ARM.mk,v 1.35 2008-06-26 15:56:25 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 GCCARCH		?= arm-eabi
@@ -19,11 +19,12 @@ STARTUP		?= $(MCUDEPENDENT)/crt0.o
 LINKERSCRIPT	?= $(MCUDEPENDENT)/linker.ld
 OPENOCDCFG	?= $(MCUDEPENDENT)/openocd.cfg
 DEBUGGDB	?= $(MCUDEPENDENT)/debug.gdb
+FWLIB		?= $(MCUDEPENDENT)/FWLib
 
 GDBFLAGS	?= -g
 OPTFLAGS	?= -O0
 CFLAGS		+= -Wall -mcpu=$(ARCH) -DMCU_$(MCU)
-CFLAGS		+= -I$(ARMSRC) -I$(ARMSRC)/include
+CFLAGS		+= -I$(ARMSRC) -I$(ARMSRC)/include -I$(FWLIB)
 CFLAGS		+= $(GDBFLAGS) $(OPTFLAGS) $(DEBUG) $(EXTRAFLAGS)
 LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDEPENDENT) -l$(MCU) -Wl,-Map=$*.map,--cref $(EXTRAOBJS)
 
@@ -83,7 +84,7 @@ update:
 # Clean out working files
 
 clean:
-	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o $(MCUDEPENDENT)/*.a $(MCUDEPENDENT)/*.o $(MCUDEPENDENT)/FWLib/*.o
+	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o $(MCUDEPENDENT)/*.a $(MCUDEPENDENT)/*.o $(FWLIB)/*.o
 
 # Include flash programming support
 
