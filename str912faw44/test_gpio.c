@@ -1,27 +1,26 @@
 /* Simple bit twiddler test program */
 
-// $Id: test_gpio.c,v 1.2 2007-11-23 12:31:34 cvs Exp $
+// $Id: test_gpio.c,v 1.3 2008-06-26 21:47:24 cvs Exp $
 
 #include <cpu.h>
 
 int main(void)
 {
+  GPIO_InitTypeDef config;
   unsigned long int i;
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-  SCU_PCGR1 |= 0x00100000;	// Turn on GPIO6 clock
-  SCU_PRR1  |= 0x00100000;	// Let GPIO6 out of reset
-
-  SCU_GPIOOUT6  = 0x1555;	// P60 to P66 are GPIO outputs
-  SCU_GPIOIN6   = 0x00;		// P60 to P66 are GPIO
-  SCU_GPIOTYPE6 = 0x00;		// P60 to P66 are push pull
-
-  GPIO6_SEL = 0x00;		// P60 to P66 are GPIO
-  GPIO6_DIR = 0x7F;		// P60 to P66 are outputs
+  SCU_APBPeriphClockConfig(__GPIO6, ENABLE);	// Turn on GPIO6 clock
+  SCU_APBPeriphReset(__GPIO6, DISABLE);		// Let GPIO6 out of reset
+ 
+  GPIO_StructInit(&config);
+  config.GPIO_Pin = GPIO_Pin_All;
+  config.GPIO_Direction = GPIO_PinOutput;	// GPIO6 pins are all outputs
+  config.GPIO_Type = GPIO_Type_PushPull;	// GPIO6 pins are all push pull outputs
+  config.GPIO_Alternate = GPIO_OutputAlt1;	// GPIO6 pins are all GPIO outputs
+  GPIO_Init(GPIO6, &config);
 
   for (i = 0;; i++)
-  {
-    GPIO6_DATA = i;
-  }
+    GPIO_Write(GPIO6, i);
 }
