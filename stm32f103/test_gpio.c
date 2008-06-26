@@ -2,7 +2,7 @@
 
 void main(void)
 {
-  GPIO_InitTypeDef GPIO_InitStructure;
+  GPIO_InitTypeDef config;
   volatile unsigned long i;
 
 // Initialize CPU core
@@ -16,17 +16,18 @@ void main(void)
 
 // Configure PC.12 as output push-pull (LED)
 
-  GPIO_WriteBit(GPIOC,GPIO_Pin_12,Bit_SET);
-  GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_12;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
+  GPIO_StructInit(&config);
+  config.GPIO_Pin =  GPIO_Pin_12;
+  config.GPIO_Mode = GPIO_Mode_Out_PP;
+  config.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(GPIOC, &config);
 
   for (;;)
   {
-    GPIOC->BRR |= 0x00001000;
+    GPIO_SetBits(GPIOC, GPIO_Pin_12);
     for (i = 0; i < 500000; i++);
-    GPIOC->BSRR |= 0x00001000;
+
+    GPIO_ResetBits(GPIOC, GPIO_Pin_12);
     for (i = 0; i < 500000; i++);
   }
 }
