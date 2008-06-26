@@ -1,15 +1,15 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_wwdg.c
 * Author             : MCD Application Team
-* Version            : V1.0
-* Date               : 10/08/2007
+* Version            : V2.0.1
+* Date               : 06/13/2008
 * Description        : This file provides all the WWDG firmware functions.
 ********************************************************************************
-* THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
 * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
 * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
-* CONTENT OF SUCH SOFTWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+* CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 *******************************************************************************/
 
@@ -80,10 +80,10 @@ void WWDG_SetPrescaler(u32 WWDG_Prescaler)
   /* Check the parameters */
   assert_param(IS_WWDG_PRESCALER(WWDG_Prescaler));
 
-  /* Clear WDGTB[8:7] bits */
+  /* Clear WDGTB[1:0] bits */
   tmpreg = WWDG->CFR & CFR_WDGTB_Mask;
 
-  /* Set WDGTB[8:7] bits according to WWDG_Prescaler value */
+  /* Set WDGTB[1:0] bits according to WWDG_Prescaler value */
   tmpreg |= WWDG_Prescaler;
 
   /* Store the new value */
@@ -187,4 +187,4 @@ void WWDG_ClearFlag(void)
   WWDG->SR = (u32)RESET;
 }
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

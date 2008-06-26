@@ -1,15 +1,15 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_can.c
 * Author             : MCD Application Team
-* Version            : V1.0
-* Date               : 10/08/2007
+* Version            : V2.0.1
+* Date               : 06/13/2008
 * Description        : This file provides all the CAN firmware functions.
 ********************************************************************************
-* THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
 * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
 * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
-* CONTENT OF SUCH SOFTWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+* CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 *******************************************************************************/
 
@@ -106,6 +106,7 @@ void CAN_DeInit(void)
 u8 CAN_Init(CAN_InitTypeDef* CAN_InitStruct)
 {
   u8 InitStatus = 0;
+  u16 WaitAck;
 
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(CAN_InitStruct->CAN_TTCM));
@@ -200,8 +201,13 @@ u8 CAN_Init(CAN_InitTypeDef* CAN_InitStruct)
     /* Request leave initialisation */
     CAN->MCR &= ~CAN_MCR_INRQ;
 
+    /* Wait the acknowledge */
+    for(WaitAck = 0x400; WaitAck > 0x0; WaitAck--)
+    {
+    }
+    
     /* ...and check acknowledged */
-    if ((CAN->MSR & CAN_MSR_INAK) != CAN_MSR_INAK)
+    if ((CAN->MSR & CAN_MSR_INAK) == CAN_MSR_INAK)
     {
       InitStatus = CANINITFAILED;
     }
@@ -238,38 +244,38 @@ void CAN_FilterInit(CAN_FilterInitTypeDef* CAN_FilterInitStruct)
   CAN->FMR |= CAN_FMR_FINIT;
 
   /* Filter Deactivation */
-  CAN->FA0R &= ~(u32)FilterNumber_BitPos;
+  CAN->FA1R &= ~(u32)FilterNumber_BitPos;
 
   /* Filter Scale */
   if (CAN_FilterInitStruct->CAN_FilterScale == CAN_FilterScale_16bit)
   {
     /* 16-bit scale for the filter */
-    CAN->FS0R &= ~(u32)FilterNumber_BitPos;
+    CAN->FS1R &= ~(u32)FilterNumber_BitPos;
 
     /* First 16-bit identifier and First 16-bit mask */
     /* Or First 16-bit identifier and Second 16-bit identifier */
-    CAN->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR0 = 
+    CAN->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR1 = 
     ((u32)((u32)0x0000FFFF & CAN_FilterInitStruct->CAN_FilterMaskIdLow) << 16) |
         ((u32)0x0000FFFF & CAN_FilterInitStruct->CAN_FilterIdLow);
 
     /* Second 16-bit identifier and Second 16-bit mask */
     /* Or Third 16-bit identifier and Fourth 16-bit identifier */
-    CAN->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR1 = 
+    CAN->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR2 = 
     ((u32)((u32)0x0000FFFF & CAN_FilterInitStruct->CAN_FilterMaskIdHigh) << 16) |
         ((u32)0x0000FFFF & CAN_FilterInitStruct->CAN_FilterIdHigh);
   }
   if (CAN_FilterInitStruct->CAN_FilterScale == CAN_FilterScale_32bit)
   {
     /* 32-bit scale for the filter */
-    CAN->FS0R |= FilterNumber_BitPos;
+    CAN->FS1R |= FilterNumber_BitPos;
 
     /* 32-bit identifier or First 32-bit identifier */
-    CAN->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR0 = 
+    CAN->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR1 = 
     ((u32)((u32)0x0000FFFF & CAN_FilterInitStruct->CAN_FilterIdHigh) << 16) |
         ((u32)0x0000FFFF & CAN_FilterInitStruct->CAN_FilterIdLow);
 
     /* 32-bit mask or Second 32-bit identifier */
-    CAN->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR1 = 
+    CAN->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR2 = 
     ((u32)((u32)0x0000FFFF & CAN_FilterInitStruct->CAN_FilterMaskIdHigh) << 16) |
         ((u32)0x0000FFFF & CAN_FilterInitStruct->CAN_FilterMaskIdLow);
 
@@ -279,30 +285,30 @@ void CAN_FilterInit(CAN_FilterInitTypeDef* CAN_FilterInitStruct)
   if (CAN_FilterInitStruct->CAN_FilterMode == CAN_FilterMode_IdMask)
   {
     /*Id/Mask mode for the filter*/
-    CAN->FM0R &= ~(u32)FilterNumber_BitPos;
+    CAN->FM1R &= ~(u32)FilterNumber_BitPos;
   }
   else /* CAN_FilterInitStruct->CAN_FilterMode == CAN_FilterMode_IdList */
   {
     /*Identifier list mode for the filter*/
-    CAN->FM0R |= (u32)FilterNumber_BitPos;
+    CAN->FM1R |= (u32)FilterNumber_BitPos;
   }
 
   /* Filter FIFO assignment */
   if (CAN_FilterInitStruct->CAN_FilterFIFOAssignment == CAN_FilterFIFO0)
   {
     /* FIFO 0 assignation for the filter */
-    CAN->FFA0R &= ~(u32)FilterNumber_BitPos;
+    CAN->FFA1R &= ~(u32)FilterNumber_BitPos;
   }
   if (CAN_FilterInitStruct->CAN_FilterFIFOAssignment == CAN_FilterFIFO1)
   {
     /* FIFO 1 assignation for the filter */
-    CAN->FFA0R |= (u32)FilterNumber_BitPos;
+    CAN->FFA1R |= (u32)FilterNumber_BitPos;
   }
   
   /* Filter activation */
   if (CAN_FilterInitStruct->CAN_FilterActivation == ENABLE)
   {
-    CAN->FA0R |= FilterNumber_BitPos;
+    CAN->FA1R |= FilterNumber_BitPos;
   }
 
   /* Leave the initialisation mode for the filter */
@@ -429,15 +435,24 @@ u8 CAN_Transmit(CanTxMsg* TxMessage)
   if (TransmitMailbox != CAN_NO_MB)
   {
     /* Set up the Id */
-    TxMessage->StdId &= (u32)0x000007FF;
-    TxMessage->StdId = TxMessage->StdId << 21;
-    TxMessage->ExtId &= (u32)0x0003FFFF;
-    TxMessage->ExtId <<= 3;
-
     CAN->sTxMailBox[TransmitMailbox].TIR &= CAN_TMIDxR_TXRQ;
-    CAN->sTxMailBox[TransmitMailbox].TIR |= (TxMessage->StdId | TxMessage->ExtId |
-                                            TxMessage->IDE | TxMessage->RTR);
+    if (TxMessage->IDE == CAN_ID_STD)
+    {
+      TxMessage->StdId &= (u32)0x000007FF;
+      TxMessage->StdId = TxMessage->StdId << 21;
+      
+      CAN->sTxMailBox[TransmitMailbox].TIR |= (TxMessage->StdId | TxMessage->IDE |
+                                               TxMessage->RTR);
+    }
+    else
+    {
+      TxMessage->ExtId &= (u32)0x1FFFFFFF;
+      TxMessage->ExtId <<= 3;
 
+      CAN->sTxMailBox[TransmitMailbox].TIR |= (TxMessage->ExtId | TxMessage->IDE | 
+                                               TxMessage->RTR);
+    }
+    
     /* Set up the DLC */
     TxMessage->DLC &= (u8)0x0000000F;
     CAN->sTxMailBox[TransmitMailbox].TDTR &= (u32)0xFFFFFFF0;
@@ -479,17 +494,17 @@ u8 CAN_TransmitStatus(u8 TransmitMailbox)
 
   switch (TransmitMailbox)
   {
-    case (0): State |= ((CAN->TSR & CAN_TSR_RQCP0) << 2);
-      State |= ((CAN->TSR & CAN_TSR_TXOK0) >> 0);
-      State |= ((CAN->TSR & CAN_TSR_TME0) >> 26);
+    case (0): State |= (u8)((CAN->TSR & CAN_TSR_RQCP0) << 2);
+      State |= (u8)((CAN->TSR & CAN_TSR_TXOK0) >> 0);
+      State |= (u8)((CAN->TSR & CAN_TSR_TME0) >> 26);
       break;
-    case (1): State |= ((CAN->TSR & CAN_TSR_RQCP1) >> 6);
-      State |= ((CAN->TSR & CAN_TSR_TXOK1) >> 8);
-      State |= ((CAN->TSR & CAN_TSR_TME1) >> 27);
+    case (1): State |= (u8)((CAN->TSR & CAN_TSR_RQCP1) >> 6);
+      State |= (u8)((CAN->TSR & CAN_TSR_TXOK1) >> 8);
+      State |= (u8)((CAN->TSR & CAN_TSR_TME1) >> 27);
       break;
-    case (2): State |= ((CAN->TSR & CAN_TSR_RQCP2) >> 14);
-      State |= ((CAN->TSR & CAN_TSR_TXOK2) >> 16);
-      State |= ((CAN->TSR & CAN_TSR_TME2) >> 28);
+    case (2): State |= (u8)((CAN->TSR & CAN_TSR_RQCP2) >> 14);
+      State |= (u8)((CAN->TSR & CAN_TSR_TXOK2) >> 16);
+      State |= (u8)((CAN->TSR & CAN_TSR_TME2) >> 28);
       break;
     default:
       State = CANTXFAILED;
@@ -608,28 +623,34 @@ void CAN_Receive(u8 FIFONumber, CanRxMsg* RxMessage)
   assert_param(IS_CAN_FIFO(FIFONumber));
 
   /* Get the Id */
-  RxMessage->StdId = (u32)0x000007FF & (CAN->sFIFOMailBox[FIFONumber].RIR >> 21);
-  RxMessage->ExtId = (u32)0x0003FFFF & (CAN->sFIFOMailBox[FIFONumber].RIR >> 3);
-
-  RxMessage->IDE = (u32)0x00000004 & CAN->sFIFOMailBox[FIFONumber].RIR;
-  RxMessage->RTR = (u32)0x00000002 & CAN->sFIFOMailBox[FIFONumber].RIR;
+  RxMessage->IDE = (u8)0x04 & CAN->sFIFOMailBox[FIFONumber].RIR;
+  if (RxMessage->IDE == CAN_ID_STD)
+  {
+    RxMessage->StdId = (u32)0x000007FF & (CAN->sFIFOMailBox[FIFONumber].RIR >> 21);
+  }
+  else
+  {
+    RxMessage->ExtId = (u32)0x1FFFFFFF & (CAN->sFIFOMailBox[FIFONumber].RIR >> 3);
+  }
+  
+  RxMessage->RTR = (u8)0x02 & CAN->sFIFOMailBox[FIFONumber].RIR;
 
   /* Get the DLC */
-  RxMessage->DLC = (u32)0x0000000F & CAN->sFIFOMailBox[FIFONumber].RDTR;
+  RxMessage->DLC = (u8)0x0F & CAN->sFIFOMailBox[FIFONumber].RDTR;
 
   /* Get the FMI */
-  RxMessage->FMI = (u32)0x000000FF & (CAN->sFIFOMailBox[FIFONumber].RDTR >> 8);
+  RxMessage->FMI = (u8)0xFF & (CAN->sFIFOMailBox[FIFONumber].RDTR >> 8);
 
   /* Get the data field */
-  RxMessage->Data[0] = (u32)0x000000FF & CAN->sFIFOMailBox[FIFONumber].RDLR;
-  RxMessage->Data[1] = (u32)0x000000FF & (CAN->sFIFOMailBox[FIFONumber].RDLR >> 8);
-  RxMessage->Data[2] = (u32)0x000000FF & (CAN->sFIFOMailBox[FIFONumber].RDLR >> 16);
-  RxMessage->Data[3] = (u32)0x000000FF & (CAN->sFIFOMailBox[FIFONumber].RDLR >> 24);
+  RxMessage->Data[0] = (u8)0xFF & CAN->sFIFOMailBox[FIFONumber].RDLR;
+  RxMessage->Data[1] = (u8)0xFF & (CAN->sFIFOMailBox[FIFONumber].RDLR >> 8);
+  RxMessage->Data[2] = (u8)0xFF & (CAN->sFIFOMailBox[FIFONumber].RDLR >> 16);
+  RxMessage->Data[3] = (u8)0xFF & (CAN->sFIFOMailBox[FIFONumber].RDLR >> 24);
 
-  RxMessage->Data[4] = (u32)0x000000FF & CAN->sFIFOMailBox[FIFONumber].RDHR;
-  RxMessage->Data[5] = (u32)0x000000FF & (CAN->sFIFOMailBox[FIFONumber].RDHR >> 8);
-  RxMessage->Data[6] = (u32)0x000000FF & (CAN->sFIFOMailBox[FIFONumber].RDHR >> 16);
-  RxMessage->Data[7] = (u32)0x000000FF & (CAN->sFIFOMailBox[FIFONumber].RDHR >> 24);
+  RxMessage->Data[4] = (u8)0xFF & CAN->sFIFOMailBox[FIFONumber].RDHR;
+  RxMessage->Data[5] = (u8)0xFF & (CAN->sFIFOMailBox[FIFONumber].RDHR >> 8);
+  RxMessage->Data[6] = (u8)0xFF & (CAN->sFIFOMailBox[FIFONumber].RDHR >> 16);
+  RxMessage->Data[7] = (u8)0xFF & (CAN->sFIFOMailBox[FIFONumber].RDHR >> 24);
 
   /* Release the FIFO */
   CAN_FIFORelease(FIFONumber);
@@ -883,4 +904,4 @@ static ITStatus CheckITStatus(u32 CAN_Reg, u32 It_Bit)
   return pendingbitstatus;
 }
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

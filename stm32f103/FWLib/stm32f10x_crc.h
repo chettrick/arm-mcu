@@ -1,9 +1,10 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
-* File Name          : cortexm3_macro.h
+* File Name          : stm32f10x_crc.h
 * Author             : MCD Application Team
 * Version            : V2.0.1
 * Date               : 06/13/2008
-* Description        : Header file for cortexm3_macro.s.
+* Description        : This file contains all the functions prototypes for the
+*                      CRC firmware library.
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -14,40 +15,23 @@
 *******************************************************************************/
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __CORTEXM3_MACRO_H
-#define __CORTEXM3_MACRO_H
+#ifndef __STM32F10x_CRC_H
+#define __STM32F10x_CRC_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f10x_type.h"
+#include "stm32f10x_map.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-void __WFI(void);
-void __WFE(void);
-void __SEV(void);
-void __ISB(void);
-void __DSB(void);
-void __DMB(void);
-void __SVC(void);
-u32 __MRS_CONTROL(void);
-void __MSR_CONTROL(u32 Control);
-u32 __MRS_PSP(void);
-void __MSR_PSP(u32 TopOfProcessStack);
-u32 __MRS_MSP(void);
-void __MSR_MSP(u32 TopOfMainStack);
-void __RESETPRIMASK(void);
-void __SETPRIMASK(void);
-u32 __READ_PRIMASK(void);
-void __RESETFAULTMASK(void);
-void __SETFAULTMASK(void);
-u32 __READ_FAULTMASK(void);
-void __BASEPRICONFIG(u32 NewPriority);
-u32 __GetBASEPRI(void);
-u16 __REV_HalfWord(u16 Data);
-u32 __REV_Word(u32 Data);
+void CRC_ResetDR(void);
+u32 CRC_CalcCRC(u32 Data);
+u32 CRC_CalcBlockCRC(u32 pBuffer[], u32 BufferLength);
+u32 CRC_GetCRC(void);
+void CRC_SetIDRegister(u8 IDValue);
+u8 CRC_GetIDRegister(void);
 
-#endif /* __CORTEXM3_MACRO_H */
+#endif /* __STM32F10x_CRC_H */
 
 /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
