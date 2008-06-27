@@ -1,6 +1,6 @@
 /* Initialize CPU core */
 
-// $Id: cpu.c,v 1.5 2008-06-27 00:10:12 cvs Exp $
+// $Id: cpu.c,v 1.6 2008-06-27 20:49:27 cvs Exp $
 
 #include <cpu.h>
 
@@ -10,13 +10,27 @@ void cpu_init(unsigned long int frequency)
 {
   CPUFREQ = DEFAULT_CPU_FREQ;			// Not currently changeable
 
-// Configure for 96 MHz operation
+// Switch MCLK to oscillator input while we reprogram the PLL
 
-  SCU_PLLFactorsConfig(192, 25, 1);		// PLL = ((25 MHz/25)*192)/2) = 96 MHz
+  SCU_MCLKSourceConfig(SCU_MCLK_OSC);		// MCLK = OSC
+
+// Configure PLL for 48 MHz operation
+
+  SCU_PLLCmd(DISABLE);
+  SCU_PLLFactorsConfig(192, 25, 3);		// PLL = ((25 MHz/25)*2*192)/8) = 48 MHz
   SCU_PLLCmd(ENABLE);
-  SCU_RCLKDivisorConfig(SCU_RCLK_Div1);		// RCLK = PLL = 96 MHz
-  SCU_HCLKDivisorConfig(SCU_HCLK_Div1);		// HCLK = PLL = 96 MHz
-  SCU_FMICLKDivisorConfig(SCU_FMICLK_Div1);	// FMICLK = PLL = 96 MHz
-  SCU_PCLKDivisorConfig(SCU_PCLK_Div2);		// PCLK = PLL/2 = 48 MHz
-  SCU_MCLKSourceConfig(SCU_MCLK_PLL);		// MCLK = PLL = 96 MHz
+
+// Configure various subordinate clock dividers
+
+  SCU_BRCLKDivisorConfig(SCU_BRCLK_Div1);	// BRCLK = MCLK = 48 MHz
+  SCU_RCLKDivisorConfig(SCU_RCLK_Div1);		// RCLK = MCLK = 48 MHz
+  SCU_USBCLKConfig(SCU_USBCLK_MCLK);		// USBCLK = MCLK/2 = 48 MHz
+
+  SCU_FMICLKDivisorConfig(SCU_FMICLK_Div1);	// FMICLK = RCLK = 48 MHz
+  SCU_HCLKDivisorConfig(SCU_HCLK_Div1);		// HCLK = RCLK = 48 MHz
+  SCU_PCLKDivisorConfig(SCU_PCLK_Div1);		// PCLK = RCLK = 48 MHz
+
+// Switch MCLK to PLL
+
+  SCU_MCLKSourceConfig(SCU_MCLK_PLL);		// MCLK = PLL
 }
