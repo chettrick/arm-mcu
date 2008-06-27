@@ -1,6 +1,6 @@
 /* Linker script for STM32F103 Cortex-M3 microcontroller */
 
-/* $Id: linker.ld,v 1.5 2008-03-25 09:16:19 cvs Exp $ */
+/* $Id: linker.ld,v 1.6 2008-06-27 22:42:12 cvs Exp $ */
 
 MEMORY
 {
@@ -63,8 +63,8 @@ PROVIDE(HardFaultException = _default_handler);
 PROVIDE(MemManageException = _default_handler);
 PROVIDE(BusFaultException = _default_handler);
 PROVIDE(UsageFaultException = _default_handler);
-PROVIDE(SVCHandler = _default_handler);
 PROVIDE(DebugMonitor = _default_handler);
+PROVIDE(SVCHandler = _default_handler);
 PROVIDE(PendSVC = _default_handler);
 PROVIDE(SysTickHandler = _default_handler);
 PROVIDE(WWDG_IRQHandler = _default_handler);
@@ -78,14 +78,14 @@ PROVIDE(EXTI1_IRQHandler = _default_handler);
 PROVIDE(EXTI2_IRQHandler = _default_handler);
 PROVIDE(EXTI3_IRQHandler = _default_handler);
 PROVIDE(EXTI4_IRQHandler = _default_handler);
-PROVIDE(DMAChannel1_IRQHandler = _default_handler);
-PROVIDE(DMAChannel2_IRQHandler = _default_handler);
-PROVIDE(DMAChannel3_IRQHandler = _default_handler);
-PROVIDE(DMAChannel4_IRQHandler = _default_handler);
-PROVIDE(DMAChannel5_IRQHandler = _default_handler);
-PROVIDE(DMAChannel6_IRQHandler = _default_handler);
-PROVIDE(DMAChannel7_IRQHandler = _default_handler);
-PROVIDE(ADC_IRQHandler = _default_handler);
+PROVIDE(DMA1_Channel1_IRQHandler = _default_handler);
+PROVIDE(DMA1_Channel2_IRQHandler = _default_handler);
+PROVIDE(DMA1_Channel3_IRQHandler = _default_handler);
+PROVIDE(DMA1_Channel4_IRQHandler = _default_handler);
+PROVIDE(DMA1_Channel5_IRQHandler = _default_handler);
+PROVIDE(DMA1_Channel6_IRQHandler = _default_handler);
+PROVIDE(DMA1_Channel7_IRQHandler = _default_handler);
+PROVIDE(ADC1_2_IRQHandler = _default_handler);
 PROVIDE(USB_HP_CAN_TX_IRQHandler = _default_handler);
 PROVIDE(USB_LP_CAN_RX0_IRQHandler = _default_handler);
 PROVIDE(CAN_RX1_IRQHandler = _default_handler);
@@ -110,3 +110,20 @@ PROVIDE(USART3_IRQHandler = _default_handler);
 PROVIDE(EXTI15_10_IRQHandler = _default_handler);
 PROVIDE(RTCAlarm_IRQHandler = _default_handler);
 PROVIDE(USBWakeUp_IRQHandler = _default_handler);
+PROVIDE(TIM8_BRK_IRQHandler = _default_handler);
+PROVIDE(TIM8_UP_IRQHandler = _default_handler);
+PROVIDE(TIM8_TRG_COM_IRQHandler = _default_handler);
+PROVIDE(TIM8_CC_IRQHandler = _default_handler);
+PROVIDE(ADC3_IRQHandler = _default_handler);
+PROVIDE(FSMC_IRQHandler = _default_handler);
+PROVIDE(SDIO_IRQHandler = _default_handler);
+PROVIDE(TIM5_IRQHandler = _default_handler);
+PROVIDE(SPI3_IRQHandler = _default_handler);
+PROVIDE(UART4_IRQHandler = _default_handler);
+PROVIDE(UART5_IRQHandler = _default_handler);
+PROVIDE(TIM6_IRQHandler = _default_handler);
+PROVIDE(TIM7_IRQHandler = _default_handler);
+PROVIDE(DMA2_Channel1_IRQHandler = _default_handler);
+PROVIDE(DMA2_Channel2_IRQHandler = _default_handler);
+PROVIDE(DMA2_Channel3_IRQHandler = _default_handler);
+PROVIDE(DMA2_Channel4_5_IRQHandler = _default_handler);
