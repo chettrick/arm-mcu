@@ -1,6 +1,6 @@
 /* Startup for STM32F103 Cortex-M3 ARM microcontroller */
 
-// $Id: crt0.S,v 1.3 2008-03-15 06:01:26 cvs Exp $
+// $Id: crt0.S,v 1.4 2008-06-27 23:39:13 cvs Exp $
 
 		.text
 		.extern		main
@@ -63,22 +63,22 @@ _start: 	.word		STACK_TOP
 		.word		EXTI3_IRQHandler
 		.extern		EXTI4_IRQHandler
 		.word		EXTI4_IRQHandler
-		.extern		DMAChannel1_IRQHandler
-		.word		DMAChannel1_IRQHandler
-		.extern		DMAChannel2_IRQHandler
-		.word		DMAChannel2_IRQHandler
-		.extern		DMAChannel3_IRQHandler
-		.word		DMAChannel3_IRQHandler
-		.extern		DMAChannel4_IRQHandler
-		.word		DMAChannel4_IRQHandler
-		.extern		DMAChannel5_IRQHandler
-		.word		DMAChannel5_IRQHandler
-		.extern		DMAChannel6_IRQHandler
-		.word		DMAChannel6_IRQHandler
-		.extern		DMAChannel7_IRQHandler
-		.word		DMAChannel7_IRQHandler
-		.extern		ADC_IRQHandler
-		.word		ADC_IRQHandler
+		.extern		DMA1_Channel1_IRQHandler
+		.word		DMA1_Channel1_IRQHandler
+		.extern		DMA1_Channel2_IRQHandler
+		.word		DMA1_Channel2_IRQHandler
+		.extern		DMA1_Channel3_IRQHandler
+		.word		DMA1_Channel3_IRQHandler
+		.extern		DMA1_Channel4_IRQHandler
+		.word		DMA1_Channel4_IRQHandler
+		.extern		DMA1_Channel5_IRQHandler
+		.word		DMA1_Channel5_IRQHandler
+		.extern		DMA1_Channel6_IRQHandler
+		.word		DMA1_Channel6_IRQHandler
+		.extern		DMA1_Channel7_IRQHandler
+		.word		DMA1_Channel7_IRQHandler
+		.extern		ADC1_2_IRQHandler
+		.word		ADC1_2_IRQHandler
 		.extern		USB_HP_CAN_TX_IRQHandler
 		.word		USB_HP_CAN_TX_IRQHandler
 		.extern		USB_LP_CAN_RX0_IRQHandler
@@ -127,6 +127,40 @@ _start: 	.word		STACK_TOP
 		.word		RTCAlarm_IRQHandler
 		.extern		USBWakeUp_IRQHandler
 		.word		USBWakeUp_IRQHandler
+		.extern		TIM8_BRK_IRQHandler
+		.word		TIM8_BRK_IRQHandler
+		.extern		TIM8_UP_IRQHandler
+		.word		TIM8_UP_IRQHandler
+		.extern		TIM8_TRG_COM_IRQHandler
+		.word		TIM8_TRG_COM_IRQHandler
+		.extern		TIM8_CC_IRQHandler
+		.word		TIM8_CC_IRQHandler
+		.extern		ADC3_IRQHandler
+		.word		ADC3_IRQHandler
+		.extern		FSMC_IRQHandler
+		.word		FSMC_IRQHandler
+		.extern		SDIO_IRQHandler
+		.word		SDIO_IRQHandler
+		.extern		TIM5_IRQHandler
+		.word		TIM5_IRQHandler
+		.extern		SPI3_IRQHandler
+		.word		SPI3_IRQHandler
+		.extern		UART4_IRQHandler
+		.word		UART4_IRQHandler
+		.extern		UART5_IRQHandler
+		.word		UART5_IRQHandler
+		.extern		TIM6_IRQHandler
+		.word		TIM6_IRQHandler
+		.extern		TIM7_IRQHandler
+		.word		TIM7_IRQHandler
+		.extern		DMA2_Channel1_IRQHandler
+		.word		DMA2_Channel1_IRQHandler
+		.extern		DMA2_Channel2_IRQHandler
+		.word		DMA2_Channel2_IRQHandler
+		.extern		DMA2_Channel3_IRQHandler
+		.word		DMA2_Channel3_IRQHandler
+		.extern		DMA2_Channel4_5_IRQHandler
+		.word		DMA2_Channel4_5_IRQHandler
 
 // Default exception handler; does nothing
 
