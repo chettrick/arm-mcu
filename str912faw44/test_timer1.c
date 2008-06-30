@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.4 2008-04-15 07:35:04 cvs Exp $
+// $Id: test_timer1.c,v 1.5 2008-06-30 18:24:42 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
@@ -11,7 +11,7 @@
 
 volatile int Timer1Flag = FALSE;
 
-__attribute__ ((__interrupt__)) void Timer1ISR(void)
+__attribute__ ((__interrupt__)) void TIM1_IRQHandler(void)
 {
   static int ticks = 0;
 
@@ -21,13 +21,15 @@ __attribute__ ((__interrupt__)) void Timer1ISR(void)
     Timer1Flag = TRUE;
   }
 
-  TIM1_SR = 0x0000;		// Clear OCF1
-  TIM1_CNTR = 0x0000;		// Reset counter
-  VIC0_VAR = 0;			// Signal end of interrupt
+  TIM1->SR = 0x0000;		// Clear OCF1
+  TIM1->CNTR = 0x0000;		// Reset counter
+  VIC0->VAR = 0;		// Signal end of interrupt
 }
 
 int main(void)
 {
+  TIM_InitTypeDef config_timer;
+
   cpu_init(DEFAULT_CPU_FREQ);
   conio_init(0, 19200);
 
@@ -35,23 +37,28 @@ int main(void)
 
 /* Configure timer 1 to interrupt 10 times a second */
 
-  SCU_PCGR1 |= 0x0001;		// Enable timer 1 peripheral clock
-  SCU_PRR1 |= 0x0001;		// Let timer 1 out of reset
-  TIM1_CNTR = 0x0000;		// Reset counter
-  TIM1_CR2 = 0x40FF;		// Prescale=256, output compare 1 interupt enabled
-  TIM1_OC1R = 37496;		// 10 ticks per second
-  TIM1_CR1 = 0x8000;		// Enable timer 1
+  SCU_APBPeriphClockConfig(__TIM01, ENABLE);	// Turn on timer 1 clock
+  SCU_APBPeriphReset(__TIM01, DISABLE);		// Let timer 1 out of reset
+
+  TIM_StructInit(&config_timer);
+  config_timer.TIM_Mode = TIM_OCM_CHANNEL_1;
+  config_timer.TIM_OC1_Modes = TIM_TIMING;
+  config_timer.TIM_Clock_Source = TIM_CLK_APB;
+  config_timer.TIM_Prescaler = 0xFF;
+  config_timer.TIM_Pulse_Length_1 = CPUFREQ/256/5;
+  TIM_Init(TIM1, &config_timer);
+  TIM_CounterCmd(TIM1, TIM_CLEAR);
+  TIM_ITConfig(TIM1, TIM_IT_OC1, ENABLE);
+  TIM_CounterCmd(TIM1, TIM_START);
 
 /* Configure timer 1 interrupt */
 
   DISABLE_INTERRUPTS(IRQ);
 
-  SCU_PCGR0 |= 0x0020;				// Enable VIC peripheral clock
-  SCU_PRR0 |= 0x0020;				// Let VIC out of reset
-  VIC0_INTSR &= ~(1 << INT_TIMER1);		// Timer 1 uses IRQ
-  VIC0_VC0R = 0x0020 + INT_TIMER1;		// Timer 1 uses vector 0
-  VIC0_VA0R = (unsigned long) Timer1ISR;	// Timer 1 ISR address
-  VIC0_INTER |= 1 << INT_TIMER1;		// Enable timer 1 interrupt
+  SCU_AHBPeriphClockConfig(__VIC, ENABLE);	// Enable VIC clock
+  SCU_AHBPeriphReset(__VIC, DISABLE);		// Let VIC out of reset
+  VIC_Config(TIM1_ITLine, VIC_IRQ, 0);		// Configure timer 1 interrupt
+  VIC_ITCmd(TIM1_ITLine, ENABLE);		// Enable timer 1 interrupt
 
   ENABLE_INTERRUPTS(IRQ);
 
