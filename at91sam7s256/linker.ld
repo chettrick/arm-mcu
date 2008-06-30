@@ -1,6 +1,6 @@
 /* Linker script for AT91SAM7S256 microcontroller */
 
-/* $Id: linker.ld,v 1.6 2008-03-25 09:17:16 cvs Exp $ */
+/* $Id: linker.ld,v 1.7 2008-06-30 18:10:22 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 256K
@@ -76,8 +76,8 @@ INPUT( -lat91sam7s256 )
 
 /*  Provide a default vector for any unhandled interrupts.	*/
 
-PROVIDE( undefined_instruction_exception = endless_loop);
-PROVIDE( software_interrupt_exception = endless_loop);
-PROVIDE( prefetch_abort_exception = endless_loop);
-PROVIDE( data_abort_exception = endless_loop);
-PROVIDE( fast_interrupt_exception = endless_loop);
+PROVIDE(undefined_instruction_exception = endless_loop);
+PROVIDE(software_interrupt_exception = endless_loop);
+PROVIDE(prefetch_abort_exception = endless_loop);
+PROVIDE(data_abort_exception = endless_loop);
+PROVIDE(fast_interrupt_exception = endless_loop);
