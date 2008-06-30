@@ -71,7 +71,7 @@ void TIM_DeInit(TIM_TypeDef *TIMx)
   TIMx->OC2R = 0x8000;
   TIMx->CR1  = 0x0;
   TIMx->CR2  = 0x1;
-  TIMx->CNTR = 0x1234;
+  TIMx->CNTR = 0x0000;
   TIMx->SR   = 0x0;
 }
 
@@ -432,7 +432,7 @@ void TIM_CounterCmd(TIM_TypeDef *TIMx, TIM_CounterOperations TIM_operation)
       break;
 
     case TIM_CLEAR:
-      TIMx->CNTR = 0x1234;
+      TIMx->CNTR = 0x0000;
       break;
     
     default:
