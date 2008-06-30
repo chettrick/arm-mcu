@@ -1,6 +1,6 @@
 /* Linker script for STR912FAW44 microcontroller */
 
-/* $Id: linker.ld,v 1.7 2008-03-25 09:17:16 cvs Exp $ */
+/* $Id: linker.ld,v 1.8 2008-06-30 18:17:06 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 512K
@@ -73,10 +73,44 @@ end = .;
 
 INPUT( -lstr912faw44 )
 
-/*  Provide a default vector for any unhandled interrupts.	*/
+/* The following interrupt service routines have been extracted from 91x_it.h */
 
-PROVIDE( undefined_instruction_exception = endless_loop);
-PROVIDE( software_interrupt_exception = endless_loop);
-PROVIDE( prefetch_abort_exception = endless_loop);
-PROVIDE( data_abort_exception = endless_loop);
-PROVIDE( fast_interrupt_exception = endless_loop);
+PROVIDE(Undefined_Handler = endless_loop);
+PROVIDE(SWI_Handler = endless_loop);
+PROVIDE(Prefetch_Handler = endless_loop);
+PROVIDE(Abort_Handler = endless_loop);
+PROVIDE(FIQ_Handler = endless_loop);
+PROVIDE(WDG_IRQHandler = endless_loop);
+PROVIDE(SW_IRQHandler = endless_loop);
+PROVIDE(ARMRX_IRQHandler = endless_loop);
+PROVIDE(ARMTX_IRQHandler = endless_loop);
+PROVIDE(TIM0_IRQHandler = endless_loop);
+PROVIDE(TIM1_IRQHandler = endless_loop);
+PROVIDE(TIM2_IRQHandler = endless_loop);
+PROVIDE(TIM3_IRQHandler = endless_loop);
+PROVIDE(USBHP_IRQHandler = endless_loop);
+PROVIDE(USBLP_IRQHandler = endless_loop);
+PROVIDE(SCU_IRQHandler = endless_loop);
+PROVIDE(ENET_IRQHandler = endless_loop);
+PROVIDE(DMA_IRQHandler = endless_loop);
+PROVIDE(CAN_IRQHandler = endless_loop);
+PROVIDE(MC_IRQHandler = endless_loop);
+PROVIDE(ADC_IRQHandler = endless_loop);
+PROVIDE(UART0_IRQHandler = endless_loop);
+PROVIDE(UART1_IRQHandler = endless_loop);
+PROVIDE(UART2_IRQHandler = endless_loop);
+PROVIDE(I2C0_IRQHandler = endless_loop);
+PROVIDE(I2C1_IRQHandler = endless_loop);
+PROVIDE(SSP0_IRQHandler = endless_loop);
+PROVIDE(SSP1_IRQHandler = endless_loop);
+PROVIDE(LVD_IRQHandler = endless_loop);
+PROVIDE(RTC_IRQHandler = endless_loop);
+PROVIDE(WIU_IRQHandler = endless_loop);
+PROVIDE(EXTIT0_IRQHandler = endless_loop);
+PROVIDE(EXTIT1_IRQHandler = endless_loop);
+PROVIDE(EXTIT2_IRQHandler = endless_loop);
+PROVIDE(EXTIT3_IRQHandler = endless_loop);
+PROVIDE(EXTIT4_IRQHandler = endless_loop);
+PROVIDE(USBWU_IRQHandler = endless_loop);
+PROVIDE(PFQBC_IRQHandler = endless_loop);
+PROVIDE(DefaultVector_Handler = endless_loop);

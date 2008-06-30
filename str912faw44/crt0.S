@@ -1,6 +1,6 @@
 // Startup for STR912FAW44 ARM microcontroller
 
-// $Id: crt0.S,v 1.1 2007-11-22 09:44:32 cvs Exp $
+// $Id: crt0.S,v 1.2 2008-06-30 18:17:06 cvs Exp $
 
 	.extern	main 		/*  Usual C startup.			*/
 
@@ -163,10 +163,10 @@ endless_loop:
 	.align 0
 
 	b	start
-	b	undefined_instruction_exception
-	b	software_interrupt_exception
-	b	prefetch_abort_exception
-	b	data_abort_exception
+	b	Undefined_Handler
+	b	SWI_Handler
+	b	Prefetch_Handler
+	b	Abort_Handler
 	nop
 	ldr	pc,[pc,#-0xFF0]	    	/* Vector via VIC		*/
-	b	fast_interrupt_exception
+	b	FIQ_Handler
