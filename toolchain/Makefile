@@ -1,11 +1,11 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.18 2008-04-14 08:02:12 cvs Exp $
+# $Id: Makefile,v 1.19 2008-06-30 14:52:17 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 TEMP		= /tmp
-TARGETNAME	= arm-eabi
+TARGETNAME	= arm-elf
 
 BINUTILVER	= 2.18
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
@@ -13,7 +13,7 @@ BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.3.0
+GCCVER		= 4.3.1
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
@@ -46,7 +46,7 @@ D2XXDIST	= $(TEMP)/libftd2xx0.4.13.tar.gz
 endif
 D2XXDIR		= D2XX
 
-OPENOCDVER	= 520
+OPENOCDVER	= 717
 OPENOCDSRC	= openocd-$(OPENOCDVER)
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
@@ -69,7 +69,7 @@ $(BINUTILDIST):
 binutils.done: $(BINUTILDIST)
 	rm -rf $(BINUTILSRC)
 	tar xzf $(BINUTILDIST)
-	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared
+	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared --with-float=soft
 	$(MAKE) -C $(BINUTILSRC)
 ifeq ($(shell uname), Linux)
 # Force static linking
@@ -106,7 +106,7 @@ gcc.done: binutils.done $(GCCDIST)
 	rm -rf $(GCCOBJ)
 	tar xjf $(GCCDIST)
 	mkdir -p $(GCCOBJ)
-	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib
+	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft
 ifeq ($(shell uname), Linux)
 # Force static linking
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) LDFLAGS=-static
@@ -128,7 +128,7 @@ $(NEWLIBDIST):
 newlib.done: gcc.done $(NEWLIBDIST)
 	rm -rf $(NEWLIBSRC)
 	tar xzf $(NEWLIBDIST)
-	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls --disable-nls --disable-shared
+	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls --disable-nls --disable-shared --with-float=soft
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC) install
 	touch newlib.done
@@ -243,7 +243,7 @@ uninstall:
 
 clean:
 	-rm *.done
-	-rm $(PKGNAME)*.tgz
+	-rm *.tgz
 	rm -rf $(INSTBASE)
 	rm -rf $(BINUTILSRC)
 	rm -rf $(GCCSRC)
