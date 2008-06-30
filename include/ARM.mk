@@ -1,9 +1,9 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.37 2008-06-27 20:37:10 cvs Exp $
+# $Id: ARM.mk,v 1.38 2008-06-30 14:41:27 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
-GCCARCH		?= arm-eabi
+GCCARCH		?= arm-elf
 CC		= $(ARMTOOLS)/bin/$(GCCARCH)-gcc
 LD		= $(ARMTOOLS)/bin/$(GCCARCH)-ld
 AR		= $(ARMTOOLS)/bin/$(GCCARCH)-ar

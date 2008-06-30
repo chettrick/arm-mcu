@@ -1,6 +1,6 @@
 /* Simple serial console I/O test program */
 
-// $Id: test_conio.c,v 1.5 2008-04-15 07:35:04 cvs Exp $
+// $Id: test_conio.c,v 1.6 2008-06-30 14:41:27 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
@@ -22,6 +22,6 @@ int main(void)
     fflush(stdout);
     fgets(buf, sizeof(buf), stdin);
     if (strlen(buf)) if (buf[strlen(buf)-1] == '\n') buf[strlen(buf)-1] = 0;
-    printf("You entered %d bytes, '%s'\n", strlen(buf), buf);
+    printf("You entered %ld bytes, '%s'\n", strlen(buf), buf);
   }
 }
