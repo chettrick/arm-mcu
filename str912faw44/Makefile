@@ -1,10 +1,10 @@
 # Make processor dependent startup and libraries for STR91x
 
-# $Id: Makefile,v 1.5 2008-06-26 16:49:12 cvs Exp $
+# $Id: Makefile,v 1.6 2008-06-30 14:36:07 cvs Exp $
 
 ARMSRC		= ..
 
-ARCH		= arm966e-s
+ARCH		= arm9
 MCU		= str912faw44
 
 LIBOBJS		= conio.o cpu.o syscalls.o
