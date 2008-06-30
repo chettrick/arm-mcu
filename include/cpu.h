@@ -1,6 +1,6 @@
 /* Initialize CPU core */
 
-// $Id: cpu.h,v 1.8 2008-06-26 21:32:05 cvs Exp $
+// $Id: cpu.h,v 1.9 2008-06-30 18:27:04 cvs Exp $
 
 extern unsigned long int CPUFREQ;
 
@@ -24,6 +24,7 @@ extern void cpu_init(unsigned long int frequency);
 #endif
 
 #ifdef MCU_str912faw44
+#include <str912faw44/interrupt.h>
 #include <str912faw44/FWLib/91x_lib.h>
 #include <str912faw44/FWLib/91x_it.h>
 #define DEFAULT_CPU_FREQ 48000000
