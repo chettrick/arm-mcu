@@ -1,22 +1,10 @@
-# Make processor dependent startup and libraries for AT91SAM7S256
+# Make processor dependent startup and libraries
 
-# $Id: Makefile,v 1.4 2008-07-01 18:12:00 cvs Exp $
+# $Id: Makefile,v 1.5 2008-07-01 19:07:24 cvs Exp $
 
 ARMSRC		= ..
+MCU             = at91sam7s256
 
-ARCH		= arm7tdmi        
-MCU		= at91sam7s256
-
-LIBOBJS		= conio.o cpu.o syscalls.o
-
-# Build support library
-
-lib$(MCU).a: $(LIBOBJS)
-	$(AR) crs lib$(MCU).a $(LIBOBJS)
-
-# Remove working files
-
-clean_$(MCU):
-	-rm *.a *.o
+default: lib$(MCU).a
 
 include $(ARMSRC)/include/ARM.mk
