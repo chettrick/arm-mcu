@@ -1,6 +1,6 @@
 # Makefile for simple hello world application
 
-# $Id: Makefile,v 1.2 2008-07-01 18:45:35 cvs Exp $
+# $Id: Makefile,v 1.3 2008-07-01 20:11:09 cvs Exp $
 
 # Override the following macro to move the framework directory
 
@@ -19,7 +19,6 @@ MCU	?= lpc2366
 # make hello.flashocd
 # make hello.debug
 # make clean
-# make resetocd
 
 default: hello.hex
 
