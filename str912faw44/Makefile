@@ -1,6 +1,6 @@
-# Make processor dependent startup and libraries for STR91x
+# Make processor dependent startup and libraries
 
-# $Id: Makefile,v 1.8 2008-07-01 18:44:31 cvs Exp $
+# $Id: Makefile,v 1.9 2008-07-01 19:08:04 cvs Exp $
 
 ARMSRC		= ..
 MCU             = str912faw44

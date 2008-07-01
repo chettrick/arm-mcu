@@ -1,6 +1,6 @@
-# STR912FAW44 processor dependent make definitions
+# Processor dependent make definitions
 
-# $Id: mcu.mk,v 1.1 2008-07-01 18:44:31 cvs Exp $
+# $Id: mcu.mk,v 1.2 2008-07-01 19:08:04 cvs Exp $
 
 ARCH		= arm9
 
@@ -21,7 +21,7 @@ lib$(MCU).a: $(LIBOBJS)
 clean_$(MCU):
 	rm -f *.a *.o $(FWLIB)/*.o
 
-# Define a suffix rule for flashing the STR91x microcontroller
+# Define a suffix rule for programming the flash with OpenOCD
 
 .SUFFIXES: .flashocd
 
