@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.39 2008-07-01 18:12:36 cvs Exp $
+# $Id: ARM.mk,v 1.40 2008-07-01 18:52:55 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 GCCARCH		?= arm-elf
@@ -94,6 +94,6 @@ clean:
 	cd $(MCUDEPENDENT) && $(MAKE) clean_$(MCU)
 	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o
 
-# Include flash programming support
+# Include MCU dependent makefile
 
-include $(MCUDEPENDENT)/flash.mk
+include $(MCUDEPENDENT)/mcu.mk
