@@ -1,22 +1,10 @@
-# Make processor dependent startup and libraries for LPC2366
+# Make processor dependent startup and libraries
 
-# $Id: Makefile,v 1.7 2008-07-01 18:12:00 cvs Exp $
+# $Id: Makefile,v 1.8 2008-07-01 20:05:58 cvs Exp $
 
 ARMSRC		= ..
+MCU             = lpc2366
 
-ARCH		= arm7tdmi-s
-MCU		= lpc2366
-
-LIBOBJS		= conio.o cpu.o syscalls.o
-
-# Build support library
-
-lib$(MCU).a: $(LIBOBJS)
-	$(AR) crs lib$(MCU).a $(LIBOBJS)
-
-# Remove working files
-
-clean_$(MCU):
-	-rm *.a *.o
+default: lib$(MCU).a
 
 include $(ARMSRC)/include/ARM.mk
