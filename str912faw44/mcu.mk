@@ -1,6 +1,6 @@
 # Processor dependent make definitions
 
-# $Id: mcu.mk,v 1.2 2008-07-01 19:08:04 cvs Exp $
+# $Id: mcu.mk,v 1.3 2008-07-01 19:21:11 cvs Exp $
 
 ARCH		= arm9
 
@@ -8,6 +8,8 @@ FWLIB		= $(MCUDEPENDENT)/FWLib
 CFLAGS		+= -I$(FWLIB)
 
 LIBOBJS		= conio.o cpu.o syscalls.o
+
+.SUFFIXES:	.flashocd
 
 # Build processor dependent support library
 
@@ -22,10 +24,6 @@ clean_$(MCU):
 	rm -f *.a *.o $(FWLIB)/*.o
 
 # Define a suffix rule for programming the flash with OpenOCD
-
-.SUFFIXES: .flashocd
-
-# Program flash with OpenOCD
 
 .bin.flashocd:
 	$(MCUDEPENDENT)/flash.exp $(OPENOCD) $(OPENOCDCFG) $<
