@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.19 2008-06-30 14:52:17 cvs Exp $
+# $Id: Makefile,v 1.20 2008-07-01 05:14:09 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -37,8 +37,8 @@ GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
 GDBSRC		= insight-$(GDBVER)
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
-D2XXURL		= http://www.ftdichip.com/Driver/CDM/CDM%202.02.04%20WHQL%20Certified.zip
-D2XXDIST	= $(TEMP)/CDM_2.02.04_WHQL_Certified.zip
+D2XXURL		= http://www.ftdichip.com/Driver/CDM/CDM%202.04.06%20WHQL%20Certified.zip
+D2XXDIST	= $(TEMP)/CDM_2.04.06_WHQL_Certified.zip
 endif
 ifeq ($(shell uname), Linux)
 D2XXURL		= http://www.ftdichip.com/Drivers/D2XX/Linux/libftd2xx0.4.13.tar.gz
