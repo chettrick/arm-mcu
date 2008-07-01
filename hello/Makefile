@@ -1,14 +1,13 @@
 # Makefile for simple hello world application
 
-# $Id: Makefile,v 1.1 2008-01-03 10:37:57 cvs Exp $
+# $Id: Makefile,v 1.2 2008-07-01 18:45:35 cvs Exp $
 
 # Override the following macro to move the framework directory
 
 ARMSRC	?= ..
 
-# Override the following macros to use on another MCU
+# Override the following macro to build for another MCU
 
-ARCH	?= arm7tdmi-s
 MCU	?= lpc2366
 
 # The following targets are of interest:
