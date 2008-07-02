@@ -1,20 +1,18 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.41 2008-07-01 20:07:10 cvs Exp $
+# $Id: ARM.mk,v 1.42 2008-07-02 15:47:38 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
-GCCARCH		?= arm-elf
-CC		= $(ARMTOOLS)/bin/$(GCCARCH)-gcc
-LD		= $(ARMTOOLS)/bin/$(GCCARCH)-ld
-AR		= $(ARMTOOLS)/bin/$(GCCARCH)-ar
-STRIP		= $(ARMTOOLS)/bin/$(GCCARCH)-strip
-OBJCOPY		= $(ARMTOOLS)/bin/$(GCCARCH)-objcopy
-OBJDUMP		= $(ARMTOOLS)/bin/$(GCCARCH)-objdump
-GDB		= $(ARMTOOLS)/bin/$(GCCARCH)-gdb
+CC		= $(ARMTOOLS)/bin/arm-elf-gcc
+LD		= $(ARMTOOLS)/bin/arm-elf-ld
+AR		= $(ARMTOOLS)/bin/arm-elf-ar
+STRIP		= $(ARMTOOLS)/bin/arm-elf-strip
+OBJCOPY		= $(ARMTOOLS)/bin/arm-elf-objcopy
+OBJDUMP		= $(ARMTOOLS)/bin/arm-elf-objdump
+GDB		= $(ARMTOOLS)/bin/arm-elf-gdb
 LPC21ISP	= $(ARMTOOLS)/bin/lpc21isp
 OPENOCD		= $(ARMTOOLS)/bin/openocd
 
-ARMSRC		?= .
 MCUDEPENDENT	?= $(ARMSRC)/$(MCU)
 STARTUP		?= $(MCUDEPENDENT)/crt0.o
 LINKERSCRIPT	?= $(MCUDEPENDENT)/linker.ld
