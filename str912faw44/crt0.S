@@ -1,6 +1,6 @@
 // Startup for STR912FAW44 ARM microcontroller
 
-// $Id: crt0.S,v 1.2 2008-06-30 18:17:06 cvs Exp $
+// $Id: crt0.S,v 1.3 2008-07-03 17:51:40 cvs Exp $
 
 	.extern	main 		/*  Usual C startup.			*/
 
@@ -55,9 +55,12 @@ _mainCRTStartup:
 
 	ldr	r1, =0x54000000		// FMI_BBSR
 	ldr	r2, =__rom_size__
-	sub	r2, #32768
+	ldr	r3, blocksize
+	add	r2, r2, r3
 	mov	r2, r2, LSR #15
-	str	r2, [r1]
+	ldr	r3, =bbsrtable
+	ldrb	r4, [r3, r2]
+	str	r4, [r1]
 
 	ldr	r1, =0x5400000C		// FMI_BBADR
 	mov	r2, #0
@@ -152,6 +155,13 @@ endless_loop:
 .word	__data_beg_src__
 .LC5:
 .word	__data_end__
+
+blocksize:
+	.word 32767
+
+bbsrtable:
+	.byte 0, 0, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4
+	.byte 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
 
 	/**** Exception/Interrupt table ****/
 
