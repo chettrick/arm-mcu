@@ -384,9 +384,9 @@ enum EP_BUF_NUM{
 /* OUT: none */
 /*----------------------------------------------------------------*/
 #define _ToggleDTOG_RX(bEpNum)    (_SetENDPOINT(bEpNum, \
-				   EP_DTOG_RX | _GetENDPOINT(bEpNum) & EPREG_MASK))
+				   (EP_DTOG_RX | _GetENDPOINT(bEpNum)) & EPREG_MASK))
 #define _ToggleDTOG_TX(bEpNum)    (_SetENDPOINT(bEpNum, \
-			           EP_DTOG_TX | _GetENDPOINT(bEpNum) & EPREG_MASK))
+			           (EP_DTOG_TX | _GetENDPOINT(bEpNum)) & EPREG_MASK))
 /*----------------------------------------------------------------*/
 /* ClearDTOG_RX / ClearDTOG_TX */
 /* IN : bEpNum  = endpoint number */
@@ -405,7 +405,7 @@ enum EP_BUF_NUM{
 /*----------------------------------------------------------------*/
 
 #define _SetEPAddress(bEpNum,bAddr) _SetENDPOINT(bEpNum,\
-			           _GetENDPOINT(bEpNum) & EPREG_MASK | bAddr)
+			           (_GetENDPOINT(bEpNum) & EPREG_MASK) | bAddr)
 /*----------------------------------------------------------------*/
 /* GetEPAddress */
 /* IN : bEpNum  = endpoint number */
