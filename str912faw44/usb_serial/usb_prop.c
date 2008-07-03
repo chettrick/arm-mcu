@@ -21,7 +21,6 @@
 #include "usb_prop.h"
 #include "usb_desc.h"
 #include "usb_pwr.h"
-#include "hw_config.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -110,7 +109,6 @@ void Virtual_Com_Port_init(void)
   _SetCNTR(wInterrupt_Mask); /* set interrupts mask */
   pInformation->Current_Feature = Virtual_Com_Port_ConfigDescriptor[7];
   /* Wait until device is configured */
-  UART0_Config_Default();
   while (pInformation->Current_Configuration == 0) NOP_Process();
     bDeviceState = CONFIGURED;
 }
@@ -169,7 +167,6 @@ void Virtual_Com_Port_Reset(void)
 void Virtual_Com_Port_Status_In(void)
 {
   if (Request == SET_LINE_CODING){
-    UART0_Config();
     Request = 0;
   }
 }
