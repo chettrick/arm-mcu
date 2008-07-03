@@ -427,7 +427,7 @@ u16 ADC_GetConversionValue(u16 ADC_Channel)
 *******************************************************************************/
 FlagStatus ADC_GetAnalogWatchdogResult(u16 ADC_Channel)
 {
-  if (ADC->CRR & (1<<ADC_Channel) != RESET)
+  if ((ADC->CRR & (1<<ADC_Channel)) != RESET)
   {
       return SET;
   }
