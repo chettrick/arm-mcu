@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.5 2008-06-30 18:24:42 cvs Exp $
+// $Id: test_timer1.c,v 1.6 2008-07-07 19:19:35 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
@@ -35,6 +35,11 @@ int main(void)
 
   puts("\033[H\033[2JSTR912FAW44 Timer 1 Interrupt Test (" __DATE__ " " __TIME__ ")\n");
 
+/* Configure VIC */
+
+  SCU_AHBPeriphClockConfig(__VIC, ENABLE);	// Enable VIC clock
+  SCU_AHBPeriphReset(__VIC, DISABLE);		// Let VIC out of reset
+
 /* Configure timer 1 to interrupt 10 times a second */
 
   SCU_APBPeriphClockConfig(__TIM01, ENABLE);	// Turn on timer 1 clock
@@ -55,8 +60,6 @@ int main(void)
 
   DISABLE_INTERRUPTS(IRQ);
 
-  SCU_AHBPeriphClockConfig(__VIC, ENABLE);	// Enable VIC clock
-  SCU_AHBPeriphReset(__VIC, DISABLE);		// Let VIC out of reset
   VIC_Config(TIM1_ITLine, VIC_IRQ, 0);		// Configure timer 1 interrupt
   VIC_ITCmd(TIM1_ITLine, ENABLE);		// Enable timer 1 interrupt
 
