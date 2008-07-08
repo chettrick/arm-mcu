@@ -108,9 +108,6 @@ void Virtual_Com_Port_init(void)
   wInterrupt_Mask = IMR_MSK;
   _SetCNTR(wInterrupt_Mask); /* set interrupts mask */
   pInformation->Current_Feature = Virtual_Com_Port_ConfigDescriptor[7];
-  /* Wait until device is configured */
-  while (pInformation->Current_Configuration == 0) NOP_Process();
-    bDeviceState = CONFIGURED;
 }
 /*******************************************************************************
 * Function Name  : Virtual_Com_Port_Reset
