@@ -1,11 +1,12 @@
 # Processor dependent make definitions
 
-# $Id: mcu.mk,v 1.4 2008-07-02 17:42:17 cvs Exp $
+# $Id: mcu.mk,v 1.5 2008-07-08 15:59:49 cvs Exp $
 
 ARCH		= arm9
 
 FWLIB		= $(MCUDEPENDENT)/FWLib
-CFLAGS		+= -I$(FWLIB)
+USBLIB		= $(MCUDEPENDENT)/usb_serial
+CFLAGS		+= -I$(FWLIB) -I$(USBLIB)
 
 USBSERIAL	= $(MCUDEPENDENT)/usb_serial
 
@@ -20,7 +21,7 @@ lib$(MCU).a: $(LIBOBJS)
 	for F in $(FWLIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs libusb_serial.a $(USBSERIAL)/*.o
+	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
 
 # Clean out working files
 
