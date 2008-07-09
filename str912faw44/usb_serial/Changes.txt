@@ -1,0 +1,27 @@
+Changes Made to ST9x USB Developer Kit
+--------------------------------------
+
+Philip Munts, 9 July 2008
+
+1.  Downloaded um0290.zip, version 1.0 January 2007, from www.st.com.
+
+2.  Copied source and header files to this subdirectory.
+
+3.  Removed trailing DOS CR's from each source and header file.
+
+4.  Eliminated 91x_it.c.  ISR stubs are provided by linker.ld instead,
+    and may be overridden by routines declared in user source files.
+
+5.  Eliminated 91x_conf.h, hw_config.h, hw_config.c, and main.c.
+
+6.  Added parantheses to usb_regs.h to avoid gcc compiler warnings.
+
+7.  Removed unnecessary #include "hw_config.h" from usb_endp.c.
+
+8.  Modified usb_prop.c to remove hw_config.h, remove UART0 configuration,
+    and remove USB device configuration wait loop.
+
+9.  Modified usb_pwr.c to include usb_serial.h (for USB_Cable_Config) instead
+    of hw_config.h.
+
+10. Added usb_serial.c and usb_serial.h.
