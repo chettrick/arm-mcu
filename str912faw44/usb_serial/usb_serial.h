@@ -1,6 +1,10 @@
 /* USB serial port encapsulation routines */
 
-// $Id: usb_serial.h,v 1.1 2008-07-08 23:04:35 cvs Exp $
+// $Id: usb_serial.h,v 1.2 2008-07-09 15:13:33 cvs Exp $
+
+// Connect or disconnect D+ pullup resistor
+
+void USB_Cable_Config(FunctionalState NewState);
 
 // Initialize USB subsystem
 

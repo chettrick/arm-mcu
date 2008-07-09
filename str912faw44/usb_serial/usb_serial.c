@@ -1,6 +1,6 @@
 /* USB serial port library encapsulation routines */
 
-// $Id: usb_serial.c,v 1.1 2008-07-08 23:04:35 cvs Exp $
+// $Id: usb_serial.c,v 1.2 2008-07-09 15:13:33 cvs Exp $
 
 #include <string.h>
 
@@ -18,15 +18,41 @@ extern u8 buffer_out[];
 extern void USB_Istr(void);
 extern void CTR_HP(void);
 
+// Connect or disconnect D+ pullup resistor
+
+void USB_Cable_Config(FunctionalState NewState)
+{
+  if (NewState == ENABLE)
+    GPIO_WriteBit(GPIO0, GPIO_Pin_1, Bit_RESET);
+  else
+    GPIO_WriteBit(GPIO0, GPIO_Pin_1, Bit_SET);
+}
+
 // Initialize USB subsystem
 
 void usb_serial_init(void)
 {
-
+  GPIO_InitTypeDef config_gpio;
+  
 // Enable VIC subsystem
 
   SCU_AHBPeriphClockConfig(__VIC,ENABLE);
   SCU_AHBPeriphReset(__VIC,DISABLE);
+
+// Enable GPIO0 subsystem
+
+  SCU_APBPeriphClockConfig(__GPIO0, ENABLE);
+  SCU_APBPeriphReset(__GPIO0, DISABLE);
+
+// Configure P0.1 to control USB D+ pullup resistor
+
+  GPIO_DeInit(GPIO0);
+  config_gpio.GPIO_Direction = GPIO_PinOutput;
+  config_gpio.GPIO_Pin = GPIO_Pin_1;
+  config_gpio.GPIO_Type = GPIO_Type_PushPull;
+  config_gpio.GPIO_IPInputConnected = GPIO_IPInputConnected_Enable;
+  config_gpio.GPIO_Alternate = GPIO_OutputAlt1;
+  GPIO_Init(GPIO0, &config_gpio);
 
 // Enable USB subsystem
 
