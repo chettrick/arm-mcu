@@ -3,7 +3,7 @@ Changes Made to ST9x FWLib
 
 Philip Munts, 9 July 2008
 
-1. Downloaded um0233.zip, version 1.0 January 2008, from www.st.com.
+1. Downloaded um0233.zip, version 2 January 2008, from www.st.com.
 
 2. Copied source and header files to this subdirectory.
 
