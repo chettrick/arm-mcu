@@ -1,0 +1,18 @@
+Changes Made to ST9x FWLib
+--------------------------
+
+Philip Munts, 9 July 2008
+
+1. Downloaded um0233.zip, version 1.0 January 2008, from www.st.com.
+
+2. Copied source and header files to this subdirectory.
+
+3. Removed trailing DOS CR's from each source and header file.
+
+4. Eliminated 91x_it.c.  ISR stubs are provided by linker.ld instead,
+   and may be overridden by routines declared in user source files.
+   See test_timer1.c for an example.
+
+5. Added some parantheses to 91x_adc.c to avoid a gcc compiler warning.
+
+6. Modified 91x_tim.c to reset the counter to 0x0000, not 0x1234.
