@@ -1,31 +1,65 @@
 /* USB serial port library encapsulation routines */
 
-// $Id: usb_serial.c,v 1.2 2008-07-09 15:13:33 cvs Exp $
+// $Id: usb_serial.c,v 1.3 2008-07-09 18:57:40 cvs Exp $
 
 #include <string.h>
-
 #include <91x_lib.h>
-
 #include <usb_lib.h>
 #include <usb_serial.h>
-
 #include <str912faw44/interrupt.h>
 
-// The following are defined in the USB library code from ST.COM
-
-extern u32 count_out;
-extern u8 buffer_out[];
 extern void USB_Istr(void);
-extern void CTR_HP(void);
 
-// Connect or disconnect D+ pullup resistor
+#define RINGBUFFER_SIZE 256
 
-void USB_Cable_Config(FunctionalState NewState)
+static volatile bool txready = TRUE;
+
+// Define a ring buffer data structure
+
+typedef struct
 {
-  if (NewState == ENABLE)
-    GPIO_WriteBit(GPIO0, GPIO_Pin_1, Bit_RESET);
-  else
-    GPIO_WriteBit(GPIO0, GPIO_Pin_1, Bit_SET);
+  int head;
+  int tail;
+  int count;
+  unsigned char data[RINGBUFFER_SIZE];
+} ringbuffer_t;
+
+static volatile ringbuffer_t rxbuf;
+
+// Enqueue data into a ring buffer
+
+static int ringbuffer_enqueue(unsigned char *src, ringbuffer_t *dst, int count)
+{
+  int result = 0;
+
+  while ((dst->count < RINGBUFFER_SIZE) && count--)
+  {
+    dst->data[dst->tail++] = *src++;
+    if (dst->tail == RINGBUFFER_SIZE) dst->tail = 0;
+    dst->count++;
+    result++;
+  }
+
+  return result;
+}
+
+// Dequeue data from a ring buffer
+
+static int ringbuffer_dequeue(ringbuffer_t *src, unsigned char *dst, int count)
+{
+  int result = 0;
+
+  while ((src->count > 0) && count--)
+  {
+    *dst++ = src->data[src->head++];
+    if (src->head == RINGBUFFER_SIZE) src->head = 0;
+    DISABLE_INTERRUPTS(IRQ);
+    src->count--;
+    ENABLE_INTERRUPTS(IRQ);
+    result++;
+  }
+
+  return result;
 }
 
 // Initialize USB subsystem
@@ -33,7 +67,15 @@ void USB_Cable_Config(FunctionalState NewState)
 void usb_serial_init(void)
 {
   GPIO_InitTypeDef config_gpio;
-  
+
+// Initialize transmit done flag
+
+  txready = TRUE;
+
+// Initialize the receive ring buffer
+
+  memset((void *) &rxbuf, 0, sizeof(ringbuffer_t));
+
 // Enable VIC subsystem
 
   SCU_AHBPeriphClockConfig(__VIC,ENABLE);
@@ -76,34 +118,54 @@ void usb_serial_init(void)
 
 // Send data to USB host
 
-void usb_serial_send(void *src, int len)
+int usb_serial_send(void *src, int count)
 {
-  UserToPMABufferCopy(src, ENDP1_TXADDR, len);
-  SetEPTxCount(ENDP1, len);
+  if (!txready) return 0;
+  txready = FALSE;
+
+  UserToPMABufferCopy(src, ENDP1_TXADDR, count);
+  SetEPTxCount(ENDP1, count);
   SetEPTxValid(ENDP1);
+
+  return count;
 }
 
 // Receive data from USB host
 
-int usb_serial_receive(void *dst, int dstsize)
+int usb_serial_receive(void *dst, int count)
 {
-  int len = 0;
-
-  if (count_out)
-  {
-    len = count_out;
-    memset(dst, 0, dstsize);
-    memcpy(dst, buffer_out, count_out);
-    count_out = 0;
-  }
-
-  return len;  
+  return ringbuffer_dequeue((ringbuffer_t *) &rxbuf, dst, count);
 }
 
-/* USB Low Priority Interrupt Service Routine */
+// Connect or disconnect D+ pullup resistor
+
+void USB_Cable_Config(FunctionalState NewState)
+{
+  if (NewState == ENABLE)
+    GPIO_WriteBit(GPIO0, GPIO_Pin_1, Bit_RESET);
+  else
+    GPIO_WriteBit(GPIO0, GPIO_Pin_1, Bit_SET);
+}
+
+// USB Low Priority Interrupt Service Routine
 
 __attribute__ ((__interrupt__)) void USBLP_IRQHandler(void)
 {
-  USB_Istr();
-  VIC0->VAR = 0;
+  USB_Istr();		// Call USB ISR
+  VIC0->VAR = 0;	// End of interrupt
+}
+
+// This function is called from the USB ISR when data has been received from the USB host
+
+void EP3_OUT_Callback(void)
+{
+  ringbuffer_enqueue((unsigned char *) (PMAAddr + ENDP3_RXADDR), (ringbuffer_t *) &rxbuf, GetEPRxCount(ENDP3));
+  SetEPRxValid(ENDP3);
+}
+
+// This function is called from the USB ISR when data has been sent to the USB host
+
+void EP1_IN_Callback(void)
+{
+  txready = TRUE;
 }
