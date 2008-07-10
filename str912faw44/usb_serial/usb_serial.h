@@ -1,15 +1,9 @@
 /* USB serial port encapsulation routines */
 
-// $Id: usb_serial.h,v 1.4 2008-07-10 20:22:21 cvs Exp $
+// $Id: usb_serial.h,v 1.5 2008-07-10 20:34:00 cvs Exp $
 
 #ifndef __USB_SERIAL_H
 #define __USB_SERIAL_H
-
-#include <usb_type.h>
-
-// Connect or disconnect D+ pullup resistor
-
-void USB_Cable_Config(FunctionalState NewState);
 
 // Initialize USB subsystem
 
