@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.c,v 1.10 2008-03-24 11:17:21 cvs Exp $
+// $Id: conio.c,v 1.11 2008-07-16 15:40:05 cvs Exp $
 
 #include <cpu.h>
 #include <conio.h>
@@ -156,12 +156,4 @@ void cgets(char *s, int bufsize)
   }
 
   return;
-}
-
-/* Override fgets() with a version that does line editing */
-
-char *fgets(char *s, int bufsize, FILE *f)
-{
-  cgets(s, bufsize);
-  return s;
 }

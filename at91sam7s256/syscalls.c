@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: syscalls.c,v 1.1 2008-01-09 21:04:06 cvs Exp $
+// $Id: syscalls.c,v 1.2 2008-07-16 15:40:05 cvs Exp $
 
 #include <conio.h>
 #include <sys/stat.h>
@@ -67,4 +67,12 @@ int _write(int fd, const char *buf, size_t cnt)
     putch(buf[i]);
 
   return cnt;
+}
+
+/* Override fgets() in newlib with a version that does line editing */
+
+char *fgets(char *s, int bufsize, void *f)
+{
+  cgets(s, bufsize);
+  return s;
 }
