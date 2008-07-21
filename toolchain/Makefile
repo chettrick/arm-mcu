@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.20 2008-07-01 05:14:09 cvs Exp $
+# $Id: Makefile,v 1.21 2008-07-21 15:37:40 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -26,8 +26,8 @@ NEWLIBDIST	= $(TEMP)/newlib-$(NEWLIBVER).tar.gz
 NEWLIBURL	= $(NEWLIBSERVER)/`basename $(NEWLIBDIST)`
 NEWLIBSRC	= newlib-$(NEWLIBVER)
 
-LPC21ISPVER	= 1.55
-LPC21ISPSRC	= lpc21isp-$(LPC21ISPVER)
+LPC21ISPVER	= 160
+LPC21ISPSRC	= lpc21isp_$(LPC21ISPVER)
 LPC21ISPDIST	= $(LPC21ISPSRC).zip
 
 GDBVER		= 6.7.1
@@ -195,7 +195,7 @@ lpc21isp.done: $(LPC21ISPDIST)
 	rm -rf $(LPC21ISPSRC)
 	mkdir -p $(LPC21ISPSRC)
 	unzip $(LPC21ISPDIST) -d $(LPC21ISPSRC)
-	$(MAKE) -C $(LPC21ISPSRC) -f Makefile.gnu CFLAGS="-Wall -static"
+	$(MAKE) -C $(LPC21ISPSRC) CFLAGS="-Wall -static"
 	install -csm 0755 $(LPC21ISPSRC)/lpc21isp $(INSTBASE)/bin
 	touch lpc21isp.done
 
