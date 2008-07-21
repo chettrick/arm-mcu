@@ -1,6 +1,6 @@
-/* Simple serial console I/O test program */
+/* Simple real time clock test program */
 
-// $Id: test_rtc.c,v 1.1 2008-07-16 18:55:51 cvs Exp $
+// $Id: test_rtc.c,v 1.2 2008-07-21 23:28:17 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
