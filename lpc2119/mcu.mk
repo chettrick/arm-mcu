@@ -1,13 +1,13 @@
 # Processor dependent make definitions
 
-# $Id: mcu.mk,v 1.1 2008-07-01 20:07:59 cvs Exp $
+# $Id: mcu.mk,v 1.2 2008-07-22 21:09:03 cvs Exp $
 
 ARCH		= arm7tdmi-s
 
 LIBOBJS		= conio.o cpu.o syscalls.o
 
 LPC21ISPDEV	?= /dev/cua00
-LPC21ISPBAUD	?= 38400
+LPC21ISPBAUD	?= 19200
 LPC21ISPCLOCK	?= 19660
 LPC21ISPFLAGS	?= -control
 
