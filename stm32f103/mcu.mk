@@ -1,8 +1,9 @@
 # Processor dependent make definitions
 
-# $Id: mcu.mk,v 1.1 2008-07-01 20:39:17 cvs Exp $
+# $Id: mcu.mk,v 1.2 2008-07-22 16:46:18 cvs Exp $
 
-ARCH		= cortex-m3 -mthumb
+ARCH		= cortex-m3
+THUMBFLAGS	= -mthumb
 
 FWLIB		= $(MCUDEPENDENT)/FWLib
 CFLAGS		+= -I$(FWLIB)
