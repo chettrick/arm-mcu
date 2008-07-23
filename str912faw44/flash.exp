@@ -2,7 +2,7 @@
 
 # expect script for programming STR912FAW44 flash
 
-# $Id: flash.exp,v 1.4 2008-06-30 20:47:21 cvs Exp $
+# $Id: flash.exp,v 1.5 2008-07-23 20:42:29 cvs Exp $
 
 # Script arguments:
 
@@ -27,6 +27,9 @@ send "reset run_and_halt\n"
 expect $prompt
 
 send "wait_halt\n"
+expect $prompt
+
+send "jtag_khz 3000\n"
 expect $prompt
 
 send "str9x flash_config 0 4 2 0 0x80000\n"
