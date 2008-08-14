@@ -4,13 +4,16 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: syscalls.c,v 1.3 2008-07-16 18:55:11 cvs Exp $
+// $Id: syscalls.c,v 1.4 2008-08-14 20:08:18 cvs Exp $
 
-#include <conio.h>
 #include <cpu.h>
+#include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/time.h>
+#include <errno.h>
+#undef errno
+extern int errno;
 
 extern char end[];
 static char *heap_ptr;
@@ -31,7 +34,16 @@ void * _sbrk(ptrdiff_t incr)
 
 int _open(const char *path, int flags, ...)
 {
-  return 1;
+  int d;
+
+  if ((d = device_lookup(path)) < 0)
+    return -1;
+
+  if (device_table[d].init != NULL)
+    if (device_table[d].init(device_table[d].subdevice, device_table[d].settings))
+      return -1;
+
+  return d;
 }
 
 int _close(int fd)
@@ -57,19 +69,28 @@ int _lseek(int fd, off_t pos, int whence)
 
 int _read(int fd, char *buf, size_t cnt)
 {
-  *buf = getch();
+  if (device_table[fd].read == NULL)
+  {
+    errno = EIO;
+    return -1;
+  }
 
-  return 1;
+#ifdef CONFIG_RAWREAD
+  return device_table[fd].read(device_table[fd].subdevice, buf, cnt);
+#else
+  return device_gets(fd, buf, cnt);
+#endif
 }
 
 int _write(int fd, const char *buf, size_t cnt)
 {
-  int i;
+  if (device_table[fd].write == NULL)
+  {
+    errno = EIO;
+    return -1;
+  }
 
-  for (i = 0; i < cnt; i++)
-    putch(buf[i]);
-
-  return cnt;
+  return device_table[fd].write(device_table[fd].subdevice, buf, cnt);
 }
 
 /*
@@ -178,12 +199,4 @@ int _gettimeofday(struct timeval *ptimeval, void *ptimezone)
   ptimeval->tv_sec = now;
 
   return 0;
-}
-
-/* Override fgets() in newlib with a version that does line editing */
-
-char *fgets(char *s, int bufsize, void *f)
-{
-  cgets(s, bufsize);
-  return s;
 }

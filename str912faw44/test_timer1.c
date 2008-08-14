@@ -1,8 +1,7 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.6 2008-07-07 19:19:35 cvs Exp $
+// $Id: test_timer1.c,v 1.7 2008-08-14 20:08:18 cvs Exp $
 
-#include <conio.h>
 #include <cpu.h>
 #include <stdio.h>
 
@@ -31,7 +30,12 @@ int main(void)
   TIM_InitTypeDef config_timer;
 
   cpu_init(DEFAULT_CPU_FREQ);
-  conio_init(0, 19200);
+
+#ifdef USB_STDIO
+  usb_serial_stdio();
+#else
+  serial_stdio(0, 19200);
+#endif
 
   puts("\033[H\033[2JSTR912FAW44 Timer 1 Interrupt Test (" __DATE__ " " __TIME__ ")\n");
 

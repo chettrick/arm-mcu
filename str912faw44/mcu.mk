@@ -1,6 +1,6 @@
 # Processor dependent make definitions
 
-# $Id: mcu.mk,v 1.5 2008-07-08 15:59:49 cvs Exp $
+# $Id: mcu.mk,v 1.6 2008-08-14 20:08:18 cvs Exp $
 
 ARCH		= arm9
 
@@ -10,7 +10,7 @@ CFLAGS		+= -I$(FWLIB) -I$(USBLIB)
 
 USBSERIAL	= $(MCUDEPENDENT)/usb_serial
 
-LIBOBJS		= conio.o cpu.o syscalls.o
+LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
 .SUFFIXES:	.flashocd
 

@@ -1,8 +1,7 @@
 /* Simple real time clock test program */
 
-// $Id: test_rtc.c,v 1.2 2008-07-21 23:28:17 cvs Exp $
+// $Id: test_rtc.c,v 1.3 2008-08-14 20:08:18 cvs Exp $
 
-#include <conio.h>
 #include <cpu.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -19,7 +18,7 @@ int main(void)
   time_t t_unix;
 
   cpu_init(DEFAULT_CPU_FREQ);
-  conio_init(0, 19200);
+  serial_stdio(0, 19200);
 
   puts("\033[H\033[2JSTR912FAW44 Real Time Clock Test (" __DATE__ " " __TIME__ ")\n");
 
@@ -40,17 +39,16 @@ int main(void)
   {
     if (keypressed())
     {
-      c = toupper(getch());
-
-      switch (c)
+      switch (toupper(getch()))
       {
         case 'T' :
           printf("Enter UTC time (HH:MM:SS): ");
           fflush(stdout);
 
-          fgets(buf, sizeof(buf), stdin);
-          sscanf(buf, "%d:%d:%d\n", &hour, &minute, &second);
-          
+//          fgets(buf, sizeof(buf), stdin);
+//          sscanf(buf, "%d:%d:%d\n", &hour, &minute, &second);
+          scanf("%d:%d:%d", &hour, &minute, &second);
+
           memset(&t_rtc, 0, sizeof(t_rtc));
           t_rtc.hours = hour;
           t_rtc.minutes = minute;
@@ -62,8 +60,9 @@ int main(void)
           printf("Enter UTC date (YYYY MM DD): ");
           fflush(stdout);
 
-          fgets(buf, sizeof(buf), stdin);
-          sscanf(buf, "%d %d %d\n", &year, &month, &day);
+//          fgets(buf, sizeof(buf), stdin);
+//          sscanf(buf, "%d %d %d\n", &year, &month, &day);
+          scanf("%d %d %d", &year, &month, &day);
 
           memset(&d_rtc, 0, sizeof(d_rtc));
           d_rtc.century = year / 100;

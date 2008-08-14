@@ -1,12 +1,15 @@
 /* USB serial port library encapsulation routines */
 
-// $Id: usb_serial.c,v 1.3 2008-07-09 18:57:40 cvs Exp $
+// $Id: usb_serial.c,v 1.4 2008-08-14 20:08:18 cvs Exp $
 
+#include <cpu.h>
 #include <string.h>
 #include <91x_lib.h>
 #include <usb_lib.h>
+#include <usb_desc.h>
 #include <usb_serial.h>
-#include <str912faw44/interrupt.h>
+
+#include <stdio.h>
 
 extern void USB_Istr(void);
 
@@ -21,14 +24,14 @@ typedef struct
   int head;
   int tail;
   int count;
-  unsigned char data[RINGBUFFER_SIZE];
+  char data[RINGBUFFER_SIZE];
 } ringbuffer_t;
 
 static volatile ringbuffer_t rxbuf;
 
 // Enqueue data into a ring buffer
 
-static int ringbuffer_enqueue(unsigned char *src, ringbuffer_t *dst, int count)
+static int ringbuffer_enqueue(char *src, ringbuffer_t *dst, int count)
 {
   int result = 0;
 
@@ -45,7 +48,7 @@ static int ringbuffer_enqueue(unsigned char *src, ringbuffer_t *dst, int count)
 
 // Dequeue data from a ring buffer
 
-static int ringbuffer_dequeue(ringbuffer_t *src, unsigned char *dst, int count)
+static int ringbuffer_dequeue(ringbuffer_t *src, char *dst, int count)
 {
   int result = 0;
 
@@ -64,7 +67,7 @@ static int ringbuffer_dequeue(ringbuffer_t *src, unsigned char *dst, int count)
 
 // Initialize USB subsystem
 
-void usb_serial_init(void)
+int usb_serial_init(unsigned subdevice, void *settings)
 {
   GPIO_InitTypeDef config_gpio;
 
@@ -74,7 +77,7 @@ void usb_serial_init(void)
 
 // Initialize the receive ring buffer
 
-  memset((void *) &rxbuf, 0, sizeof(ringbuffer_t));
+  memset((ringbuffer_t *) &rxbuf, 0, sizeof(ringbuffer_t));
 
 // Enable VIC subsystem
 
@@ -114,27 +117,65 @@ void usb_serial_init(void)
 // Initialize USB subsystem
 
   USB_Init();
+  return 0;
+}
+
+// Register USB serial port devices for standard I/O
+
+int usb_serial_stdio(void)
+{
+  device_unregister("stdin");
+  device_unregister("stdout");
+  device_unregister("stderr");
+
+  device_register_fd("stdin",  0, 0, NULL, NULL, usb_serial_write, usb_serial_read,
+                     usb_serial_txready, usb_serial_rxready);
+
+  device_register_fd("stdout", 1, 0, NULL, NULL, usb_serial_write, usb_serial_read,
+                     usb_serial_txready, usb_serial_rxready);
+
+  device_register_fd("stderr", 2, 0, NULL, NULL, usb_serial_write, usb_serial_read,
+                     usb_serial_txready, usb_serial_rxready);
+
+  return 0;
+}
+
+// Return TRUE if USB system is ready to accept another transmit message
+
+int usb_serial_txready(unsigned subdevice)
+{
+  return txready;
+}
+
+// Return TRUE if USB subsystem has receive data available
+
+int usb_serial_rxready(unsigned subdevice)
+{
+  return (rxbuf.count > 0);
 }
 
 // Send data to USB host
 
-int usb_serial_send(void *src, int count)
+int usb_serial_write(unsigned subdevice, char *buf, size_t count)
 {
   if (!txready) return 0;
-  txready = FALSE;
 
-  UserToPMABufferCopy(src, ENDP1_TXADDR, count);
+  if (count > VIRTUAL_COM_PORT_DATA_SIZE)
+    count = VIRTUAL_COM_PORT_DATA_SIZE;
+
+  UserToPMABufferCopy((unsigned char *) buf, ENDP1_TXADDR, count);
   SetEPTxCount(ENDP1, count);
   SetEPTxValid(ENDP1);
 
+  txready = FALSE;
   return count;
 }
 
 // Receive data from USB host
 
-int usb_serial_receive(void *dst, int count)
+int usb_serial_read(unsigned subdevice, char *buf, size_t count)
 {
-  return ringbuffer_dequeue((ringbuffer_t *) &rxbuf, dst, count);
+  return ringbuffer_dequeue((ringbuffer_t *) &rxbuf, buf, count);
 }
 
 // Connect or disconnect D+ pullup resistor
@@ -159,7 +200,7 @@ __attribute__ ((__interrupt__)) void USBLP_IRQHandler(void)
 
 void EP3_OUT_Callback(void)
 {
-  ringbuffer_enqueue((unsigned char *) (PMAAddr + ENDP3_RXADDR), (ringbuffer_t *) &rxbuf, GetEPRxCount(ENDP3));
+  ringbuffer_enqueue((char *) (PMAAddr + ENDP3_RXADDR), (ringbuffer_t *) &rxbuf, GetEPRxCount(ENDP3));
   SetEPRxValid(ENDP3);
 }
 
