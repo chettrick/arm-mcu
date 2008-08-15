@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: device.c,v 1.1 2008-08-14 20:08:18 cvs Exp $
+// $Id: device.c,v 1.2 2008-08-15 15:54:20 cvs Exp $
 
 #include <cpu.h>
 #include <string.h>
@@ -145,51 +145,14 @@ int device_ready_read(int fd)
 
 int device_putc(int fd, char c)
 {
-  int len;
-
-  if (device_table[fd].name[0] == 0)
-  {
-    errno = ENODEV;
-    return -1;
-  }
-
-  if (device_table[fd].write == NULL)
-  {
-    errno = EIO;
-    return -1;
-  }
-
-  while ((len = device_table[fd].write(device_table[fd].subdevice, &c, 1)) == 0);
-
-  return len;  
+  return _write(fd, &c, 1);
 }
 
 /* Write a string to a device */
 
 int device_puts(int fd, char *s)
 {
-  int len;
-
-  if (device_table[fd].name[0] == 0)
-  {
-    errno = ENODEV;
-    return -1;
-  }
-
-  if (device_table[fd].write == NULL)
-  {
-    errno = EIO;
-    return -1;
-  }
-
-  while (strlen(s))
-  {
-    len = device_table[fd].write(device_table[fd].subdevice, s, strlen(s));
-    if (len < 0) return len;
-    if (len > 0) s += len;
-  }
-
-  return 0;
+  return _write(fd, s, strlen(s));
 }
 
 /* Read a single character from a device */
