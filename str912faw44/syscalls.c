@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: syscalls.c,v 1.6 2008-08-15 16:52:17 cvs Exp $
+// $Id: syscalls.c,v 1.7 2008-08-15 21:47:15 cvs Exp $
 
 #include <cpu.h>
 #include <string.h>
@@ -87,9 +87,14 @@ int _read(int fd, char *buf, size_t size)
 #endif
 }
 
-int _write(int fd, const char *buf, size_t size)
+int _write(int fd, const char *src, size_t size)
 {
-  int len, count = 0;
+  char dst[256];
+  int srcidx;
+  int dstidx;
+  int totalbytes;	// Number of source bytes transferred
+  int chunkbytes;	// Number of chunk bytes transferred
+  int len;
 
   if (device_table[fd].name[0] == 0)
   {
@@ -103,18 +108,45 @@ int _write(int fd, const char *buf, size_t size)
     return -1;
   }
 
-  while (count < size)
+  srcidx = 0;
+  totalbytes = 0;
+
+  while (totalbytes < size)
   {
-    len = device_table[fd].write(device_table[fd].subdevice, buf, size - count);
-    if (len < 0) return len;
-    if (len > 0)
+    dstidx = 0;
+
+// Copy data from source buffer to chunk buffer, inserting CR's before LF's
+
+    while ((totalbytes < size) && (dstidx < sizeof(dst)))
     {
-      buf += len;
-      count += len;
+      if ((dstidx == sizeof(dst) - 1) && (src[srcidx] == '\n'))
+        break;
+
+      if (src[srcidx] == '\n')
+      {
+        dst[dstidx++] = '\r';
+        dst[dstidx++] = '\n';
+      }
+      else
+        dst[dstidx++] = src[srcidx];
+
+      srcidx++;
+      totalbytes++;
+    }
+
+// Dispatch chunk buffer to device driver
+
+    chunkbytes = 0;
+
+    while (chunkbytes < dstidx)
+    {
+      len = device_table[fd].write(device_table[fd].subdevice, dst + chunkbytes, dstidx - chunkbytes);
+      if (len < 0) return len;
+      chunkbytes += len;
     }
   }
 
-  return count;
+  return totalbytes;
 }
 
 /*
