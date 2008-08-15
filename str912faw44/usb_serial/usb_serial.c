@@ -1,6 +1,6 @@
 /* USB serial port library encapsulation routines */
 
-// $Id: usb_serial.c,v 1.4 2008-08-14 20:08:18 cvs Exp $
+// $Id: usb_serial.c,v 1.5 2008-08-15 14:22:20 cvs Exp $
 
 #include <cpu.h>
 #include <string.h>
@@ -117,6 +117,14 @@ int usb_serial_init(unsigned subdevice, void *settings)
 // Initialize USB subsystem
 
   USB_Init();
+  return 0;
+}
+
+int usb_serial_register(void)
+{
+  device_register("ucom0", 0, NULL, usb_serial_init, usb_serial_write, usb_serial_read,
+                  usb_serial_txready, usb_serial_rxready);
+
   return 0;
 }
 

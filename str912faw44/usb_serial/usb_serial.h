@@ -1,6 +1,6 @@
 /* USB serial port encapsulation routines */
 
-// $Id: usb_serial.h,v 1.6 2008-08-14 20:08:18 cvs Exp $
+// $Id: usb_serial.h,v 1.7 2008-08-15 14:22:20 cvs Exp $
 
 #ifndef __USB_SERIAL_H
 #define __USB_SERIAL_H
@@ -8,6 +8,10 @@
 // Initialize USB subsystem
 
 int usb_serial_init(unsigned subdevice, void *settings);
+
+// Register USB serial port driver
+
+int usb_serial_register(void);
 
 // Use USB serial port for standard I/O
 
