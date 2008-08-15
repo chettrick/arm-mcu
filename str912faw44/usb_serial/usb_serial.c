@@ -1,6 +1,6 @@
 /* USB serial port library encapsulation routines */
 
-// $Id: usb_serial.c,v 1.6 2008-08-15 17:54:59 cvs Exp $
+// $Id: usb_serial.c,v 1.7 2008-08-15 18:06:49 cvs Exp $
 
 #include <cpu.h>
 #include <string.h>
@@ -132,6 +132,8 @@ int usb_serial_register(void)
 
 int usb_serial_stdio(void)
 {
+  usb_serial_init(0, NULL);
+
   device_unregister("stdin");
   device_unregister("stdout");
   device_unregister("stderr");
