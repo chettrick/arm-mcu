@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: serial.c,v 1.1 2008-08-14 20:08:18 cvs Exp $
+// $Id: serial.c,v 1.2 2008-08-15 18:23:50 cvs Exp $
 
 #include <cpu.h>
 #include <stdio.h>
@@ -228,8 +228,6 @@ int serial_txready(unsigned port)
 
 static void serial_putch(unsigned port, char c)
 {
-  if (c == '\n') serial_putch(port, '\r');	// Insert CR before LF
-
   while (!serial_txready(port));
   UARTS[port]->DR = c;
 }
