@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: syscalls.c,v 1.5 2008-08-15 15:54:45 cvs Exp $
+// $Id: syscalls.c,v 1.6 2008-08-15 16:52:17 cvs Exp $
 
 #include <cpu.h>
 #include <string.h>
@@ -35,7 +35,7 @@ int _open(const char *path, int flags, ...)
 {
   int d;
 
-  if ((d = device_lookup(path)) < 0)
+  if ((d = device_lookup((char *) path)) < 0)
     return -1;
 
   if (device_table[d].init != NULL)
