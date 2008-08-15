@@ -1,6 +1,6 @@
 /* USB serial port library encapsulation routines */
 
-// $Id: usb_serial.c,v 1.5 2008-08-15 14:22:20 cvs Exp $
+// $Id: usb_serial.c,v 1.6 2008-08-15 17:54:59 cvs Exp $
 
 #include <cpu.h>
 #include <string.h>
@@ -152,6 +152,8 @@ int usb_serial_stdio(void)
 
 int usb_serial_txready(unsigned subdevice)
 {
+  if (!(GetDADDR() & DADDR_EF)) return FALSE;
+  if (!(GetDADDR() & DADDR_ADD)) return FALSE;
   return txready;
 }
 
@@ -159,6 +161,8 @@ int usb_serial_txready(unsigned subdevice)
 
 int usb_serial_rxready(unsigned subdevice)
 {
+  if (!(GetDADDR() & DADDR_EF)) return FALSE;
+  if (!(GetDADDR() & DADDR_ADD)) return FALSE;
   return (rxbuf.count > 0);
 }
 
@@ -166,7 +170,7 @@ int usb_serial_rxready(unsigned subdevice)
 
 int usb_serial_write(unsigned subdevice, char *buf, size_t count)
 {
-  if (!txready) return 0;
+  if (!usb_serial_txready(subdevice)) return 0;
 
   if (count > VIRTUAL_COM_PORT_DATA_SIZE)
     count = VIRTUAL_COM_PORT_DATA_SIZE;
