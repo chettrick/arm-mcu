@@ -1,6 +1,6 @@
 /* Simple real time clock test program */
 
-// $Id: test_rtc.c,v 1.3 2008-08-14 20:08:18 cvs Exp $
+// $Id: test_rtc.c,v 1.4 2008-08-15 18:07:30 cvs Exp $
 
 #include <cpu.h>
 #include <ctype.h>
@@ -18,7 +18,11 @@ int main(void)
   time_t t_unix;
 
   cpu_init(DEFAULT_CPU_FREQ);
+#ifdef CONFIG_USBSTDIO
+  usb_serial_stdio();
+#else
   serial_stdio(0, 19200);
+#endif
 
   puts("\033[H\033[2JSTR912FAW44 Real Time Clock Test (" __DATE__ " " __TIME__ ")\n");
 
