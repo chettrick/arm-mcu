@@ -4,13 +4,14 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: device.c,v 1.2 2008-08-15 15:54:20 cvs Exp $
+// $Id: device.c,v 1.3 2008-08-15 16:41:56 cvs Exp $
 
 #include <cpu.h>
 #include <string.h>
 #include <errno.h>
 #undef errno
 extern int errno;
+extern int _write(int fd, char *buf, size_t size);
 
 device_t device_table[MAX_DEVICES];
 
