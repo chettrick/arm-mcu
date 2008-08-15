@@ -4,10 +4,9 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: syscalls.c,v 1.4 2008-08-14 20:08:18 cvs Exp $
+// $Id: syscalls.c,v 1.5 2008-08-15 15:54:45 cvs Exp $
 
 #include <cpu.h>
-#include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/time.h>
@@ -67,8 +66,14 @@ int _lseek(int fd, off_t pos, int whence)
   return 0;
 }
 
-int _read(int fd, char *buf, size_t cnt)
+int _read(int fd, char *buf, size_t size)
 {
+  if (device_table[fd].name[0] == 0)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+
   if (device_table[fd].read == NULL)
   {
     errno = EIO;
@@ -76,21 +81,40 @@ int _read(int fd, char *buf, size_t cnt)
   }
 
 #ifdef CONFIG_RAWREAD
-  return device_table[fd].read(device_table[fd].subdevice, buf, cnt);
+  return device_table[fd].read(device_table[fd].subdevice, buf, size);
 #else
-  return device_gets(fd, buf, cnt);
+  return device_gets(fd, buf, size);
 #endif
 }
 
-int _write(int fd, const char *buf, size_t cnt)
+int _write(int fd, const char *buf, size_t size)
 {
+  int len, count = 0;
+
+  if (device_table[fd].name[0] == 0)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+
   if (device_table[fd].write == NULL)
   {
     errno = EIO;
     return -1;
   }
 
-  return device_table[fd].write(device_table[fd].subdevice, buf, cnt);
+  while (count < size)
+  {
+    len = device_table[fd].write(device_table[fd].subdevice, buf, size - count);
+    if (len < 0) return len;
+    if (len > 0)
+    {
+      buf += len;
+      count += len;
+    }
+  }
+
+  return count;
 }
 
 /*
