@@ -1,6 +1,6 @@
 /* Simple real time clock test program */
 
-// $Id: test_rtc.c,v 1.4 2008-08-15 18:07:30 cvs Exp $
+// $Id: test_rtc.c,v 1.5 2008-08-18 10:19:22 cvs Exp $
 
 #include <cpu.h>
 #include <ctype.h>
@@ -10,16 +10,15 @@
 
 int main(void)
 {
-  char c;
-  char buf[32];
   RTC_TIME t_rtc;
   RTC_DATE d_rtc;
   int year, month, day, hour, minute, second;
-  time_t t_unix;
+  time_t then, now;
 
   cpu_init(DEFAULT_CPU_FREQ);
-#ifdef CONFIG_USBSTDIO
+#ifdef CONFIG_USBCONSOLE
   usb_serial_stdio();
+  getch();
 #else
   serial_stdio(0, 19200);
 #endif
@@ -39,6 +38,8 @@ int main(void)
   puts("Press D to set the date\n");
   puts("Press T to set the time\n");
 
+  then = 0;
+
   for (;;)
   {
     if (keypressed())
@@ -49,8 +50,6 @@ int main(void)
           printf("Enter UTC time (HH:MM:SS): ");
           fflush(stdout);
 
-//          fgets(buf, sizeof(buf), stdin);
-//          sscanf(buf, "%d:%d:%d\n", &hour, &minute, &second);
           scanf("%d:%d:%d", &hour, &minute, &second);
 
           memset(&t_rtc, 0, sizeof(t_rtc));
@@ -64,8 +63,6 @@ int main(void)
           printf("Enter UTC date (YYYY MM DD): ");
           fflush(stdout);
 
-//          fgets(buf, sizeof(buf), stdin);
-//          sscanf(buf, "%d %d %d\n", &year, &month, &day);
           scanf("%d %d %d", &year, &month, &day);
 
           memset(&d_rtc, 0, sizeof(d_rtc));
@@ -86,10 +83,14 @@ int main(void)
     if ((t_rtc.hours == 0) && (t_rtc.minutes == 0) && (t_rtc.seconds == 0))
       RTC_GetDate(BINARY, &d_rtc);
 
-    t_unix = time(NULL);
+    now = time(NULL);
+
+    if (now == then) continue;
+
+    then = now;
 
     printf("%04d %02d %02d %02d:%02d:%02d %s", d_rtc.century*100 + d_rtc.year,
            d_rtc.month, d_rtc.day, t_rtc.hours, t_rtc.minutes, t_rtc.seconds,
-           ctime(&t_unix));
+           ctime(&now));
   }  
 }
