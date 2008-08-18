@@ -1,12 +1,9 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.7 2008-08-14 20:08:18 cvs Exp $
+// $Id: test_timer1.c,v 1.8 2008-08-18 10:18:03 cvs Exp $
 
 #include <cpu.h>
 #include <stdio.h>
-
-#define TRUE	1
-#define	FALSE	0
 
 volatile int Timer1Flag = FALSE;
 
@@ -31,8 +28,9 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-#ifdef USB_STDIO
+#ifdef CONFIG_USBCONSOLE
   usb_serial_stdio();
+  getch();
 #else
   serial_stdio(0, 19200);
 #endif

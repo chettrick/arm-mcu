@@ -1,6 +1,6 @@
 /* Simple serial console I/O test program */
 
-// $Id: test_conio.c,v 1.8 2008-08-15 18:12:30 cvs Exp $
+// $Id: test_conio.c,v 1.9 2008-08-18 10:17:05 cvs Exp $
 
 #include <cpu.h>
 #include <stdio.h>
@@ -13,7 +13,8 @@ int main(void)
   int x, y;
 
   cpu_init(DEFAULT_CPU_FREQ);
-#ifdef CONFIG_USBSTDIO
+
+#ifdef CONFIG_USBCONSOLE
   usb_serial_stdio();
   getch();
 #else
