@@ -1,6 +1,6 @@
 /* Simple A/D converter test program */
 
-// $Id: test_adc.c,v 1.2 2008-08-19 08:35:05 cvs Exp $
+// $Id: test_adc.c,v 1.3 2008-08-19 08:42:36 cvs Exp $
 
 #include <cpu.h>
 #include <stdio.h>
@@ -60,20 +60,20 @@ int main(void)
 
 // Configure RTC
 
-  RTC_DeInit();
+  RTC_DeInit();			// Reset RTC
 
-// Initialize A/D input 6
+// Configure P4.6 as analog input 6
 
-  GPIO_DeInit(GPIO4);
+  GPIO_DeInit(GPIO4);		// Reset GPIO4
   GPIO_ANAPinConfig(GPIO_ANAChannel6, ENABLE);
 
-// Initialize A/D converter
+// Configure A/D converter
 
-  ADC_DeInit();
-  ADC_Cmd(ENABLE);
-  ADC_PrescalerConfig(0x2);
+  ADC_DeInit();			// Reset A/D converter
+  ADC_Cmd(ENABLE);		// Power on A/D converter
+  ADC_PrescalerConfig(0x2);	// Conversion clock is 24 MHz
 
-// Sample A/D input 6 once a second
+// Sample analog input 6 once a second
 
   then = 0;
 
