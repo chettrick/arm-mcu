@@ -1,6 +1,6 @@
-/* Simple serial console I/O test program */
+/* Simple A/D converter test program */
 
-// $Id: test_adc.c,v 1.1 2008-08-19 08:33:58 cvs Exp $
+// $Id: test_adc.c,v 1.2 2008-08-19 08:35:05 cvs Exp $
 
 #include <cpu.h>
 #include <stdio.h>
