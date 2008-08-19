@@ -1,6 +1,6 @@
 /* Simple A/D converter test program */
 
-// $Id: test_adc.c,v 1.3 2008-08-19 08:42:36 cvs Exp $
+// $Id: test_adc.c,v 1.4 2008-08-19 08:48:14 cvs Exp $
 
 #include <cpu.h>
 #include <stdio.h>
@@ -11,7 +11,7 @@ unsigned short int SampleADC(int channel)
 {
   ADC_InitTypeDef adcinit;
 
-// Initalize A/D converter
+// Set A/D channel and mode
 
   ADC_StructInit(&adcinit);
   adcinit.ADC_Channel_0_Mode = ADC_NoThreshold_Conversion;
