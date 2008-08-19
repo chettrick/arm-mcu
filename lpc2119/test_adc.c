@@ -1,6 +1,6 @@
 /* Simple analog to digital converter test program */
 
-// $Id: test_adc.c,v 1.7 2008-04-14 18:19:03 cvs Exp $
+// $Id: test_adc.c,v 1.8 2008-08-19 08:30:05 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
@@ -12,7 +12,7 @@
 
 #define STEPVOLTAGE	3.3/65536
 
-unsigned int SampleADC(int channel)
+unsigned short int SampleADC(int channel)
 {
   ADCR = ADCSTART + (1 << channel);	// Start conversion
 
