@@ -1,6 +1,6 @@
 /* Linker script for STR912FAW44 microcontroller */
 
-/* $Id: linker.ld,v 1.8 2008-06-30 18:17:06 cvs Exp $ */
+/* $Id: linker.ld,v 1.9 2008-08-20 13:45:15 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 512K
@@ -42,7 +42,16 @@ SECTIONS {
 	*(.glue_7)
 	*(.glue_7t)
  	} >flash
- __end_of_text__ = .;			/*  Used by startup to find 	*/
+
+/* C++ exception unwinding stuff--needed by Code Sourcery toolchain */
+
+.ARM.extab : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >flash
+
+__exidx_start = .;
+.ARM.exidx : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >flash
+__exidx_end = .;
+
+__end_of_text__ = .;			/*  Used by startup to find 	*/
 					/* initialized vars.		*/
 
 	/*  Initialized data, located in ram but a copy is placed	*/
@@ -69,7 +78,7 @@ SECTIONS {
 end = .;
 }
 
-/*  Libraries to link against.					*/
+/* Libraries to link against. */
 
 INPUT( -lstr912faw44 )
 
@@ -114,3 +123,7 @@ PROVIDE(EXTIT4_IRQHandler = endless_loop);
 PROVIDE(USBWU_IRQHandler = endless_loop);
 PROVIDE(PFQBC_IRQHandler = endless_loop);
 PROVIDE(DefaultVector_Handler = endless_loop);
+
+/* Some toolchains require _isatty() */
+
+PROVIDE(_isatty = isatty);

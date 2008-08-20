@@ -1,6 +1,6 @@
 /* Linker script for AT91SAM7S256 microcontroller */
 
-/* $Id: linker.ld,v 1.7 2008-06-30 18:10:22 cvs Exp $ */
+/* $Id: linker.ld,v 1.8 2008-08-20 13:45:15 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 256K
@@ -42,7 +42,16 @@ SECTIONS {
 	*(.glue_7)
 	*(.glue_7t)
  	} >flash
- __end_of_text__ = .;			/*  Used by startup to find 	*/
+
+/* C++ exception unwinding stuff--needed by Code Sourcery toolchain */
+
+.ARM.extab : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >flash
+
+__exidx_start = .;
+.ARM.exidx : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >flash
+__exidx_end = .;
+
+__end_of_text__ = .;			/*  Used by startup to find 	*/
 					/* initialized vars.		*/
 
 	/*  Initialized data, located in ram but a copy is placed	*/
@@ -70,14 +79,18 @@ SECTIONS {
 end = .;
 }
 
-/*  Libraries to link against.					*/
+/* Libraries to link against. */
 
 INPUT( -lat91sam7s256 )
 
-/*  Provide a default vector for any unhandled interrupts.	*/
+/* Provide a default vector for any unhandled interrupts. */
 
 PROVIDE(undefined_instruction_exception = endless_loop);
 PROVIDE(software_interrupt_exception = endless_loop);
 PROVIDE(prefetch_abort_exception = endless_loop);
 PROVIDE(data_abort_exception = endless_loop);
 PROVIDE(fast_interrupt_exception = endless_loop);
+
+/* Some toolchains require _isatty() */
+
+PROVIDE(_isatty = isatty);

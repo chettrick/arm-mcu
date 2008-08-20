@@ -1,10 +1,10 @@
 /* Linker script for STM32F103 Cortex-M3 microcontroller */
 
-/* $Id: linker.ld,v 1.6 2008-06-27 22:42:12 cvs Exp $ */
+/* $Id: linker.ld,v 1.7 2008-08-20 13:45:15 cvs Exp $ */
 
 MEMORY
 {
-  rom (rx)  : ORIGIN = 0x00000000, LENGTH = 128K
+  flash (rx)  : ORIGIN = 0x00000000, LENGTH = 128K
   ram (rwx) : ORIGIN = 0x20000000, LENGTH = 20K
 }
 
@@ -28,7 +28,15 @@ SECTIONS
   *(.glue_7t)
   . = ALIGN(4);
   __text_end__ = .;			/* Used in crt0.S */
-  } >rom
+  } >flash
+
+/* C++ exception unwinding stuff--needed by Code Sourcery toolchain */
+
+.ARM.extab : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >flash
+
+__exidx_start = .;
+.ARM.exidx : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >flash
+__exidx_end = .;
 
   . = 0x20000000;
   .data : {
@@ -127,3 +135,7 @@ PROVIDE(DMA2_Channel1_IRQHandler = _default_handler);
 PROVIDE(DMA2_Channel2_IRQHandler = _default_handler);
 PROVIDE(DMA2_Channel3_IRQHandler = _default_handler);
 PROVIDE(DMA2_Channel4_5_IRQHandler = _default_handler);
+
+/* Some toolchains require _isatty() */
+
+PROVIDE(_isatty = isatty);
