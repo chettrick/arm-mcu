@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: syscalls.c,v 1.2 2008-07-16 15:40:05 cvs Exp $
+// $Id: syscalls.c,v 1.3 2008-08-25 16:15:36 cvs Exp $
 
 #include <conio.h>
 #include <sys/stat.h>
@@ -40,6 +40,11 @@ int _fstat(int fd, struct stat *st)
 {
   st->st_mode = S_IFCHR;
   return 0;
+}
+
+int _isatty(int fd)
+{
+  return 1;
 }
 
 int isatty(int fd)
