@@ -1,6 +1,6 @@
 /* Linker script for LPC2366 microcontroller */
 
-/* $Id: linker.ld,v 1.9 2008-08-20 13:45:15 cvs Exp $ */
+/* $Id: linker.ld,v 1.10 2008-08-25 16:13:36 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 256K
@@ -89,7 +89,3 @@ PROVIDE(software_interrupt_exception = endless_loop);
 PROVIDE(prefetch_abort_exception = endless_loop);
 PROVIDE(data_abort_exception = endless_loop);
 PROVIDE(fast_interrupt_exception = endless_loop);
-
-/* Some toolchains require _isatty() */
-
-PROVIDE(_isatty = isatty);
