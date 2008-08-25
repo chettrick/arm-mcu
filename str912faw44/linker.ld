@@ -1,6 +1,6 @@
 /* Linker script for STR912FAW44 microcontroller */
 
-/* $Id: linker.ld,v 1.9 2008-08-20 13:45:15 cvs Exp $ */
+/* $Id: linker.ld,v 1.10 2008-08-25 16:07:05 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 512K
@@ -123,7 +123,3 @@ PROVIDE(EXTIT4_IRQHandler = endless_loop);
 PROVIDE(USBWU_IRQHandler = endless_loop);
 PROVIDE(PFQBC_IRQHandler = endless_loop);
 PROVIDE(DefaultVector_Handler = endless_loop);
-
-/* Some toolchains require _isatty() */
-
-PROVIDE(_isatty = isatty);

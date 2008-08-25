@@ -1,6 +1,6 @@
 /* Linker script for STM32F103 Cortex-M3 microcontroller */
 
-/* $Id: linker.ld,v 1.7 2008-08-20 13:45:15 cvs Exp $ */
+/* $Id: linker.ld,v 1.8 2008-08-25 16:11:40 cvs Exp $ */
 
 MEMORY
 {
@@ -45,7 +45,7 @@ __exidx_end = .;
   *(.data)				/* Initialized datay */
   . = ALIGN(4);
   __data_end__ = .;			/* Used in crt0.S */
-  } >ram AT > rom 
+  } >ram AT > flash 
 
   .bss : {
   . = ALIGN(4);
@@ -135,7 +135,3 @@ PROVIDE(DMA2_Channel1_IRQHandler = _default_handler);
 PROVIDE(DMA2_Channel2_IRQHandler = _default_handler);
 PROVIDE(DMA2_Channel3_IRQHandler = _default_handler);
 PROVIDE(DMA2_Channel4_5_IRQHandler = _default_handler);
-
-/* Some toolchains require _isatty() */
-
-PROVIDE(_isatty = isatty);

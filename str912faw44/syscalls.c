@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: syscalls.c,v 1.7 2008-08-15 21:47:15 cvs Exp $
+// $Id: syscalls.c,v 1.8 2008-08-25 16:07:05 cvs Exp $
 
 #include <cpu.h>
 #include <string.h>
@@ -54,6 +54,11 @@ int _fstat(int fd, struct stat *st)
 {
   st->st_mode = S_IFCHR;
   return 0;
+}
+
+int _isatty(int fd)
+{
+  return 1;
 }
 
 int isatty(int fd)
