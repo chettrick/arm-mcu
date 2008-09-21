@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.22 2008-09-19 22:18:50 cvs Exp $
+# $Id: Makefile,v 1.23 2008-09-21 15:45:53 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -106,12 +106,11 @@ gcc.done: binutils.done $(GCCDIST)
 	rm -rf $(GCCOBJ)
 	tar xjf $(GCCDIST)
 	mkdir -p $(GCCOBJ)
+	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft $(GCCEXTRACONFIG)
 ifeq ($(shell uname), Linux)
-	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft --with-mpfr=/usr/local
 # Force static linking
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) LDFLAGS=-static
 else
-	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
 endif
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) install
