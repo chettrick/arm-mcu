@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.46 2008-08-20 13:10:05 cvs Exp $
+# $Id: ARM.mk,v 1.47 2008-09-22 14:05:57 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 ARMPREFIX	?= $(ARMTOOLS)/bin/arm-elf-
@@ -63,7 +63,7 @@ default_catch:
 	$(OBJCOPY) -S -O binary --gap-fill=0 $< $@
 
 .elf.debug:
-	-rm ~/gdbtk.ini
+	-rm ~/.gdbtkinit
 	$(OPENOCD) -f $(OPENOCDCFG) &
 	sleep 1
 	-$(GDB) -x $(DEBUGGDB) -w $<
