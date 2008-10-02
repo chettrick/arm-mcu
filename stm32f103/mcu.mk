@@ -1,6 +1,6 @@
 # Processor dependent make definitions
 
-# $Id: mcu.mk,v 1.2 2008-07-22 16:46:18 cvs Exp $
+# $Id: mcu.mk,v 1.3 2008-10-02 17:26:14 cvs Exp $
 
 ARCH		= cortex-m3
 THUMBFLAGS	= -mthumb
@@ -10,6 +10,7 @@ CFLAGS		+= -I$(FWLIB)
 
 LIBOBJS		= conio.o cpu.o syscalls.o
 
+.PHONY:		reset
 .SUFFIXES:	.flashocd
 
 # Build processor dependent support library
@@ -18,6 +19,11 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	for F in $(FWLIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
+
+# Reset the target
+
+reset:
+	$(MCUDEPENDENT)/reset.exp $(OPENOCD) $(OPENOCDCFG)
 
 # Clean out working files
 

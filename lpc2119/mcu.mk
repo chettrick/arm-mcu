@@ -1,6 +1,6 @@
 # Processor dependent make definitions
 
-# $Id: mcu.mk,v 1.2 2008-07-22 21:09:03 cvs Exp $
+# $Id: mcu.mk,v 1.3 2008-10-02 17:26:14 cvs Exp $
 
 ARCH		= arm7tdmi-s
 
@@ -11,12 +11,19 @@ LPC21ISPBAUD	?= 19200
 LPC21ISPCLOCK	?= 19660
 LPC21ISPFLAGS	?= -control
 
-.SUFFIXES: .flashisp .flashocd
+.PHONY:		reset
+
+.SUFFIXES:	.flashisp .flashocd
 
 # Build processor dependent support library
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
+
+# Reset the target
+
+reset:
+	$(MCUDEPENDENT)/reset.exp $(OPENOCD) $(OPENOCDCFG)
 
 # Clean out working files
 
