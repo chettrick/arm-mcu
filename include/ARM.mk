@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.47 2008-09-22 14:05:57 cvs Exp $
+# $Id: ARM.mk,v 1.48 2008-10-06 23:13:11 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 ARMPREFIX	?= $(ARMTOOLS)/bin/arm-elf-
@@ -32,7 +32,7 @@ LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDEPENDENT) -l$(MCU) -Wl,-Map=
 # Define default target placeholder
 
 default_catch:
-	@echo ERROR: You must explicitly specify the target!
+	@echo ERROR: You must explicitly specify a make target!
 	@exit 1
 
 # These targets are not files
