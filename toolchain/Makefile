@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.24 2008-11-20 18:43:48 cvs Exp $
+# $Id: Makefile,v 1.25 2008-11-21 16:33:42 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -26,7 +26,7 @@ NEWLIBDIST	= $(TEMP)/newlib-$(NEWLIBVER).tar.gz
 NEWLIBURL	= $(NEWLIBSERVER)/`basename $(NEWLIBDIST)`
 NEWLIBSRC	= newlib-$(NEWLIBVER)
 
-LPC21ISPVER	= 160
+LPC21ISPVER	= 162
 LPC21ISPSRC	= lpc21isp_$(LPC21ISPVER)
 LPC21ISPDIST	= $(LPC21ISPSRC).zip
 
