@@ -1,30 +1,34 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.25 2008-11-21 16:33:42 cvs Exp $
+# $Id: Makefile,v 1.26 2009-02-04 23:13:01 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 TEMP		= /tmp
 TARGETNAME	= arm-elf
 
-BINUTILVER	= 2.19
+BINUTILVER	= 2.19.1
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.3.2
+GCCVER		= 4.3.3
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
 GCCOBJ		= gcc-$(GCCVER).obj
 
-NEWLIBVER	= 1.16.0
+NEWLIBVER	= 1.17.0
 NEWLIBSERVER	= ftp://sources.redhat.com/pub/newlib
 NEWLIBDIST	= $(TEMP)/newlib-$(NEWLIBVER).tar.gz
 NEWLIBURL	= $(NEWLIBSERVER)/`basename $(NEWLIBDIST)`
 NEWLIBSRC	= newlib-$(NEWLIBVER)
+LIBCPDFURL	= $(NEWLIBSERVER)/libc.pdf
+LIBMPDFURL	= $(NEWLIBSERVER)/libm.pdf
+LIBCPDF		= $(TEMP)/libc.pdf
+LIBMPDF		= $(TEMP)/libm.pdf
 
 LPC21ISPVER	= 162
 LPC21ISPSRC	= lpc21isp_$(LPC21ISPVER)
@@ -42,7 +46,7 @@ D2XXDIST	= $(TEMP)/CDM_2.04.06_WHQL_Certified.zip
 endif
 ifeq ($(shell uname), Linux)
 D2XXURL		= http://www.ftdichip.com/Drivers/D2XX/Linux/libftd2xx0.4.13.tar.gz
-D2XXDIST	= $(TEMP)/libftd2xx0.4.13.tar.gz
+D2XXDIST	= $(TEMP)/libftd2xx0.4.16.tar.gz
 endif
 D2XXDIR		= D2XX
 
@@ -101,6 +105,8 @@ $(GCCDIST):
 
 # Compile gcc
 
+# CentOS 4 wants GCCEXTRACONFIG=--with-mpr=/usr/local
+
 gcc.done: binutils.done $(GCCDIST)
 	rm -rf $(GCCSRC)
 	rm -rf $(GCCOBJ)
@@ -125,13 +131,30 @@ $(NEWLIBDIST):
 
 # Compile newlib
 
-newlib.done: gcc.done $(NEWLIBDIST)
+newlib.done: gcc.done $(NEWLIBDIST) $(LIBCPDF) $(LIBMPDF)
 	rm -rf $(NEWLIBSRC)
 	tar xzf $(NEWLIBDIST)
 	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls --disable-nls --disable-shared --with-float=soft
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC) install
+	
 	touch newlib.done
+
+# Download newlib docs
+
+$(LIBCPDF):
+	wget -P $(TEMP) $(LIBCPDFURL)
+
+$(LIBMPDF):
+	wget -P $(TEMP) $(LIBMPDFURL)
+
+# Install newlib docs
+
+newlibdocs.done: $(LIBCPDF) $(LIBMPDF)
+	mkdir -p $(INSTBASE)/doc
+	install -cm 0444 $(LIBCPDF) $(INSTBASE)/doc
+	install -cm 0444 $(LIBMPDF) $(INSTBASE)/doc
+	touch newlibdocs.done
 
 ################################################################################
 
@@ -184,7 +207,9 @@ endif
 ifeq ($(shell uname), Linux)
 	$(MAKE) -C $(OPENOCDSRC) LDFLAGS="-L`pwd`/$(D2XXDIR)/static_lib" LIBS=" -lpthread -ldl -static"
 endif
+	$(MAKE) -C $(OPENOCDSRC)/doc openocd.pdf
 	install -csm 0755 $(OPENOCDSRC)/src/openocd $(INSTBASE)/bin
+	install -cm 0644 $(OPENOCDSRC)/doc/openocd.pdf $(INSTBASE)/doc
 	touch openocd.done
 
 ################################################################################
@@ -203,7 +228,7 @@ lpc21isp.done: $(LPC21ISPDIST)
 
 # Create installation tarball
 
-$(TARBALL): binutils.done gcc.done newlib.done gdb.done openocd.done lpc21isp.done
+$(TARBALL): binutils.done gcc.done newlib.done newlibdocs.done gdb.done openocd.done lpc21isp.done
 	echo "GNU ARM microcontroller toolchain"	>$(INSTBASE)/README
 	echo " "					>>$(INSTBASE)/README
 	echo "Built on `date` from:"			>>$(INSTBASE)/README
