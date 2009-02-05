@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.26 2009-02-04 23:13:01 cvs Exp $
+# $Id: Makefile,v 1.27 2009-02-05 15:18:00 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -105,7 +105,7 @@ $(GCCDIST):
 
 # Compile gcc
 
-# CentOS 4 wants GCCEXTRACONFIG=--with-mpr=/usr/local
+# CentOS 4 wants GCCEXTRACONFIG=--with-mpfr=/usr/local
 
 gcc.done: binutils.done $(GCCDIST)
 	rm -rf $(GCCSRC)
