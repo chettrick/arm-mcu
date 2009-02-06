@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.27 2009-02-05 15:18:00 cvs Exp $
+# $Id: Makefile,v 1.28 2009-02-06 17:36:55 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -199,6 +199,7 @@ endif
 
 openocd.done: d2xx.done
 	svn checkout -r $(OPENOCDVER) http://svn.berlios.de/svnroot/repos/openocd/trunk $(OPENOCDSRC)
+	cd $(OPENOCDSRC) && patch -p0 <../openocd.patch
 	cd $(OPENOCDSRC) && ./bootstrap
 	cd $(OPENOCDSRC) && ./configure --enable-ft2232_ftd2xx --disable-ft2232_libftdi --disable-amtjtagaccel --disable-ep93xx --disable-parport --disable-parport_ppdev --with-ftd2xx=`pwd`/../$(D2XXDIR)
 ifeq ($(shell uname), CYGWIN_NT-5.1)
@@ -207,7 +208,7 @@ endif
 ifeq ($(shell uname), Linux)
 	$(MAKE) -C $(OPENOCDSRC) LDFLAGS="-L`pwd`/$(D2XXDIR)/static_lib" LIBS=" -lpthread -ldl -static"
 endif
-	$(MAKE) -C $(OPENOCDSRC)/doc openocd.pdf
+	$(MAKE) -C $(OPENOCDSRC) pdf
 	install -csm 0755 $(OPENOCDSRC)/src/openocd $(INSTBASE)/bin
 	install -cm 0644 $(OPENOCDSRC)/doc/openocd.pdf $(INSTBASE)/doc
 	touch openocd.done
