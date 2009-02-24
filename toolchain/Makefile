@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.32 2009-02-24 17:08:48 cvs Exp $
+# $Id: Makefile,v 1.33 2009-02-24 21:25:15 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -40,7 +40,7 @@ ifeq ($(shell uname), CYGWIN_NT-5.1)
 D2XXVER		= 2.04.06
 D2XXSERVER	= http://www.ftdichip.com/Driver/CDM
 D2XXDIST	= $(TEMP)/CDM_$(D2XXVER)_WHQL_Certified.zip
-D2XXURL		= $(D2XXSERVER)/CDM/CDM%202.04.06%20WHQL%20Certified.zip
+D2XXURL		= $(D2XXSERVER)/CDM%202.04.06%20WHQL%20Certified.zip
 D2XXDIR		= d2xx-$(D2XXVER)
 else
 D2XXVER		= 0.4.16
