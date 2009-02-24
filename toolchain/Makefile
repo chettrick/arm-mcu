@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.28 2009-02-06 17:36:55 cvs Exp $
+# $Id: Makefile,v 1.29 2009-02-24 15:58:14 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -41,16 +41,24 @@ GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
 GDBSRC		= insight-$(GDBVER)
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
-D2XXURL		= http://www.ftdichip.com/Driver/CDM/CDM%202.04.06%20WHQL%20Certified.zip
-D2XXDIST	= $(TEMP)/CDM_2.04.06_WHQL_Certified.zip
+D2XXVER		= 2.04.06
+D2XXSERVER	= http://www.ftdichip.com/Driver/CDM
+D2XXDIST	= $(TEMP)/CDM_$(D2XXVER)_WHQL_Certified.zip
+D2XXURL		= $(D2XXSERVER)/CDM/CDM%202.04.06%20WHQL%20Certified.zip
+D2XXDIR		= d2xx-$(D2XXVER)
 endif
 ifeq ($(shell uname), Linux)
-D2XXURL		= http://www.ftdichip.com/Drivers/D2XX/Linux/libftd2xx0.4.13.tar.gz
-D2XXDIST	= $(TEMP)/libftd2xx0.4.16.tar.gz
+D2XXVER		= 0.4.16
+D2XXSERVER	= http://www.ftdichip.com/Drivers/D2XX/Linux
+D2XXDIST	= $(TEMP)/libftd2xx$(D2XXVER).tar.gz
+D2XXURL		= $(D2XXSERVER)/`basename $(D2XXDIST)`
+D2XXDIR		= libftd2xx$(D2XXVER)
 endif
-D2XXDIR		= D2XX
 
-OPENOCDVER	= 717
+OPENOCDVER	= 0.1.0
+OPENOCDSERVER	= http://download.berlios.de/openocd
+OPENOCDDIST	= $(TEMP)/openocd-$(OPENOCDVER).tar.gz
+OPENOCDURL	= $(OPENOCDSERVER)/`basename $(OPENOCDDIST)`
 OPENOCDSRC	= openocd-$(OPENOCDVER)
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
@@ -189,27 +197,34 @@ ifeq ($(shell uname), CYGWIN_NT-5.1)
 	cd $(D2XXDIR) && ln -s i386/ftd2xx.lib
 endif
 ifeq ($(shell uname), Linux)
-	mkdir $(D2XXDIR)
-	cd $(D2XXDIR) && tar xzf $(D2XXDIST)
-	cd $(D2XXDIR)/static_lib && ln -s lib* libftd2xx.a
+	tar xzf $(D2XXDIST)
 endif
 	touch d2xx.done
 
+################################################################################
+
+# Download OpenOCD
+
+$(OPENOCDDIST):
+	wget -O $(OPENOCDDIST) $(OPENOCDURL)
+
 # Compile OpenOCD
 
-openocd.done: d2xx.done
-	svn checkout -r $(OPENOCDVER) http://svn.berlios.de/svnroot/repos/openocd/trunk $(OPENOCDSRC)
-	cd $(OPENOCDSRC) && patch -p0 <../openocd.patch
-	cd $(OPENOCDSRC) && ./bootstrap
-	cd $(OPENOCDSRC) && ./configure --enable-ft2232_ftd2xx --disable-ft2232_libftdi --disable-amtjtagaccel --disable-ep93xx --disable-parport --disable-parport_ppdev --with-ftd2xx=`pwd`/../$(D2XXDIR)
+openocd.done: d2xx.done $(OPENOCDDIST)
+	rm -rf $(OPENOCDSRC)
+	tar xzf $(OPENOCDDIST)
 ifeq ($(shell uname), CYGWIN_NT-5.1)
+	cd $(OPENOCDSRC) && ./configure --enable-ft2232_ftd2xx --disable-ft2232_libftdi --disable-amtjtagaccel --disable-ep93xx --disable-parport --disable-parport_ppdev --with-ftd2xx=`pwd`/../$(D2XXLIBDIR)
 	$(MAKE) -C $(OPENOCDSRC)
 endif
 ifeq ($(shell uname), Linux)
-	$(MAKE) -C $(OPENOCDSRC) LDFLAGS="-L`pwd`/$(D2XXDIR)/static_lib" LIBS=" -lpthread -ldl -static"
+#	cd $(OPENOCDSRC) && ./configure --enable-ft2232_ftd2xx --disable-ft2232_libftdi --disable-amtjtagaccel --disable-ep93xx --disable-parport --disable-parport_ppdev --with-ftd2xx-linux-tardir=`pwd`/../$(D2XXDIR)
+	cd $(OPENOCDSRC) && ./configure --prefix=$(INSTBASE) --enable-ft2232_ftd2xx --with-ftd2xx-linux-tardir=`pwd`/../$(D2XXDIR)
 endif
+	$(MAKE) -C $(OPENOCDSRC)
+	$(MAKE) -C $(OPENOCDSRC) install
 	$(MAKE) -C $(OPENOCDSRC) pdf
-	install -csm 0755 $(OPENOCDSRC)/src/openocd $(INSTBASE)/bin
+	mkdir -p $(INSTBASE)/doc
 	install -cm 0644 $(OPENOCDSRC)/doc/openocd.pdf $(INSTBASE)/doc
 	touch openocd.done
 
