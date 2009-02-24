@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.31 2009-02-24 16:20:45 cvs Exp $
+# $Id: Makefile,v 1.32 2009-02-24 17:08:48 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -42,8 +42,7 @@ D2XXSERVER	= http://www.ftdichip.com/Driver/CDM
 D2XXDIST	= $(TEMP)/CDM_$(D2XXVER)_WHQL_Certified.zip
 D2XXURL		= $(D2XXSERVER)/CDM/CDM%202.04.06%20WHQL%20Certified.zip
 D2XXDIR		= d2xx-$(D2XXVER)
-endif
-ifeq ($(shell uname), Linux)
+else
 D2XXVER		= 0.4.16
 D2XXSERVER	= http://www.ftdichip.com/Drivers/D2XX/Linux
 D2XXDIST	= $(TEMP)/libftd2xx$(D2XXVER).tar.gz
@@ -196,9 +195,7 @@ d2xx.done: $(D2XXDIST)
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 	unzip $(D2XXDIST)
 	mv CDM* $(D2XXDIR)
-	cd $(D2XXDIR) && ln -s i386/ftd2xx.lib
-endif
-ifeq ($(shell uname), Linux)
+else
 	tar xzf $(D2XXDIST)
 endif
 	touch d2xx.done
@@ -216,11 +213,8 @@ openocd.done: d2xx.done $(OPENOCDDIST)
 	rm -rf $(OPENOCDSRC)
 	tar xzf $(OPENOCDDIST)
 ifeq ($(shell uname), CYGWIN_NT-5.1)
-	cd $(OPENOCDSRC) && ./configure --enable-ft2232_ftd2xx --disable-ft2232_libftdi --disable-amtjtagaccel --disable-ep93xx --disable-parport --disable-parport_ppdev --with-ftd2xx=`pwd`/../$(D2XXLIBDIR)
-	$(MAKE) -C $(OPENOCDSRC)
-endif
-ifeq ($(shell uname), Linux)
-#	cd $(OPENOCDSRC) && ./configure --enable-ft2232_ftd2xx --disable-ft2232_libftdi --disable-amtjtagaccel --disable-ep93xx --disable-parport --disable-parport_ppdev --with-ftd2xx-linux-tardir=`pwd`/../$(D2XXDIR)
+	cd $(OPENOCDSRC) && ./configure --prefix=$(INSTBASE) --enable-ft2232_ftd2xx --with-ftd2xx-win32-zipdir=`pwd`/../$(D2XXDIR)
+else
 	cd $(OPENOCDSRC) && ./configure --prefix=$(INSTBASE) --enable-ft2232_ftd2xx --with-ftd2xx-linux-tardir=`pwd`/../$(D2XXDIR)
 endif
 	$(MAKE) -C $(OPENOCDSRC)
@@ -242,7 +236,7 @@ $(LPC21ISPDIST):
 lpc21isp.done: $(LPC21ISPDIST)
 	rm -rf $(LPC21ISPSRC)
 	tar xzf $(LPC21ISPDIST)
-	$(MAKE) -C $(LPC21ISPSRC) CFLAGS="-Wall -static"
+	$(MAKE) -C $(LPC21ISPSRC) clean lpc21isp CFLAGS="-Wall -static"
 	mkdir -p $(INSTBASE)/bin
 	install -csm 0755 $(LPC21ISPSRC)/lpc21isp $(INSTBASE)/bin
 	touch lpc21isp.done
