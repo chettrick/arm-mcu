@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.30 2009-02-24 16:03:22 cvs Exp $
+# $Id: Makefile,v 1.31 2009-02-24 16:20:45 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -30,10 +30,6 @@ LIBMPDFURL	= $(NEWLIBSERVER)/libm.pdf
 LIBCPDF		= $(TEMP)/libc.pdf
 LIBMPDF		= $(TEMP)/libm.pdf
 
-LPC21ISPVER	= 163
-LPC21ISPSRC	= lpc21isp_$(LPC21ISPVER)
-LPC21ISPDIST	= $(LPC21ISPSRC).zip
-
 GDBVER		= 6.8
 GDBSERVER	= ftp://sourceware.org/pub/insight/releases
 GDBDIST		= $(TEMP)/insight-$(GDBVER).tar.bz2
@@ -60,6 +56,12 @@ OPENOCDSERVER	= http://download.berlios.de/openocd
 OPENOCDDIST	= $(TEMP)/openocd-$(OPENOCDVER).tar.gz
 OPENOCDURL	= $(OPENOCDSERVER)/`basename $(OPENOCDDIST)`
 OPENOCDSRC	= openocd-$(OPENOCDVER)
+
+LPC21ISPVER	= 1.64
+LPC21ISPSERVER	= http://downloads.sourceforge.net/lpc21isp
+LPC21ISPDIST	= $(TEMP)/lpc21isp-$(LPC21ISPVER).tar.gz
+LPC21ISPURL	= $(LPC21ISPSERVER)/`basename $(LPC21ISPDIST)`
+LPC21ISPSRC	= lpc21isp-$(LPC21ISPVER)
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 TARBALL		= $(PKGNAME)-cygwin.tgz
@@ -230,12 +232,16 @@ endif
 
 ################################################################################
 
+# Download lpc21isp
+
+$(LPC21ISPDIST):
+	wget -O $(LPC21ISPDIST) $(LPC21ISPURL)
+
 # Compile lpc21isp
 
 lpc21isp.done: $(LPC21ISPDIST)
 	rm -rf $(LPC21ISPSRC)
-	mkdir -p $(LPC21ISPSRC)
-	unzip $(LPC21ISPDIST) -d $(LPC21ISPSRC)
+	tar xzf $(LPC21ISPDIST)
 	$(MAKE) -C $(LPC21ISPSRC) CFLAGS="-Wall -static"
 	mkdir -p $(INSTBASE)/bin
 	install -csm 0755 $(LPC21ISPSRC)/lpc21isp $(INSTBASE)/bin
