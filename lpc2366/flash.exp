@@ -2,7 +2,7 @@
 
 # expect script for programming LPC2366 flash
 
-# $Id: flash.exp,v 1.5 2008-06-30 20:47:21 cvs Exp $
+# $Id: flash.exp,v 1.6 2009-02-25 17:53:27 cvs Exp $
 
 # Script arguments:
 
@@ -23,7 +23,10 @@ flush stdout
 spawn /usr/bin/telnet localhost 4444
 expect $prompt
 
-send "reset run_and_halt\n"
+send "reset run\n"
+expect $prompt
+
+send "halt\n"
 expect $prompt
 
 send "wait_halt\n"
