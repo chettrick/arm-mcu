@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.48 2008-10-06 23:13:11 cvs Exp $
+# $Id: ARM.mk,v 1.49 2009-03-02 19:57:30 cvs Exp $
 
 ARMTOOLS	?= /usr/local/arm-tools
 ARMPREFIX	?= $(ARMTOOLS)/bin/arm-elf-
@@ -12,8 +12,8 @@ STRIP		= $(ARMPREFIX)strip
 OBJCOPY		= $(ARMPREFIX)objcopy
 OBJDUMP		= $(ARMPREFIX)objdump
 GDB		= $(ARMPREFIX)gdb
-LPC21ISP	= $(ARMTOOLS)/bin/lpc21isp
-OPENOCD		= $(ARMTOOLS)/bin/openocd
+LPC21ISP	?= $(ARMTOOLS)/bin/lpc21isp
+OPENOCD		?= $(ARMTOOLS)/bin/openocd
 
 MCUDEPENDENT	?= $(ARMSRC)/$(MCU)
 STARTUP		?= $(MCUDEPENDENT)/crt0.o
