@@ -1,10 +1,11 @@
 # GDB startup script for debugging program in AT91SAM7S256 flash ROM
 
-# $Id: debug.gdb,v 1.2 2009-02-25 18:47:18 cvs Exp $
+# $Id: debug.gdb,v 1.3 2009-03-03 17:19:48 cvs Exp $
 
 # Connect to the OpenOCD server
 
 target remote localhost:3333 
+info mem
 
 # Reset target & gain control
 
