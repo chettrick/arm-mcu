@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.33 2009-02-24 21:25:15 cvs Exp $
+# $Id: Makefile,v 1.34 2009-03-03 23:56:30 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -212,6 +212,7 @@ $(OPENOCDDIST):
 openocd.done: d2xx.done $(OPENOCDDIST)
 	rm -rf $(OPENOCDSRC)
 	tar xzf $(OPENOCDDIST)
+	cd $(OPENOCDSRC); patch -p0 <../openocd.patch
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 	cd $(OPENOCDSRC) && ./configure --prefix=$(INSTBASE) --enable-ft2232_ftd2xx --with-ftd2xx-win32-zipdir=`pwd`/../$(D2XXDIR)
 else
