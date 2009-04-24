@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.34 2009-03-03 23:56:30 cvs Exp $
+# $Id: Makefile,v 1.35 2009-04-24 06:44:26 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -35,26 +35,6 @@ GDBSERVER	= ftp://sourceware.org/pub/insight/releases
 GDBDIST		= $(TEMP)/insight-$(GDBVER).tar.bz2
 GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
 GDBSRC		= insight-$(GDBVER)
-
-ifeq ($(shell uname), CYGWIN_NT-5.1)
-D2XXVER		= 2.04.06
-D2XXSERVER	= http://www.ftdichip.com/Driver/CDM
-D2XXDIST	= $(TEMP)/CDM_$(D2XXVER)_WHQL_Certified.zip
-D2XXURL		= $(D2XXSERVER)/CDM%202.04.06%20WHQL%20Certified.zip
-D2XXDIR		= d2xx-$(D2XXVER)
-else
-D2XXVER		= 0.4.16
-D2XXSERVER	= http://www.ftdichip.com/Drivers/D2XX/Linux
-D2XXDIST	= $(TEMP)/libftd2xx$(D2XXVER).tar.gz
-D2XXURL		= $(D2XXSERVER)/`basename $(D2XXDIST)`
-D2XXDIR		= libftd2xx$(D2XXVER)
-endif
-
-OPENOCDVER	= 0.1.0
-OPENOCDSERVER	= http://download.berlios.de/openocd
-OPENOCDDIST	= $(TEMP)/openocd-$(OPENOCDVER).tar.gz
-OPENOCDURL	= $(OPENOCDSERVER)/`basename $(OPENOCDDIST)`
-OPENOCDSRC	= openocd-$(OPENOCDVER)
 
 LPC21ISPVER	= 1.64
 LPC21ISPSERVER	= http://downloads.sourceforge.net/lpc21isp
@@ -184,49 +164,6 @@ gdb.done: $(GDBDIST)
 
 ################################################################################
 
-# Download FT2232 driver
-
-$(D2XXDIST):
-	wget -O $(D2XXDIST) $(D2XXURL)
-
-# Unpack FT2232 driver
-
-d2xx.done: $(D2XXDIST)
-ifeq ($(shell uname), CYGWIN_NT-5.1)
-	unzip $(D2XXDIST)
-	mv CDM* $(D2XXDIR)
-else
-	tar xzf $(D2XXDIST)
-endif
-	touch d2xx.done
-
-################################################################################
-
-# Download OpenOCD
-
-$(OPENOCDDIST):
-	wget -O $(OPENOCDDIST) $(OPENOCDURL)
-
-# Compile OpenOCD
-
-openocd.done: d2xx.done $(OPENOCDDIST)
-	rm -rf $(OPENOCDSRC)
-	tar xzf $(OPENOCDDIST)
-	cd $(OPENOCDSRC); patch -p0 <../openocd.patch
-ifeq ($(shell uname), CYGWIN_NT-5.1)
-	cd $(OPENOCDSRC) && ./configure --prefix=$(INSTBASE) --enable-ft2232_ftd2xx --with-ftd2xx-win32-zipdir=`pwd`/../$(D2XXDIR)
-else
-	cd $(OPENOCDSRC) && ./configure --prefix=$(INSTBASE) --enable-ft2232_ftd2xx --with-ftd2xx-linux-tardir=`pwd`/../$(D2XXDIR)
-endif
-	$(MAKE) -C $(OPENOCDSRC)
-	$(MAKE) -C $(OPENOCDSRC) install
-	$(MAKE) -C $(OPENOCDSRC) pdf
-	mkdir -p $(INSTBASE)/doc
-	install -cm 0644 $(OPENOCDSRC)/doc/openocd.pdf $(INSTBASE)/doc
-	touch openocd.done
-
-################################################################################
-
 # Download lpc21isp
 
 $(LPC21ISPDIST):
@@ -246,7 +183,7 @@ lpc21isp.done: $(LPC21ISPDIST)
 
 # Create installation tarball
 
-$(TARBALL): binutils.done gcc.done newlib.done newlibdocs.done gdb.done openocd.done lpc21isp.done
+$(TARBALL): binutils.done gcc.done newlib.done newlibdocs.done gdb.done lpc21isp.done
 	echo "GNU ARM microcontroller toolchain"	>$(INSTBASE)/README
 	echo " "					>>$(INSTBASE)/README
 	echo "Built on `date` from:"			>>$(INSTBASE)/README
@@ -255,7 +192,6 @@ $(TARBALL): binutils.done gcc.done newlib.done newlibdocs.done gdb.done openocd.
 	echo "$(GCCSRC)"				>>$(INSTBASE)/README
 	echo "$(NEWLIBSRC)"				>>$(INSTBASE)/README
 	echo "$(GDBSRC)"				>>$(INSTBASE)/README
-	echo "$(OPENOCDSRC)"				>>$(INSTBASE)/README
 	echo "$(LPC21ISPSRC)"				>>$(INSTBASE)/README
 	chmod -R ugo-w $(INSTBASE)
 ifeq ($(shell uname), Linux)
@@ -294,5 +230,3 @@ clean:
 	rm -rf $(NEWLIBSRC)
 	rm -rf $(GDBSRC)
 	rm -rf $(LPC21ISPSRC)
-	rm -rf $(D2XXDIR)
-	rm -rf $(OPENOCDSRC)
