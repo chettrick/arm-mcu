@@ -1,0 +1,10 @@
+--- src/helper/log.c	2009-03-03 15:34:40.000000000 -0800
++++ src/helper/log.c.new	2009-03-03 15:35:56.000000000 -0800
+@@ -386,7 +386,6 @@
+ 	current_time=timeval_ms();
+ 	if (current_time-last_time>1000)
+ 	{
+-		LOG_WARNING("BUG: keep_alive() was not invoked in the 1000ms timelimit. GDB alive packet not sent! (%lld)", current_time-last_time);
+ 	}
+ 	if (current_time-last_time>500)
+ 	{
