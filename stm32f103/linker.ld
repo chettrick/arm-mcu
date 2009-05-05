@@ -1,6 +1,6 @@
 /* Linker script for STM32F103 Cortex-M3 microcontroller */
 
-/* $Id: linker.ld,v 1.8 2008-08-25 16:11:40 cvs Exp $ */
+/* $Id: linker.ld,v 1.9 2009-05-05 13:08:04 cvs Exp $ */
 
 MEMORY
 {
@@ -26,6 +26,7 @@ SECTIONS
   *(.rodata*)
   *(.glue_7)
   *(.glue_7t)
+  *(.eh_frame)
   . = ALIGN(4);
   __text_end__ = .;			/* Used in crt0.S */
   } >flash

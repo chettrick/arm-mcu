@@ -1,6 +1,6 @@
 /* Linker script for LPC2366 microcontroller */
 
-/* $Id: linker.ld,v 1.10 2008-08-25 16:13:36 cvs Exp $ */
+/* $Id: linker.ld,v 1.11 2009-05-05 13:08:04 cvs Exp $ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 256K
@@ -41,6 +41,7 @@ SECTIONS {
 	*(.rodata*)
 	*(.glue_7)
 	*(.glue_7t)
+	*(.eh_frame)
  	} >flash
 
 /* C++ exception unwinding stuff--needed by Code Sourcery toolchain */
