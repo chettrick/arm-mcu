@@ -1,6 +1,6 @@
 # Download and build GNU toolchain for ARM microcontrollers
 
-# $Id: Makefile,v 1.36 2009-05-05 07:03:24 cvs Exp $
+# $Id: Makefile,v 1.37 2009-05-12 08:29:15 cvs Exp $
 
 PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -184,15 +184,16 @@ lpc21isp.done: $(LPC21ISPDIST)
 # Create installation tarball
 
 $(TARBALL): binutils.done gcc.done newlib.done newlibdocs.done gdb.done lpc21isp.done
-	echo "GNU ARM microcontroller toolchain"	>$(INSTBASE)/README
-	echo " "					>>$(INSTBASE)/README
-	echo "Built on `date` from:"			>>$(INSTBASE)/README
-	echo " "					>>$(INSTBASE)/README
-	echo "$(BINUTILSRC)"				>>$(INSTBASE)/README
-	echo "$(GCCSRC)"				>>$(INSTBASE)/README
-	echo "$(NEWLIBSRC)"				>>$(INSTBASE)/README
-	echo "$(GDBSRC)"				>>$(INSTBASE)/README
-	echo "$(LPC21ISPSRC)"				>>$(INSTBASE)/README
+	echo "GNU ARM microcontroller toolchain"	>$(INSTBASE)/README.txt
+	echo " "					>>$(INSTBASE)/README.txt
+	echo "Built on `date` from:"			>>$(INSTBASE)/README.txt
+	echo " "					>>$(INSTBASE)/README.txt
+	echo "$(BINUTILSRC)"				>>$(INSTBASE)/README.txt
+	echo "$(GCCSRC)"				>>$(INSTBASE)/README.txt
+	echo "$(NEWLIBSRC)"				>>$(INSTBASE)/README.txt
+	echo "$(GDBSRC)"				>>$(INSTBASE)/README.txt
+	echo "$(LPC21ISPSRC)"				>>$(INSTBASE)/README.txt
+	unix2dos $(INSTBASE)/README.txt
 	chmod -R ugo-w $(INSTBASE)
 ifeq ($(shell uname), Linux)
 	sudo chown -R 0.0 $(INSTBASE)
