@@ -1,6 +1,6 @@
 /* Simple serial console I/O test program */
 
-// $Id: test_conio.c,v 1.9 2008-08-18 10:17:05 cvs Exp $
+// $Id: test_conio.c,v 1.10 2009-05-30 07:27:20 cvs Exp $
 
 #include <cpu.h>
 #include <stdio.h>
@@ -18,7 +18,7 @@ int main(void)
   usb_serial_stdio();
   getch();
 #else
-  serial_stdio(0, 19200);
+  serial_stdio(0, 115200);
 #endif
 
   puts("\033[H\033[2JSTR912FAW44 Console I/O Test (" __DATE__ " " __TIME__ ")\n");

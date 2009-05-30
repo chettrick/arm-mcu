@@ -1,6 +1,6 @@
 /* Simple A/D converter test program */
 
-// $Id: test_adc.c,v 1.4 2008-08-19 08:48:14 cvs Exp $
+// $Id: test_adc.c,v 1.5 2009-05-30 07:27:20 cvs Exp $
 
 #include <cpu.h>
 #include <stdio.h>
@@ -47,7 +47,7 @@ int main(void)
   usb_serial_stdio();
   getch();
 #else
-  serial_stdio(0, 19200);
+  serial_stdio(0, 115200);
 #endif
 
   puts("\033[H\033[2JSTR912FAW44 A/D Converter Test (" __DATE__ " " __TIME__ ")\n");

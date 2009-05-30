@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.8 2008-08-18 10:18:03 cvs Exp $
+// $Id: test_timer1.c,v 1.9 2009-05-30 07:27:20 cvs Exp $
 
 #include <cpu.h>
 #include <stdio.h>
@@ -32,7 +32,7 @@ int main(void)
   usb_serial_stdio();
   getch();
 #else
-  serial_stdio(0, 19200);
+  serial_stdio(0, 115200);
 #endif
 
   puts("\033[H\033[2JSTR912FAW44 Timer 1 Interrupt Test (" __DATE__ " " __TIME__ ")\n");
