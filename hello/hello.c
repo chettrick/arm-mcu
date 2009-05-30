@@ -1,6 +1,6 @@
 /* Simple "Hello, world" application */
 
-// $Id: hello.c,v 1.3 2008-07-01 19:15:40 cvs Exp $
+// $Id: hello.c,v 1.4 2009-05-30 07:40:41 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
@@ -9,7 +9,7 @@
 int main(void)
 {
   cpu_init(DEFAULT_CPU_FREQ);
-  conio_init(0, 19200);
+  conio_init(0, 115200);
 
   puts("\033[H\033[2JHello, world\n");
 

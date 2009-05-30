@@ -1,6 +1,6 @@
 /* Simple analog to digital converter test program */
 
-// $Id: test_adc.c,v 1.8 2008-08-19 08:30:05 cvs Exp $
+// $Id: test_adc.c,v 1.9 2009-05-30 07:40:42 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
@@ -28,7 +28,7 @@ int main(void)
   unsigned volatile char dummy;
 
   cpu_init(DEFAULT_CPU_FREQ);
-  conio_init(0, 19200);
+  conio_init(0, 115200);
 
   puts("\033[H\033[2JLPC2119 A/D Converter Test (" __DATE__ " " __TIME__ ")\n");
 

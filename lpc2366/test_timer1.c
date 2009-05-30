@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.10 2008-04-14 18:26:59 cvs Exp $
+// $Id: test_timer1.c,v 1.11 2009-05-30 07:40:42 cvs Exp $
 
 #include <conio.h>
 #include <cpu.h>
@@ -21,7 +21,7 @@ __attribute__ ((__interrupt__)) void Timer1ISR(void)
 int main(void)
 {
   cpu_init(DEFAULT_CPU_FREQ);
-  conio_init(0, 19200);
+  conio_init(0, 115200);
 
   puts("\033[H\033[2JLPC2366 Watchdog and Timer 1 Interrupt Test ("
        __DATE__ " " __TIME__ ")\n");
