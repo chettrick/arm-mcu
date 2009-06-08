@@ -1,6 +1,6 @@
 /* USB serial port library encapsulation routines */
 
-// $Id: usb_serial.c,v 1.7 2008-08-15 18:06:49 cvs Exp $
+// $Id$
 
 #include <cpu.h>
 #include <string.h>

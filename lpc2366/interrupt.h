@@ -1,6 +1,6 @@
 // Interrupt definitions for LPC2366
 
-// $Id: interrupt.h,v 1.2 2007-05-10 22:40:32 cvs Exp $
+// $Id$
 
 #ifndef LPC2366_INTERRUPT__H
 #define LPC2366_INTERRUPT__H

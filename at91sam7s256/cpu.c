@@ -1,6 +1,6 @@
 /* CPU initialization functions for the AT91SAM7S256 */
 
-// $Id: cpu.c,v 1.2 2008-01-12 07:06:01 cvs Exp $
+// $Id$
 
 #include <cpu.h>
 

@@ -1,6 +1,6 @@
 /* Simple serial console I/O test program */
 
-// $Id: test_conio.c,v 1.10 2009-05-30 07:27:20 cvs Exp $
+// $Id$
 
 #include <cpu.h>
 #include <stdio.h>

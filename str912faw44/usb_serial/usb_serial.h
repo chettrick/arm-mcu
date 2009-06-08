@@ -1,6 +1,6 @@
 /* USB serial port encapsulation routines */
 
-// $Id: usb_serial.h,v 1.7 2008-08-15 14:22:20 cvs Exp $
+// $Id$
 
 #ifndef __USB_SERIAL_H
 #define __USB_SERIAL_H

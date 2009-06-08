@@ -1,6 +1,6 @@
 # GDB startup script for debugging program in LPC2119 flash ROM
 
-# $Id: debug.gdb,v 1.4 2009-03-03 17:29:57 cvs Exp $
+# $Id$
 
 # Connect to the OpenOCD server
 

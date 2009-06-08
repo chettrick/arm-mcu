@@ -4,7 +4,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: conio.h,v 1.4 2008-03-24 11:17:21 cvs Exp $
+// $Id$
 
 void conio_init(unsigned port, unsigned long int baudrate);
 

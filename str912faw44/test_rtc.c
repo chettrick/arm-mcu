@@ -1,6 +1,6 @@
 /* Simple real time clock test program */
 
-// $Id: test_rtc.c,v 1.6 2009-05-30 07:27:20 cvs Exp $
+// $Id$
 
 #include <cpu.h>
 #include <ctype.h>

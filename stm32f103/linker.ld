@@ -1,6 +1,6 @@
 /* Linker script for STM32F103 Cortex-M3 microcontroller */
 
-/* $Id: linker.ld,v 1.9 2009-05-05 13:08:04 cvs Exp $ */
+/* $Id$ */
 
 MEMORY
 {

@@ -1,6 +1,6 @@
 /* Initialize CPU core */
 
-// $Id: cpu.c,v 1.7 2008-07-07 18:15:31 cvs Exp $
+// $Id$
 
 #include <cpu.h>
 

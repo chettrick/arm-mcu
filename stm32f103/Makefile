@@ -1,6 +1,6 @@
 # Make processor dependent startup and libraries
 
-# $Id: Makefile,v 1.6 2008-07-01 20:39:17 cvs Exp $
+# $Id$
 
 ARMSRC		= ..
 MCU             = stm32f103

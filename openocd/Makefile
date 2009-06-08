@@ -1,6 +1,6 @@
 # Download and build OpenOCD JTAG for ARM microcontrollers
 
-# $Id: Makefile,v 1.1 2009-04-24 08:45:49 cvs Exp $
+# $Id$
 
 PKGNAME         = openocd
 INSTBASE        = $(shell pwd)/$(PKGNAME)

@@ -1,6 +1,6 @@
 /* Simple analog to digital converter test program */
 
-// $Id: test_adc.c,v 1.9 2009-05-30 07:40:42 cvs Exp $
+// $Id$
 
 #include <conio.h>
 #include <cpu.h>

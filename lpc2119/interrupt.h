@@ -1,6 +1,6 @@
 // Interrupt definitions for LPC2119
 
-// $Id: interrupt.h,v 1.1 2006-12-14 00:40:48 cvs Exp $
+// $Id$
 
 #ifndef LPC2119_INTERRUPT__H
 #define LPC2119_INTERRUPT__H

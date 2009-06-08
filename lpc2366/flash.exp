@@ -2,7 +2,7 @@
 
 # expect script for programming LPC2366 flash
 
-# $Id: flash.exp,v 1.7 2009-03-04 17:33:21 cvs Exp $
+# $Id$
 
 # Script arguments:
 

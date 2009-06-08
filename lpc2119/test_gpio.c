@@ -1,6 +1,6 @@
 /* Simple bit twiddler test program */
 
-// $Id: test_gpio.c,v 1.4 2007-10-10 03:47:49 cvs Exp $
+// $Id$
 
 #include <cpu.h>
 

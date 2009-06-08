@@ -1,6 +1,6 @@
 // Interrupt definitions for STR912FA
 
-// $Id: interrupt.h,v 1.2 2008-06-30 18:25:35 cvs Exp $
+// $Id$
 
 #ifndef STR912FA_INTERRUPT_H
 #define STR912FA_INTERRUPT_H

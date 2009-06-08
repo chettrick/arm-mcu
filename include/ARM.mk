@@ -1,6 +1,6 @@
 # Generic Makefile for compiling ARM microcontroller firmware
 
-# $Id: ARM.mk,v 1.51 2009-04-24 08:06:27 cvs Exp $
+# $Id$
 
 ARMTOOLS	?= /usr/local/arm-tools
 ARMPREFIX	?= $(ARMTOOLS)/bin/arm-elf-

@@ -1,6 +1,6 @@
 /* Simple "Hello, world" application */
 
-// $Id: hello.c,v 1.4 2009-05-30 07:40:41 cvs Exp $
+// $Id$
 
 #include <conio.h>
 #include <cpu.h>

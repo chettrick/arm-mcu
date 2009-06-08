@@ -1,6 +1,6 @@
 // Startup for LPC2366 ARM microcontroller
 
-// $Id: crt0.S,v 1.3 2007-11-21 15:02:24 cvs Exp $
+// $Id$
 
 	.extern	main 		/*  Usual C startup.			*/
 

@@ -1,6 +1,6 @@
 # GDB startup script for debugging program in STM32F103 flash ROM
 
-# $Id: debug.gdb,v 1.3 2009-03-03 17:32:36 cvs Exp $
+# $Id$
 
 # Connect to the OpenOCD server
 

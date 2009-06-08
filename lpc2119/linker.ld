@@ -1,6 +1,6 @@
 /* Linker script for LPC2119 microcontroller */
 
-/* $Id: linker.ld,v 1.12 2009-05-05 13:08:04 cvs Exp $ */
+/* $Id$ */
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 120K

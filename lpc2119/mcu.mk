@@ -1,6 +1,6 @@
 # Processor dependent make definitions
 
-# $Id: mcu.mk,v 1.3 2008-10-02 17:26:14 cvs Exp $
+# $Id$
 
 ARCH		= arm7tdmi-s
 

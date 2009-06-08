@@ -1,6 +1,6 @@
 /* Simple A/D converter test program */
 
-// $Id: test_adc.c,v 1.5 2009-05-30 07:27:20 cvs Exp $
+// $Id$
 
 #include <cpu.h>
 #include <stdio.h>

@@ -1,6 +1,6 @@
 # Makefile for simple hello world application
 
-# $Id: Makefile,v 1.3 2008-07-01 20:11:09 cvs Exp $
+# $Id$
 
 # Override the following macro to move the framework directory
 

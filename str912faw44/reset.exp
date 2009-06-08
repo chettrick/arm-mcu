@@ -2,7 +2,7 @@
 
 # expect script for resetting the STR912FAW44 target
 
-# $Id: reset.exp,v 1.2 2009-03-04 17:33:21 cvs Exp $
+# $Id$
 
 # Script arguments:
 

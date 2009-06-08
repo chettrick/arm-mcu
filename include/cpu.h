@@ -1,6 +1,6 @@
 /* Initialize CPU core */
 
-// $Id: cpu.h,v 1.10 2008-08-14 20:08:17 cvs Exp $
+// $Id$
 
 extern unsigned long int CPUFREQ;
 

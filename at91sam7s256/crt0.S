@@ -1,6 +1,6 @@
 // Startup for AT91SAM7S256 ARM microcontroller
 
-// $Id: crt0.S,v 1.1 2008-01-09 21:04:06 cvs Exp $
+// $Id$
 
 	.extern	main 		/*  Usual C startup.			*/
 

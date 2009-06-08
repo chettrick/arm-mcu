@@ -1,6 +1,6 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_timer1.c,v 1.12 2009-05-30 07:40:42 cvs Exp $
+// $Id$
 
 #include <conio.h>
 #include <cpu.h>

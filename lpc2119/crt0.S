@@ -1,6 +1,6 @@
 // Startup for LPC2119 ARM microcontroller
 
-// $Id: crt0.S,v 1.4 2007-11-21 15:02:23 cvs Exp $
+// $Id$
 
 	.extern	main 		/*  Usual C startup.			*/
 

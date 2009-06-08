@@ -1,6 +1,6 @@
 // Startup for STR912FAW44 ARM microcontroller
 
-// $Id: crt0.S,v 1.3 2008-07-03 17:51:40 cvs Exp $
+// $Id$
 
 	.extern	main 		/*  Usual C startup.			*/
 

@@ -1,6 +1,6 @@
 /* Startup for STM32F103 Cortex-M3 ARM microcontroller */
 
-// $Id: crt0.S,v 1.4 2008-06-27 23:39:13 cvs Exp $
+// $Id$
 
 		.text
 		.extern		main

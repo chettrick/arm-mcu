@@ -1,6 +1,6 @@
 # Processor dependent make definitions
 
-# $Id: mcu.mk,v 1.4 2009-03-04 16:33:14 cvs Exp $
+# $Id$
 
 ARCH		= cortex-m3
 ARCHFLAGS	= -mthumb
