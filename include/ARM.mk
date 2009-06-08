@@ -87,10 +87,11 @@ startocd:
 stopocd:
 	killall openocd
 
-# Update from CVS repository
+# Update from source code repository
 
 update:
-	cvs -q update
+	svn status
+	svn update
 
 # Clean out working files
 
