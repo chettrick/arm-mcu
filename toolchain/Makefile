@@ -36,12 +36,6 @@ GDBDIST		= $(TEMP)/insight-$(GDBVER).tar.bz2
 GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
 GDBSRC		= insight-$(GDBVER)
 
-LPC21ISPVER	= 1.64
-LPC21ISPSERVER	= http://downloads.sourceforge.net/lpc21isp
-LPC21ISPDIST	= $(TEMP)/lpc21isp-$(LPC21ISPVER).tar.gz
-LPC21ISPURL	= $(LPC21ISPSERVER)/`basename $(LPC21ISPDIST)`
-LPC21ISPSRC	= lpc21isp-$(LPC21ISPVER)
-
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 TARBALL		= $(PKGNAME)-cygwin.tgz
 else
@@ -164,26 +158,9 @@ gdb.done: $(GDBDIST)
 
 ################################################################################
 
-# Download lpc21isp
-
-$(LPC21ISPDIST):
-	wget -O $(LPC21ISPDIST) $(LPC21ISPURL)
-
-# Compile lpc21isp
-
-lpc21isp.done: $(LPC21ISPDIST)
-	rm -rf $(LPC21ISPSRC)
-	tar xzf $(LPC21ISPDIST)
-	$(MAKE) -C $(LPC21ISPSRC) clean lpc21isp CFLAGS="-Wall -static"
-	mkdir -p $(INSTBASE)/bin
-	install -csm 0755 $(LPC21ISPSRC)/lpc21isp $(INSTBASE)/bin
-	touch lpc21isp.done
-
-################################################################################
-
 # Create installation tarball
 
-$(TARBALL): binutils.done gcc.done newlib.done newlibdocs.done gdb.done lpc21isp.done
+$(TARBALL): binutils.done gcc.done newlib.done newlibdocs.done gdb.done
 	echo "GNU ARM microcontroller toolchain"	>$(INSTBASE)/README.txt
 	echo " "					>>$(INSTBASE)/README.txt
 	echo "Built on `date` from:"			>>$(INSTBASE)/README.txt
@@ -192,7 +169,6 @@ $(TARBALL): binutils.done gcc.done newlib.done newlibdocs.done gdb.done lpc21isp
 	echo "$(GCCSRC)"				>>$(INSTBASE)/README.txt
 	echo "$(NEWLIBSRC)"				>>$(INSTBASE)/README.txt
 	echo "$(GDBSRC)"				>>$(INSTBASE)/README.txt
-	echo "$(LPC21ISPSRC)"				>>$(INSTBASE)/README.txt
 	unix2dos $(INSTBASE)/README.txt
 	chmod -R ugo-w $(INSTBASE)
 ifeq ($(shell uname), Linux)
@@ -230,4 +206,3 @@ clean:
 	rm -rf $(GCCOBJ)
 	rm -rf $(NEWLIBSRC)
 	rm -rf $(GDBSRC)
-	rm -rf $(LPC21ISPSRC)
