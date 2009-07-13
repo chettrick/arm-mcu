@@ -27,7 +27,11 @@ OPENOCDDIST	= $(TEMP)/$(OPENOCDNAME)-$(OPENOCDVER).tar.gz
 OPENOCDURL	= $(OPENOCDSERVER)/`basename $(OPENOCDDIST)`
 OPENOCDSRC	= $(OPENOCDNAME)-$(OPENOCDVER)
 
-TARBALL		= $(OPENOCDNAME)-$(OPENOCDVER).tgz
+ifeq ($(shell uname), CYGWIN_NT-5.1)
+TARBALL		= $(OPENOCDNAME)-cygwin-$(OPENOCDVER).tgz
+else
+TARBALL		= $(OPENOCDNAME)-`uname`-$(OPENOCDVER).tgz
+endif
 
 .PHONY: default tarball rpm clean distclean
 
