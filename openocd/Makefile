@@ -122,6 +122,7 @@ clean:
 	-rm -rf fakeroot
 	-rm -rf rpmbuild
 	-rm specfile
+	-rm *.rpm
 
 distclean: clean
 	rm $(D2XXDIST)
