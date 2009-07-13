@@ -29,7 +29,7 @@ OPENOCDSRC	= $(OPENOCDNAME)-$(OPENOCDVER)
 
 TARBALL		= $(OPENOCDNAME)-$(OPENOCDVER).tgz
 
-.PHONY: default rpm clean distclean
+.PHONY: default tarball rpm clean distclean
 
 default: tarball
 
@@ -65,7 +65,8 @@ openocd.done: d2xx.done $(OPENOCDDIST)
 	tar xzf $(OPENOCDDIST)
 	cd $(OPENOCDSRC); patch -p0 <../openocd.patch
 ifeq ($(shell uname), CYGWIN_NT-5.1)
-	cd $(OPENOCDSRC) && ./configure -v --prefix=$(INSTBASE) --enable-ft2232_ftd2xx --with-ftd2xx-win32-zipdir=`pwd`/../$(D2XXDIR) CC="gcc -mno-cygwin"
+	install -cm 755 $(D2XXDIR)/i386/ftd2xx.dll $(OPENOCDSRC)
+	cd $(OPENOCDSRC) && ./configure -v --prefix=$(INSTBASE) --enable-ft2232_ftd2xx --with-ftd2xx-win32-zipdir=`pwd`/../$(D2XXDIR)
 else
 	cd $(OPENOCDSRC) && ./configure --prefix=$(INSTBASE) --enable-ft2232_ftd2xx --with-ftd2xx-linux-tardir=`pwd`/../$(D2XXDIR)
 endif
@@ -85,7 +86,7 @@ $(TARBALL): openocd.done
 	tar czf $(TARBALL) openocd
 	chmod -R +w $(INSTBASE)
 
-tarbal: $(TARBALL)
+tarball: $(TARBALL)
 
 ################################################################################
 
