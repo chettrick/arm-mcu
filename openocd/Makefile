@@ -20,15 +20,18 @@ D2XXURL		= $(D2XXSERVER)/`basename $(D2XXDIST)`
 D2XXDIR		= libftd2xx$(D2XXVER)
 endif
 
+OPENOCDNAME	= openocd
 OPENOCDVER	= 0.1.0
 OPENOCDSERVER	= http://download.berlios.de/openocd
-OPENOCDDIST	= $(TEMP)/openocd-$(OPENOCDVER).tar.gz
+OPENOCDDIST	= $(TEMP)/$(OPENOCDNAME)-$(OPENOCDVER).tar.gz
 OPENOCDURL	= $(OPENOCDSERVER)/`basename $(OPENOCDDIST)`
-OPENOCDSRC	= openocd-$(OPENOCDVER)
+OPENOCDSRC	= $(OPENOCDNAME)-$(OPENOCDVER)
 
-TARBALL		= openocd-$(OPENOCDVER).tgz
+TARBALL		= $(OPENOCDNAME)-$(OPENOCDVER).tgz
 
-default: $(TARBALL)
+.PHONY: default rpm clean distclean
+
+default: tarball
 
 ################################################################################
 
@@ -71,13 +74,40 @@ endif
 	$(MAKE) -C $(OPENOCDSRC) pdf
 	mkdir -p $(INSTBASE)/doc
 	install -cm 0644 $(OPENOCDSRC)/doc/openocd.pdf $(INSTBASE)/doc
-	chmod -R -w $(INSTBASE)
 	touch openocd.done
+
+################################################################################
 
 # Create tarball
 
 $(TARBALL): openocd.done
+	chmod -R -w $(INSTBASE)
 	tar czf $(TARBALL) openocd
+	chmod -R +w $(INSTBASE)
+
+tarbal: $(TARBALL)
+
+################################################################################
+
+# Create RPM package
+
+fakeroot: openocd.done
+	mkdir -p fakeroot/usr/local/bin
+	cp -R -p openocd fakeroot/usr/local
+	ln -s ../openocd/bin/openocd fakeroot/usr/local/bin/openocd
+	
+specfile: specfile.template fakeroot
+	sed s/@@VERSION@@/$(OPENOCDVER)/g <specfile.template >specfile
+	find fakeroot -type d | awk '/openocd/ { printf("%%dir %s\n", substr($$1, 9)); }' >>specfile
+	find fakeroot -type f | cut -c 9- >>specfile
+	find fakeroot -type l | cut -c 9- >>specfile
+
+rpm: fakeroot specfile 
+	mkdir -p rpmbuild/RPMS/$(MACHTYPE)
+	chmod -R -w fakeroot
+	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
+	cp rpmbuild/RPMS/$(MACHTYPE)/*.rpm .
+	chmod -R +w fakeroot
 
 ################################################################################
 
@@ -86,9 +116,12 @@ $(TARBALL): openocd.done
 clean:
 	-rm *.done
 	-rm $(TARBALL)
-	rm -rf $(D2XXDIR)
-	rm -rf $(OPENOCDSRC)
-	rm -rf $(INSTBASE)
+	-rm -rf $(D2XXDIR)
+	-rm -rf $(OPENOCDSRC)
+	-rm -rf $(INSTBASE)
+	-rm -rf fakeroot
+	-rm -rf rpmbuild
+	-rm specfile
 
 distclean: clean
 	rm $(D2XXDIST)
