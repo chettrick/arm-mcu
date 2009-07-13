@@ -13,8 +13,8 @@ OBJCOPY		= $(ARMPREFIX)objcopy
 OBJDUMP		= $(ARMPREFIX)objdump
 GDB		= $(ARMPREFIX)gdb
 
-LPC21ISP	?= $(ARMTOOLS)/bin/lpc21isp
-OPENOCD		?= /usr/local/openocd/bin/openocd
+LPC21ISP	?= /usr/local/bin/lpc21isp
+OPENOCD		?= /usr/local/bin/openocd
 
 MCUDEPENDENT	?= $(ARMSRC)/$(MCU)
 STARTUP		?= $(MCUDEPENDENT)/crt0.o
