@@ -21,7 +21,7 @@ D2XXDIR		= libftd2xx$(D2XXVER)
 endif
 
 OPENOCDNAME	= openocd
-OPENOCDVER	= 0.1.0
+OPENOCDVER	= 0.2.0
 OPENOCDSERVER	= http://download.berlios.de/openocd
 OPENOCDDIST	= $(TEMP)/$(OPENOCDNAME)-$(OPENOCDVER).tar.gz
 OPENOCDURL	= $(OPENOCDSERVER)/`basename $(OPENOCDDIST)`
@@ -67,13 +67,14 @@ $(OPENOCDDIST):
 openocd.done: d2xx.done $(OPENOCDDIST)
 	rm -rf $(OPENOCDSRC)
 	tar xzf $(OPENOCDDIST)
-	cd $(OPENOCDSRC); patch -p0 <../openocd.patch
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 	install -cm 755 $(D2XXDIR)/i386/ftd2xx.dll $(OPENOCDSRC)
 	cd $(OPENOCDSRC) && ./configure -v --prefix=$(INSTBASE) --enable-ft2232_ftd2xx --with-ftd2xx-win32-zipdir=`pwd`/../$(D2XXDIR)
 else
 	cd $(OPENOCDSRC) && ./configure --prefix=$(INSTBASE) --enable-ft2232_ftd2xx --with-ftd2xx-linux-tardir=`pwd`/../$(D2XXDIR)
 endif
+# Ugly workaround for libtool library reorder bug
+	cd $(OPENOCDSRC) ; make ; cd src ; gcc -std=gnu99 -g -O2 -I$(shell pwd)/libftd2xx0.4.16 -Wall -Wstrict-prototypes -Wformat-security -Wextra -Wno-unused-parameter -Wbad-function-cast -Wcast-align -Wredundant-decls -Werror -Wl,-rpath -Wl,$(shell pwd)/openocd/lib -o openocd main.o ./.libs/libopenocd.a $(shell pwd)/libftd2xx0.4.16/static_lib/libftd2xx.a.0.4.16 -ldl -lpthread  
 	$(MAKE) -C $(OPENOCDSRC)
 	$(MAKE) -C $(OPENOCDSRC) install
 	$(MAKE) -C $(OPENOCDSRC) pdf
