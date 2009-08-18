@@ -15,4 +15,4 @@ Source: %{name}-%{version}.tar.gz
 GCC toolchain for bare-machine ARM microcontrollers
 
 %files
-%defattr(-,root,root)
+%defattr(-,root,root,555)
