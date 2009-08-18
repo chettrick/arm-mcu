@@ -47,7 +47,7 @@ endif
 
 .PHONY: download tarball rpm clean distclean
 
-default: tarball
+default: rpm
 
 ################################################################################
 
@@ -146,6 +146,8 @@ gdb.done: $(GDBDIST)
 	touch gdb.done
 
 ################################################################################
+
+# Create README.txt
 
 readme.done: binutils.done gcc.done newlib.done newlibdocs.done gdb.done
 	echo "GNU ARM microcontroller toolchain"	>$(INSTBASE)/README.txt
