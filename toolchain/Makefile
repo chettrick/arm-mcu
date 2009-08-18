@@ -147,9 +147,7 @@ gdb.done: $(GDBDIST)
 
 ################################################################################
 
-# Create installation tarball
-
-tarball: binutils.done gcc.done newlib.done newlibdocs.done gdb.done
+readme.done: binutils.done gcc.done newlib.done newlibdocs.done gdb.done
 	echo "GNU ARM microcontroller toolchain"	>$(INSTBASE)/README.txt
 	echo " "					>>$(INSTBASE)/README.txt
 	echo "Built on `date` from:"			>>$(INSTBASE)/README.txt
@@ -159,23 +157,23 @@ tarball: binutils.done gcc.done newlib.done newlibdocs.done gdb.done
 	echo "$(NEWLIBSRC)"				>>$(INSTBASE)/README.txt
 	echo "$(GDBSRC)"				>>$(INSTBASE)/README.txt
 	unix2dos $(INSTBASE)/README.txt
-	chmod -R ugo-w $(INSTBASE)
-ifeq ($(shell uname), Linux)
-	sudo chown -R 0.0 $(INSTBASE)
-endif
-	tar czf $(TARBALL) `basename $(INSTBASE)`
-ifeq ($(shell uname), Linux)
-	sudo chown -R $(shell id -u).$(shell id -g) $(INSTBASE)
-endif
-	chmod -R u+w $(INSTBASE)
+	touch readme.done
 
 ################################################################################
 
-# Create RPM package
+# Create toolchain tarball
 
-fakeroot: binutils.done gcc.done newlib.done newlibdocs.done gdb.done
+tarball: readme.done
+	tar czf $(TARBALL) `basename $(INSTBASE)` --owner=root --group=root --mode=ugo-w
+
+################################################################################
+
+# Create toolchain RPM package
+
+fakeroot: readme.done
 	mkdir -p fakeroot/usr/local
 	cp -R -p arm-tools fakeroot/usr/local
+	chmod -R -w fakeroot
 
 specfile: specfile.template fakeroot
 	sed s/@@VERSION@@/$(VERSION)/g <specfile.template | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
@@ -184,10 +182,8 @@ specfile: specfile.template fakeroot
 
 rpm: specfile
 	mkdir -p rpmbuild/RPMS/$(MACHTYPE)
-	chmod -R -w fakeroot
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
 	cp rpmbuild/RPMS/$(MACHTYPE)/*.rpm .
-	chmod -R +w fakeroot
 
 ################################################################################
 
