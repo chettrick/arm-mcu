@@ -3,7 +3,7 @@
 # $Id$
 
 Summary: GCC toolchain for bare-machine ARM Microcontrollers
-Name: avrtools
+Name: armtools
 Version: @@VERSION@@
 Release: @@RELEASE@@
 Group: Utilities
