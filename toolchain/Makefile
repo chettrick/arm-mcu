@@ -47,7 +47,7 @@ endif
 
 .PHONY: download tarball rpm clean distclean
 
-default: rpm
+default: tarball
 
 ################################################################################
 
@@ -201,5 +201,6 @@ clean:
 	rm -rf $(GCCOBJ)
 	rm -rf $(NEWLIBSRC)
 	rm -rf $(GDBSRC)
+	rm -rf fakeroot specfile rpmbuild *.rpm
 
 distclean: clean
