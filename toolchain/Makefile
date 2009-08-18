@@ -179,7 +179,8 @@ fakeroot: binutils.done gcc.done newlib.done newlibdocs.done gdb.done
 
 specfile: specfile.template fakeroot
 	sed s/@@VERSION@@/$(VERSION)/g <specfile.template | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
-	find fakeroot -type f | cut -c 9- >>specfile
+	find fakeroot/usr/local/arm-tools -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
+	find fakeroot/usr/local/arm-tools -type f | cut -c 9- >>specfile
 
 rpm: specfile
 	mkdir -p rpmbuild/RPMS/$(MACHTYPE)
