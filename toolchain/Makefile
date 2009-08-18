@@ -13,7 +13,7 @@ BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.4.0
+GCCVER		= 4.4.1
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
@@ -30,11 +30,14 @@ LIBMPDFURL	= $(NEWLIBSERVER)/libm.pdf
 LIBCPDF		= $(TEMP)/libc.pdf
 LIBMPDF		= $(TEMP)/libm.pdf
 
-GDBVER		= 6.8
+GDBVER		= 6.8-1
 GDBSERVER	= ftp://sourceware.org/pub/insight/releases
 GDBDIST		= $(TEMP)/insight-$(GDBVER).tar.bz2
 GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
 GDBSRC		= insight-$(GDBVER)
+
+VERSION		= $(BINUTILVER)_$(GCCVER)_$(NEWLIBVER)_$(subst -,.,$(GDBVER))
+RELEASE		= 1
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
 TARBALL		= $(PKGNAME)-cygwin.tgz
@@ -42,7 +45,15 @@ else
 TARBALL		= $(PKGNAME)-$(shell uname -s)-$(shell uname -i).tgz
 endif
 
-default: $(TARBALL)
+.PHONY: download tarball rpm clean distclean
+
+default: rpm
+
+################################################################################
+
+# Download all source distributions
+
+download: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPDF)
 
 ################################################################################
 
@@ -58,24 +69,6 @@ binutils.done: $(BINUTILDIST)
 	tar xzf $(BINUTILDIST)
 	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared --with-float=soft
 	$(MAKE) -C $(BINUTILSRC)
-ifeq ($(shell uname), Linux)
-# Force static linking
-	rm $(BINUTILSRC)/binutils/ar
-	rm $(BINUTILSRC)/binutils/addr2line
-	rm $(BINUTILSRC)/binutils/cxxfilt
-	rm $(BINUTILSRC)/binutils/nm-new
-	rm $(BINUTILSRC)/binutils/objcopy
-	rm $(BINUTILSRC)/binutils/objdump
-	rm $(BINUTILSRC)/binutils/ranlib
-	rm $(BINUTILSRC)/binutils/readelf
-	rm $(BINUTILSRC)/binutils/size
-	rm $(BINUTILSRC)/binutils/strings
-	rm $(BINUTILSRC)/binutils/strip-new
-	rm $(BINUTILSRC)/gas/as-new
-	rm $(BINUTILSRC)/gprof/gprof
-	rm $(BINUTILSRC)/ld/ld-new
-	$(MAKE) -C $(BINUTILSRC) LDFLAGS=-all-static
-endif
 	$(MAKE) -C $(BINUTILSRC) install
 	touch binutils.done
 
@@ -96,12 +89,7 @@ gcc.done: binutils.done $(GCCDIST)
 	tar xjf $(GCCDIST)
 	mkdir -p $(GCCOBJ)
 	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft $(GCCEXTRACONFIG)
-ifeq ($(shell uname), Linux)
-# Force static linking
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) LDFLAGS=-static
-else
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
-endif
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) install
 	touch gcc.done
 
@@ -151,6 +139,7 @@ $(GDBDIST):
 gdb.done: $(GDBDIST)
 	rm -rf $(GDBSRC)
 	tar xjf $(GDBDIST)
+	cd $(GDBSRC) && patch -p0 <../gdb.patch
 	cd $(GDBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared
 	$(MAKE) -C $(GDBSRC)
 	$(MAKE) -C $(GDBSRC) install
@@ -160,7 +149,7 @@ gdb.done: $(GDBDIST)
 
 # Create installation tarball
 
-$(TARBALL): binutils.done gcc.done newlib.done newlibdocs.done gdb.done
+tarball: binutils.done gcc.done newlib.done newlibdocs.done gdb.done
 	echo "GNU ARM microcontroller toolchain"	>$(INSTBASE)/README.txt
 	echo " "					>>$(INSTBASE)/README.txt
 	echo "Built on `date` from:"			>>$(INSTBASE)/README.txt
@@ -180,20 +169,26 @@ ifeq ($(shell uname), Linux)
 endif
 	chmod -R u+w $(INSTBASE)
 
-# Store tarball to repository
+################################################################################
 
-store: $(TARBALL)
-	scp $(TARBALL) root@munts.net:/export/software/MCU
+# Create RPM package
 
-# Install tarball to /usr/local
+fakeroot: binutils.done gcc.done newlib.done newlibdocs.done gdb.done
+	mkdir -p fakeroot/usr/local
+	cp -R -p arm-tools fakeroot/usr/local
 
-install: $(TARBALL)
-	tar xzf $(TARBALL) --directory=/usr/local
+specfile: specfile.template fakeroot
+	sed s/@@VERSION@@/$(VERSION)/g <specfile.template | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
+	find fakeroot -type f | cut -c 9- >>specfile
 
-# Uninstall
+rpm: specfile
+	mkdir -p rpmbuild/RPMS/$(MACHTYPE)
+	chmod -R -w fakeroot
+	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
+	cp rpmbuild/RPMS/$(MACHTYPE)/*.rpm .
+	chmod -R +w fakeroot
 
-uninstall:
-	rm -rf /usr/local/$(PKGNAME)
+################################################################################
 
 # Clean out working files
 
@@ -206,3 +201,5 @@ clean:
 	rm -rf $(GCCOBJ)
 	rm -rf $(NEWLIBSRC)
 	rm -rf $(GDBSRC)
+
+distclean: clean

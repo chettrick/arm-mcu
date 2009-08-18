@@ -1,0 +1,18 @@
+# Specfile for GCC toolchain for bare-machine ARM microcontrollers
+
+# $Id$
+
+Summary: GCC toolchain for bare-machine ARM Microcontrollers
+Name: avrtools
+Version: @@VERSION@@
+Release: @@RELEASE@@
+Group: Utilities
+License: GPL
+Packager: Philip Munts <phil@munts.net>
+Source: %{name}-%{version}.tar.gz
+
+%description
+GCC toolchain for bare-machine ARM microcontrollers
+
+%files
+%defattr(-,root,root)
