@@ -2,6 +2,7 @@
 
 // $Id$
 
+#include <assert.h>
 #include <cpu.h>
 #include <stdio.h>
 #include <string.h>
@@ -104,5 +105,9 @@ int main(void)
     fflush(stdin);
     scanf("%d %d", &x, &y);
     printf("You entered %d and %d\n", x, y);
+
+    if ((x == 0) && (y == 0)) break;
   }
+
+  assert(0);
 }

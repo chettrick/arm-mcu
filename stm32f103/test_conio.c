@@ -2,6 +2,7 @@
 
 // $Id$
 
+#include <assert.h>
 #include <conio.h>
 #include <cpu.h>
 #include <stdio.h>
@@ -23,5 +24,8 @@ int main(void)
     fgets(buf, sizeof(buf), stdin);
     if (strlen(buf)) if (buf[strlen(buf)-1] == '\n') buf[strlen(buf)-1] = 0;
     printf("You entered %ld bytes, '%s'\n", strlen(buf), buf);
+    if (!strcasecmp(buf, "quit")) break;
   }
+
+  assert(0);
 }
