@@ -6,13 +6,14 @@
 
 // $Id$
 
+#include <errno.h>
+#undef errno
+extern int errno;
+
 #include <cpu.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/time.h>
-#include <errno.h>
-#undef errno
-extern int errno;
 
 extern char end[];
 static char *heap_ptr;
@@ -260,4 +261,20 @@ int _gettimeofday(struct timeval *ptimeval, void *ptimezone)
   ptimeval->tv_sec = now;
 
   return 0;
+}
+
+void _exit(int status)
+{
+  for (;;);
+}
+
+pid_t _getpid(void)
+{
+  return 1;
+}
+
+int _kill(int pid, int sig)
+{
+  errno = EINVAL;
+  return -1;
 }

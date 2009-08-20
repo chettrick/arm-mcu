@@ -6,6 +6,10 @@
 
 // $Id$
 
+#include <errno.h>
+#undef errno
+extern int errno;
+
 #include <conio.h>
 #include <sys/stat.h>
 
@@ -80,4 +84,20 @@ char *fgets(char *s, int bufsize, void *f)
 {
   cgets(s, bufsize);
   return s;
+}
+
+void _exit(int status)
+{
+  for (;;);
+}
+
+pid_t _getpid(void)
+{
+  return 1;
+}
+
+int _kill(int pid, int sig)
+{
+  errno = EINVAL;
+  return -1;
 }
