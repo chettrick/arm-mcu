@@ -1,0 +1,20 @@
+# Specfile for LPC21ISP RPM Package
+
+# $Id$
+
+Summary: Serial Port ISP utility for LPC2xxx ARM microcontrollers
+Name: lpc21isp
+Version: @@VERSION@@
+Release: 1
+Group: Utilities
+License: GPL
+Packager: Philip Munts <phil@munts.net>
+Source: %{name}-%{version}.tar.gz
+
+%description
+Serial Port ISP utility for LPC2xxx ARM microcontrollers by Martin Maurer (Martin.Maurer@clibb.de)
+
+%files
+%defattr(-,root,root)
+%dir /usr/local/bin
+/usr/local/bin/%{name}
