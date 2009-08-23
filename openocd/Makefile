@@ -7,7 +7,7 @@ INSTBASE        = $(shell pwd)/$(PKGNAME)
 TEMP            = /tmp
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
-D2XXVER		= 2.04.06
+D2XXVER		= 2.04.16
 D2XXSERVER	= http://www.ftdichip.com/Driver/CDM
 D2XXDIST	= $(TEMP)/CDM_$(D2XXVER)_WHQL_Certified.zip
 D2XXURL		= $(D2XXSERVER)/CDM%20$(D2XXVER)%20WHQL%20Certified.zip
