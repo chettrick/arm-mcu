@@ -35,7 +35,11 @@ endif
 
 .PHONY: default tarball rpm clean distclean
 
+ifeq ($(shell uname), Linux)
+default: rpm
+else
 default: tarball
+endif
 
 ################################################################################
 
@@ -73,8 +77,11 @@ ifeq ($(shell uname), CYGWIN_NT-5.1)
 else
 	cd $(OPENOCDSRC) && ./configure --prefix=$(INSTBASE) --enable-ft2232_ftd2xx --with-ftd2xx-linux-tardir=`pwd`/../$(D2XXDIR)
 endif
+
+ifeq ($(shell uname), Linux)
 # Ugly workaround for libtool library reorder bug
-	cd $(OPENOCDSRC) ; make ; cd src ; gcc -std=gnu99 -g -O2 -I$(shell pwd)/libftd2xx0.4.16 -Wall -Wstrict-prototypes -Wformat-security -Wextra -Wno-unused-parameter -Wbad-function-cast -Wcast-align -Wredundant-decls -Werror -Wl,-rpath -Wl,$(shell pwd)/openocd/lib -o openocd main.o ./.libs/libopenocd.a $(shell pwd)/libftd2xx0.4.16/static_lib/libftd2xx.a.0.4.16 -ldl -lpthread  
+	cd $(OPENOCDSRC) ; make ; cd src ; gcc -std=gnu99 -g -O2 -I$(shell pwd)/libftd2xx0.4.16 -Wall -Wstrict-prototypes -Wformat-security -Wextra -Wno-unused-parameter -Wbad-function-cast -Wcast-align -Wredundant-decls -Werror -Wl,-rpath -Wl,$(shell pwd)/openocd/lib -o openocd main.o ./.libs/libopenocd.a $(shell pwd)/libftd2xx0.4.16/static_lib/libftd2xx.a.0.4.16 -ldl -lpthread
+endif
 	$(MAKE) -C $(OPENOCDSRC)
 	$(MAKE) -C $(OPENOCDSRC) install
 	$(MAKE) -C $(OPENOCDSRC) pdf
