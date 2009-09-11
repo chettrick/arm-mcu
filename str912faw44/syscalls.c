@@ -86,13 +86,6 @@ int _isatty(int fd)
   return 1;
 }
 
-#ifdef DEFINE_ISATTY
-int isatty(int fd)
-{
-  return 1;
-}
-#endif
-
 #ifdef REENTRANT_SYSCALLS
 off_t _lseek_r(void *reent, int fd, off_t pos, int whence)
 #else
@@ -198,13 +191,6 @@ void _exit(int status)
   for (;;);
 }
 
-#ifdef DEFINE_ABORT
-void abort(void)
-{
-  for (;;);
-}
-#endif
-
 #ifdef REENTRANT_SYSCALLS
 pid_t _getpid_r(struct _reent *r)
 #else
@@ -222,4 +208,16 @@ int _kill(int pid, int sig)
 {
   errno = EINVAL;
   return -1;
+}
+
+// Only certain toolchains require the following so we mark them weak
+
+void __attribute__ ((weak)) abort(void)
+{
+  for (;;);
+}
+
+int __attribute__ ((weak)) isatty(int fd)
+{
+  return 1;
 }
