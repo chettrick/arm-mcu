@@ -8,7 +8,12 @@
 
 #include <errno.h>
 #undef errno
+
+#ifdef REENTRANT_SYSCALLS
+int errno;
+#else
 extern int errno;
+#endif
 
 #include <cpu.h>
 #include <string.h>
@@ -17,7 +22,11 @@ extern int errno;
 extern char end[];
 static char *heap_ptr;
 
-void * _sbrk(ptrdiff_t incr)
+#ifdef REENTRANT_SYSCALLS
+char *_sbrk_r(void *reent, size_t incr)
+#else
+char * _sbrk(ptrdiff_t incr)
+#endif
 {
   char  *base;
 
@@ -31,7 +40,11 @@ void * _sbrk(ptrdiff_t incr)
   return base;          /*  Return pointer to start of new heap area.   */
 }
 
-int _open(const char *path, int flags, ...)
+#ifdef REENTRANT_SYSCALLS
+int _open_r(void *reent, const char *path, int flags, int mode)
+#else
+int _open(const char *path, int flags, int mode)
+#endif
 {
   int d;
 
@@ -45,33 +58,55 @@ int _open(const char *path, int flags, ...)
   return d;
 }
 
+#ifdef REENTRANT_SYSCALLS
+int _close_r(void *reent, int fd)
+#else
 int _close(int fd)
+#endif
 {
   return 0;
 }
 
+#ifdef REENTRANT_SYSCALLS
+int _fstat_r(void *reent, int fd, struct stat *st)
+#else
 int _fstat(int fd, struct stat *st)
+#endif
 {
   st->st_mode = S_IFCHR;
   return 0;
 }
 
+#ifdef REENTRANT_SYSCALLS
+int _isatty_r(struct _reent *r, int fd)
+#else
 int _isatty(int fd)
+#endif
 {
   return 1;
 }
 
+#ifdef DEFINE_ISATTY
 int isatty(int fd)
 {
   return 1;
 }
+#endif
 
+#ifdef REENTRANT_SYSCALLS
+off_t _lseek_r(void *reent, int fd, off_t pos, int whence)
+#else
 int _lseek(int fd, off_t pos, int whence)
+#endif
 {
   return 0;
 }
 
+#ifdef REENTRANT_SYSCALLS
+long _read_r(void *reent, int fd, void *buf, size_t size)
+#else
 int _read(int fd, char *buf, size_t size)
+#endif
 {
   if (device_table[fd].name[0] == 0)
   {
@@ -86,13 +121,17 @@ int _read(int fd, char *buf, size_t size)
   }
 
 #ifdef CONFIG_RAWREAD
-  return device_table[fd].read(device_table[fd].subdevice, buf, size);
+  return device_table[fd].read(device_table[fd].subdevice, buf, size)
 #else
   return device_gets(fd, buf, size);
 #endif
 }
 
+#ifdef REENTRANT_SYSCALLS
+long _write_r(void *reent, int fd, const char *src, size_t size)
+#else
 int _write(int fd, const char *src, size_t size)
+#endif
 {
   char dst[256];
   int srcidx;
@@ -159,12 +198,27 @@ void _exit(int status)
   for (;;);
 }
 
+#ifdef DEFINE_ABORT
+void abort(void)
+{
+  for (;;);
+}
+#endif
+
+#ifdef REENTRANT_SYSCALLS
+pid_t _getpid_r(struct _reent *r)
+#else
 pid_t _getpid(void)
+#endif
 {
   return 1;
 }
 
+#ifdef REENTRANT_SYSCALLS
+int _kill_r(struct _reent *r, int pid, int sig)
+#else
 int _kill(int pid, int sig)
+#endif
 {
   errno = EINVAL;
   return -1;
