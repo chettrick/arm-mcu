@@ -10,7 +10,7 @@ CFLAGS		+= -I$(FWLIB) -I$(USBLIB)
 
 USBSERIAL	= $(MCUDEPENDENT)/usb_serial
 
-LIBOBJS		= cpu.o device.o serial.o syscalls.o
+LIBOBJS		= cpu.o device.o serial.o syscalls.o time.o
 
 .PHONY:		reset
 
