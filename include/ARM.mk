@@ -3,15 +3,15 @@
 # $Id$
 
 ARMTOOLS	?= /usr/local/arm-tools
-ARMPREFIX	?= $(ARMTOOLS)/bin/arm-elf-
+CROSS_COMPILE	?= $(ARMTOOLS)/bin/arm-elf-
 
-CC		= $(ARMPREFIX)gcc
-LD		= $(ARMPREFIX)ld
-AR		= $(ARMPREFIX)ar
-STRIP		= $(ARMPREFIX)strip
-OBJCOPY		= $(ARMPREFIX)objcopy
-OBJDUMP		= $(ARMPREFIX)objdump
-GDB		= $(ARMPREFIX)gdb
+CC		= $(CROSS_COMPILE)gcc
+LD		= $(CROSS_COMPILE)ld
+AR		= $(CROSS_COMPILE)ar
+STRIP		= $(CROSS_COMPILE)strip
+OBJCOPY		= $(CROSS_COMPILE)objcopy
+OBJDUMP		= $(CROSS_COMPILE)objdump
+GDB		= $(CROSS_COMPILE)gdb
 
 LPC21ISP	?= /usr/local/bin/lpc21isp
 OPENOCD		?= /usr/local/bin/openocd
