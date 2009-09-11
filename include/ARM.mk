@@ -23,11 +23,12 @@ OPENOCDCFG	?= $(MCUDEPENDENT)/openocd.cfg
 DEBUGGDB	?= $(MCUDEPENDENT)/debug.gdb
 
 ARCHFLAGS	?= -marm
+CONFIGFLAGS	?=
 GDBFLAGS	?= -g
 OPTFLAGS	?= -O0
 CFLAGS		+= -Wall -mcpu=$(ARCH) $(ARCHFLAGS) -DMCU_$(MCU)
 CFLAGS		+= -I$(ARMSRC) -I$(ARMSRC)/include
-CFLAGS		+= $(GDBFLAGS) $(OPTFLAGS) $(DEBUG) $(EXTRAFLAGS)
+CFLAGS		+= $(CONFIGFLAGS) $(GDBFLAGS) $(OPTFLAGS) $(DEBUG) $(EXTRAFLAGS)
 LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDEPENDENT) -l$(MCU) -Wl,-Map=$*.map,--cref $(EXTRAOBJS)
 
 # Define default target placeholder
