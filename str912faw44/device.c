@@ -11,7 +11,6 @@
 #include <errno.h>
 #undef errno
 extern int errno;
-extern int _write(int fd, char *buf, size_t size);
 
 device_t device_table[MAX_DEVICES];
 
@@ -146,14 +145,14 @@ int device_ready_read(int fd)
 
 int device_putc(int fd, char c)
 {
-  return _write(fd, &c, 1);
+  return device_table[fd].write(device_table[fd].subdevice, &c, 1);
 }
 
 /* Write a string to a device */
 
 int device_puts(int fd, char *s)
 {
-  return _write(fd, s, strlen(s));
+  return device_table[fd].write(device_table[fd].subdevice, s, strlen(s));
 }
 
 /* Read a single character from a device */
