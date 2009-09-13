@@ -26,6 +26,7 @@ typedef struct
   device_read_t read;
   device_write_ready_t write_ready;
   device_read_ready_t read_ready;
+  int flags;
 } device_t;
 
 extern device_t device_table[MAX_DEVICES];
