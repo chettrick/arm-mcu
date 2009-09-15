@@ -29,8 +29,6 @@ typedef struct
   int flags;
 } device_t;
 
-extern device_t device_table[MAX_DEVICES];
-
 // Device registration functions
 
 int device_register(char *name, unsigned subdevice, void *settings,
@@ -44,19 +42,21 @@ int device_register_fd(char *name, int fd, unsigned subdevice, void *settings,
 int device_unregister(char *name);
 int device_lookup(char *name);
 
-// Non-buffered I/O helper functions
+// I/O method functions
 
-int device_ready_write(int fd);
+int device_open(char *name, int flags, int mode);
+int device_close(int fd);
 int device_ready_read(int fd);
-int device_putc(int fd, char c);
-int device_puts(int fd, char *s);
+int device_ready_write(int fd);
+int device_read(int fd, char *s, size_t size);
+int device_write(int fd, char *s, size_t size);
 int device_getc(int fd);
-int device_gets(int fd, char *s, size_t size);
+int device_putc(int fd, char c);
 
 // Convenience macros, vaguely inspired by Turbo C and Turbo Pascal
 
-#define putch(c)	(device_putc(fileno(stdout), c))
-#define cputs(s)	(device_puts(fileno(stdout), s))
-#define keypressed(...)	(device_ready_read(fileno(stdout)))
+#define keypressed(...)	(device_ready_read(fileno(stdin)))
 #define getch(...)	(device_getc(fileno(stdin)))
-#define cgets(s, size)	(device_gets(fileno(stdin), s, size))
+#define putch(c)	(device_putc(fileno(stdout), c))
+#define cgets(s, size)	(device_read(fileno(stdin), s, size))
+#define cputs(s)	(device_write(fileno(stdout), s, strlen(s)))

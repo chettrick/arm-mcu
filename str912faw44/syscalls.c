@@ -9,6 +9,8 @@
 #include <errno.h>
 #undef errno
 
+#define REENTRANT_SYSCALLS 1
+
 #ifdef REENTRANT_SYSCALLS
 int errno;
 #else
@@ -30,6 +32,8 @@ char * _sbrk(ptrdiff_t incr)
 {
   char  *base;
 
+  errno = 0;
+
 /* Initialize if first time through. */
 
   if (!heap_ptr) heap_ptr = end;
@@ -41,21 +45,13 @@ char * _sbrk(ptrdiff_t incr)
 }
 
 #ifdef REENTRANT_SYSCALLS
-int _open_r(void *reent, const char *path, int flags, int mode)
+int _open_r(void *reent, char *path, int flags, int mode)
 #else
-int _open(const char *path, int flags, int mode)
+int _open(char *path, int flags, int mode)
 #endif
 {
-  int d;
-
-  if ((d = device_lookup((char *) path)) < 0)
-    return -1;
-
-  if (device_table[d].init != NULL)
-    if (device_table[d].init(device_table[d].subdevice, device_table[d].settings))
-      return -1;
-
-  return d;
+  errno = 0;
+  return device_open(path, flags, mode);
 }
 
 #ifdef REENTRANT_SYSCALLS
@@ -64,8 +60,31 @@ int _close_r(void *reent, int fd)
 int _close(int fd)
 #endif
 {
-  return 0;
+  errno = 0;
+  return device_close(fd);
 }
+
+#ifdef REENTRANT_SYSCALLS
+long _read_r(void *reent, int fd, void *dst, size_t size)
+#else
+int _read(int fd, char *dst, size_t size)
+#endif
+{
+  errno = 0;
+  return device_read(fd, dst, size);
+}
+
+#ifdef REENTRANT_SYSCALLS
+long _write_r(void *reent, int fd, char *src, size_t size)
+#else
+int _write(int fd, char *src, size_t size)
+#endif
+{
+  errno = 0;
+  return device_write(fd, src, size);
+}
+
+// The following are just dummy routines
 
 #ifdef REENTRANT_SYSCALLS
 int _fstat_r(void *reent, int fd, struct stat *st)
@@ -73,6 +92,7 @@ int _fstat_r(void *reent, int fd, struct stat *st)
 int _fstat(int fd, struct stat *st)
 #endif
 {
+  errno = 0;
   st->st_mode = S_IFCHR;
   return 0;
 }
@@ -83,6 +103,7 @@ int _isatty_r(struct _reent *r, int fd)
 int _isatty(int fd)
 #endif
 {
+  errno = 0;
   return 1;
 }
 
@@ -92,98 +113,8 @@ off_t _lseek_r(void *reent, int fd, off_t pos, int whence)
 int _lseek(int fd, off_t pos, int whence)
 #endif
 {
+  errno = 0;
   return 0;
-}
-
-#ifdef REENTRANT_SYSCALLS
-long _read_r(void *reent, int fd, void *buf, size_t size)
-#else
-int _read(int fd, char *buf, size_t size)
-#endif
-{
-  if (device_table[fd].name[0] == 0)
-  {
-    errno = ENODEV;
-    return -1;
-  }
-
-  if (device_table[fd].read == NULL)
-  {
-    errno = EIO;
-    return -1;
-  }
-
-#ifdef CONFIG_RAWREAD
-  return device_table[fd].read(device_table[fd].subdevice, buf, size)
-#else
-  return device_gets(fd, buf, size);
-#endif
-}
-
-#ifdef REENTRANT_SYSCALLS
-long _write_r(void *reent, int fd, const char *src, size_t size)
-#else
-int _write(int fd, const char *src, size_t size)
-#endif
-{
-  char dst[256];
-  int srcidx;
-  int dstidx;
-  int totalbytes;	// Number of source bytes transferred
-  int chunkbytes;	// Number of chunk bytes transferred
-  int len;
-
-  if (device_table[fd].name[0] == 0)
-  {
-    errno = ENODEV;
-    return -1;
-  }
-
-  if (device_table[fd].write == NULL)
-  {
-    errno = EIO;
-    return -1;
-  }
-
-  srcidx = 0;
-  totalbytes = 0;
-
-  while (totalbytes < size)
-  {
-    dstidx = 0;
-
-// Copy data from source buffer to chunk buffer, inserting CR's before LF's
-
-    while ((totalbytes < size) && (dstidx < sizeof(dst)))
-    {
-      if ((dstidx == sizeof(dst) - 1) && (src[srcidx] == '\n'))
-        break;
-
-      if (src[srcidx] == '\n')
-      {
-        dst[dstidx++] = '\r';
-        dst[dstidx++] = '\n';
-      }
-      else
-        dst[dstidx++] = src[srcidx];
-
-      srcidx++;
-      totalbytes++;
-    }
-
-// Dispatch chunk buffer to device driver
-
-    chunkbytes = 0;
-
-    while (chunkbytes < dstidx)
-    {
-      len = device_table[fd].write(device_table[fd].subdevice, dst + chunkbytes, dstidx - chunkbytes);
-      if (len < 0) return len;
-      chunkbytes += len;
-    }
-  }
-
-  return totalbytes;
 }
 
 void _exit(int status)
@@ -197,6 +128,7 @@ pid_t _getpid_r(struct _reent *r)
 pid_t _getpid(void)
 #endif
 {
+  errno = 0;
   return 1;
 }
 
@@ -212,6 +144,7 @@ int _kill(int pid, int sig)
 
 // Only certain toolchains require the following so we mark them weak
 
+#if 0
 void __attribute__ ((weak)) abort(void)
 {
   for (;;);
@@ -221,3 +154,4 @@ int __attribute__ ((weak)) isatty(int fd)
 {
   return 1;
 }
+#endif
