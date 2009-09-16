@@ -32,6 +32,8 @@ extern void cpu_init(unsigned long int frequency);
 #endif
 
 #ifdef MCU_stm32f103
+#include <stm32f103/device.h>
+#include <stm32f103/serial.h>
 #include <stm32f103/FWLib/stm32f10x_lib.h>
 #include <stm32f103/FWLib/stm32f10x_it.h>
 #define DEFAULT_CPU_FREQ 72000000

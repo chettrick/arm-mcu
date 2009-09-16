@@ -1,30 +1,34 @@
 /******************************************************************************/
 /*                                                                            */
-/*      Simple serial console I/O routines for the STR912FAW44 ARM MCU        */
+/*    Simple serial port I/O routines for the STM32F103 Cortex-M3 ARM MCU     */
 /*                                                                            */
 /******************************************************************************/
 
 // $Id$
 
-#include <conio.h>
 #include <cpu.h>
 #include <stdio.h>
 #include <string.h>
+#include <errno.h>
+#undef errno
+extern int errno;
 
 static USART_TypeDef *UART = (USART_TypeDef *) USART1_BASE;
 
 /* Initialize serial console */
 
-void conio_init(unsigned port, unsigned long int baudrate)
+int serial_init(unsigned port, unsigned long int baudrate)
 {
   USART_InitTypeDef USART_config;
   GPIO_InitTypeDef GPIO_config;
-  
+
+  errno = 0;
+
 // Turn on USART
 
   switch (port)
   {
-    case 1 :
+    case 0 :
       UART = (USART_TypeDef *) USART1_BASE;
 
 // Turn on peripheral clocks
@@ -47,7 +51,7 @@ void conio_init(unsigned port, unsigned long int baudrate)
       GPIO_Init(GPIOA, &GPIO_config);
       break;
  
-    case 2 :
+    case 1 :
       UART = (USART_TypeDef *) USART2_BASE;
 
 // Turn on peripheral clocks
@@ -70,7 +74,7 @@ void conio_init(unsigned port, unsigned long int baudrate)
       GPIO_Init(GPIOA, &GPIO_config);
       break;
  
-    case 3 :
+    case 2 :
       UART = (USART_TypeDef *) USART3_BASE;
 
 // Turn on peripheral clocks
@@ -92,6 +96,10 @@ void conio_init(unsigned port, unsigned long int baudrate)
       GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
       GPIO_Init(GPIOB, &GPIO_config);
       break;
+
+    default :
+      errno = ENODEV;
+      return -1;
   }
 
 // Configure USART
@@ -100,80 +108,75 @@ void conio_init(unsigned port, unsigned long int baudrate)
   USART_config.USART_BaudRate = baudrate;
   USART_Init(UART, &USART_config);
   USART_Cmd(UART, ENABLE);
+
+  return 0;
 }
 
-/* Send 1 character */
+/* Register serial port for standard I/O */
 
-void putch(unsigned char c)
+int serial_stdio(unsigned port, unsigned long int baudrate)
 {
-  if (c == '\n') putch('\r');
+  serial_init(port, baudrate);
 
-  while (!(UART->SR & USART_FLAG_TXE));
+  device_unregister("stdin");
+  device_unregister("stdout");
+  device_unregister("stderr");
+
+  device_register_fd("stdin",  0, port, (void *) baudrate, (device_init_t) serial_init,
+                     serial_write, serial_read, serial_txready, serial_rxready);
+
+  device_register_fd("stdout", 1, port, (void *) baudrate, (device_init_t) serial_init,
+                     serial_write, serial_read, serial_txready, serial_rxready);
+
+  device_register_fd("stderr", 2, port, (void *) baudrate, (device_init_t) serial_init,
+                     serial_write, serial_read, serial_txready, serial_rxready);
+
+  return 0;
+}
+
+/* Return TRUE if transmitter is ready to accept data */
+
+int serial_txready(unsigned port)
+{
+  return UART->SR & USART_FLAG_RXNE;
+}
+
+/* Send 1 byte to the serial port */
+
+static void serial_putch(unsigned port, char c)
+{
+  while (!serial_txready(port));
   UART->DR = c;
 }
 
-/* Receive 1 character */
+/* Send a buffer to the serial port */
 
-unsigned char getch(void)
+int serial_write(unsigned port, char *buf, unsigned int count)
 {
-  while (!(UART->SR & USART_FLAG_RXNE));
-  return UART->DR;
+  int n;
+
+  for (n = 0; n < count; n++)
+    serial_putch(port, *buf++);
+
+  return count;
 }
 
-/* Return 1 if key pressed */
+/* Return TRUE if receive data is available */
 
-unsigned char keypressed(void)
+int serial_rxready(unsigned port)
 {
-  return (UART->SR & USART_FLAG_RXNE);
+  return UART->SR & USART_FLAG_RXNE;
 }
 
-/* Send a string */
+/* Read buffer from the serial port */
 
-void cputs(char *s)
+int serial_read(unsigned port, char *buf, unsigned int count)
 {
-  while (*s)
-    putch(*s++);
-}
-
-/* Receive a string, with rudimentary line editing */
-
-void cgets(char *s, int bufsize)
-{
-  char *p;
-  int c;
-
-  memset(s, 0, bufsize);
-
-  p = s;
-
-  for (p = s; p < s + bufsize-1;)
+  if (serial_rxready(port))
   {
-    c = getch();
-    switch (c)
-    {
-      case '\r' :
-      case '\n' :
-        putch('\r');
-        putch('\n');
-        *p = '\n';
-        return;
-
-      case '\b' :
-        if (p > s)
-        {
-          *p-- = 0;
-          putch('\b');
-          putch(' ');
-          putch('\b');
-        }
-        break;
-
-      default :
-        putch(c);
-        *p++ = c;
-        break;
-    }
+    *buf = UART->DR;
+    return 1;
   }
-
-  return;
+  else
+    return 0;
 }

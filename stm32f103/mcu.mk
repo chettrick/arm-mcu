@@ -8,7 +8,7 @@ ARCHFLAGS	= -mthumb
 FWLIB		= $(MCUDEPENDENT)/FWLib
 CFLAGS		+= -I$(FWLIB)
 
-LIBOBJS		= conio.o cpu.o syscalls.o
+LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
 .PHONY:		reset
 .SUFFIXES:	.flashocd
