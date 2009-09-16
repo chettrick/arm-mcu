@@ -1,4 +1,4 @@
-/* Simple bit twiddler test program */
+/* Simple bit twiddler test program for the STR912FAW44 ARM MCU */
 
 // $Id$
 

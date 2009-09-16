@@ -1,4 +1,4 @@
-/* Simple A/D converter test program */
+/* Simple A/D converter test program for the STR912FAW44 ARM MCU */
 
 // $Id$
 

@@ -1,4 +1,4 @@
-/* Simple real time clock test program */
+/* Simple real time clock test program for the STR912FAW44 ARM MCU */
 
 // $Id$
 

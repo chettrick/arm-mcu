@@ -1,4 +1,4 @@
-/* Simple serial console I/O test program */
+/* Simple serial console I/O test program for the STR912FAW44 ARM MCU */
 
 // $Id$
 

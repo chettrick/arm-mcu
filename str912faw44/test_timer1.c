@@ -1,4 +1,4 @@
-/* Simple timer interrupt test program */
+/* Simple timer interrupt test program for the STR912FAW44 ARM MCU */
 
 // $Id$
 
