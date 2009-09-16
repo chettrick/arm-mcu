@@ -4,7 +4,7 @@
 
 ARCH		= arm7tdmi
 
-LIBOBJS		= conio.o cpu.o syscalls.o
+LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
 .PHONY:		reset
 
