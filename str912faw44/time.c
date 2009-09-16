@@ -6,7 +6,6 @@
 
 // $Id$
 
-#include <errno.h>
 #include <cpu.h>
 #include <string.h>
 #include <sys/stat.h>
