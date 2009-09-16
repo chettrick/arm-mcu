@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*                                                                            */
-/*        Syscall support functions for newlib console I/O with stdio         */
+/*             Syscall shim functions for newlib file system I/O              */
 /*                                                                            */
 /******************************************************************************/
 
