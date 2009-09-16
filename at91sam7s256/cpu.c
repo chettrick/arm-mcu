@@ -1,4 +1,4 @@
-/* CPU initialization functions for the AT91SAM7S256 */
+/* CPU initialization functions for the AT91SAM7S256 ARM MCU */
 
 // $Id$
 

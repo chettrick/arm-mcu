@@ -1,4 +1,4 @@
-/* Initialize CPU core */
+/* ARM microcontroller device specific definitions and header files */
 
 // $Id$
 

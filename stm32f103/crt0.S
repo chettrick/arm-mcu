@@ -1,4 +1,4 @@
-/* Startup for STM32F103 Cortex-M3 ARM microcontroller */
+/* Startup for STM32F103 Cortex-M3 ARM MCU */
 
 // $Id$
 

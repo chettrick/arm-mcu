@@ -1,4 +1,4 @@
-// Startup for STR912FAW44 ARM microcontroller
+// Startup for STR912FAW44 ARM MCU
 
 // $Id$
 

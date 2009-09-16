@@ -1,4 +1,4 @@
-// Interrupt definitions for LPC2366
+// Interrupt definitions for LPC2366 ARM MCU
 
 // $Id$
 

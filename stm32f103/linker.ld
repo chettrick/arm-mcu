@@ -1,4 +1,4 @@
-/* Linker script for STM32F103 Cortex-M3 microcontroller */
+/* Linker script for STM32F103 Cortex-M3 ARM MCU */
 
 /* $Id$ */
 

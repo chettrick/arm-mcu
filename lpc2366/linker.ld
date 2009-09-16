@@ -1,4 +1,4 @@
-/* Linker script for LPC2366 microcontroller */
+/* Linker script for LPC2366 ARM MCU */
 
 /* $Id$ */
 

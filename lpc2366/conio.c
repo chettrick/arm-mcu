@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*                                                                            */
-/*     Simple serial console I/O routines for the Phillips LPC2366 ARM MCU    */
+/*        Simple serial console I/O routines for the LPC2366 ARM MCU          */
 /*                                                                            */
 /******************************************************************************/
 

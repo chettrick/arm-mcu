@@ -1,4 +1,4 @@
-/* Linker script for STR912FAW44 microcontroller */
+/* Linker script for STR912FAW44 ARM MCU */
 
 /* $Id$ */
 
