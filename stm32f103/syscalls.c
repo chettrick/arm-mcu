@@ -17,11 +17,9 @@ int errno;
 extern char end[];
 static char *heap_ptr;
 
-char *_sbrk_r(void *reent, size_t incr)
+char *_sbrk_r(struct _reent *reent, size_t incr)
 {
   char  *base;
-
-  errno = 0;
 
 /* Initialize if first time through. */
 
@@ -30,63 +28,64 @@ char *_sbrk_r(void *reent, size_t incr)
   base = heap_ptr;      /*  Point to end of heap.                       */
   heap_ptr += incr;     /*  Increase heap.                              */
 
+  reent->_errno = 0;
   return base;          /*  Return pointer to start of new heap area.   */
 }
 
-int _open_r(void *reent, char *path, int flags, int mode)
+int _open_r(struct _reent *reent, char *path, int flags, int mode)
 {
-  errno = 0;
+  reent->_errno = 0;
   return device_open(path, flags, mode);
 }
 
-int _close_r(void *reent, int fd)
+int _close_r(struct _reent *reent, int fd)
 {
-  errno = 0;
+  reent->_errno = 0;
   return device_close(fd);
 }
 
-long _read_r(void *reent, int fd, void *dst, size_t size)
+long _read_r(struct _reent *reent, int fd, void *dst, size_t size)
 {
-  errno = 0;
+  reent->_errno = 0;
   return device_read(fd, dst, size);
 }
 
-long _write_r(void *reent, int fd, char *src, size_t size)
+long _write_r(struct _reent *reent, int fd, void *src, size_t size)
 {
-  errno = 0;
+  reent->_errno = 0;
   return device_write(fd, src, size);
 }
 
 // The following are just dummy routines
 
-int _fstat_r(void *reent, int fd, struct stat *st)
+int _fstat_r(struct _reent *reent, int fd, struct stat *st)
 {
-  errno = 0;
+  reent->_errno = 0;
   st->st_mode = S_IFCHR;
   return 0;
 }
 
-int _isatty_r(struct _reent *r, int fd)
+int _isatty_r(struct _reent *reent, int fd)
 {
-  errno = 0;
+  reent->_errno = 0;
   return 1;
 }
 
-off_t _lseek_r(void *reent, int fd, off_t pos, int whence)
+off_t _lseek_r(struct _reent *reent, int fd, off_t pos, int whence)
 {
-  errno = 0;
+  reent->_errno = 0;
   return 0;
 }
 
-pid_t _getpid_r(struct _reent *r)
+pid_t _getpid_r(struct _reent *reent)
 {
-  errno = 0;
+  reent->_errno = 0;
   return 1;
 }
 
-int _kill_r(struct _reent *r, int pid, int sig)
+int _kill_r(struct _reent *reent, int pid, int sig)
 {
-  errno = EINVAL;
+  reent->_errno = EINVAL;
   return -1;
 }
 
