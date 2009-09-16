@@ -88,7 +88,7 @@ int serial_stdio(unsigned port, unsigned long int baudrate)
 
 int serial_txready(unsigned port)
 {
-  return !(US_CSR & AT91C_US_TXRDY);
+  return US_CSR & AT91C_US_TXRDY;
 }
 
 /* Send a buffer to the serial port */
