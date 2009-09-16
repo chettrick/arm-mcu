@@ -13,12 +13,6 @@ extern void cpu_init(unsigned long int frequency);
 #define DEFAULT_CPU_FREQ 48000000
 #endif
 
-#ifdef MCU_lpc2119
-#include <lpc2119/io.h>
-#include <lpc2119/interrupt.h>
-#define DEFAULT_CPU_FREQ 58982400
-#endif
-
 #ifdef MCU_lpc2366
 #include <lpc2366/io.h>
 #include <lpc2366/interrupt.h>
