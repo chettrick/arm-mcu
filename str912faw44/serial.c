@@ -234,7 +234,7 @@ static void serial_putch(unsigned port, char c)
 
 /* Send a buffer to the serial port */
 
-int serial_write(unsigned port, char *buf, size_t count)
+int serial_write(unsigned port, char *buf, unsigned int count)
 {
   int n;
 
@@ -253,7 +253,7 @@ int serial_rxready(unsigned port)
 
 /* Read buffer from the serial port */
 
-int serial_read(unsigned port, char *buf, size_t count)
+int serial_read(unsigned port, char *buf, unsigned int count)
 {
   if (serial_rxready(port))
   {

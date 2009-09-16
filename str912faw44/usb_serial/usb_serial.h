@@ -19,11 +19,11 @@ int usb_serial_stdio(void);
 
 // Send data to USB host
 
-int usb_serial_write(unsigned subdevice, char *buf, size_t count);
+int usb_serial_write(unsigned subdevice, char *buf, unsigned int count);
 
 // Receive data from USB host
 
-int usb_serial_read(unsigned subdevice, char *buf, size_t count);
+int usb_serial_read(unsigned subdevice, char *buf, unsigned int count);
 
 // Return TRUE if receive data is available
 

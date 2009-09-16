@@ -221,7 +221,7 @@ int device_ready_write(int fd)
 
 /* Read from a device */
 
-int device_read(int fd, char *s, size_t size)
+int device_read(int fd, char *s, unsigned int count)
 {
   device_t *d;
   char *p;
@@ -250,16 +250,16 @@ int device_read(int fd, char *s, size_t size)
     return -1;
   }
 
-  memset(s, 0, size);
+  memset(s, 0, count);
 
 // Pass raw read directly to device driver
 
   if (d->flags & O_BINARY)
-    return d->read(d->subdevice, s, size);
+    return d->read(d->subdevice, s, count);
 
 // Handle cooked input here
 
-  for (p = s; p < s + size - 1;)
+  for (p = s; p < s + count - 1;)
   {
     while ((len = d->read(d->subdevice, &c, 1)) != 1);
     if (len < 0) return len;
@@ -292,7 +292,7 @@ int device_read(int fd, char *s, size_t size)
 
 /* Write to a device */
 
-int device_write(int fd, char *s, size_t size)
+int device_write(int fd, char *s, unsigned int count)
 {
   int i;
 
@@ -321,11 +321,11 @@ int device_write(int fd, char *s, size_t size)
 // Pass binary write directly to device driver
 
   if (device_table[fd].flags & O_BINARY)
-    return device_table[fd].write(device_table[fd].subdevice, s, size);
+    return device_table[fd].write(device_table[fd].subdevice, s, count);
 
 // Handle cooked (CR inserted before each LF) output here
 
-  for (i = 0; i < size; i++)
+  for (i = 0; i < count; i++)
   {
     if (*s == '\n') if (device_table[fd].write(device_table[fd].subdevice, "\r", 1) != 1)
       return -1;
@@ -336,7 +336,7 @@ int device_write(int fd, char *s, size_t size)
     s++;
   }
 
-  return size;
+  return count;
 }
   
 /* Read a single unbuffered, unechoed character from a device */

@@ -22,7 +22,7 @@ int serial_txready(unsigned port);
 
 /* Write data to the serial port */
 
-int serial_write(unsigned port, char *buf, size_t count);
+int serial_write(unsigned port, char *buf, unsigned int count);
 
 /* Return TRUE if receive data is available */
 
@@ -30,4 +30,4 @@ int serial_rxready(unsigned port);
 
 /* Read data from the serial port */
 
-int serial_read(unsigned port, char *buf, size_t count);
+int serial_read(unsigned port, char *buf, unsigned int count);
