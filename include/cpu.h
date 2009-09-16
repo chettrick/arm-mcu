@@ -14,8 +14,10 @@ extern void cpu_init(unsigned long int frequency);
 #endif
 
 #ifdef MCU_lpc2366
+#include <lpc2366/device.h>
 #include <lpc2366/io.h>
 #include <lpc2366/interrupt.h>
+#include <lpc2366/serial.h>
 #define DEFAULT_CPU_FREQ 48000000
 #endif
 
@@ -23,9 +25,9 @@ extern void cpu_init(unsigned long int frequency);
 #include <str912faw44/device.h>
 #include <str912faw44/interrupt.h>
 #include <str912faw44/serial.h>
+#include <str912faw44/usb_serial/usb_serial.h>
 #include <str912faw44/FWLib/91x_lib.h>
 #include <str912faw44/FWLib/91x_it.h>
-#include <str912faw44/usb_serial/usb_serial.h>
 #define DEFAULT_CPU_FREQ 48000000
 #endif
 
