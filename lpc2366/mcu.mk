@@ -4,7 +4,7 @@
 
 ARCH		= arm7tdmi-s
 
-LIBOBJS		= conio.o cpu.o syscalls.o
+LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
 LPC21ISPDEV	?= /dev/cua00
 LPC21ISPBAUD	?= 19200
