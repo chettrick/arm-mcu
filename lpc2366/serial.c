@@ -118,14 +118,6 @@ int serial_txready(unsigned port)
   return UxLSR & 0x20;
 }
 
-/* Send 1 byte to the serial port */
-
-static void serial_putch(unsigned port, char c)
-{
-  while (!serial_txready(port));
-  UxTHR = c;
-}
-
 /* Send a buffer to the serial port */
 
 int serial_write(unsigned port, char *buf, unsigned int count)
@@ -133,7 +125,10 @@ int serial_write(unsigned port, char *buf, unsigned int count)
   int n;
 
   for (n = 0; n < count; n++)
-    serial_putch(port, *buf++);
+  {
+    while (!serial_txready(port));
+    UxTHR = *buf++;
+  }
 
   return count;
 }

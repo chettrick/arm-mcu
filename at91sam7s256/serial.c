@@ -91,14 +91,6 @@ int serial_txready(unsigned port)
   return !(US_CSR & AT91C_US_TXRDY);
 }
 
-/* Send 1 byte to the serial port */
-
-static void serial_putch(unsigned port, char c)
-{
-  while (!serial_txready(port));
-  US_THR = c;
-}
-
 /* Send a buffer to the serial port */
 
 int serial_write(unsigned port, char *buf, unsigned int count)
@@ -106,7 +98,10 @@ int serial_write(unsigned port, char *buf, unsigned int count)
   int n;
 
   for (n = 0; n < count; n++)
-    serial_putch(port, *buf++);
+  {
+    while (!serial_txready(port));
+    US_THR = *buf++;
+  }
 
   return count;
 }

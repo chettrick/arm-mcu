@@ -141,14 +141,6 @@ int serial_txready(unsigned port)
   return UART->SR & USART_FLAG_RXNE;
 }
 
-/* Send 1 byte to the serial port */
-
-static void serial_putch(unsigned port, char c)
-{
-  while (!serial_txready(port));
-  UART->DR = c;
-}
-
 /* Send a buffer to the serial port */
 
 int serial_write(unsigned port, char *buf, unsigned int count)
@@ -156,7 +148,10 @@ int serial_write(unsigned port, char *buf, unsigned int count)
   int n;
 
   for (n = 0; n < count; n++)
-    serial_putch(port, *buf++);
+  {
+    while (!serial_txready(port));
+    UART->DR = *buf++;
+  }
 
   return count;
 }
