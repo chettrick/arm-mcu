@@ -28,7 +28,7 @@ int serial_init(unsigned port, unsigned long int baudrate)
 
   switch (port)
   {
-    case 0 :
+    case 1 :
       UART = (USART_TypeDef *) USART1_BASE;
 
 // Turn on peripheral clocks
@@ -51,7 +51,7 @@ int serial_init(unsigned port, unsigned long int baudrate)
       GPIO_Init(GPIOA, &GPIO_config);
       break;
  
-    case 1 :
+    case 2 :
       UART = (USART_TypeDef *) USART2_BASE;
 
 // Turn on peripheral clocks
@@ -74,7 +74,7 @@ int serial_init(unsigned port, unsigned long int baudrate)
       GPIO_Init(GPIOA, &GPIO_config);
       break;
  
-    case 2 :
+    case 3 :
       UART = (USART_TypeDef *) USART3_BASE;
 
 // Turn on peripheral clocks
