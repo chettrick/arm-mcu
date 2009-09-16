@@ -1,4 +1,4 @@
-// Startup for AT91SAM7S256 ARM microcontroller
+// Startup for AT91SAM7S256 ARM MCU
 
 // $Id$
 

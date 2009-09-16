@@ -1,4 +1,4 @@
-/* Linker script for AT91SAM7S256 microcontroller */
+/* Linker script for AT91SAM7S256 ARM MCU */
 
 /* $Id$ */
 
