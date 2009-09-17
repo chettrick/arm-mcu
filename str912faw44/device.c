@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*                                                                            */
-/*           Device abstraction layer for the STR912FAW44 ARM MCU             */
+/*                 MCU independent Device Abstraction Layer                   */
 /*                                                                            */
 /******************************************************************************/
 
@@ -32,7 +32,7 @@ int device_register(char *name, unsigned subdevice, void *settings,
                     device_init_t init, device_write_t write, device_read_t read,
                     device_write_ready_t write_ready, device_read_ready_t read_ready)
 {
-  int d;
+  int fd;
 
   errno = 0;
 
@@ -42,18 +42,19 @@ int device_register(char *name, unsigned subdevice, void *settings,
     return -1;
   }
   
-  for (d = 3; d < MAX_DEVICES; d++)
-    if (device_table[d].name[0] == 0)
+  for (fd = 3; fd < MAX_DEVICES; fd++)
+    if (device_table[fd].name[0] == 0)
     {
-      strlcpy(device_table[d].name, name, sizeof(device_table[d].name));
-      device_table[d].subdevice = subdevice;
-      device_table[d].settings = settings;
-      device_table[d].init = init;
-      device_table[d].write = write;
-      device_table[d].read = read;
-      device_table[d].write_ready = write_ready;
-      device_table[d].read_ready = read_ready;
-      device_table[d].flags = 0;
+      memset(&device_table[fd], 0, sizeof(device_t));
+      strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
+      device_table[fd].subdevice = subdevice;
+      device_table[fd].settings = settings;
+      device_table[fd].init = init;
+      device_table[fd].write = write;
+      device_table[fd].read = read;
+      device_table[fd].write_ready = write_ready;
+      device_table[fd].read_ready = read_ready;
+      device_table[fd].flags = 0;
       return 0;
     }
 
@@ -81,7 +82,8 @@ int device_register_fd(char *name, int fd, unsigned subdevice, void *settings,
     return -1;
   }
 
-  strlcpy(device_table[fd].name, name, MAXPATHLEN);
+  memset(&device_table[fd], 0, sizeof(device_t));
+  strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
   device_table[fd].subdevice = subdevice;
   device_table[fd].settings = settings;
   device_table[fd].init = init;

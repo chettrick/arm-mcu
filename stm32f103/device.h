@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*                                                                            */
-/*        Device abstraction layer for the STM32F103 Cortex-M3 ARM MCU        */
+/*                 MCU independent Device Abstraction Layer                   */
 /*                                                                            */
 /******************************************************************************/
 
@@ -8,7 +8,8 @@
 
 #include <unistd.h>
 
-#define MAX_DEVICES	16
+#define MAX_DEVICES		16
+#define DEVICE_NAME_SIZE	9
 
 typedef int (*device_init_t)		(unsigned subdevice, void *settings);
 typedef int (*device_write_t)		(unsigned subdevice, char *buf, unsigned int count);
@@ -18,7 +19,7 @@ typedef int (*device_read_ready_t)	(unsigned subdevice);
 
 typedef struct
 {
-  char name[MAXPATHLEN];
+  char name[DEVICE_NAME_SIZE];
   unsigned subdevice;
   void *settings;
   device_init_t init;
