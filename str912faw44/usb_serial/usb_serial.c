@@ -120,27 +120,25 @@ int usb_serial_init(unsigned subdevice, void *settings)
   return 0;
 }
 
-int usb_serial_register(void)
-{
-  device_register_char("ucom0", 0, NULL, usb_serial_init, usb_serial_write,
-    usb_serial_read, usb_serial_txready, usb_serial_rxready);
-
-  return 0;
-}
-
-// Register USB serial port devices for standard I/O
+// Register USB serial port device for standard I/O
 
 int usb_serial_stdio(void)
 {
   usb_serial_init(0, NULL);
 
-  device_unregister("stdin");
-  device_unregister("stdout");
-  device_unregister("stderr");
+  device_register_char_fd(NULL, 0, 0, NULL, NULL, NULL, usb_serial_read, NULL, usb_serial_rxready);
+  device_register_char_fd(NULL, 1, 0, NULL, NULL, usb_serial_write, NULL, usb_serial_txready, NULL);
+  device_register_char_fd(NULL, 2, 0, NULL, NULL, usb_serial_write, NULL, usb_serial_txready, NULL);
 
-  device_register_char_fd("stdin", 0, 0, NULL, NULL, NULL, usb_serial_read, NULL, usb_serial_rxready);
-  device_register_char_fd("stdout", 1, 0, NULL, NULL, usb_serial_write, NULL, usb_serial_txready, NULL);
-  device_register_char_fd("stderr", 2, 0, NULL, NULL, usb_serial_write, NULL, usb_serial_txready, NULL);
+  return 0;
+}
+
+// Register USB serial port device
+
+int usb_serial_register(void)
+{
+  device_register_char("ucom0", 0, NULL, usb_serial_init, usb_serial_write,
+    usb_serial_read, usb_serial_txready, usb_serial_rxready);
 
   return 0;
 }

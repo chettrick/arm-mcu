@@ -76,13 +76,9 @@ int serial_stdio(unsigned port, unsigned long int baudrate)
     return -1;
   }
 
-  device_unregister("stdin");
-  device_unregister("stdout");
-  device_unregister("stderr");
-
-  device_register_char_fd("stdin", 0, port, (void *) baudrate, (device_init_t) serial_init, NULL, serial_read, NULL, serial_rxready);
-  device_register_char_fd("stdout", 1, port, (void *) baudrate, (device_init_t) serial_init, serial_write, NULL, serial_txready, NULL);
-  device_register_char_fd("stderr", 2, port, (void *) baudrate, (device_init_t) serial_init, serial_write, NULL, serial_txready, NULL);
+  device_register_char_fd(NULL, 0, port, (void *) baudrate, (device_init_t) serial_init, NULL, serial_read, NULL, serial_rxready);
+  device_register_char_fd(NULL, 1, port, (void *) baudrate, (device_init_t) serial_init, serial_write, NULL, serial_txready, NULL);
+  device_register_char_fd(NULL, 2, port, (void *) baudrate, (device_init_t) serial_init, serial_write, NULL, serial_txready, NULL);
 
   return 0;
 }
