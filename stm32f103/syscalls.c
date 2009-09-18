@@ -32,6 +32,8 @@ char *_sbrk_r(struct _reent *reent, size_t incr)
   return base;          /*  Return pointer to start of new heap area.   */
 }
 
+// Basic I/O services
+
 int _open_r(struct _reent *reent, char *path, int flags, int mode)
 {
   reent->_errno = 0;
@@ -56,26 +58,27 @@ long _write_r(struct _reent *reent, int fd, void *src, size_t size)
   return device_write(fd, src, size);
 }
 
-// The following are just dummy routines
+// File system support services
 
 int _fstat_r(struct _reent *reent, int fd, struct stat *st)
 {
   reent->_errno = 0;
-  st->st_mode = S_IFCHR;
-  return 0;
+  return device_stat(fd, st);
 }
 
 int _isatty_r(struct _reent *reent, int fd)
 {
   reent->_errno = 0;
-  return 1;
+  return device_isatty(fd);
 }
 
 off_t _lseek_r(struct _reent *reent, int fd, off_t pos, int whence)
 {
   reent->_errno = 0;
-  return 0;
+  return device_seek(fd, pos, whence);
 }
+
+// The following are just dummy routines
 
 pid_t _getpid_r(struct _reent *reent)
 {
@@ -98,7 +101,8 @@ void __attribute__ ((weak)) abort(void)
 
 int __attribute__ ((weak)) isatty(int fd)
 {
-  return 1;
+  errno = 0;
+  return device_isatty(fd);
 }
 
 void __attribute__ ((weak)) _exit(int status)

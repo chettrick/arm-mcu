@@ -205,14 +205,14 @@ int serial_stdio(unsigned port, unsigned long int baudrate)
   device_unregister("stdout");
   device_unregister("stderr");
 
-  device_register_fd("stdin",  0, port, (void *) baudrate, (device_init_t) serial_init,
-                     serial_write, serial_read, serial_txready, serial_rxready);
+  device_register_fd("stdin",  DEVICE_TYPE_CHAR, 0, port, (void *) baudrate,
+    (device_init_t) serial_init, serial_write, serial_read, serial_txready, serial_rxready);
 
-  device_register_fd("stdout", 1, port, (void *) baudrate, (device_init_t) serial_init,
-                     serial_write, serial_read, serial_txready, serial_rxready);
+  device_register_fd("stdout", DEVICE_TYPE_CHAR, 1, port, (void *) baudrate,
+    (device_init_t) serial_init, serial_write, serial_read, serial_txready, serial_rxready);
 
-  device_register_fd("stderr", 2, port, (void *) baudrate, (device_init_t) serial_init,
-                     serial_write, serial_read, serial_txready, serial_rxready);
+  device_register_fd("stderr", DEVICE_TYPE_CHAR, 2, port, (void *) baudrate,
+    (device_init_t) serial_init, serial_write, serial_read, serial_txready, serial_rxready);
 
   return 0;
 }

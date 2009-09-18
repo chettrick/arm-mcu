@@ -6,6 +6,7 @@
 
 // $Id$
 
+#include <assert.h>
 #include <cpu.h>
 #include <string.h>
 #include <errno.h>
@@ -28,7 +29,7 @@ static device_t device_table[MAX_DEVICES];
 
 /* Register a device driver to the next available file descriptor */
 
-int device_register(char *name, unsigned subdevice, void *settings,
+int device_register(char *name, device_type_t type, unsigned subdevice, void *settings,
                     device_init_t init, device_write_t write, device_read_t read,
                     device_write_ready_t write_ready, device_read_ready_t read_ready)
 {
@@ -47,6 +48,7 @@ int device_register(char *name, unsigned subdevice, void *settings,
     {
       memset(&device_table[fd], 0, sizeof(device_t));
       strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
+      device_table[fd].type = type;
       device_table[fd].subdevice = subdevice;
       device_table[fd].settings = settings;
       device_table[fd].init = init;
@@ -64,7 +66,7 @@ int device_register(char *name, unsigned subdevice, void *settings,
 
 /* Register a device driver to a specific file descripter */
 
-int device_register_fd(char *name, int fd, unsigned subdevice, void *settings,
+int device_register_fd(char *name, device_type_t type, int fd, unsigned subdevice, void *settings,
                        device_init_t init, device_write_t write, device_read_t read,
                        device_write_ready_t write_ready, device_read_ready_t read_ready)
 {
@@ -84,6 +86,7 @@ int device_register_fd(char *name, int fd, unsigned subdevice, void *settings,
 
   memset(&device_table[fd], 0, sizeof(device_t));
   strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
+  device_table[fd].type = type;
   device_table[fd].subdevice = subdevice;
   device_table[fd].settings = settings;
   device_table[fd].init = init;
@@ -381,4 +384,103 @@ int device_getc(int fd)
 int device_putc(int fd, char c)
 {
   return device_write(fd, &c, 1);
+}
+
+/* Is this file descriptor a character device? */
+
+int device_isatty(int fd)
+{
+  errno = 0;
+
+// Validate file descriptor
+
+  if ((fd < 0) || (fd >= MAX_DEVICES))
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (device_table[fd].name[0] == 0)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+
+  return (device_table[fd].type == DEVICE_TYPE_CHAR);
+}
+
+/* Return file information */
+
+int device_stat(int fd, struct stat *st)
+{
+  errno = 0;
+
+// Validate file descriptor
+
+  if ((fd < 0) || (fd >= MAX_DEVICES))
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (device_table[fd].name[0] == 0)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+
+  memset(st, 0, sizeof(struct stat));
+
+  switch (device_table[fd].type)
+  {
+    case DEVICE_TYPE_CHAR :
+      st->st_mode = S_IFCHR;
+      break;
+
+    case DEVICE_TYPE_BLOCK :
+      st->st_mode = S_IFBLK;
+      break;
+
+    case DEVICE_TYPE_DIRECTORY :
+      st->st_mode = S_IFDIR;
+      break;
+
+    case DEVICE_TYPE_FILE :
+      st->st_mode = S_IFREG;
+      break;
+
+    default :
+      assert(0);
+  }
+
+  return 0;
+}
+
+/* Seek to position in file */
+
+off_t device_seek(int fd, off_t pos, int whence)
+{
+  errno = 0;
+
+// Validate file descriptor
+
+  if ((fd < 0) || (fd >= MAX_DEVICES))
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (device_table[fd].name[0] == 0)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+
+  if (device_table[fd].type == DEVICE_TYPE_CHAR)
+  {
+    errno = ENOTBLK;
+    return -1;
+  }
+
+  return 0;
 }

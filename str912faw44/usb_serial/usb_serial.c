@@ -122,8 +122,8 @@ int usb_serial_init(unsigned subdevice, void *settings)
 
 int usb_serial_register(void)
 {
-  device_register("ucom0", 0, NULL, usb_serial_init, usb_serial_write, usb_serial_read,
-                  usb_serial_txready, usb_serial_rxready);
+  device_register("ucom0", DEVICE_TYPE_CHAR, 0, NULL, usb_serial_init, usb_serial_write,
+    usb_serial_read, usb_serial_txready, usb_serial_rxready);
 
   return 0;
 }
@@ -138,14 +138,14 @@ int usb_serial_stdio(void)
   device_unregister("stdout");
   device_unregister("stderr");
 
-  device_register_fd("stdin",  0, 0, NULL, NULL, usb_serial_write, usb_serial_read,
-                     usb_serial_txready, usb_serial_rxready);
+  device_register_fd("stdin", DEVICE_TYPE_CHAR, 0, 0, NULL, NULL, usb_serial_write,
+    usb_serial_read, usb_serial_txready, usb_serial_rxready);
 
-  device_register_fd("stdout", 1, 0, NULL, NULL, usb_serial_write, usb_serial_read,
-                     usb_serial_txready, usb_serial_rxready);
+  device_register_fd("stdout", DEVICE_TYPE_CHAR, 1, 0, NULL, NULL, usb_serial_write,
+    usb_serial_read, usb_serial_txready, usb_serial_rxready);
 
-  device_register_fd("stderr", 2, 0, NULL, NULL, usb_serial_write, usb_serial_read,
-                     usb_serial_txready, usb_serial_rxready);
+  device_register_fd("stderr", DEVICE_TYPE_CHAR, 2, 0, NULL, NULL, usb_serial_write,
+    usb_serial_read, usb_serial_txready, usb_serial_rxready);
 
   return 0;
 }
