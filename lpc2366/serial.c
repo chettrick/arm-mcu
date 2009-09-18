@@ -93,20 +93,52 @@ int serial_init(unsigned port, unsigned long int baudrate)
 
 int serial_stdio(unsigned port, unsigned long int baudrate)
 {
+  errno = 0;
+
+  if (port+1 > MAX_SERIAL_PORTS)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+
   serial_init(port, baudrate);
 
   device_unregister("stdin");
   device_unregister("stdout");
   device_unregister("stderr");
 
-  device_register_fd("stdin", DEVICE_TYPE_CHAR, 0, port, (void *) baudrate,
-    (device_init_t) serial_init, serial_write, serial_read, serial_txready, serial_rxready);
+  device_register_char_fd("stdin", 0, port, (void *) baudrate, (device_init_t) serial_init, NULL, serial_read, NULL, serial_rxready);
+  device_register_char_fd("stdout", 1, port, (void *) baudrate, (device_init_t) serial_init, NULL, serial_read, NULL, serial_rxready);
+  device_register_char_fd("stderr", 2, port, (void *) baudrate, (device_init_t) serial_init, NULL, serial_read, NULL, serial_rxready);
 
-  device_register_fd("stdout", DEVICE_TYPE_CHAR, 1, port, (void *) baudrate,
-    (device_init_t) serial_init, serial_write, serial_read, serial_txready, serial_rxready);
+  return 0;
+}
 
-  device_register_fd("stderr", DEVICE_TYPE_CHAR, 2, port, (void *) baudrate,
-    (device_init_t) serial_init, serial_write, serial_read, serial_txready, serial_rxready);
+/* Register a serial port device */
+
+int serial_register(unsigned port, unsigned long int baudrate)
+{
+  int status;
+  char name[DEVICE_NAME_SIZE];
+
+  errno = 0;
+
+  if (port+1 > MAX_SERIAL_PORTS)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+
+  status = serial_init(port, baudrate);
+  if (status) return status;
+
+  memset(name, 0, sizeof(name));
+  sprintf(name, "com%d", port);
+
+  device_unregister(name);
+
+  device_register_char(name, port, (void *) baudrate,
+   (device_init_t) serial_init, serial_write, serial_read, serial_txready, serial_rxready);
 
   return 0;
 }
@@ -115,6 +147,14 @@ int serial_stdio(unsigned port, unsigned long int baudrate)
 
 int serial_txready(unsigned port)
 {
+  errno = 0;
+
+  if (port+1 > MAX_SERIAL_PORTS)
+  {
+    errno = ENODEV;
+    return 0;
+  }
+
   return UxLSR & 0x20;
 }
 
@@ -123,6 +163,14 @@ int serial_txready(unsigned port)
 int serial_write(unsigned port, char *buf, unsigned int count)
 {
   int n;
+
+  errno = 0;
+
+  if (port+1 > MAX_SERIAL_PORTS)
+  {
+    errno = ENODEV;
+    return -1;
+  }
 
   for (n = 0; n < count; n++)
   {
@@ -137,6 +185,14 @@ int serial_write(unsigned port, char *buf, unsigned int count)
 
 int serial_rxready(unsigned port)
 {
+  errno = 0;
+
+  if (port+1 > MAX_SERIAL_PORTS)
+  {
+    errno = ENODEV;
+    return 0;
+  }
+
   return UxLSR & 0x01;
 }
 
@@ -144,6 +200,14 @@ int serial_rxready(unsigned port)
 
 int serial_read(unsigned port, char *buf, unsigned int count)
 {
+  errno = 0;
+
+  if (port+1 > MAX_SERIAL_PORTS)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+
   if (serial_rxready(port))
   {
     *buf = UxRBR;

@@ -16,6 +16,10 @@ int serial_init(unsigned port, unsigned long int baudrate);
 
 int serial_stdio(unsigned port, unsigned long int baudrate);
 
+/* Register a serial port device */
+
+int serial_register(unsigned port, unsigned long int baudrate);
+
 /* Return TRUE if transmitter is ready to accept data */
 
 int serial_txready(unsigned port);

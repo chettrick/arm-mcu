@@ -42,13 +42,13 @@ typedef struct
 
 // Device registration functions
 
-int device_register(char *name, device_type_t type, unsigned subdevice, void *settings,
-                    device_init_t init, device_write_t write, device_read_t read,
-                    device_write_ready_t write_ready, device_read_ready_t read_ready);
+int device_register_char(char *name, unsigned subdevice, void *settings,
+                         device_init_t init, device_write_t write, device_read_t read,
+                         device_write_ready_t write_ready, device_read_ready_t read_ready);
 
-int device_register_fd(char *name, device_type_t type, int fd, unsigned subdevice, void *settings,
-                       device_init_t init, device_write_t write, device_read_t read,
-                       device_write_ready_t write_ready, device_read_ready_t read_ready);
+int device_register_char_fd(char *name, int fd, unsigned subdevice, void *settings,
+                            device_init_t init, device_write_t write, device_read_t read,
+                            device_write_ready_t write_ready, device_read_ready_t read_ready);
 
 int device_unregister(char *name);
 int device_lookup(char *name);
