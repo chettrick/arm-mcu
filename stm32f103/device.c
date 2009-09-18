@@ -257,12 +257,12 @@ int device_read(int fd, char *s, unsigned int count)
 
   memset(s, 0, count);
 
-// Pass raw read directly to device driver
+// Pass file, directory, or block device or character device raw read directly to device driver
 
-  if (d->flags & O_BINARY)
+  if ((d->type != DEVICE_TYPE_CHAR) || (d->flags & O_BINARY))
     return d->read(d->subdevice, s, count);
 
-// Handle cooked input here
+// Handle cooked character device input here
 
   for (p = s; p < s + count - 1;)
   {
@@ -323,12 +323,12 @@ int device_write(int fd, char *s, unsigned int count)
     return -1;
   }
 
-// Pass binary write directly to device driver
+// Pass file, directory, or block device or character device raw write directly to device driver
 
-  if (device_table[fd].flags & O_BINARY)
+  if ((d->type != DEVICE_TYPE_CHAR) || (d->flags & O_BINARY))
     return device_table[fd].write(device_table[fd].subdevice, s, count);
 
-// Handle cooked (CR inserted before each LF) output here
+// Handle cooked character device output here
 
   for (i = 0; i < count; i++)
   {
