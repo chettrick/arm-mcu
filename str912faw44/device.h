@@ -68,9 +68,13 @@ int device_close(int fd);
 int device_init(int fd, void *settings);
 int device_ready_read(int fd);
 int device_ready_write(int fd);
+int device_read_raw(int fd, char *s, unsigned int count);
+int device_read_cooked(int fd, char *s, unsigned int count);
 int device_read(int fd, char *s, unsigned int count);
-int device_write(int fd, char *s, unsigned int count);
 int device_getc(int fd);
+int device_write_raw(int fd, char *s, unsigned int count);
+int device_write_cooked(int fd, char *s, unsigned int count);
+int device_write(int fd, char *s, unsigned int count);
 int device_putc(int fd, char c);
 
 // File system support method functions

@@ -302,9 +302,37 @@ int device_ready_write(int fd)
   return device_table[fd].write_ready(device_table[fd].subdevice);
 }
 
-/* Read from a device */
+/* Read uncooked input from a device (whatever is available) */
 
-int device_read(int fd, char *s, unsigned int count)
+int device_read_raw(int fd, char *s, unsigned int count)
+{
+  errno = 0;
+
+  if ((fd < 0) || (fd >= MAX_DEVICES))
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (device_table[fd].type == DEVICE_TYPE_UNUSED)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+
+  if (device_table[fd].read == NULL)
+  {
+    errno = EIO;
+    return -1;
+  }
+
+  memset(s, 0, count);
+  return device_table[fd].read(device_table[fd].subdevice, s, count);
+}
+
+/* Read cooked input from a device */
+
+int device_read_cooked(int fd, char *s, unsigned int count)
 {
   device_t *d;
   char *p;
@@ -335,16 +363,11 @@ int device_read(int fd, char *s, unsigned int count)
 
   memset(s, 0, count);
 
-// Pass file, directory, or block device or character device raw read directly to device driver
-
-  if ((d->type != DEVICE_TYPE_CHAR) || (d->flags & O_BINARY))
-    return d->read(d->subdevice, s, count);
-
 // Handle cooked character device input here
 
   for (p = s; p < s + count - 1;)
   {
-    while ((len = d->read(d->subdevice, &c, 1)) != 1);
+    while ((len = d->read(d->subdevice, &c, 1)) == 0);
     if (len < 0) return len;
 
     switch (c)
@@ -352,9 +375,10 @@ int device_read(int fd, char *s, unsigned int count)
       case '\r' :
       case '\n' :
         if (fd > 0)
-          d->write(d->subdevice, "\r\n", 2);
+          device_write_raw(fd, "\r\n", 2);
         else
-          device_table[1].write(device_table[1].subdevice, "\r\n", 2);
+          device_write_raw(1, "\r\n", 2);
+
         *p = '\n';
 
         return strlen(s);
@@ -365,17 +389,17 @@ int device_read(int fd, char *s, unsigned int count)
           *p-- = 0;
 
           if (fd > 0)
-            d->write(d->subdevice, "\b \b", 3);
+            device_write_raw(fd, "\b \b", 3);
           else
-            device_table[1].write(device_table[1].subdevice, "\b \b", 3);
+            device_write_raw(1, "\b \b", 3);
         }
         break;
 
       default :
         if (fd > 0)
-          d->write(d->subdevice, &c, 1);
+          device_write_raw(fd, &c, 1);
         else
-          device_table[1].write(device_table[1].subdevice, &c, 1);
+          device_write_raw(1, &c, 1);
 
         *p++ = c;
         break;
@@ -385,15 +409,11 @@ int device_read(int fd, char *s, unsigned int count)
   return strlen(s);
 }
 
-/* Write to a device */
+/* Read input from a device */
 
-int device_write(int fd, char *s, unsigned int count)
+int device_read(int fd, char *s, unsigned int count)
 {
-  int i;
-
   errno = 0;
-
-// Validate file descriptor
 
   if ((fd < 0) || (fd >= MAX_DEVICES))
   {
@@ -401,39 +421,12 @@ int device_write(int fd, char *s, unsigned int count)
     return -1;
   }
 
-  if (device_table[fd].type == DEVICE_TYPE_UNUSED)
-  {
-    errno = ENODEV;
-    return -1;
-  }
-
-  if (device_table[fd].write == NULL)
-  {
-    errno = EIO;
-    return -1;
-  }
-
-// Pass file, directory, or block device or character device raw write directly to device driver
-
   if ((device_table[fd].type != DEVICE_TYPE_CHAR) || (device_table[fd].flags & O_BINARY))
-    return device_table[fd].write(device_table[fd].subdevice, s, count);
-
-// Handle cooked character device output here
-
-  for (i = 0; i < count; i++)
-  {
-    if (*s == '\n') if (device_table[fd].write(device_table[fd].subdevice, "\r", 1) != 1)
-      return -1;
-
-    if (device_table[fd].write(device_table[fd].subdevice, s, 1) != 1)
-      return -1;
-
-    s++;
-  }
-
-  return count;
+    return device_read_raw(fd, s, count);
+  else
+    return device_read_cooked(fd, s, count);
 }
-  
+
 /* Read a single unbuffered, unechoed character from a device */
 
 int device_getc(int fd)
@@ -469,6 +462,119 @@ int device_getc(int fd)
     return len;
 }
 
+/* Write uncooked output to a device */
+
+int device_write_raw(int fd, char *s, unsigned int count)
+{
+  int len;
+  int i;
+
+  errno = 0;
+
+// Validate file descriptor
+
+  if ((fd < 0) || (fd >= MAX_DEVICES))
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (device_table[fd].type == DEVICE_TYPE_UNUSED)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+
+  if (device_table[fd].write == NULL)
+  {
+    errno = EIO;
+    return -1;
+  }
+
+// Dispatch raw data to device driver.  Keep trying if less than the whole
+// buffer is transferred.
+
+  for (i = 0; i < count;)
+  {
+    len = device_table[fd].write(device_table[fd].subdevice, s, count - i);
+    if (len < 0) return len;
+
+    s += len;
+    i += len;
+  }
+
+  return count;
+}
+
+/* Write cooked (CR before LF) output to a device */
+
+int device_write_cooked(int fd, char *s, unsigned int count)
+{
+  int len;
+  int i;
+
+  errno = 0;
+
+// Validate file descriptor
+
+  if ((fd < 0) || (fd >= MAX_DEVICES))
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (device_table[fd].type == DEVICE_TYPE_UNUSED)
+  {
+    errno = ENODEV;
+    return -1;
+  }
+
+  if (device_table[fd].write == NULL)
+  {
+    errno = EIO;
+    return -1;
+  }
+
+// Handle cooked character device output here
+
+  for (i = 0; i < count;)
+  {
+    if (*s == '\n')
+    {
+      while ((len = device_table[fd].write(device_table[fd].subdevice, "\r", 1)) == 0);
+      if (len < 0) return len;
+    }
+
+    while ((len = device_table[fd].write(device_table[fd].subdevice, s, 1)) == 0);
+    if (len < 0) return len;
+
+    s++;
+    i++;
+  }
+
+  return count;
+}
+
+/* Write to a device */
+
+int device_write(int fd, char *s, unsigned int count)
+{
+  errno = 0;
+
+// Validate file descriptor
+
+  if ((fd < 0) || (fd >= MAX_DEVICES))
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if ((device_table[fd].type != DEVICE_TYPE_CHAR) || (device_table[fd].flags & O_BINARY))
+    return device_write_raw(fd, s, count);
+  else
+    return device_write_cooked(fd, s, count);
+}
+  
 /* Write a single character to a device */
 
 int device_putc(int fd, char c)
