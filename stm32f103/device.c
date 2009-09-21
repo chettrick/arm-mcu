@@ -512,6 +512,7 @@ int device_write_cooked(int fd, char *s, unsigned int count)
 {
   int len;
   int i;
+  char *p;
 
   errno = 0;
 
@@ -539,17 +540,30 @@ int device_write_cooked(int fd, char *s, unsigned int count)
 
   for (i = 0; i < count;)
   {
-    if (*s == '\n')
+    p = memchr(s, '\n', count - i);
+
+    if (p == NULL)
     {
-      while ((len = device_table[fd].write(device_table[fd].subdevice, "\r", 1)) == 0);
+      len = device_write_raw(fd, s, count);	// Write everything
       if (len < 0) return len;
+
+      i += len;
+      s += len;
     }
+    else
+    {
+      len = device_write_raw(fd, s, p - s);	// Write everything up to LF
+      if (len < 0) return len;
 
-    while ((len = device_table[fd].write(device_table[fd].subdevice, s, 1)) == 0);
-    if (len < 0) return len;
+      i += len;
+      s += len;
 
-    s++;
-    i++;
+      len = device_write_raw(fd, "\r\n", 2);	// Write CR/LF
+      if (len < 0) return len;
+
+      i++;
+      s++;
+    }
   }
 
   return count;
