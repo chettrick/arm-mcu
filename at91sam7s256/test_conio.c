@@ -15,7 +15,7 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-  serial_stdio(0, 115200);
+  serial_stdio(CONSOLE_PORT, 115200);
 
   puts("\033[H\033[2JAT91SAM7S256 Console I/O Test (" __DATE__ " " __TIME__ ")\n");
 

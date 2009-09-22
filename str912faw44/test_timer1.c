@@ -28,11 +28,11 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-#ifdef CONFIG_USBCONSOLE
+#ifdef CONSOLE_USB
   usb_serial_stdio();
   getch();
 #else
-  serial_stdio(0, 115200);
+  serial_stdio(CONSOLE_PORT, 115200);
 #endif
 
   puts("\033[H\033[2JSTR912FAW44 Timer 1 Interrupt Test (" __DATE__ " " __TIME__ ")\n");

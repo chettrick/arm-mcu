@@ -13,4 +13,10 @@ extern void cpu_init(unsigned long int frequency);
 #include <FWLib/91x_lib.h>
 #include <FWLib/91x_it.h>
 
-#define DEFAULT_CPU_FREQ 48000000
+#ifndef DEFAULT_CPU_FREQ
+#define DEFAULT_CPU_FREQ	48000000
+#endif
+
+#ifndef CONSOLE_PORT
+#define CONSOLE_PORT		0
+#endif
