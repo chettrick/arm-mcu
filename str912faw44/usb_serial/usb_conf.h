@@ -1,19 +1,18 @@
-/******************** (C) COPYRIGHT 2006 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : usb_conf.h
 * Author             : MCD Application Team
-* Date First Issued  : 10/01/2006 : V1.0
+* Version            : V2.0.0
+* Date               : 09/29/2008
 * Description        : Virtual Com Port Demo configuration file
 ********************************************************************************
-* History:
-* 10/01/2006 : V1.0
-********************************************************************************
-* THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
 * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
 * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
 * CONTENT OF SUCH SOFTWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 *******************************************************************************/
+
 
 #ifndef __USB_CONF_H
 #define __USB_CONF_H
@@ -22,7 +21,7 @@
 /*-------------------------------------------------------------*/
 /* define the µC and the Bufferd Mode                          */
 /*-------------------------------------------------------------*/
-//#define STR7xx  /*STR7 family*/ 
+//#define STR7xx  /*STR7 family*/
 //#define STR71x  /* STR71x µCs*/
 #define STR91x   /*STR91x Family*/
 #define STR91x_USB_BUFFERED /* Buffered Mode*/
@@ -31,7 +30,7 @@
 /* EP_NUM */
 /* defines how many endpoints are used by the device */
 /*-------------------------------------------------------------*/
-#define EP_NUM  			(4)
+#define EP_NUM     (4)
 
 /*-------------------------------------------------------------*/
 /* --------------   Buffer Description Table  -----------------*/
@@ -56,13 +55,13 @@
 /* mask defining which events has to be handled */
 /* by the device application software */
 #define IMR_MSK (CNTR_CTRM  | \
-				 CNTR_WKUPM | \
-				 CNTR_SUSPM | \
-				 CNTR_ERRM  | \
-				 CNTR_SOFM  | \
-				 CNTR_ESOFM | \
-		 		 CNTR_RESETM  \
-		 		)
+                 CNTR_WKUPM | \
+                 CNTR_SUSPM | \
+                 CNTR_ERRM  | \
+                 CNTR_SOFM  | \
+                 CNTR_ESOFM | \
+                 CNTR_RESETM  \
+                )
 
 /* CTR service routines */
 /* associated to defined endpoints */
@@ -99,4 +98,4 @@
 #define  EP15_OUT_Callback  NOP_Process
 
 #endif /*__USB_CONF_H*/
-/******************* (C) COPYRIGHT 2006 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

@@ -7,6 +7,7 @@
 #include <91x_lib.h>
 #include <usb_lib.h>
 #include <usb_desc.h>
+#include <usb_pwr.h>
 #include <usb_serial.h>
 
 #include <stdio.h>
@@ -216,4 +217,26 @@ void EP3_OUT_Callback(void)
 void EP1_IN_Callback(void)
 {
   txready = TRUE;
+}
+
+void Enter_LowPowerMode(void)
+{
+  /* Set the device state to suspend */
+  bDeviceState = SUSPENDED;
+}
+
+void Leave_LowPowerMode(void)
+{
+  DEVICE_INFO *pInfo = &Device_Info;
+
+  /* Set the device state to the correct state */
+  if (pInfo->Current_Configuration != 0)
+  {
+    /* Device configured */
+    bDeviceState = CONFIGURED;
+  }
+  else
+  {
+    bDeviceState = ATTACHED;
+  }
 }

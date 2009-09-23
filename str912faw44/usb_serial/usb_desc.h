@@ -1,19 +1,18 @@
-/******************** (C) COPYRIGHT 2006 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : usb_desc.h
 * Author             : MCD Application Team
-* Date First Issued  : 10/01/2006 : V1.0
+* Version            : V2.0.0
+* Date               : 09/29/2008
 * Description        : Descriptor Header for Virtual Com Port Demo
 ********************************************************************************
-* History:
-* 10/01/2006 : V1.0
-********************************************************************************
-* THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
 * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
 * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
 * CONTENT OF SUCH SOFTWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 *******************************************************************************/
+
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USB_DESC_H
@@ -29,12 +28,12 @@
 #define USB_INTERFACE_DESCRIPTOR_TYPE           0x04
 #define USB_ENDPOINT_DESCRIPTOR_TYPE            0x05
 
-#define VIRTUAL_COM_PORT_DATA_SIZE	           64
-#define VIRTUAL_COM_PORT_INT_SIZE                  8 
+#define VIRTUAL_COM_PORT_DATA_SIZE            64
+#define VIRTUAL_COM_PORT_INT_SIZE                  8
 
 #define VIRTUAL_COM_PORT_SIZ_DEVICE_DESC           18
-#define	VIRTUAL_COM_PORT_SIZ_CONFIG_DESC           67
-#define	VIRTUAL_COM_PORT_SIZ_STRING_LANGID         4
+#define VIRTUAL_COM_PORT_SIZ_CONFIG_DESC           67
+#define VIRTUAL_COM_PORT_SIZ_STRING_LANGID         4
 #define VIRTUAL_COM_PORT_SIZ_STRING_VENDOR         38
 #define VIRTUAL_COM_PORT_SIZ_STRING_PRODUCT        52
 #define VIRTUAL_COM_PORT_SIZ_STRING_SERIAL         22
@@ -53,4 +52,4 @@ extern const u8 Virtual_Com_Port_StringSerial[VIRTUAL_COM_PORT_SIZ_STRING_SERIAL
 
 #endif /* __USB_DESC_H */
 
-/******************* (C) COPYRIGHT 2006 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
