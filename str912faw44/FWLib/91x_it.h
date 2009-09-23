@@ -1,8 +1,8 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : 91x_it.h
 * Author             : MCD Application Team
-* Version            : V2.0
-* Date               : 12/07/2007
+* Version            : V2.1
+* Date               : 12/22/2008
 * Description        : This file contains the headers of the interrupt
 *                      handlers'routines
 ********************************************************************************
@@ -69,4 +69,4 @@ void DefaultVector_Handler(void);
 
 #endif /* __91x_IT_H */
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

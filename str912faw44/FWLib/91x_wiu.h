@@ -1,8 +1,8 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : 91x_wiu.h
 * Author             : MCD Application Team
-* Version            : V2.0
-* Date               : 12/07/2007
+* Version            : V2.1
+* Date               : 12/22/2008
 * Description        : This file contains all the functions prototypes for the
 *                      WIU firmware library.
 **********************************************************************************
@@ -86,5 +86,5 @@ void WIU_ClearITPendingBit(u32 WIU_Line);
 
 #endif /* __91x_WIU_H */
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
 

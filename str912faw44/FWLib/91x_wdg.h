@@ -1,8 +1,8 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : 91x_wdg.h
 * Author             : MCD Application Team
-* Version            : V2.0
-* Date               : 12/07/2007
+* Version            : V2.1
+* Date               : 12/22/2008
 * Description        : This file contains all the functions prototypes for the
 *                      WDG firmware library.
 ********************************************************************************
@@ -62,7 +62,6 @@ This value is loaded in the WDG Counter when it starts counting.*/
 
 /* Exported functions ------------------------------------------------------- */
 
-void WDG_DeInit(void);
 void WDG_Init(WDG_InitTypeDef* WDG_InitStruct);
 void WDG_StructInit(WDG_InitTypeDef* WDG_InitStruct);
 void WDG_TimerModeCmd(FunctionalState NewState);
@@ -76,4 +75,4 @@ void WDG_ClearITPendingBit(void);
 void WDG_Reload(void);
 #endif /* __WDG_H */
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

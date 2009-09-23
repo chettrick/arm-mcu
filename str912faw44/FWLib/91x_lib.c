@@ -1,8 +1,8 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : 91x_lib.c
 * Author             : MCD Application Team
-* Version            : V2.0
-* Date               : 12/07/2007
+* Version            : V2.1
+* Date               : 12/22/2008
 * Description        : This file provides all peripherals pointers
 *                    : initialization.
 ********************************************************************************
@@ -278,4 +278,4 @@ void debug(void)
 }
 #endif  /* DEBUG */
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

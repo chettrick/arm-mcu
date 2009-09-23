@@ -1,8 +1,8 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : 91x_uart.c
 * Author             : MCD Application Team
-* Version            : V2.0
-* Date               : 12/07/2007
+* Version            : V2.1
+* Date               : 12/22/2008
 * Description        : This file provides all the UART firmware functions.
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
@@ -655,4 +655,4 @@ void UART_DTRConfig(UART_LevelTypeDef LevelState)
     UART0->CR &= UART_DTR_HighLevel_Mask;
   }
 }
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

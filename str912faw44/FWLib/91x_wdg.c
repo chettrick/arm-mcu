@@ -1,8 +1,8 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : 91x_wdg.c
 * Author             : MCD Application Team
-* Version            : V2.0
-* Date               : 12/07/2007
+* Version            : V2.1
+* Date               : 12/22/2008
 * Description        : This file provides all the WDG firmware functions.
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
@@ -39,22 +39,6 @@
 /* Registers reset value */
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-
-/******************************************************************************
-* Function Name  : WDG_DeInit
-* Description    : Deinitializes the WDG peripheral registers to their default
-*                  reset values.
-* Input          : None
-* Output         : None
-* Return         : None
-*******************************************************************************/
-void WDG_DeInit(void)
-{
-
-  SCU_APBPeriphReset(__WDG, ENABLE);  /*WDG peripheral under Reset */
-  SCU_APBPeriphReset(__WDG, DISABLE);  /*WDG peripheral Reset off*/
-  
-}
 
 /*******************************************************************************
 * Function Name  : WDG_StructInit
@@ -266,4 +250,4 @@ void WDG_Reload(void)
 }
 
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

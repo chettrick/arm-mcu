@@ -1,8 +1,8 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : 91x_wiu.c
 * Author             : MCD Application Team
-* Version            : V2.0
-* Date               : 12/07/2007
+* Version            : V2.1
+* Date               : 12/22/2008
 * Description        : This file provides all the WIU firmware functions.
 **********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS WITH
@@ -109,7 +109,7 @@ void WIU_Cmd(FunctionalState NewState )
   {
         /* Disable the Wake-up Unit (for interrupts and wake-up from low power modes) */
 
-     WIU->CTRL &= WIU_Enable ;
+     WIU->CTRL &= ~WIU_Enable ;
   }
 }
 
@@ -198,4 +198,4 @@ void WIU_ClearITPendingBit(u32 WIU_Line)
 }
 
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

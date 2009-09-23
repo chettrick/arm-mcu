@@ -1,8 +1,8 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : 91x_scu.c
 * Author             : MCD Application Team
-* Version            : V2.0
-* Date               : 12/07/2007
+* Version            : V2.1
+* Date               : 12/22/2008
 * Description        : This file provides the SCU library firmware functions
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS WITH
@@ -91,14 +91,13 @@ ErrorStatus SCU_PLLFactorsConfig(u8 PLLN, u8 PLLM, u8 PLLP)
 *******************************************************************************/
 ErrorStatus SCU_PLLCmd(FunctionalState NewState)
 {
-  vu32 i;
   if (NewState==ENABLE)
   {
     if (!((SCU->PLLCONF&SCU_PLLEN)&&(SCU->SYSSTATUS&SCU_FLAG_LOCK)))
     {
       SCU->SYSSTATUS|=SCU_FLAG_LOCK;               /*clear LOCK bit*/
       SCU->PLLCONF |=SCU_PLLEN;                    /*PLL Enable*/
-      while(!SCU->SYSSTATUS&SCU_FLAG_LOCK);        /*Wait PLL to lock*/
+      while(!(SCU->SYSSTATUS&SCU_FLAG_LOCK));        /*Wait PLL to lock*/
       return SUCCESS;
     }
     else return ERROR;
@@ -107,7 +106,6 @@ ErrorStatus SCU_PLLCmd(FunctionalState NewState)
   {
     if(SCU->CLKCNTR&0x3)                /*check if PLL not sys CLK*/
     {
-      for(i=10;i>0;i--);                /*delay before PLL disabling*/
       SCU->PLLCONF &=~SCU_PLLEN;        /*PLL Disable*/
       return SUCCESS;
     }
@@ -184,9 +182,9 @@ void SCU_APBPeriphClockConfig(u32 APBPeriph, FunctionalState NewState)
 void SCU_AHBPeriphClockConfig(u32 AHBPeriph, FunctionalState NewState)
 {
   if (NewState==ENABLE)                     /*Enable clock for AHB peripheral*/
-  SCU->PCGRO |=AHBPeriph;
+  SCU->PCGR0 |=AHBPeriph;
   else
-  SCU->PCGRO &=~AHBPeriph;                  /*Disable clock for AHB peripheral*/
+  SCU->PCGR0 &=~AHBPeriph;                  /*Disable clock for AHB peripheral*/
 }
 
 /*******************************************************************************
@@ -674,4 +672,4 @@ void SCU_EMIclock_Pinconfig(FunctionalState NewState)
  }
 
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

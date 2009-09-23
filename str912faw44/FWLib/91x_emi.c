@@ -1,8 +1,8 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : 91x_emi.c
 * Author             : MCD Application Team
-* Version            : V2.0
-* Date               : 12/07/2007
+* Version            : V2.1
+* Date               : 12/22/2008
 * Description        : This file provides all the EMI firmware functions.
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
@@ -142,6 +142,12 @@ void EMI_StructInit( EMI_InitTypeDef *EMI_InitStruct)
    
   EMI_InitStruct->EMI_AccessWrite_Support=EMI_Write_Asyn;
   
+  /* Burst Write transfer length */
+  /*This member can be :"EMI_Write_4Data", "EMI_Write_8Data" or */
+  /*"EMI_Write_Continuous" for synchronous only*/
+  
+  EMI_InitStruct->EMI_BurstModeWrite_TransferLength = EMI_Write_4Data;
+  
   /* Select burst or non-burst write to memory*/
    
   EMI_InitStruct-> EMI_BurstModeWrite_Selection=EMI_NonBurstModeWrite;
@@ -225,4 +231,4 @@ void EMI_BCLKCmd(FunctionalState NewState)
 
 
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

@@ -1,9 +1,9 @@
 Changes Made to ST9x FWLib
 --------------------------
 
-Philip Munts, 9 July 2008
+Philip Munts, 23 September 2009
 
-1. Downloaded um0233.zip, version 2 January 2008, from www.st.com.
+1. Downloaded um0233.zip, version 2.1, February 2009, from www.st.com.
 
 2. Copied source and header files to this subdirectory.
 
@@ -16,3 +16,5 @@ Philip Munts, 9 July 2008
 5. Added some parantheses to 91x_adc.c to avoid a gcc compiler warning.
 
 6. Modified 91x_tim.c to reset the counter to 0x0000, not 0x1234.
+
+7. Removed unused variable i from SCU_PLLCmd() in 91x_scu.c.

@@ -1,8 +1,8 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : 91x_vic.c
 * Author             : MCD Application Team
-* Version            : V2.0
-* Date               : 12/07/2007
+* Version            : V2.1
+* Date               : 12/22/2008
 * Description        : This file provides all the VIC firmware functions.
 ********************************************************************************
 * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS WITH
@@ -533,7 +533,7 @@ static void VIC_ISRVectAddConfig(u16 VIC_Source, u16 VIC_Priority, \
 /*******************************************************************************
 * Function Name  : VIC_GetISRVectAdd
 * Description    : Get the ISR vector address of the correspondent line.
-* Input          : VIC_Source: specifies the number of the source line.
+* Input1          : VIC_Source: specifies the number of the source line.
 *                  This parameter can be one of the following values:
 *                     - WDG_ITLine   : VIC source 0
 *                     - SW_ITLine    : VIC source 1
@@ -567,15 +567,17 @@ static void VIC_ISRVectAddConfig(u16 VIC_Source, u16 VIC_Priority, \
 *                     - EXTIT3_ITLine: VIC source 29
 *                     - USBWU_ITLine : VIC source 30
 *                     - PFQBC_ITLine : VIC source 31
+* Input2         : VIC_Priority: specifies the priority of the interrupt.
+*                  It can be a value from 0 to 15. 0 is the highest priority.
 * Output         : None
 * Return         : The correspondent ISR vector address.
 *******************************************************************************/
-u32 VIC_GetISRVectAdd(u16 VIC_Source)
+u32 VIC_GetISRVectAdd(u16 VIC_Source,u16 VIC_Priority)
 {
   if (VIC_Source < VIC_REGISTER_NUMBER) /* VIC0 */
-    return VIC0->VAiR[VIC_Source];
+    return VIC0->VAiR[VIC_Priority];
   else /* VIC1 */
-    return VIC1->VAiR[VIC_Source - VIC_REGISTER_NUMBER];
+    return VIC1->VAiR[VIC_Priority]; 
 }
 
 /*******************************************************************************
@@ -838,4 +840,4 @@ void VIC_Config(u16 VIC_Source, VIC_ITLineMode VIC_LineMode, u8 VIC_Priority)
   VIC_ITSourceConfig(VIC_Source, VIC_Priority);
 }
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

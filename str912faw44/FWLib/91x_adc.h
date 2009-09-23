@@ -1,8 +1,8 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : 91x_adc.h
 * Author             : MCD Application Team
-* Version            : V2.0
-* Date               : 12/07/2007
+* Version            : V2.1
+* Date               : 12/22/2008
 * Description        : This file contains all the functions prototypes for the
 *                      ADC firmware library.
 ********************************************************************************
@@ -131,5 +131,5 @@ void ADC_DMACmd(FunctionalState ADC_NewState);
 void ADC_AutomaticClockGatedCmd(FunctionalState ADC_NewState);
 #endif /* __91x_ADC_H */
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
 

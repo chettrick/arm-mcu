@@ -1,8 +1,8 @@
-/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+/******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : 91x_gpio.h
 * Author             : MCD Application Team
-* Version            : V2.0
-* Date               : 12/07/2007
+* Version            : V2.1
+* Date               : 12/22/2008
 * Description        : This file contains all the functions prototypes for the
 *                      GPIO firmware library.
 ********************************************************************************
@@ -89,4 +89,4 @@ void GPIO_ANAPinConfig(u8 GPIO_ANAChannel, FunctionalState NewState);
 
 #endif /* _91x_GPIO_H */
 
-/******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
+/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
