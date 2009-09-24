@@ -10,7 +10,8 @@ CFLAGS		+= -I$(FWLIB)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
-.PHONY:		reset
+.PHONY:		clean_$(MCU) lib reset
+
 .SUFFIXES:	.flashocd
 
 # Build processor dependent support library
@@ -19,6 +20,8 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	for F in $(FWLIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
+
+lib: lib$(MCU).a
 
 # Reset the target
 

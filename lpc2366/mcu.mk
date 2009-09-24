@@ -11,7 +11,7 @@ LPC21ISPBAUD	?= 19200
 LPC21ISPCLOCK	?= 12000
 LPC21ISPFLAGS	?= -control
 
-.PHONY:		reset
+.PHONY:		clean_$(MCU) lib reset
 
 .SUFFIXES:	.flashisp .flashocd
 
@@ -19,6 +19,8 @@ LPC21ISPFLAGS	?= -control
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
+
+lib: lib$(MCU).a
 
 # Reset the target
 

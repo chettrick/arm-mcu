@@ -6,7 +6,7 @@ ARCH		= arm7tdmi
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
-.PHONY:		reset
+.PHONY:		clean_$(MCU) lib reset
 
 .SUFFIXES:	.flashocd
 
@@ -14,6 +14,8 @@ LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
+
+lib: lib$(MCU).a
 
 # Reset the target
 

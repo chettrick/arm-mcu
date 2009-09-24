@@ -12,7 +12,7 @@ USBSERIAL	= $(MCUDEPENDENT)/usb_serial
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o time.o
 
-.PHONY:		reset
+.PHONY:		clean_$(MCU) lib reset
 
 .SUFFIXES:	.flashocd
 
@@ -24,6 +24,8 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
+
+lib: lib$(MCU).a
 
 # Reset the target
 
