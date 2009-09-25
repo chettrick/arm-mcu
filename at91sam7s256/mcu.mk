@@ -4,6 +4,9 @@
 
 ARCH		= arm7tdmi
 
+AT91LIB		= $(MCUDEPENDENT)/at91lib
+CFLAGS		+= -I$(AT91LIB)
+
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
 .PHONY:		clean_$(MCU) lib reset
@@ -14,6 +17,8 @@ LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
+	for F in $(AT91LIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
+	$(AR) crs lib$(MCU).a $(AT91LIB)/*.o
 
 lib: lib$(MCU).a
 
@@ -25,7 +30,7 @@ reset:
 # Clean out working files
 
 clean_$(MCU):
-	rm -f *.a *.o
+	rm -f *.a *.o $(AT91LIB)/*.o
 
 # Define a suffix rule for programming the flash with OpenOCD
 

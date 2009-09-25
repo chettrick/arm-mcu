@@ -1,0 +1,48 @@
+Changes to AT91LIB source files
+-------------------------------
+
+$Id$
+
+1.  Downloaded at91lib_softpack_1.5.zip from:
+
+    http://www.at91.com/samphpbb/download/file.php?id=28
+
+2.  Unzipped at91lib_softpack_1.5.zip.
+
+3.  Copied peripherals/*/* to directory at91lib.
+
+4.  Copied utility/math.* directory at91lib/utility.
+
+5.  Copied boards/at91sam7s-ek/at91sam7s256/AT91SAM7S256.h to directory at91lib.
+
+6.  Removed all .dir files from at91lib.
+
+7.  Strip DOS CR's from all files in at91lib.
+
+8.  Changed '#include <adc/adc.h>' to '#include <adc.h>' in at91lib/adc.c.
+
+9.  Changed '#include <aic/aic.h>' to '#include <aic.h>' in at91lib/pio_it.c.
+
+10. Created minimal board.h, utility/assert.h, and utility/trace.h in at91lib.
+
+11. Removed files for hardware blocks not present in the AT91SAM7S256 ARM MCU:
+
+    at91lib/ac97c.*
+    at91lib/aes.*
+    at91lib/can.*
+    at91lib/cp15*.*
+    at91lib/dma.*
+    at91lib/eefc.*
+    at91lib/efc.*
+    at91lib/emac.*
+    at91lib/isi*.*
+    at91lib/mci.*
+    at91lib/rtc.*
+    at91lib/shdwc.*
+    at91lib/slcdc.*
+    at91lib/slck.*
+    at91lib/supc.*
+    at91lib/tdes.*
+    at91lib/tsadcc.*
+
+12. Also removed at91lib/dbgu.* since it conflicts with newlib.
