@@ -5,10 +5,8 @@
 ARCH		= arm9
 
 FWLIB		= $(MCUDEPENDENT)/FWLib
-USBLIB		= $(MCUDEPENDENT)/usb_serial
-CFLAGS		+= -I$(FWLIB) -I$(USBLIB)
-
 USBSERIAL	= $(MCUDEPENDENT)/usb_serial
+CFLAGS		+= -I$(FWLIB) -I$(USBSERIAL)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o time.o
 
