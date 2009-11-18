@@ -32,7 +32,7 @@ expect $prompt
 send "wait_halt\n"
 expect $prompt
 
-send "jtag_khz 3000\n"
+send "jtag_khz 1000\n"
 expect $prompt
 
 send "str9x flash_config 0 4 2 0 0x80000\n"
