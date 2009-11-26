@@ -18,4 +18,9 @@
 #define ADC_STARTUP_TIME_MAX		20
 #define ADC_TRACK_HOLD_TIME_MIN		600
 
+// Define some macros necessary to compile USB serial support
+
+#define BOARD_USB_ENDPOINTS_MAXPACKETSIZE(i)	((i == 0) ? 8 : 64)
+#define BOARD_USB_BMATTRIBUTES			USBConfigurationDescriptor_SELFPOWERED_NORWAKEUP
+
 #endif
