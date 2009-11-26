@@ -688,7 +688,7 @@ off_t device_seek(int fd, off_t pos, int whence)
 
   if (device_table[fd].type == DEVICE_TYPE_CHAR)
   {
-    errno = ENOTBLK;
+    errno = EINVAL;
     return -1;
   }
 
