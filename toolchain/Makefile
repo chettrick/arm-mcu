@@ -7,13 +7,13 @@ INSTBASE	= $(shell pwd)/$(PKGNAME)
 TEMP		= /tmp
 TARGETNAME	= arm-elf
 
-BINUTILVER	= 2.19.1
+BINUTILVER	= 2.20
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.4.1
+GCCVER		= 4.4.2
 GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
@@ -71,7 +71,7 @@ $(BINUTILDIST):
 binutils.done: $(BINUTILDIST)
 	rm -rf $(BINUTILSRC)
 	tar xzf $(BINUTILDIST)
-	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared --with-float=soft
+	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared --with-float=soft --disable-werror
 	$(MAKE) -C $(BINUTILSRC)
 	$(MAKE) -C $(BINUTILSRC) install
 	touch binutils.done
@@ -92,7 +92,7 @@ gcc.done: binutils.done $(GCCDIST)
 	rm -rf $(GCCOBJ)
 	tar xjf $(GCCDIST)
 	mkdir -p $(GCCOBJ)
-	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft $(GCCEXTRACONFIG)
+	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft --disable-werror $(GCCEXTRACONFIG)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) install
 	touch gcc.done
@@ -101,14 +101,13 @@ gcc.done: binutils.done $(GCCDIST)
 
 # Download newlib
 
-$(NEWLIBDIST):
-	wget -P $(TEMP) $(NEWLIBURL)
+$(NEWLIBSRC):
+	cvs -z 9 -d :pserver:anoncvs@sources.redhat.com:/cvs/src co newlib
+	mv src $(NEWLIBSRC)
 
 # Compile newlib
 
-newlib.done: gcc.done $(NEWLIBDIST) $(LIBCPDF) $(LIBMPDF)
-	rm -rf $(NEWLIBSRC)
-	tar xzf $(NEWLIBDIST)
+newlib.done: gcc.done $(NEWLIBSRC)
 	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls --disable-nls --disable-shared --with-float=soft
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC) install
@@ -117,7 +116,7 @@ newlib.done: gcc.done $(NEWLIBDIST) $(LIBCPDF) $(LIBMPDF)
 
 # Download newlib docs
 
-$(LIBCPDF):
+$(LIBCPDF): 
 	wget -P $(TEMP) $(LIBCPDFURL)
 
 $(LIBMPDF):
@@ -143,8 +142,7 @@ $(GDBDIST):
 gdb.done: $(GDBDIST)
 	rm -rf $(GDBSRC)
 	tar xjf $(GDBDIST)
-	cd $(GDBSRC) && patch -p0 <../gdb.patch
-	cd $(GDBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared
+	cd $(GDBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared --disable-werror
 	$(MAKE) -C $(GDBSRC)
 	$(MAKE) -C $(GDBSRC) install
 	touch gdb.done
