@@ -7,7 +7,7 @@ INSTBASE        = $(shell pwd)/$(PKGNAME)
 TEMP            = /tmp
 
 ifeq ($(shell uname), CYGWIN_NT-5.1)
-D2XXVER		= 2.04.16
+D2XXVER		= 2.06.00
 D2XXSERVER	= http://www.ftdichip.com/Driver/CDM
 D2XXDIST	= $(TEMP)/CDM_$(D2XXVER)_WHQL_Certified.zip
 D2XXURL		= $(D2XXSERVER)/CDM%20$(D2XXVER)%20WHQL%20Certified.zip
@@ -21,7 +21,7 @@ D2XXDIR		= libftd2xx$(D2XXVER)
 endif
 
 OPENOCDNAME	= openocd
-OPENOCDVER	= 0.2.0
+OPENOCDVER	= 0.3.1
 OPENOCDSERVER	= http://download.berlios.de/openocd
 OPENOCDDIST	= $(TEMP)/$(OPENOCDNAME)-$(OPENOCDVER).tar.gz
 OPENOCDURL	= $(OPENOCDSERVER)/`basename $(OPENOCDDIST)`
