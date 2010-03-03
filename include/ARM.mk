@@ -13,8 +13,8 @@ OBJCOPY		= $(CROSS_COMPILE)objcopy
 OBJDUMP		= $(CROSS_COMPILE)objdump
 GDB		= $(CROSS_COMPILE)gdb
 
-LPC21ISP	?= /usr/local/bin/lpc21isp
-OPENOCD		?= /usr/local/bin/openocd
+LPC21ISP	?= lpc21isp
+OPENOCD		?= openocd
 
 MCUDEPENDENT	?= $(ARMSRC)/$(MCU)
 STARTUP		?= $(MCUDEPENDENT)/crt0.o
