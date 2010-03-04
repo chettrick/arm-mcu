@@ -8,6 +8,7 @@ target remote localhost:3333
 
 # Reset target & gain control
 
+monitor gdb_breakpoint_override hard
 monitor soft_reset_halt
 monitor wait_halt
 info mem
