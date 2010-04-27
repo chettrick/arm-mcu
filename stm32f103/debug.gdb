@@ -4,7 +4,7 @@
 
 # Connect to the OpenOCD server
 
-target remote localhost:3333 
+target remote localhost:3333
 
 # Reset target & gain control
 
