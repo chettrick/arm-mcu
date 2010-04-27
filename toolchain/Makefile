@@ -7,7 +7,7 @@ INSTBASE	= $(shell pwd)/$(PKGNAME)
 TEMP		= /tmp
 TARGETNAME	= arm-elf
 
-BINUTILVER	= 2.20
+BINUTILVER	= 2.20.1
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
