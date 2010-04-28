@@ -8,7 +8,7 @@ target remote localhost:3333
 
 # Reset target & gain control
 
-monitor soft_reset_halt
+monitor reset halt
 monitor wait_halt
 info mem
 
