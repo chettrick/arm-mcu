@@ -11,6 +11,9 @@ LPC21ISPBAUD	?= 19200
 LPC21ISPCLOCK	?= 12000
 LPC21ISPFLAGS	?= -control
 
+FLASHEXP	?= $(MCUDEPENDENT)/flash.exp
+RESETEXP	?= $(MCUDEPENDENT)/reset.exp
+
 .PHONY:		clean_$(MCU) lib reset
 
 .SUFFIXES:	.flashisp .flashocd
@@ -25,7 +28,7 @@ lib: lib$(MCU).a
 # Reset the target
 
 reset:
-	$(MCUDEPENDENT)/reset.exp $(OPENOCD) $(OPENOCDCFG)
+	$(RESETEXP) $(OPENOCD) $(OPENOCDCFG)
 
 # Clean out working files
 
@@ -40,4 +43,4 @@ clean_$(MCU):
 # Define a suffix rule for programming the flash with OpenOCD
 
 .bin.flashocd:
-	$(MCUDEPENDENT)/flash.exp $(OPENOCD) $(OPENOCDCFG) $<
+	$(FLASHEXP) $(OPENOCD) $(OPENOCDCFG) $<

@@ -10,6 +10,9 @@ CFLAGS		+= -I$(AT91LIB) -I$(USBSERIAL)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
+FLASHEXP	?= $(MCUDEPENDENT)/flash.exp
+RESETEXP	?= $(MCUDEPENDENT)/reset.exp
+
 .PHONY:		clean_$(MCU) lib reset
 
 .SUFFIXES:	.flashocd
@@ -28,7 +31,7 @@ lib: lib$(MCU).a
 # Reset the target
 
 reset:
-	$(MCUDEPENDENT)/reset.exp $(OPENOCD) $(OPENOCDCFG)
+	$(RESETEXP) $(OPENOCD) $(OPENOCDCFG)
 
 # Clean out working files
 
@@ -38,4 +41,4 @@ clean_$(MCU):
 # Define a suffix rule for programming the flash with OpenOCD
 
 .bin.flashocd:
-	$(MCUDEPENDENT)/flash.exp $(OPENOCD) $(OPENOCDCFG) $<
+	$(FLASHEXP) $(OPENOCD) $(OPENOCDCFG) $<
