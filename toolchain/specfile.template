@@ -14,5 +14,8 @@ Source: %{name}-%{version}.tar.gz
 %description
 GCC toolchain for bare-machine ARM microcontrollers
 
+%post
+chmod -R -w /usr/local/arm-tools
+
 %files
 %defattr(-,root,root,555)
