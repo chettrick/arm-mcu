@@ -6,6 +6,7 @@ PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 TEMP		= /tmp
 TARGETNAME	= arm-elf
+MACHTYPE	= $(shell uname -i)
 
 BINUTILVER	= 2.20.1
 BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
@@ -181,7 +182,6 @@ endif
 fakeroot: readme.done
 	mkdir -p fakeroot/usr/local
 	cp -R -p arm-tools fakeroot/usr/local
-	chmod -R -w fakeroot
 
 specfile: specfile.template fakeroot
 	sed s/@@VERSION@@/$(VERSION)/g <specfile.template | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
