@@ -9,19 +9,19 @@ TARGETNAME	= arm-elf
 MACHTYPE	= $(shell uname -i)
 
 BINUTILVER	= 2.20.1
-BINUTILSERVER	= ftp://ftp.gnu.org/pub/gnu/binutils
+BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
 GCCVER		= 4.5.1
-GCCSERVER	= ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
+GCCSERVER	= http://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
 GCCOBJ		= gcc-$(GCCVER).obj
 
-NEWLIBVER	= 1.18.0
+NEWLIBVER	= 1.18.0-cvs-$(shell date +%Y-%j)
 NEWLIBSERVER	= ftp://sources.redhat.com/pub/newlib
 NEWLIBDIST	= $(TEMP)/newlib-$(NEWLIBVER).tar.gz
 NEWLIBURL	= $(NEWLIBSERVER)/`basename $(NEWLIBDIST)`
@@ -102,13 +102,16 @@ gcc.done: binutils.done $(GCCDIST)
 
 # Download newlib
 
-$(NEWLIBSRC):
+$(NEWLIBDIST):
 	cvs -z 9 -d :pserver:anoncvs@sources.redhat.com:/cvs/src co newlib
 	mv src $(NEWLIBSRC)
+	tar czf $(NEWLIBDIST) $(NEWLIBSRC)
 
 # Compile newlib
 
 newlib.done: gcc.done $(NEWLIBSRC)
+	rm -rf $(NEWLIBSRC)
+	tar xzf $(NEWLIBDIST)
 	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls --disable-nls --disable-shared --with-float=soft
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC) install
