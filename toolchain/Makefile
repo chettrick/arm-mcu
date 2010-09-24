@@ -40,7 +40,7 @@ GDBSRC		= insight-$(GDBVER)
 VERSION		= $(BINUTILVER)_$(GCCVER)_$(NEWLIBVER)_$(subst -,.,$(GDBVER))
 RELEASE		= 1
 
-ifeq ($(shell uname), CYGWIN_NT-5.1)
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 TARBALL		= $(PKGNAME)-$(VERSION)-cygwin.tgz
 else
 TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -s)-$(shell uname -i).tgz
@@ -169,7 +169,7 @@ readme.done: binutils.done gcc.done newlib.done newlibdocs.done gdb.done
 # Create toolchain tarball
 
 tarball: readme.done
-ifeq ($(shell uname), CYGWIN_NT-5.1)
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 	tar czf $(TARBALL) `basename $(INSTBASE)` --mode=ugo-w
 else
 	tar czf $(TARBALL) `basename $(INSTBASE)` --owner=root --group=root --mode=ugo-w
