@@ -21,7 +21,7 @@ GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
 GCCOBJ		= gcc-$(GCCVER).obj
 
-NEWLIBVER	= 1.18.0-cvs-$(shell date +%Y-%j)
+NEWLIBVER	= 1.18.0_cvs_$(shell date +%Y_%j)
 NEWLIBSERVER	= ftp://sources.redhat.com/pub/newlib
 NEWLIBDIST	= $(TEMP)/newlib-$(NEWLIBVER).tar.gz
 NEWLIBURL	= $(NEWLIBSERVER)/`basename $(NEWLIBDIST)`
