@@ -109,7 +109,7 @@ $(NEWLIBDIST):
 
 # Compile newlib
 
-newlib.done: gcc.done $(NEWLIBSRC)
+newlib.done: gcc.done $(NEWLIBDIST)
 	rm -rf $(NEWLIBSRC)
 	tar xzf $(NEWLIBDIST)
 	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls --disable-nls --disable-shared --with-float=soft
