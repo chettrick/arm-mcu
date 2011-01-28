@@ -8,20 +8,20 @@ TEMP		= /tmp
 TARGETNAME	= arm-elf
 MACHTYPE	= $(shell uname -i)
 
-BINUTILVER	= 2.20.1
+BINUTILVER	= 2.21
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 
-GCCVER		= 4.5.1
+GCCVER		= 4.5.2
 GCCSERVER	= http://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
 GCCOBJ		= gcc-$(GCCVER).obj
 
-NEWLIBVER	= 1.18.0_cvs_$(shell date +%Y_%j)
+NEWLIBVER	= 1.19.0
 NEWLIBSERVER	= ftp://sources.redhat.com/pub/newlib
 NEWLIBDIST	= $(TEMP)/newlib-$(NEWLIBVER).tar.gz
 NEWLIBURL	= $(NEWLIBSERVER)/`basename $(NEWLIBDIST)`
@@ -103,9 +103,7 @@ gcc.done: binutils.done $(GCCDIST)
 # Download newlib
 
 $(NEWLIBDIST):
-	cvs -z 9 -d :pserver:anoncvs@sources.redhat.com:/cvs/src co newlib
-	mv src $(NEWLIBSRC)
-	tar czf $(NEWLIBDIST) $(NEWLIBSRC)
+	wget -P $(TEMP) $(NEWLIBURL)
 
 # Compile newlib
 
