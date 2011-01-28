@@ -22,7 +22,7 @@ GCCSRC		= gcc-$(GCCVER)
 GCCOBJ		= gcc-$(GCCVER).obj
 
 NEWLIBVER	= 1.19.0
-NEWLIBSERVER	= ftp://sources.redhat.com/pub/newlib
+NEWLIBSERVER	= http://mirrors.kernel.org/sources.redhat.com/newlib
 NEWLIBDIST	= $(TEMP)/newlib-$(NEWLIBVER).tar.gz
 NEWLIBURL	= $(NEWLIBSERVER)/`basename $(NEWLIBDIST)`
 NEWLIBSRC	= newlib-$(NEWLIBVER)
@@ -32,7 +32,7 @@ LIBCPDF		= $(TEMP)/libc.pdf
 LIBMPDF		= $(TEMP)/libm.pdf
 
 GDBVER		= 6.8-1
-GDBSERVER	= ftp://sourceware.org/pub/insight/releases
+GDBSERVER	= http://mirrors.kernel.org/sources.redhat.com/insight/releases
 GDBDIST		= $(TEMP)/insight-$(GDBVER).tar.bz2
 GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
 GDBSRC		= insight-$(GDBVER)
