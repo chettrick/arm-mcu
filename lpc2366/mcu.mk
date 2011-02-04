@@ -16,9 +16,11 @@ LPC21ISPFLAGS	?= -control
 FLASHEXP	?= $(MCUDEPENDENT)/flash.exp
 RESETEXP	?= $(MCUDEPENDENT)/reset.exp
 
+MBED		?= /media/MBED
+
 .PHONY:		clean_$(MCU) lib reset
 
-.SUFFIXES:	.flashisp .flashocd
+.SUFFIXES:	.flashisp .flashocd .mbed
 
 # Build processor dependent support library
 
@@ -46,3 +48,10 @@ clean_$(MCU):
 
 .bin.flashocd:
 	$(FLASHEXP) $(OPENOCD) $(OPENOCDCFG) $<
+
+# Define a suffix rule for installing to an mbed board
+
+.bin.mbed:
+	test -d $(MBED) -a -w $(MBED)
+	cp $< $(MBED)
+	@echo -e "\nPress RESET on the LPC2368 mbed board to start $<\n"
