@@ -4,9 +4,11 @@
 
 ARCH		= arm7tdmi-s
 
+BOARDNAME	?= OLIMEX_LPC_P2378
+
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
-LPC21ISPDEV	?= /dev/cua00
+LPC21ISPDEV	?= /dev/ttyS0
 LPC21ISPBAUD	?= 19200
 LPC21ISPCLOCK	?= 12000
 LPC21ISPFLAGS	?= -control

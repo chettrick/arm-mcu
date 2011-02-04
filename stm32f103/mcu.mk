@@ -5,6 +5,8 @@
 ARCH		= cortex-m3
 ARCHFLAGS	= -mthumb
 
+BOARDNAME	?= OLIMEX_STM32_P103
+
 FWLIB		= $(MCUDEPENDENT)/FWLib
 CFLAGS		+= -I$(FWLIB)
 
