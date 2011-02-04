@@ -29,7 +29,7 @@ void cpu_init(unsigned long int frequency)
 
   while (!(PLLSTAT & (1 << 26))); // Wait for PLL lock
 
-  CCLKCFG = 5;			// CPU clock is Fcco/4 (48 MHz)
+  CCLKCFG = 3;			// CPU clock is Fcco/4 (72 MHz)
   USBCLKCFG = 5;		// USB clock is Fcco/6 (48 MHz)
 
   PLLCON = 3;			// Connect PLL
