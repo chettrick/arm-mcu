@@ -1,16 +1,16 @@
-/* Linker script for LPC2366 ARM MCU */
+/* Linker script for LPC2364/65/66/67/68/77/78/87/88 ARM MCU */
 
 /* $Id$ */
 
 MEMORY {
-  flash : ORIGIN = 0x00000000, LENGTH = 256K
+  flash : ORIGIN = 0x00000000, LENGTH = 512K
   ram : ORIGIN = 0x40000000, LENGTH = 32K
   }
 
 __rom_start__ = 0x00000000;
-__rom_size__ = 256K;
+__rom_size__ = 512K;
 __ram_start__ = 0x40000000;
-__ram_size__ = 32K;
+__ram_size__ = 32K;	/* Reduce to 8K for LPC2364 */
 
 __STACK_SIZE_FIQ__ = 0x100;
 __STACK_SIZE_IRQ__ = 0x100;
