@@ -4,7 +4,7 @@
 
 ARCH		= arm7tdmi-s
 
-BOARDNAME	?= OLIMEX_LPC_P2378
+BOARDNAME	?= MBED_LPC2368
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
