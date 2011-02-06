@@ -12,8 +12,8 @@ void cpu_init(unsigned long int frequency)
 
 /* Initialize MAM--See Errata MAM.1 */
 
-  MAMCR = 1;			// MAM functions fully enabled
-  MAMTIM = 3;			// 3 CPU clocks per fetch cycle
+  MAMCR = 2;			// MAM functions fully enabled
+  MAMTIM = 4;			// CPU clocks per fetch cycle
 
 /* Configure clock generators--See Errata PLL.1 and Flash.1 */
 
