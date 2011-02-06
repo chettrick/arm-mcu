@@ -16,6 +16,7 @@ arm-aout too. */
 	/* is.								*/
 	.extern	__bss_beg__	
 	.extern	__bss_end__
+	.extern __stack_beg__
 	.extern __stack_end__
 	.extern __data_beg__
 	.extern __data_end__
@@ -71,7 +72,6 @@ _mainCRTStartup:
 	str	r2, [r1]
 
 	/*  Start by setting up a stack					*/
-	/* Set up the stack pointer to end of bss 			*/
 	msr	cpsr_c, #INIT_FIQ_MODE
 	ldr	sp, =__stack_end_fiq__
 	msr	cpsr_c, #INIT_IRQ_MODE
@@ -85,7 +85,7 @@ _mainCRTStartup:
 	msr	cpsr_c, #INIT_SYSTEM_MODE
 	ldr	sp, =__stack_end__
 
-	sub	sl, sp, #512	/* Assumes 512 bytes below sp 		*/
+	ldr	sl, =__stack_beg__
 
 	mov 	a2, #0		/* Fill value 				*/
 	mov	fp, a2		/* Null frame pointer 			*/ 
