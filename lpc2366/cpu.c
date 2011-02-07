@@ -12,8 +12,13 @@ void cpu_init(unsigned long int frequency)
 
 /* Initialize MAM--See Errata MAM.1 */
 
+#ifdef REVISION_A
+  MAMCR = 1;			// MAM functions partially enabled
+  MAMTIM = 3;			// 3 CPU clocks per fetch cycle
+#else
   MAMCR = 2;			// MAM functions fully enabled
   MAMTIM = 4;			// CPU clocks per fetch cycle
+#endif
 
 /* Configure clock generators--See Errata PLL.1 and Flash.1 */
 
@@ -29,7 +34,11 @@ void cpu_init(unsigned long int frequency)
 
   while (!(PLLSTAT & (1 << 26))); // Wait for PLL lock
 
+#ifdef REVISION_A
+  CCLKCFG = 5;			// CPU clock is Fcco/6 (48 MHz)
+#else
   CCLKCFG = 3;			// CPU clock is Fcco/4 (72 MHz)
+#endif
   USBCLKCFG = 5;		// USB clock is Fcco/6 (48 MHz)
 
   PLLCON = 3;			// Connect PLL
