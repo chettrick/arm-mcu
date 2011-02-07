@@ -10,8 +10,6 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-/* Configure P0 pins */
-
   PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
 
 #ifdef BOARD_OLIMEX_LPC_P2378
