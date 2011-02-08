@@ -6,6 +6,8 @@
 
 // $Id$
 
+static const char syscalls_revision[] = "$Id$";
+
 #include <cpu.h>
 #include <errno.h>
 #include <string.h>

@@ -2,9 +2,9 @@
 
 // $Id$
 
-#include <cpu.h>
+static const char revision[] = "$Id$";
 
-static char revision[] = "$Id$";
+#include <cpu.h>
 
 int main(void)
 {

@@ -2,13 +2,13 @@
 
 // $Id$
 
+static const char test_timer1_revision[] = "$Id$";
+
 #include <cpu.h>
 #include <stdio.h>
 
 #define TRUE	1
 #define	FALSE	0
-
-static char revision[] = "$Id$";
 
 volatile int Timer1Flag = FALSE;
 
