@@ -9,9 +9,9 @@ MEMORY
 }
 
 __rom_start__	= 0x00000000;
-__rom_size__	= 0x00020000;
+__rom_size__	= 128K;
 __ram_start__	= 0x20000000;
-__ram_size__	= 0x00005000;
+__ram_size__	= 20K;
 
 __stack_top__	= __ram_start__ + __ram_size__;
 
@@ -19,7 +19,8 @@ PROVIDE(STACK_TOP = __stack_top__);
 
 SECTIONS
 {
-  . = 0x00000000;
+  . = 0;
+
   .text : {
   *(.text)				/* Program code */
   *(.rodata)				/* Read only data */
@@ -27,23 +28,23 @@ SECTIONS
   *(.glue_7)
   *(.glue_7t)
   *(.eh_frame)
-  . = ALIGN(4);
-  __text_end__ = .;			/* Used in crt0.S */
   } >flash
 
 /* C++ exception unwinding stuff--needed by Code Sourcery toolchain */
 
-.ARM.extab : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >flash
+  .ARM.extab : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >flash
 
-__exidx_start = .;
-.ARM.exidx : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >flash
-__exidx_end = .;
+  __exidx_start = .;
+  .ARM.exidx : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >flash
+  __exidx_end = .;
 
-  . = 0x20000000;
+  . = ALIGN(4);
+  __text_end__ = .;
+
   .data : {
   . = ALIGN(4);
   __data_beg__ = .;			/* Used in crt0.S */
-  *(.data)				/* Initialized datay */
+  *(.data)				/* Initialized data */
   . = ALIGN(4);
   __data_end__ = .;			/* Used in crt0.S */
   } >ram AT > flash 
