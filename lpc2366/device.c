@@ -6,7 +6,7 @@
 
 // $Id$
 
-static const char device_revision[] = "$Id$";
+static const char revision[] = "$Id$";
 
 #include <assert.h>
 #include <cpu.h>

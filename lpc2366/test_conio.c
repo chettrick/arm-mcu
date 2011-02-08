@@ -2,7 +2,7 @@
 
 // $Id$
 
-static const char test_conio_revision[] = "$Id$";
+static const char revision[] = "$Id$";
 
 #include <assert.h>
 #include <cpu.h>

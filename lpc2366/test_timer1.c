@@ -2,7 +2,7 @@
 
 // $Id$
 
-static const char test_timer1_revision[] = "$Id$";
+static const char revision[] = "$Id$";
 
 #include <cpu.h>
 #include <stdio.h>

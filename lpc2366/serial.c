@@ -6,7 +6,7 @@
 
 // $Id$
 
-static const char serial_revision[] = "$Id$";
+static const char revision[] = "$Id$";
 
 #include <cpu.h>
 #include <stdio.h>
