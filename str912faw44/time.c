@@ -6,6 +6,8 @@
 
 // $Id$
 
+static const char revision[] = "$Id$";
+
 #include <cpu.h>
 #include <string.h>
 #include <sys/stat.h>
