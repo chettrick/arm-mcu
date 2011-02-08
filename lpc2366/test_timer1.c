@@ -8,6 +8,8 @@
 #define TRUE	1
 #define	FALSE	0
 
+static char revision[] = "$Id$";
+
 volatile int Timer1Flag = FALSE;
 
 __attribute__ ((__interrupt__)) void Timer1ISR(void)

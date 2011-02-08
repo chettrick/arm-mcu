@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <string.h>
 
+static char revision[] = "$Id$";
+
 int main(void)
 {
   int i;

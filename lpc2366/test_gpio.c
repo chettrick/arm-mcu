@@ -4,6 +4,8 @@
 
 #include <cpu.h>
 
+static char revision[] = "$Id$";
+
 int main(void)
 {
   unsigned long int i;
