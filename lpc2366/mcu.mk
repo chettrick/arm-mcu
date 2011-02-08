@@ -54,4 +54,5 @@ clean_$(MCU):
 .bin.mbed:
 	test -d $(MBED) -a -w $(MBED)
 	cp $< $(MBED)
+	sync
 	@echo -e "\nPress RESET on the LPC2368 mbed board to start $<\n"
