@@ -54,28 +54,28 @@ __exidx_start = .;
 .ARM.exidx : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >flash
 __exidx_end = .;
 
-__end_of_text__ = .;			/*  Used by startup to find 	*/
-					/* initialized vars.		*/
+. = ALIGN(4);
+__data_beg_src__ = .;				/* Used by startup.	*/
 
 	/*  Initialized data, located in ram but a copy is placed	*/
 	/* in flash so it can be used to init the ram on startup.	*/
- .data : { 
+ .data : {
+	. = ALIGN(4);
 	__data_beg__ = .;			/* Used by startup.	*/
-	__data_beg_src__ = __end_of_text__;	/* Used by startup.	*/
  	*(.data)
+	. = ALIGN(4);
 	__data_end__ = .;			/* Used by startup.	*/
  	} >ram AT>flash
 
 	/*  Unitialized data, located in ram, no copy in flash needed	*/
 	/* since startup will zero associated area in RAM.		*/
- .bss : { 
+ .bss : {
 	. = ALIGN(4);
-	__bss_beg__ = .;	/*  Used by startup to find start of	*/
-				/* unitialized variables.		*/
+	__bss_beg__ = .;			/* Used by startup.	*/
  	*(.bss)
 	*(COMMON)
 	. = ALIGN(4);
-	__bss_end__ = .;
+	__bss_end__ = .;			/* Used by startup.	*/
  	} >ram
 
 . = ALIGN(4);
