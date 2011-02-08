@@ -2,6 +2,8 @@
 
 // $Id$
 
+static const char revision[] = "$Id$";
+
 #include <cpu.h>
 
 unsigned long int CPUFREQ;

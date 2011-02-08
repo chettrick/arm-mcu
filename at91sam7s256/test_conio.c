@@ -2,6 +2,8 @@
 
 // $Id$
 
+static const char revision[] = "$Id$";
+
 #include <assert.h>
 #include <cpu.h>
 #include <stdio.h>
