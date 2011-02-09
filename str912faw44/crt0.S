@@ -47,8 +47,8 @@ _mainCRTStartup:
 	ldr	r2, [r1]
 	and	r2, r2, #0xFFFFFFE7
 	ldr	r3, =__ram_size__
-	sub	r3, #32768
-	orr	r2, r3, LSR #12
+	sub	r3, r3, #32768
+	orr	r2, r2, r3, LSR #12
 	str	r2, [r1]
 
 /* Configure ROM size, based on what the linker tells us */
