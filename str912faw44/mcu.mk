@@ -2,7 +2,7 @@
 
 # $Id$
 
-ARCH		= arm9
+CPU		= arm9
 
 BOARDNAME	?= STMICRO_STR910_EVAL
 

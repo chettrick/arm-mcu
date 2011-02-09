@@ -2,7 +2,7 @@
 
 # $Id$
 
-ARCH		= arm7tdmi-s
+CPU		= arm7tdmi
 
 BOARDNAME	?= MBED_LPC2368
 

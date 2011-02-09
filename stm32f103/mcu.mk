@@ -2,8 +2,8 @@
 
 # $Id$
 
-ARCH		= cortex-m3
-ARCHFLAGS	= -mthumb
+CPU		= cortex-m3
+CPUFLAGS	= -mthumb
 
 BOARDNAME	?= OLIMEX_STM32_P103
 

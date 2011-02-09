@@ -2,7 +2,7 @@
 
 # $Id$
 
-ARCH		= arm7tdmi
+CPU		= arm7tdmi
 
 BOARDNAME	?= OLIMEX_SAM7_P256
 
