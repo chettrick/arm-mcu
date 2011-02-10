@@ -3,12 +3,17 @@
  *   The header file is the super set of all hardware definition of the 
  *   peripherals for the LPC23xx/24xx family microprocessor.
  *
- *   Copyright(C) 2006, NXP Semiconductor
+ *   Copyright(C) 2006-2008, NXP Semiconductor
  *   All rights reserved.
  *
  *   History
  *   2005.10.01  ver 1.00    Prelimnary version, first Release
- *
+ *   2007.05.17  ver 1.01    several corrections
+ *   2007.09.05  ver 1.02    added VICVectPriorityx symbols
+ *   2007.09.05  ver 1.03    FIO1PIN1 value corrected
+ *   2008.04.23  ver 1.04    EMC_DYN_CFGx,EMC_DYN_RASCASx value corrected
+ *   2008.08.12  ver 1.05    EMC_STA_EXT_WAIT value corrected
+ *   2009.11.12  ver 1.06    Copy for MDK 4.01
 ******************************************************************************/
 
 #ifndef __LPC23xx_H
@@ -94,6 +99,40 @@ these registers are known as "VICVectPriority(x)". */
 #define VICVectCntl29  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x274))
 #define VICVectCntl30  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x278))
 #define VICVectCntl31  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x27C))
+
+/* LPC23xx/24xx VICVectPriority(x)". */
+#define VICVectPriority0   (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x200))
+#define VICVectPriority1   (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x204))
+#define VICVectPriority2   (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x208))
+#define VICVectPriority3   (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x20C))
+#define VICVectPriority4   (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x210))
+#define VICVectPriority5   (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x214))
+#define VICVectPriority6   (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x218))
+#define VICVectPriority7   (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x21C))
+#define VICVectPriority8   (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x220))
+#define VICVectPriority9   (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x224))
+#define VICVectPriority10  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x228))
+#define VICVectPriority11  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x22C))
+#define VICVectPriority12  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x230))
+#define VICVectPriority13  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x234))
+#define VICVectPriority14  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x238))
+#define VICVectPriority15  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x23C))
+#define VICVectPriority16  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x240))
+#define VICVectPriority17  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x244))
+#define VICVectPriority18  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x248))
+#define VICVectPriority19  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x24C))
+#define VICVectPriority20  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x250))
+#define VICVectPriority21  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x254))
+#define VICVectPriority22  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x258))
+#define VICVectPriority23  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x25C))
+#define VICVectPriority24  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x260))
+#define VICVectPriority25  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x264))
+#define VICVectPriority26  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x268))
+#define VICVectPriority27  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x26C))
+#define VICVectPriority28  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x270))
+#define VICVectPriority29  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x274))
+#define VICVectPriority30  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x278))
+#define VICVectPriority31  (*(volatile unsigned long *)(VIC_BASE_ADDR + 0x27C))
 
 #define VICVectAddr    (*(volatile unsigned long *)(VIC_BASE_ADDR + 0xF00))
 
@@ -264,7 +303,7 @@ these registers are known as "VICVectPriority(x)". */
 #define FIO4PIN0       (*(volatile unsigned char *)(FIO_BASE_ADDR + 0x94)) 
 
 #define FIO0PIN1       (*(volatile unsigned char *)(FIO_BASE_ADDR + 0x15)) 
-#define FIO1PIN1       (*(volatile unsigned char *)(FIO_BASE_ADDR + 0x25)) 
+#define FIO1PIN1       (*(volatile unsigned char *)(FIO_BASE_ADDR + 0x35)) 
 #define FIO2PIN1       (*(volatile unsigned char *)(FIO_BASE_ADDR + 0x55)) 
 #define FIO3PIN1       (*(volatile unsigned char *)(FIO_BASE_ADDR + 0x75)) 
 #define FIO4PIN1       (*(volatile unsigned char *)(FIO_BASE_ADDR + 0x95)) 
@@ -449,12 +488,12 @@ are for LPC24xx only. */
 
 #define EMC_DYN_CFG0     (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x100))
 #define EMC_DYN_RASCAS0  (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x104))
-#define EMC_DYN_CFG1     (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x140))
-#define EMC_DYN_RASCAS1  (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x144))
-#define EMC_DYN_CFG2     (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x160))
-#define EMC_DYN_RASCAS2  (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x164))
-#define EMC_DYN_CFG3     (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x180))
-#define EMC_DYN_RASCAS3  (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x184))
+#define EMC_DYN_CFG1     (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x120))
+#define EMC_DYN_RASCAS1  (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x124))
+#define EMC_DYN_CFG2     (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x140))
+#define EMC_DYN_RASCAS2  (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x144))
+#define EMC_DYN_CFG3     (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x160))
+#define EMC_DYN_RASCAS3  (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x164))
 
 /* static RAM access registers */
 #define EMC_STA_CFG0      (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x200))
@@ -489,7 +528,7 @@ are for LPC24xx only. */
 #define EMC_STA_WAITWR3   (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x274))
 #define EMC_STA_WAITTURN3 (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x278))
 
-#define EMC_STA_EXT_WAIT  (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x880))
+#define EMC_STA_EXT_WAIT  (*(volatile unsigned long *)(EMC_BASE_ADDR + 0x080))
 
 	
 /* Timer 0 */
@@ -1126,40 +1165,6 @@ with the spec. update in USB Device Section. */
 #define MAC_POWERDOWN       (*(volatile unsigned long *)(MAC_BASE_ADDR + 0xFF4)) /* Power-down reg */
 #define MAC_MODULEID        (*(volatile unsigned long *)(MAC_BASE_ADDR + 0xFFC)) /* Module ID reg (RO) */
 
-// Keil decided to use old (LPC2xxx) register names for some reason.
-// The following aliases match the LPC3xxx user manual.
 
-#define VICVectPriority0	VICVectCntl0
-#define VICVectPriority1	VICVectCntl1
-#define VICVectPriority2	VICVectCntl2
-#define VICVectPriority3	VICVectCntl3
-#define VICVectPriority4	VICVectCntl4
-#define VICVectPriority5	VICVectCntl5
-#define VICVectPriority6	VICVectCntl6
-#define VICVectPriority7	VICVectCntl7
-#define VICVectPriority8	VICVectCntl8
-#define VICVectPriority9	VICVectCntl9
-#define VICVectPriority10	VICVectCntl10
-#define VICVectPriority11	VICVectCntl11
-#define VICVectPriority12	VICVectCntl12
-#define VICVectPriority13	VICVectCntl13
-#define VICVectPriority14	VICVectCntl14
-#define VICVectPriority15	VICVectCntl15
-#define VICVectPriority16	VICVectCntl16
-#define VICVectPriority17	VICVectCntl17
-#define VICVectPriority18	VICVectCntl18
-#define VICVectPriority19	VICVectCntl19
-#define VICVectPriority20	VICVectCntl20
-#define VICVectPriority21	VICVectCntl21
-#define VICVectPriority22	VICVectCntl22
-#define VICVectPriority23	VICVectCntl23
-#define VICVectPriority24	VICVectCntl24
-#define VICVectPriority25	VICVectCntl25
-#define VICVectPriority26	VICVectCntl26
-#define VICVectPriority27	VICVectCntl27
-#define VICVectPriority28	VICVectCntl28
-#define VICVectPriority29	VICVectCntl29
-#define VICVectPriority30	VICVectCntl30
-#define VICVectPriority31	VICVectCntl31
 #endif  // __LPC23xx_H
 
