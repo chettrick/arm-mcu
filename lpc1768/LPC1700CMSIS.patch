@@ -1,0 +1,22 @@
+--- Drivers/include/lpc17xx_clkpwr.h.original	2011-02-10 22:02:08.000000000 +0100
++++ Drivers/include/lpc17xx_clkpwr.h	2011-02-10 22:02:22.000000000 +0100
+@@ -28,7 +28,7 @@
+ #define LPC17XX_CLKPWR_H_
+ 
+ /* Includes ------------------------------------------------------------------- */
+-#include "lpc17xx.h"
++#include "LPC17xx.h"
+ #include "lpc_types.h"
+ 
+ #ifdef __cplusplus
+--- Drivers/include/lpc17xx_pinsel.h.original	2011-02-10 22:03:46.000000000 +0100
++++ Drivers/include/lpc17xx_pinsel.h	2011-02-10 22:04:00.000000000 +0100
+@@ -28,7 +28,7 @@
+ #define LPC17XX_PINSEL_H_
+ 
+ /* Includes ------------------------------------------------------------------- */
+-#include "lpc17xx.h"
++#include "LPC17xx.h"
+ #include "lpc_types.h"
+ 
+ #ifdef __cplusplus
