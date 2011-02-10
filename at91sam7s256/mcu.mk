@@ -45,6 +45,6 @@ reset:
 clean_$(MCU):
 	rm -f *.a *.o $(AT91LIB)/*.o $(USBSERIAL)/*.o
 
-reallyclean_$(MCU): clean
+reallyclean_$(MCU): clean_$(MCU)
 
-distclean_$(MCU): reallyclean
+distclean_$(MCU): reallyclean_$(MCU)
