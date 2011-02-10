@@ -180,3 +180,87 @@ bbsrtable:
 	nop
 	ldr	pc,[pc,#-0xFF0]	    	/* Vector via VIC		*/
 	b	FIQ_Handler
+
+// Default exception handlers
+
+	.text
+	.code 32
+
+	.weak Undefined_Handler
+	Undefined_Handler=endless_loop
+	.weak SWI_Handler
+	SWI_Handler=endless_loop
+	.weak Prefetch_Handler
+	Prefetch_Handler=endless_loop
+	.weak Abort_Handler
+	Abort_Handler=endless_loop
+	.weak FIQ_Handler
+	FIQ_Handler=endless_loop
+	.weak WDG_IRQHandler
+	WDG_IRQHandler=endless_loop
+	.weak SW_IRQHandler
+	SW_IRQHandler=endless_loop
+	.weak ARMRX_IRQHandler
+	ARMRX_IRQHandler=endless_loop
+	.weak ARMTX_IRQHandler
+	ARMTX_IRQHandler=endless_loop
+	.weak TIM0_IRQHandler
+	TIM0_IRQHandler=endless_loop
+	.weak TIM1_IRQHandler
+	TIM1_IRQHandler=endless_loop
+	.weak TIM2_IRQHandler
+	TIM2_IRQHandler=endless_loop
+	.weak TIM3_IRQHandler
+	TIM3_IRQHandler=endless_loop
+	.weak USBHP_IRQHandler
+	USBHP_IRQHandler=endless_loop
+	.weak USBLP_IRQHandler
+	USBLP_IRQHandler=endless_loop
+	.weak SCU_IRQHandler
+	SCU_IRQHandler=endless_loop
+	.weak ENET_IRQHandler
+	ENET_IRQHandler=endless_loop
+	.weak DMA_IRQHandler
+	DMA_IRQHandler=endless_loop
+	.weak CAN_IRQHandler
+	CAN_IRQHandler=endless_loop
+	.weak MC_IRQHandler
+	MC_IRQHandler=endless_loop
+	.weak ADC_IRQHandler
+	ADC_IRQHandler=endless_loop
+	.weak UART0_IRQHandler
+	UART0_IRQHandler=endless_loop
+	.weak UART1_IRQHandler
+	UART1_IRQHandler=endless_loop
+	.weak UART2_IRQHandler
+	UART2_IRQHandler=endless_loop
+	.weak I2C0_IRQHandler
+	I2C0_IRQHandler=endless_loop
+	.weak I2C1_IRQHandler
+	I2C1_IRQHandler=endless_loop
+	.weak SSP0_IRQHandler
+	SSP0_IRQHandler=endless_loop
+	.weak SSP1_IRQHandler
+	SSP1_IRQHandler=endless_loop
+	.weak LVD_IRQHandler
+	LVD_IRQHandler=endless_loop
+	.weak RTC_IRQHandler
+	RTC_IRQHandler=endless_loop
+	.weak WIU_IRQHandler
+	WIU_IRQHandler=endless_loop
+	.weak EXTIT0_IRQHandler
+	EXTIT0_IRQHandler=endless_loop
+	.weak EXTIT1_IRQHandler
+	EXTIT1_IRQHandler=endless_loop
+	.weak EXTIT2_IRQHandler
+	EXTIT2_IRQHandler=endless_loop
+	.weak EXTIT3_IRQHandler
+	EXTIT3_IRQHandler=endless_loop
+	.weak EXTIT4_IRQHandler
+	EXTIT4_IRQHandler=endless_loop
+	.weak USBWU_IRQHandler
+	USBWU_IRQHandler=endless_loop
+	.weak PFQBC_IRQHandler
+	PFQBC_IRQHandler=endless_loop
+	.weak DefaultVector_Handler
+	DefaultVector_Handler=endless_loop

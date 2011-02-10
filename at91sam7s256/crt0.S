@@ -141,3 +141,19 @@ endless_loop:
 	nop
 	ldr	pc,[pc,#-0xF20]	    	/* Vector via VIC		*/
 	b	fast_interrupt_exception
+
+// Default exception handlers
+
+	.text
+	.code 32
+
+	.weak undefined_instruction_exception
+	undefined_instruction_exception=endless_loop
+	.weak software_interrupt_exception
+	software_interrupt_exception=endless_loop
+	.weak prefetch_abort_exception
+	prefetch_abort_exception=endless_loop
+	.weak data_abort_exception
+	data_abort_exception=endless_loop
+	.weak fast_interrupt_exception
+	fast_interrupt_exception=endless_loop

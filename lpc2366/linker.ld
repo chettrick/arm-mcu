@@ -84,11 +84,3 @@ end = .;
 /* Libraries to link against. */
 
 INPUT( -llpc2366 )
-
-/* Provide a default vector for any unhandled interrupts. */
-
-PROVIDE(undefined_instruction_exception = endless_loop);
-PROVIDE(software_interrupt_exception = endless_loop);
-PROVIDE(prefetch_abort_exception = endless_loop);
-PROVIDE(data_abort_exception = endless_loop);
-PROVIDE(fast_interrupt_exception = endless_loop);
