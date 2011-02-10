@@ -100,6 +100,12 @@ clean:
 	cd $(MCUDEPENDENT) && $(MAKE) clean_$(MCU)
 	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o
 
+reallyclean: clean
+	cd $(MCUDEPENDENT) && $(MAKE) reallyclean_$(MCU)
+
+distclean: reallyclean
+	cd $(MCUDEPENDENT) && $(MAKE) distclean_$(MCU)
+
 # Include MCU dependent makefile
 
 include $(MCUDEPENDENT)/mcu.mk

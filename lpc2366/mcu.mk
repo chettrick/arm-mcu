@@ -29,25 +29,20 @@ lib$(MCU).a: $(LIBOBJS)
 
 lib: lib$(MCU).a
 
-# Reset the target
+# Reset the target with OpenOCD
 
 reset:
 	$(RESETEXP) $(OPENOCD) $(OPENOCDCFG)
-
-# Clean out working files
-
-clean_$(MCU):
-	rm -f *.a *.o
-
-# Define a suffix rule for programming the flash with lpc21isp
-
-.hex.flashisp:
-	$(LPC21ISP) $(LPC21ISPFLAGS) $< $(LPC21ISPDEV) $(LPC21ISPBAUD) $(LPC21ISPCLOCK)
 
 # Define a suffix rule for programming the flash with OpenOCD
 
 .bin.flashocd:
 	$(FLASHEXP) $(OPENOCD) $(OPENOCDCFG) $<
+
+# Define a suffix rule for programming the flash with lpc21isp
+
+.hex.flashisp:
+	$(LPC21ISP) $(LPC21ISPFLAGS) $< $(LPC21ISPDEV) $(LPC21ISPBAUD) $(LPC21ISPCLOCK)
 
 # Define a suffix rule for installing to an mbed board
 
@@ -56,3 +51,12 @@ clean_$(MCU):
 	cp $< $(MBED)
 	sync
 	@echo -e "\nPress RESET on the LPC2368 mbed board to start $<\n"
+
+# Clean out working files
+
+clean_$(MCU):
+	rm -f *.a *.o
+
+reallyclean_$(MCU): clean
+
+distclean_$(MCU): reallyclean

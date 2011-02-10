@@ -30,17 +30,21 @@ lib$(MCU).a: $(LIBOBJS)
 
 lib: lib$(MCU).a
 
-# Reset the target
+# Reset the target with OpenOCD
 
 reset:
 	$(RESETEXP) $(OPENOCD) $(OPENOCDCFG)
+
+# Define a suffix rule for programming the flash with OpenOCD
+
+.bin.flashocd:
+	$(FLASHEXP) $(OPENOCD) $(OPENOCDCFG) $<
 
 # Clean out working files
 
 clean_$(MCU):
 	rm -f *.a *.o $(FWLIB)/*.o $(USBSERIAL)/*.o
 
-# Define a suffix rule for programming the flash with OpenOCD
+reallyclean_$(MCU): clean
 
-.bin.flashocd:
-	$(FLASHEXP) $(OPENOCD) $(OPENOCDCFG) $<
+distclean_$(MCU): reallyclean
