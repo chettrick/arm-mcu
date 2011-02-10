@@ -10,7 +10,7 @@ extern void cpu_init(unsigned long int frequency);
 #include <interrupt.h>
 #include <serial.h>
 
-#include <LPC23XX.h>
+#include <LPC23xx.h>
 
 #ifndef DEFAULT_CPU_FREQ
 #ifdef REVISION_A
