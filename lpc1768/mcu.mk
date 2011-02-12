@@ -10,7 +10,7 @@ CPUFLAGS	= -mthumb
 BOARDNAME	?= MBED_LPC1768
 
 CMSIS_SERVER	= http://ics.nxp.com/support/documents/microcontrollers/zip
-CMSIS_DIST	= $(TEMP)/lpc17xx.cmsis.driver.library.zip
+CMSIS_DIST	= lpc17xx.cmsis.driver.library.zip
 CMSIS_URL	= $(CMSIS_SERVER)/$(CMSIS_DIST)
 CMSIS_DIR	= $(MCUDEPENDENT)/LPC1700CMSIS
 
@@ -28,13 +28,13 @@ MBED		?= /media/MBED
 
 # Download CMSIS source distribution
 
-$(CMSIS_DIST):
+$(TEMP)/$(CMSIS_DIST):
 	wget -P $(TEMP) $(CMSIS_URL)
 
 # Unpack CMSIS source distribution
 
-$(CMSIS_DIR): $(CMSIS_DIST)
-	unzip -q $(CMSIS_DIST) -x LPC1700CMSIS_ReleaseNotes.txt
+$(CMSIS_DIR): $(TEMP)/$(CMSIS_DIST)
+	unzip -q $(TEMP)/$(CMSIS_DIST) -x LPC1700CMSIS_ReleaseNotes.txt
 	cd $(CMSIS_DIR) ; patch -p0 <../LPC1700CMSIS.patch
 	touch $@
 
