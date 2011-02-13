@@ -35,6 +35,8 @@ $(TEMP)/$(CMSIS_DIST):
 
 $(CMSIS_DIR): $(TEMP)/$(CMSIS_DIST)
 	unzip -q $(TEMP)/$(CMSIS_DIST) -x LPC1700CMSIS_ReleaseNotes.txt
+	dos2unix $(CMSIS_DIR)/Drivers/include/lpc17xx_clkpwr.h
+	dos2unix $(CMSIS_DIR)/Drivers/include/lpc17xx_pinsel.h
 	cd $(CMSIS_DIR) ; patch -p0 <../LPC1700CMSIS.patch
 	touch $@
 
