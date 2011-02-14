@@ -5,6 +5,7 @@
 static const char revision[] = "$Id$";
 
 #include <cpu.h>
+#include <LPC17xx.h>
 
 #ifdef BOARD_MBED_LPC1768
 #define LED1	18
