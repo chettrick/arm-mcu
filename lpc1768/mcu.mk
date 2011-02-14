@@ -18,7 +18,7 @@ CFLAGS		+= -I$(CMSIS_DIR)/Core/CM3/CoreSupport
 CFLAGS		+= -I$(CMSIS_DIR)/Core/CM3/DeviceSupport/NXP/LPC17xx
 CFLAGS		+= -I$(CMSIS_DIR)/Drivers/include
 
-LIBOBJS		= cpu.o device.o syscalls.o
+LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
 MBED		?= /media/MBED
 
