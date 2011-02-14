@@ -5,17 +5,14 @@
 MEMORY
 {
   flash (rx) : ORIGIN = 0x00000000, LENGTH = 512K
-  ram (rwx) : ORIGIN = 0x10000000, LENGTH = 64K
+  ram (rwx) : ORIGIN = 0x10000000, LENGTH = 32K
 }
 
-__rom_start__	= 0x00000000;
-__rom_size__	= 512K;
-__ram_start__	= 0x10000000;
-__ram_size__	= 64K;
-
-__stack_top__	= __ram_start__ + __ram_size__;
-
-PROVIDE(STACK_TOP = __stack_top__);
+__rom_start__	= ORIGIN(flash);
+__rom_size__	= LENGTH(flash);
+__ram_start__	= ORIGIN(ram);
+__ram_size__	= LENGTH(ram);
+__stack_end__	= __ram_start__ + __ram_size__;
 
 SECTIONS
 {
