@@ -10,7 +10,7 @@ extern void cpu_init(unsigned long int frequency);
 
 #include <LPC17xx.h>
 
-#define DEFAULT_CPU_FREQ	72000000
+#define DEFAULT_CPU_FREQ	100000000
 
 #ifndef CONSOLE_PORT
 #define CONSOLE_PORT		0
