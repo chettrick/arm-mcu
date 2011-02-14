@@ -2,25 +2,30 @@
 
 // $Id$
 
-		.text
-		.extern		main
-		.global		 _start
-		.global		_default_handler
-		.code		16
 		.syntax 	unified
-		.type		_reset, function
+		.thumb
+		.text
 
-		.extern		__bss_beg__
-		.extern		__bss_end__
+// Export these symbols
+
+		.global		 _start
+		.global		Reset_Handler
+		.global		Default_Handler
+
+// Import these symbols
+
+		.extern		__text_end__
 		.extern		__data_beg__
 		.extern		__data_end__
-		.extern		__text_end__
-		.extern		STACK_TOP
+		.extern		__bss_beg__
+		.extern		__bss_end__
+		.extern		__stack_end__
+		.extern		main
 
-// Exception vector table
+// Exception vector table--Common to all Cortex-M3
 
-_start: 	.word		STACK_TOP
-		.word		_reset
+_start: 	.word		__stack_end__
+		.word		Reset_Handler		// Reset Handler
 		.word		NMI_Handler             // NMI Handler
 		.word		HardFault_Handler       // Hard Fault Handler
 		.word		MemManage_Handler       // MPU Fault Handler
@@ -35,6 +40,9 @@ _start: 	.word		STACK_TOP
 		.word		0
 		.word		PendSV_Handler          // PendSV Handler
 		.word		SysTick_Handler         // SysTick Handler
+
+// Hardware interrupts specific to the LPC17xx
+
 		.word		WDT_IRQHandler          // 16: Watchdog Timer
 		.word		TIMER0_IRQHandler       // 17: Timer0
 		.word		TIMER1_IRQHandler       // 18: Timer1
@@ -73,7 +81,8 @@ _start: 	.word		STACK_TOP
 
 // Reset vector: Set up environment to call C main()
 
-_reset:
+		.thumb_func
+Reset_Handler:
 
 // Copy initialized data from flash to RAM
 
@@ -108,10 +117,10 @@ call_main:	mov		r0, #0			// argc=0
 
 		bl		main 
 
-// main() should never return, but if it does just do nothing forever
+// main() should never return, but if it does, just do nothing forever.
 // Should probably put processor into sleep mode instead.
 
-endless_loop:	b		endless_loop
+		b		.
 
 // These are filled in by the linker
 	
@@ -123,98 +132,64 @@ BSS_END:	.word		__bss_end__
 
 //=============================================================================
 
-// Default exception handler; does nothing
+// Default exception handler--does nothing but return
 
-_default_handler: bx		lr
+		.thumb_func
+Default_Handler: bx		lr
 
-		.weak		NMI_Handler
-		.weak		HardFault_Handler
-		.weak		MemManage_Handler
-		.weak		BusFault_Handler
-		.weak		UsageFault_Handler
-		.weak		SVC_Handler
-		.weak		DebugMon_Handler
-		.weak		PendSV_Handler
-		.weak		SysTick_Handler
-		.weak		WDT_IRQHandler
-		.weak		TIMER0_IRQHandler
-		.weak		TIMER1_IRQHandler
-		.weak		TIMER2_IRQHandler
-		.weak		TIMER3_IRQHandler
-		.weak		UART0_IRQHandler
-		.weak		UART1_IRQHandler
-		.weak		UART2_IRQHandler
-		.weak		UART3_IRQHandler
-		.weak		PWM1_IRQHandler
-		.weak		I2C0_IRQHandler
-		.weak		I2C1_IRQHandler
-		.weak		I2C2_IRQHandler
-		.weak		SPI_IRQHandler
-		.weak		SSP0_IRQHandler
-		.weak		SSP1_IRQHandler
-		.weak		PLL0_IRQHandler
-		.weak		RTC_IRQHandler
-		.weak		EINT0_IRQHandler
-		.weak		EINT1_IRQHandler
-		.weak		EINT2_IRQHandler
-		.weak		EINT3_IRQHandler
-		.weak		ADC_IRQHandler
-		.weak		BOD_IRQHandler
-		.weak		USB_IRQHandler
-		.weak		CAN_IRQHandler
-		.weak		DMA_IRQHandler
-		.weak		I2S_IRQHandler
-		.weak		ENET_IRQHandler
-		.weak		RIT_IRQHandler
-		.weak		MCPWM_IRQHandler
-		.weak		QEI_IRQHandler
-		.weak		PLL1_IRQHandler
-		.weak		USBActivity_IRQHandler
-		.weak		CANActivity_IRQHandler
+//=============================================================================
 
-		NMI_Handler		= _default_handler
-		HardFault_Handler	= _default_handler
-		MemManage_Handler	= _default_handler
-		BusFault_Handler	= _default_handler
-		UsageFault_Handler	= _default_handler
-		SVC_Handler		= _default_handler
-		DebugMon_Handler	= _default_handler
-		PendSV_Handler		= _default_handler
-		SysTick_Handler		= _default_handler
-		WDT_IRQHandler		= _default_handler
-		TIMER0_IRQHandler	= _default_handler
-		TIMER1_IRQHandler	= _default_handler
-		TIMER2_IRQHandler	= _default_handler
-		TIMER3_IRQHandler	= _default_handler
-		UART0_IRQHandler	= _default_handler
-		UART1_IRQHandler	= _default_handler
-		UART2_IRQHandler	= _default_handler
-		UART3_IRQHandler	= _default_handler
-		PWM1_IRQHandler		= _default_handler
-		I2C0_IRQHandler		= _default_handler
-		I2C1_IRQHandler		= _default_handler
-		I2C2_IRQHandler		= _default_handler
-		SPI_IRQHandler		= _default_handler
-		SSP0_IRQHandler		= _default_handler
-		SSP1_IRQHandler		= _default_handler
-		PLL0_IRQHandler		= _default_handler
-		RTC_IRQHandler		= _default_handler
-		EINT0_IRQHandler	= _default_handler
-		EINT1_IRQHandler	= _default_handler
-		EINT2_IRQHandler	= _default_handler
-		EINT3_IRQHandler	= _default_handler
-		ADC_IRQHandler		= _default_handler
-		BOD_IRQHandler		= _default_handler
-		USB_IRQHandler		= _default_handler
-		CAN_IRQHandler		= _default_handler
-		DMA_IRQHandler		= _default_handler
-		I2S_IRQHandler		= _default_handler
-		ENET_IRQHandler		= _default_handler
-		RIT_IRQHandler		= _default_handler
-		MCPWM_IRQHandler	= _default_handler
-		QEI_IRQHandler		= _default_handler
-		PLL1_IRQHandler		= _default_handler
-		USBActivity_IRQHandler	= _default_handler
-		CANActivity_IRQHandler	= _default_handler
+// Use Default_handler for all exceptions and interrupts, unless another
+// handler is provided elsewhere.
+
+		.macro		IRQ handler
+		.weak		\handler
+		.set		\handler, Default_Handler
+		.endm
+
+		IRQ		NMI_Handler
+		IRQ		HardFault_Handler
+		IRQ		MemManage_Handler
+		IRQ		BusFault_Handler
+		IRQ		UsageFault_Handler
+		IRQ		SVC_Handler
+		IRQ		DebugMon_Handler
+		IRQ		PendSV_Handler
+		IRQ		SysTick_Handler
+		IRQ		WDT_IRQHandler
+		IRQ		TIMER0_IRQHandler
+		IRQ		TIMER1_IRQHandler
+		IRQ		TIMER2_IRQHandler
+		IRQ		TIMER3_IRQHandler
+		IRQ		UART0_IRQHandler
+		IRQ		UART1_IRQHandler
+		IRQ		UART2_IRQHandler
+		IRQ		UART3_IRQHandler
+		IRQ		PWM1_IRQHandler
+		IRQ		I2C0_IRQHandler
+		IRQ		I2C1_IRQHandler
+		IRQ		I2C2_IRQHandler
+		IRQ		SPI_IRQHandler
+		IRQ		SSP0_IRQHandler
+		IRQ		SSP1_IRQHandler
+		IRQ		PLL0_IRQHandler
+		IRQ		RTC_IRQHandler
+		IRQ		EINT0_IRQHandler
+		IRQ		EINT1_IRQHandler
+		IRQ		EINT2_IRQHandler
+		IRQ		EINT3_IRQHandler
+		IRQ		ADC_IRQHandler
+		IRQ		BOD_IRQHandler
+		IRQ		USB_IRQHandler
+		IRQ		CAN_IRQHandler
+		IRQ		DMA_IRQHandler
+		IRQ		I2S_IRQHandler
+		IRQ		ENET_IRQHandler
+		IRQ		RIT_IRQHandler
+		IRQ		MCPWM_IRQHandler
+		IRQ		QEI_IRQHandler
+		IRQ		PLL1_IRQHandler
+		IRQ		USBActivity_IRQHandler
+		IRQ		CANActivity_IRQHandler
 
 		.end
