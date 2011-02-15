@@ -386,6 +386,7 @@ int device_read_cooked(int fd, char *s, unsigned int count)
         return strlen(s);
 
       case '\b' :
+      case 127 :
         if (p > s)
         {
           *p-- = 0;
