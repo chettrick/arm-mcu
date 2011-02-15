@@ -8,6 +8,7 @@ extern void cpu_init(unsigned long int frequency);
 
 #include <device.h>
 #include <serial.h>
+#include <LPC17xx.h>
 
 #define DEFAULT_CPU_FREQ	100000000
 
