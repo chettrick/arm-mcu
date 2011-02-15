@@ -8,7 +8,7 @@
 
 // Export these symbols
 
-		.global		 _start
+		.global		_start
 		.global		Reset_Handler
 		.global		Default_Handler
 
