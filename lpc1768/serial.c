@@ -15,6 +15,7 @@ static const char revision[] = "$Id$";
 #undef errno
 extern int errno;
 
+#include <lpc17xx_pinsel.h>
 #include <lpc17xx_uart.h>
 
 #define MAX_SERIAL_PORTS	4
@@ -31,22 +32,59 @@ static LPC_UART_TypeDef *UART_TABLE[MAX_SERIAL_PORTS] =
 
 int serial_init(unsigned port, unsigned long int baudrate)
 {
-  UART_CFG_Type config;
+  PINSEL_CFG_Type pinconfig;
+  UART_CFG_Type uartconfig;
+  UART_FIFO_CFG_Type fifoconfig;
 
   errno = 0;
 
-  if (port+1 > MAX_SERIAL_PORTS)
+// Configure I/O pins
+
+  switch (port)
   {
-    errno = ENODEV;
-    return -1;
+    case 0 :
+      pinconfig.Funcnum = 1;
+      pinconfig.OpenDrain = 0;
+      pinconfig.Pinmode = 0;
+      pinconfig.Pinnum = 2;
+      pinconfig.Portnum = 0;
+      PINSEL_ConfigPin(&pinconfig);
+      pinconfig.Pinnum = 3;
+      PINSEL_ConfigPin(&pinconfig);
+      break;
+
+    case 1 :
+      pinconfig.Funcnum = 2;
+      pinconfig.OpenDrain = 0;
+      pinconfig.Pinmode = 0;
+      pinconfig.Pinnum = 0;
+      pinconfig.Portnum = 2;
+      PINSEL_ConfigPin(&pinconfig);
+      pinconfig.Pinnum = 1;
+      PINSEL_ConfigPin(&pinconfig);
+      break;
+
+    default :
+      errno = ENODEV;
+      return -1;
   }
 
-  config.Baud_rate = baudrate;
-  config.Parity = UART_PARITY_NONE;
-  config.Databits = UART_DATABIT_8;
-  config.Stopbits = UART_STOPBIT_1;
+// Configure baud rate
 
-  UART_Init(UART_TABLE[port], &config);
+  uartconfig.Baud_rate = baudrate;
+  uartconfig.Parity = UART_PARITY_NONE;
+  uartconfig.Databits = UART_DATABIT_8;
+  uartconfig.Stopbits = UART_STOPBIT_1;
+  UART_Init(UART_TABLE[port], &uartconfig);
+
+// Configure FIFO
+
+  UART_FIFOConfigStructInit(&fifoconfig);
+  UART_FIFOConfig(UART_TABLE[port], &fifoconfig);
+
+// Enable the UART transmitter
+
+  UART_TxCmd(UART_TABLE[port], ENABLE);
 
   return 0;
 }
