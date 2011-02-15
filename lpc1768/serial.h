@@ -6,7 +6,7 @@
 
 // $Id$
 
-#define MAX_SERIAL_PORTS	4
+#define MAX_SERIAL_PORTS	2
 
 /* Initialize serial port */
 
