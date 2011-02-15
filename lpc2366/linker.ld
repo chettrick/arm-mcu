@@ -4,13 +4,13 @@
 
 MEMORY {
   flash : ORIGIN = 0x00000000, LENGTH = 512K
-  ram : ORIGIN = 0x40000000, LENGTH = 32K
+  ram : ORIGIN = 0x40000000, LENGTH = 32K	/* Reduce to 8K for LPC2364 */
   }
 
-__rom_start__ = 0x00000000;
-__rom_size__ = 512K;
-__ram_start__ = 0x40000000;
-__ram_size__ = 32K;	/* Reduce to 8K for LPC2364 */
+__rom_start__ = ORIGIN(flash);
+__rom_size__ = LENGTH(flash);
+__ram_start__ = ORIGIN(ram);
+__ram_size__ = LENGTH(ram);
 
 __STACK_SIZE_FIQ__ = 0x100;
 __STACK_SIZE_IRQ__ = 0x100;

@@ -8,10 +8,10 @@ MEMORY
   ram (rwx) : ORIGIN = 0x20000000, LENGTH = 20K
 }
 
-__rom_start__	= 0x00000000;
-__rom_size__	= 128K;
-__ram_start__	= 0x20000000;
-__ram_size__	= 20K;
+__rom_start__	= ORIGIN(flash);
+__rom_size__	= LENGTH(flash);
+__ram_start__	= ORIGIN(ram);
+__ram_size__	= LENGTH(ram);
 
 __stack_top__	= __ram_start__ + __ram_size__;
 
