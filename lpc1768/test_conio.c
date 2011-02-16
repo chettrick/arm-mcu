@@ -1,8 +1,8 @@
 /* Simple serial console I/O test program for the LPC1768 ARM MCU */
 
-// $Id: test_conio.c 2350 2011-02-10 21:05:13Z svn $
+// $Id$
 
-static const char revision[] = "$Id: test_conio.c 2350 2011-02-10 21:05:13Z svn $";
+static const char revision[] = "$Id$";
 
 #include <assert.h>
 #include <cpu.h>
