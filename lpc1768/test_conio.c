@@ -19,8 +19,9 @@ int main(void)
 
   serial_stdio(CONSOLE_PORT, 115200);
 
-  puts("\033[H\033[2JLPC1768 Console I/O Test ($Revision$, " __DATE__ " " __TIME__ ")");
-  printf("CPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
+  puts("\033[H\033[2JLPC1768 Console I/O Test (" __DATE__ " " __TIME__ ")\n");
+  puts(revision);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
 // Test putch()
 
