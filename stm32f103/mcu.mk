@@ -41,7 +41,8 @@ reset:
 # Clean out working files
 
 clean_$(MCU):
-	rm -f *.a *.o $(FWLIB)/*.o
+	find * -name '*.o' -exec rm {} ";"
+	rm -f *.a
 
 reallyclean_$(MCU): clean_$(MCU)
 
