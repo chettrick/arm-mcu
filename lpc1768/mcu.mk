@@ -5,7 +5,7 @@
 TEMP		?= /tmp
 
 CPU		= cortex-m3
-CPUFLAGS	= -mthumb -msoft-float
+CPUFLAGS	= -mthumb
 
 BOARDNAME	?= MBED_LPC1768
 
