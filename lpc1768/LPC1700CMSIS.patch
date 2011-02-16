@@ -20,3 +20,23 @@
  #include "lpc_types.h"
  
  #ifdef __cplusplus
+--- Drivers/source/lpc17xx_systick.c.original	2011-02-16 13:02:07.000000000 +0100
++++ Drivers/source/lpc17xx_systick.c	2011-02-16 13:02:24.000000000 +0100
+@@ -51,7 +51,7 @@
+ void SYSTICK_InternalInit(uint32_t time)
+ {
+ 	uint32_t cclk;
+-	float maxtime;
++	uint32_t maxtime;
+ 
+ 	cclk = SystemCoreClock;
+ 	/* With internal CPU clock frequency for LPC17xx is 'SystemCoreClock'
+@@ -84,7 +84,7 @@
+  **********************************************************************/
+ void SYSTICK_ExternalInit(uint32_t freq, uint32_t time)
+ {
+-	float maxtime;
++	uint32_t maxtime;
+ 
+ 	/* With external clock frequency for LPC17xx is 'freq'
+ 	 * And limit 24 bit for RELOAD value
