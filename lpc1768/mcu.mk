@@ -5,7 +5,7 @@
 TEMP		?= /tmp
 
 CPU		= cortex-m3
-CPUFLAGS	= -mthumb
+CPUFLAGS	= -mthumb -msoft-float
 
 BOARDNAME	?= MBED_LPC1768
 
@@ -56,7 +56,8 @@ lib: lib$(MCU).a
 # Clean out working files
 
 clean_$(MCU):
-	-rm -f *.a *.o
+	find * -name '*.o' -exec rm {} ";"
+	-rm -f *.a
 
 reallyclean_$(MCU): clean_$(MCU)
 	-rm -rf $(CMSIS_DIR)
