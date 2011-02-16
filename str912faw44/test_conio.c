@@ -25,6 +25,8 @@ int main(void)
 #endif
 
   puts("\033[H\033[2JSTR912FAW44 Console I/O Test (" __DATE__ " " __TIME__ ")\n");
+  puts(revision);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
 // Test putch()
 
