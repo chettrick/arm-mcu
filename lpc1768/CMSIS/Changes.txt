@@ -1,0 +1,24 @@
+Changes Made to Files From LPC1700CMSIS
+---------------------------------------
+
+$Id$
+
+1.  Copied LPC1700CMSIS/Core/CM3/CoreSupport/*.c to CMSIS/source
+
+2.  Copied LPC1700CMSIS/Core/CM3/CoreSupport/*.h to CMSIS/include
+
+3.  Copied LPC1700CMSIS/Core/CM3/DeviceSupport/NXP/LPC17xx/*.c to CMSIS/source
+
+4.  Copied LPC1700CMSIS/Core/CM3/DeviceSupport/NXP/LPC17xx/*.h to CMSIS/include
+
+5.  Copied LPC1700CMSIS/Drivers/source/*.c to CMSIS/source
+
+6.  Copied LPC1700CMSIS/Drivers/include/*.h to CMSIS/include
+
+7.  Ran dos2unix CMSIS/include/* CMSIS/source/*
+
+8.  Changed #include "lpc17xx.h" to #include "LPC17xx.h" in lpc17xx_clkpwr.h
+
+9.  Changed #include "lpc17xx.h" to #include "LPC17xx.h" in lpc17xx_pinsel.h
+
+10. Changed float to uint32_t in lpc17xx_systick.c

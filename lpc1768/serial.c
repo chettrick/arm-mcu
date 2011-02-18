@@ -18,8 +18,6 @@ extern int errno;
 #include <lpc17xx_pinsel.h>
 #include <lpc17xx_uart.h>
 
-#define MAX_SERIAL_PORTS	4
-
 static LPC_UART_TypeDef *UART_TABLE[MAX_SERIAL_PORTS] =
 {
   (LPC_UART_TypeDef *) LPC_UART0,
