@@ -30,16 +30,6 @@ lib$(MCU).a: $(CMSIS_DIR) $(LIBOBJS)
 
 lib: lib$(MCU).a
 
-# Clean out working files
-
-clean_$(MCU):
-	find * -name '*.o' -exec rm {} ";"
-	-rm -f *.a
-
-reallyclean_$(MCU): clean_$(MCU)
-
-distclean_$(MCU): reallyclean_$(MCU)
-
 # Define a suffix rule for installing to an mbed board
 
 .bin.mbed:
@@ -47,3 +37,11 @@ distclean_$(MCU): reallyclean_$(MCU)
 	cp $< $(MBED)
 	sync
 	@echo -e "\nPress RESET on the LPC1768 mbed board to start $<\n"
+
+# Clean out working files
+
+clean_$(MCU):
+
+reallyclean_$(MCU): clean_$(MCU)
+
+distclean_$(MCU): reallyclean_$(MCU)

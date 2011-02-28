@@ -98,7 +98,8 @@ update:
 
 clean:
 	cd $(MCUDEPENDENT) && $(MAKE) clean_$(MCU)
-	rm -f *.a *.asm *.bin *.elf *.hex *.map *.o
+	find * -name '*.o' -exec rm {} ";"
+	rm -f *.a *.asm *.bin *.elf *.hex *.map
 
 reallyclean: clean
 	cd $(MCUDEPENDENT) && $(MAKE) reallyclean_$(MCU)
