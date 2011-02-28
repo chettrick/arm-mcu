@@ -141,18 +141,21 @@ endless_loop:
 	ldr	pc,[pc,#-0x120]	    	/* Vector via VIC		*/
 	b	fast_interrupt_exception
 
-// Default exception handlers
+//=============================================================================
+
+// Use endless_loop for all exceptions and interrupts, unless another
+// handler is provided elsewhere.
 
 	.text
 	.code 32
 
-	.weak undefined_instruction_exception
-	undefined_instruction_exception=endless_loop
-	.weak software_interrupt_exception
-	software_interrupt_exception=endless_loop
-	.weak prefetch_abort_exception
-	prefetch_abort_exception=endless_loop
-	.weak data_abort_exception
-	data_abort_exception=endless_loop
-	.weak fast_interrupt_exception
-	fast_interrupt_exception=endless_loop
+	.macro	IRQ handler
+	.weak	\handler
+	.set	\handler, endless_loop
+	.endm
+
+	IRQ	undefined_instruction_exception
+	IRQ	software_interrupt_exception
+	IRQ	prefetch_abort_exception
+	IRQ	data_abort_exception
+	IRQ	fast_interrupt_exception
