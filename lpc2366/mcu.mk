@@ -22,11 +22,12 @@ MBED		?= /media/MBED
 
 .SUFFIXES:	.flashisp .flashocd .mbed
 
+include $(ARMSRC)/lwip/LWIP.mk
+
 # Build processor dependent support library
 
-lib$(MCU).a: $(LIBOBJS)
-	$(AR) crs lib$(MCU).a $(LIBOBJS)
-	cd $(LWIP_DIR) && $(MAKE)
+lib$(MCU).a: $(LIBOBJS) $(LWIP_OBJS)
+	$(AR) crs lib$(MCU).a $(LIBOBJS) $(LWIP_OBJS)
 
 lib: lib$(MCU).a
 
@@ -56,9 +57,8 @@ reset:
 # Clean out working files
 
 clean_$(MCU):
+	cd $(LWIP_DIR) && find * -name '*.o' -exec rm {} ";"
 
 reallyclean_$(MCU): clean_$(MCU)
 
 distclean_$(MCU): reallyclean_$(MCU)
-
-include $(ARMSRC)/lwip/LWIP.mk
