@@ -27,9 +27,9 @@ CONFIGFLAGS	?=
 GDBFLAGS	?= -g
 OPTFLAGS	?= -O0
 CFLAGS		+= -Wall -mcpu=$(CPU) $(CPUFLAGS) -DMCU_$(MCU) -DBOARD_$(BOARDNAME)
-CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDEPENDENT)
+CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDEPENDENT) $(LWIP_CFLAGS)
 CFLAGS		+= $(CONFIGFLAGS) $(GDBFLAGS) $(OPTFLAGS) $(DEBUG) $(EXTRAFLAGS)
-LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDEPENDENT) -l$(MCU) -Wl,-Map=$*.map,--cref $(EXTRAOBJS)
+LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDEPENDENT) -l$(MCU) $(LWIP_LDFLAGS) -Wl,-Map=$*.map,--cref $(EXTRAOBJS)
 
 # Define default target placeholder
 
