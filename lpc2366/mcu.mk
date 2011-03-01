@@ -26,6 +26,7 @@ MBED		?= /media/MBED
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
+	cd $(LWIP_DIR) && $(MAKE)
 
 lib: lib$(MCU).a
 
@@ -59,3 +60,5 @@ clean_$(MCU):
 reallyclean_$(MCU): clean_$(MCU)
 
 distclean_$(MCU): reallyclean_$(MCU)
+
+include $(ARMSRC)/lwip/LWIP.mk
