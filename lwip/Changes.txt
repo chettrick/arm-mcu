@@ -4,3 +4,5 @@ LWIP Change Log
 $Id$
 
 1.  Imported LWIP 1.3.2.
+
+2.  Created Makefile, arch/*.h, lwipopts.h.  Can now build an LWIP library.
