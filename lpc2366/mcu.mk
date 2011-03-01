@@ -6,9 +6,6 @@ CPU		= arm7tdmi
 
 BOARDNAME	?= MBED_LPC2368
 
-LWIP_CFLAGS	= -I$(ARMSRC)/lwip -I$(ARMSRC)/lwip/include -I$(ARMSRC)/lwip/include/ipv4
-LWIP_LDFLAGS	= -L$(ARMSRC)/lwip -llwip
-
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
 LPC21ISPDEV	?= /dev/ttyS0
