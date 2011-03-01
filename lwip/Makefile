@@ -50,5 +50,6 @@ default: liblwip.a
 
 liblwip.a: $(LWIP_OBJS)
 	$(AR) crs liblwip.a $(LWIP_OBJS)
+	ln -s -f $(LWIP_SRC)/include
 
 include $(ARMSRC)/include/ARM.mk
