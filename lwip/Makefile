@@ -6,9 +6,17 @@
 
 ARMSRC		?= ..
 
+# Override the following macro to build for another MCU
+
+MCU		?= lpc2366
+
+# LWIP source directories
+
 LWIP_DIR	= $(ARMSRC)/lwip
 LWIP_VERSION	= 1.3.2
 LWIP_SRC	= $(LWIP_DIR)/lwip-$(LWIP_VERSION)/src
+
+# LWIP object files
 
 LWIP_OBJS	= $(LWIP_SRC)/core/mem.o		\
 		  $(LWIP_SRC)/core/memp.o		\
@@ -32,13 +40,13 @@ LWIP_OBJS	= $(LWIP_SRC)/core/mem.o		\
 		  $(LWIP_SRC)/core/ipv4/inet_chksum.o	\
 		  $(LWIP_SRC)/netif/etharp.o
 
+# Build LWIP include path
+
 CFLAGS		+= -I$(LWIP_DIR) -I$(LWIP_SRC)/include -I$(LWIP_SRC)/include/ipv4
 
-# Override the following macro to build for another MCU
-
-MCU	?= lpc2366
-
 default: liblwip.a
+
+# Build LWIP library
 
 liblwip.a: $(LWIP_OBJS)
 	$(AR) crs liblwip.a $(LWIP_OBJS)
