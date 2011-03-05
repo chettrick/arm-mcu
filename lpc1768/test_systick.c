@@ -17,8 +17,6 @@ volatile int TimerFlag = FALSE;
 
 void SysTick_Handler(void)
 {
-  SYSTICK_ClearCounterFlag();
-
   if (++TimerCounter == 10)
   {
     TimerCounter = 0;
