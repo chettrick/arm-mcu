@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_spi.h
 * Author             : MCD Application Team
-* Version            : V2.0.1
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : This file contains all the functions prototypes for the
 *                      SPI firmware library.
 ********************************************************************************
@@ -232,10 +232,7 @@ typedef struct
 #define SPI_IT_CRCERR                   ((u8)0x54)
 #define I2S_IT_UDR                      ((u8)0x53)
 
-#define IS_SPI_I2S_CLEAR_IT(IT) (((IT) == SPI_I2S_IT_OVR) || \
-                                 ((IT) == SPI_IT_MODF) || \
-                                 ((IT) == SPI_IT_CRCERR) || \
-                                 ((IT) == I2S_IT_UDR))
+#define IS_SPI_I2S_CLEAR_IT(IT) (((IT) == SPI_IT_CRCERR))
 
 #define IS_SPI_I2S_GET_IT(IT) (((IT) == SPI_I2S_IT_RXNE) || ((IT) == SPI_I2S_IT_TXE) || \
                                ((IT) == I2S_IT_UDR) || ((IT) == SPI_IT_CRCERR) || \
@@ -251,8 +248,8 @@ typedef struct
 #define SPI_I2S_FLAG_OVR                ((u16)0x0040)
 #define SPI_I2S_FLAG_BSY                ((u16)0x0080)
 
-#define IS_SPI_I2S_CLEAR_FLAG(FLAG) (((FLAG) == SPI_I2S_FLAG_OVR) || ((FLAG) == SPI_FLAG_MODF) || \
-                                     ((FLAG) == SPI_FLAG_CRCERR) || ((FLAG) == I2S_FLAG_UDR))
+#define IS_SPI_I2S_CLEAR_FLAG(FLAG) (((FLAG) == SPI_FLAG_CRCERR))
+
 #define IS_SPI_I2S_GET_FLAG(FLAG) (((FLAG) == SPI_I2S_FLAG_BSY) || ((FLAG) == SPI_I2S_FLAG_OVR) || \
                                    ((FLAG) == SPI_FLAG_MODF) || ((FLAG) == SPI_FLAG_CRCERR) || \
                                    ((FLAG) == I2S_FLAG_UDR) || ((FLAG) == I2S_FLAG_CHSIDE) || \

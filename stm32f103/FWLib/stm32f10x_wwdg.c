@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_wwdg.c
 * Author             : MCD Application Team
-* Version            : V2.0.1
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : This file provides all the WWDG firmware functions.
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
@@ -26,11 +26,6 @@
 #define CFR_OFFSET        (WWDG_OFFSET + 0x04)
 #define EWI_BitNumber     0x09
 #define CFR_EWI_BB        (PERIPH_BB_BASE + (CFR_OFFSET * 32) + (EWI_BitNumber * 4))
-
-/* Alias word address of EWIF bit */
-#define SR_OFFSET         (WWDG_OFFSET + 0x08)
-#define EWIF_BitNumber    0x00
-#define SR_EWIF_BB        (PERIPH_BB_BASE + (SR_OFFSET * 32) + (EWIF_BitNumber * 4))
 
 /* --------------------- WWDG registers bit mask ------------------------ */
 /* CR register bit mask */
@@ -172,7 +167,7 @@ void WWDG_Enable(u8 Counter)
 *******************************************************************************/
 FlagStatus WWDG_GetFlagStatus(void)
 {
-  return (FlagStatus)(*(vu32 *) SR_EWIF_BB);
+  return (FlagStatus)(WWDG->SR);
 }
 
 /*******************************************************************************

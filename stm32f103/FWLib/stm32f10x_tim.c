@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_tim.c
 * Author             : MCD Application Team
-* Version            : V2.0.1
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : This file provides all the TIM firmware functions.
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
@@ -2335,7 +2335,7 @@ void TIM_SelectOCxM(TIM_TypeDef* TIMx, u16 TIM_Channel, u16 TIM_OCMode)
     *((vu32 *)((*(u32*)&TIMx) + CCMR_Offset + (TIM_Channel>>1))) &= CCMR_OC13M_Mask;
    
     /* Configure the OCxM bits in the CCMRx register */
-    *((vu32 *)((*(u32*)&TIMx) + CCMR_Offset + (TIM_Channel>>1))) = TIM_OCMode;
+    *((vu32 *)((*(u32*)&TIMx) + CCMR_Offset + (TIM_Channel>>1))) |= TIM_OCMode;
 
   }
   else
@@ -2344,7 +2344,7 @@ void TIM_SelectOCxM(TIM_TypeDef* TIMx, u16 TIM_Channel, u16 TIM_OCMode)
     *((vu32 *)((*(u32*)&TIMx) + CCMR_Offset + ((u16)(TIM_Channel - 4)>> 1))) &= CCMR_OC24M_Mask;
     
     /* Configure the OCxM bits in the CCMRx register */
-    *((vu32 *)((*(u32*)&TIMx) + CCMR_Offset + ((u16)(TIM_Channel - 4)>> 1))) = (u16)(TIM_OCMode << 8);
+    *((vu32 *)((*(u32*)&TIMx) + CCMR_Offset + ((u16)(TIM_Channel - 4)>> 1))) |= (u16)(TIM_OCMode << 8);
   }
 }
 
@@ -2952,7 +2952,6 @@ void TIM_ClearFlag(TIM_TypeDef* TIMx, u16 TIM_FLAG)
   /* Check the parameters */
   assert_param(IS_TIM_ALL_PERIPH(TIMx));
   assert_param(IS_TIM_CLEAR_FLAG(TIMx, TIM_FLAG));
-  assert_param(IS_TIM_PERIPH_FLAG(TIMx, TIM_FLAG));
    
   /* Clear the flags */
   TIMx->SR = (u16)~TIM_FLAG;

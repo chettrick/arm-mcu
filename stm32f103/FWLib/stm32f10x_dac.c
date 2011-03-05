@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_dac.c
 * Author             : MCD Application Team
-* Version            : V2.0.1
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : This file provides all the DAC firmware functions.
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
@@ -346,7 +346,7 @@ void DAC_SetChannel2Data(u32 DAC_Align, u16 Data)
 *******************************************************************************/
 void DAC_SetDualChannelData(u32 DAC_Align, u16 Data2, u16 Data1)
 {
-  u32 Data = 0;
+  u32 data = 0;
 
   /* Check the parameters */
   assert_param(IS_DAC_ALIGN(DAC_Align));
@@ -356,15 +356,15 @@ void DAC_SetDualChannelData(u32 DAC_Align, u16 Data2, u16 Data1)
   /* Calculate and set dual DAC data holding register value */
   if (DAC_Align == DAC_Align_8b_R)
   {
-    Data = ((u32)Data2 << 8) | Data1; 
+    data = ((u32)Data2 << 8) | Data1; 
   }
   else
   {
-    Data = ((u32)Data2 << 16) | Data1;
+    data = ((u32)Data2 << 16) | Data1;
   }
 
   /* Set the dual DAC selected data holding register */
-  *((vu32 *)(DAC_BASE + DHR12RD_Offset + DAC_Align)) = Data;
+  *((vu32 *)(DAC_BASE + DHR12RD_Offset + DAC_Align)) = data;
 }
 
 /*******************************************************************************

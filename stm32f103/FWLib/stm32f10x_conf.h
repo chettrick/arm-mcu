@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_conf.h
 * Author             : MCD Application Team
-* Version            : V2.0.1
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : Library configuration file.
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
@@ -145,6 +145,10 @@
 /* In the following line adjust the value of External High Speed oscillator (HSE)
    used in your application */
 #define HSE_Value    ((u32)8000000) /* Value of the External oscillator in Hz*/
+
+/* In the following line adjust the External High Speed oscillator (HSE) Startup 
+   Timeout value */
+#define HSEStartUp_TimeOut    ((u16)0x0500) /* Time out for HSE start up */
 
 /* Exported macro ------------------------------------------------------------*/
 #ifdef  DEBUG

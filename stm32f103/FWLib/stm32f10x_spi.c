@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_spi.c
 * Author             : MCD Application Team
-* Version            : V2.0.1 
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : This file provides all the SPI firmware functions.
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
@@ -44,7 +44,7 @@
 
 /* SPI or I2S mode selection masks */
 #define SPI_Mode_Select      ((u16)0xF7FF)
-#define I2S_Mode_Select      ((u16)0x0800)   
+#define I2S_Mode_Select      ((u16)0x0800) 
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -742,18 +742,23 @@ FlagStatus SPI_I2S_GetFlagStatus(SPI_TypeDef* SPIx, u16 SPI_I2S_FLAG)
 
 /*******************************************************************************
 * Function Name  : SPI_I2S_ClearFlag
-* Description    : Clears the SPIx/I2Sx pending flags.
+* Description    : Clears the SPIx CRC Error (CRCERR) flag.
 * Input          : - SPIx: where x can be :
 *                         - 1, 2 or 3 in SPI mode 
-*                         - 2 or 3 in I2S mode
-*                  - SPI_I2S_FLAG: specifies the SPI/I2S flag to clear. 
-*                    This parameter can be one of the following values:
-*                       - SPI_I2S_FLAG_OVR: Overrun flag 
-*                       - SPI_FLAG_MODF: Mode Fault flag.
-*                       - SPI_FLAG_CRCERR: CRC Error flag.
-*                       - I2S_FLAG_UDR: Underrun Error flag.
-*                    Note: Before clearing OVR flag, it is mandatory to read 
-*                          SPI_I2S_DR register, so that the last data is not lost.
+*                  - SPI_I2S_FLAG: specifies the SPI flag to clear. 
+*                    This function clears only CRCERR flag.                                           
+*                  Notes:
+*                       - OVR (OverRun error) flag is cleared by software 
+*                         sequence: a read operation to SPI_DR register 
+*                         (SPI_I2S_ReceiveData()) followed by a read operation 
+*                         to SPI_SR register (SPI_I2S_GetFlagStatus()).                           
+*                       - UDR (UnderRun error) flag is cleared by a read 
+*                         operation to SPI_SR register (SPI_I2S_GetFlagStatus()).                             
+*                       - MODF (Mode Fault) flag is cleared by software sequence: 
+*                         a read/write operation to SPI_SR register 
+*                         (SPI_I2S_GetFlagStatus()) followed by a write 
+*                         operation to SPI_CR1 register (SPI_Cmd() to enable 
+*                         the SPI).   
 * Output         : None
 * Return         : None
 *******************************************************************************/
@@ -763,27 +768,8 @@ void SPI_I2S_ClearFlag(SPI_TypeDef* SPIx, u16 SPI_I2S_FLAG)
   assert_param(IS_SPI_ALL_PERIPH(SPIx));
   assert_param(IS_SPI_I2S_CLEAR_FLAG(SPI_I2S_FLAG));
     
-  /* SPI_FLAG_MODF flag clear */
-  if(SPI_I2S_FLAG == SPI_FLAG_MODF)
-  {
-    /* Read SR register */
-    (void)SPIx->SR;
-    
-    /* Write on CR1 register */
-    SPIx->CR1 |= CR1_SPE_Set; 
-  }
-  /* SPI_I2S_FLAG_OVR flag or I2S_FLAG_UDR flag clear */
-  else if ((SPI_I2S_FLAG == SPI_I2S_FLAG_OVR) || (SPI_I2S_FLAG == I2S_FLAG_UDR))  
-  {
-    /* Read SR register  (Before clearing OVR flag, it is mandatory to read 
-       SPI_I2S_DR register)*/
-    (void)SPIx->SR;
-  }
-  else /* SPI_FLAG_CRCERR flag clear */
-  {
-    /* Clear the selected SPI flag */
+    /* Clear the selected SPI CRC Error (CRCERR) flag */
     SPIx->SR = (u16)~SPI_I2S_FLAG;
-  }
 }
 
 /*******************************************************************************
@@ -839,16 +825,24 @@ ITStatus SPI_I2S_GetITStatus(SPI_TypeDef* SPIx, u8 SPI_I2S_IT)
 
 /*******************************************************************************
 * Function Name  : SPI_I2S_ClearITPendingBit
-* Description    : Clears the SPIx/I2Sx interrupt pending bits.
+* Description    : Clears the SPIx CRC Error (CRCERR) interrupt pending bit.
 * Input          : - SPIx: where x can be :
 *                         - 1, 2 or 3 in SPI mode 
-*                         - 2 or 3 in I2S mode
-*                  - SPI_I2S_IT: specifies the SPI/I2S interrupt pending bit to clear.
-*                    This parameter can be one of the following values:
-*                       - SPI_I2S_IT_OVR: Overrun interrupt.
-*                       - SPI_IT_MODF: Mode Fault interrupt.
-*                       - SPI_IT_CRCERR: CRC Error interrupt.
-*                       - I2S_IT_UDR: Underrun Error interrupt.
+*                  - SPI_I2S_IT: specifies the SPI interrupt pending bit to clear.
+*                    This function clears only CRCERR intetrrupt pending bit.   
+*                  Notes:
+*                       - OVR (OverRun Error) interrupt pending bit is cleared 
+*                         by software sequence: a read operation to SPI_DR 
+*                         register (SPI_I2S_ReceiveData()) followed by a read 
+*                         operation to SPI_SR register (SPI_I2S_GetITStatus()).
+*                       - UDR (UnderRun Error) interrupt pending bit is cleared 
+*                         by a read operation to SPI_SR register 
+*                         (SPI_I2S_GetITStatus()).                           
+*                       - MODF (Mode Fault) interrupt pending bit is cleared by 
+*                         software sequence: a read/write operation to SPI_SR 
+*                         register (SPI_I2S_GetITStatus()) followed by a write 
+*                         operation to SPI_CR1 register (SPI_Cmd() to enable the 
+*                         SPI).   
 * Output         : None
 * Return         : None
 *******************************************************************************/
@@ -860,27 +854,10 @@ void SPI_I2S_ClearITPendingBit(SPI_TypeDef* SPIx, u8 SPI_I2S_IT)
   assert_param(IS_SPI_ALL_PERIPH(SPIx));
   assert_param(IS_SPI_I2S_CLEAR_IT(SPI_I2S_IT));
 
-  /* SPI_IT_MODF pending bit clear */
-  if(SPI_I2S_IT == SPI_IT_MODF)
-  {
-    /* Read SR register */
-    (void)SPIx->SR;
-    /* Write on CR1 register */
-    SPIx->CR1 |= CR1_SPE_Set; 
-  }
-  /* SPI_I2S_IT_OVR or I2S_IT_UDR pending bit clear */ 
-  else if((SPI_I2S_IT == SPI_I2S_IT_OVR) || (SPI_I2S_IT == I2S_IT_UDR))    
-  {
-    /* Read SR register */
-    (void)(SPIx->SR);
-  }  
-  else   /* SPI_IT_CRCERR pending bit clear */
-  {
-    /* Get the SPI/I2S IT index */
-    itpos = (u16)((u16)0x01 << (SPI_I2S_IT & (u8)0x0F));
-    /* Clear the selected SPI/I2S interrupt pending bits */
-    SPIx->SR = (u16)~itpos;
-  }
+  /* Get the SPI IT index */
+  itpos = (u16)((u16)0x01 << (SPI_I2S_IT & (u8)0x0F));
+  /* Clear the selected SPI CRC Error (CRCERR) interrupt pending bit */
+  SPIx->SR = (u16)~itpos;
 }
 
 /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

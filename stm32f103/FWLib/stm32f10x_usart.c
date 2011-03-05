@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_usart.c
 * Author             : MCD Application Team
-* Version            : V2.0.1
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : This file provides all the USART firmware functions.
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
@@ -851,16 +851,22 @@ FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, u16 USART_FLAG)
 *                       - USART_FLAG_LBD:  LIN Break detection flag.
 *                       - USART_FLAG_TC:   Transmission Complete flag.
 *                       - USART_FLAG_RXNE: Receive data register not empty flag.
-*                       - USART_FLAG_IDLE: Idle Line detection flag.
-*                       - USART_FLAG_ORE:  OverRun Error flag.
-*                       - USART_FLAG_NE:   Noise Error flag.
-*                       - USART_FLAG_FE:   Framing Error flag.
-*                       - USART_FLAG_PE:   Parity Error flag.
 *
-*                    Note: - For IDLE, ORE, NE, FE and PE flags user has to read 
-*                          the USART DR register after calling this function.
-*                          - TXE flag can't be cleared by this function, it's
-*                          cleared only by a write to the USART DR register.                        
+*                  Notes:
+*                        - PE (Parity error), FE (Framing error), NE (Noise error),
+*                          ORE (OverRun error) and IDLE (Idle line detected) 
+*                          flags are cleared by software sequence: a read 
+*                          operation to USART_SR register (USART_GetFlagStatus()) 
+*                          followed by a read operation to USART_DR register 
+*                          (USART_ReceiveData()).
+*                        - RXNE flag can be also cleared by a read to the 
+*                          USART_DR register (USART_ReceiveData()).
+*                        - TC flag can be also cleared by software sequence: a 
+*                          read operation to USART_SR register 
+*                          (USART_GetFlagStatus()) followed by a write operation
+*                          to USART_DR register (USART_SendData()).                                                      
+*                        - TXE flag is cleared only by a write to the USART_DR 
+*                          register (USART_SendData()).                        
 * Output         : None
 * Return         : None
 *******************************************************************************/
@@ -904,7 +910,7 @@ ITStatus USART_GetITStatus(USART_TypeDef* USARTx, u16 USART_IT)
 
   /* Check the parameters */
   assert_param(IS_USART_ALL_PERIPH(USARTx));
-  assert_param(IS_USART_IT(USART_IT));
+  assert_param(IS_USART_GET_IT(USART_IT));
   assert_param(IS_USART_PERIPH_IT(USARTx, USART_IT)); /* The CTS interrupt is not available for UART4 and UART5 */  
   
   /* Get the USART register index */
@@ -958,16 +964,22 @@ ITStatus USART_GetITStatus(USART_TypeDef* USARTx, u16 USART_IT)
 *                       - USART_IT_LBD:  LIN Break detection interrupt
 *                       - USART_IT_TC:   Transmission complete interrupt. 
 *                       - USART_IT_RXNE: Receive Data register not empty interrupt.
-*                       - USART_IT_IDLE: Idle line detection interrupt.
-*                       - USART_IT_ORE:  OverRun Error interrupt.
-*                       - USART_IT_NE:   Noise Error interrupt.
-*                       - USART_IT_FE:   Framing Error interrupt.
-*                       - USART_IT_PE:   Parity Error interrupt.
-*
-*                    Note: - For IDLE, ORE, NE, FE and PE pending bits user has to 
-*                            read the USART DR register after calling this function.
-*                          - TXE pending bit can't be cleared by this function, it's
-*                            cleared only by a write to the USART DR register.
+*                    
+*                  Notes:
+*                        - PE (Parity error), FE (Framing error), NE (Noise error),
+*                          ORE (OverRun error) and IDLE (Idle line detected) 
+*                          pending bits are cleared by software sequence: a read 
+*                          operation to USART_SR register (USART_GetITStatus()) 
+*                          followed by a read operation to USART_DR register 
+*                          (USART_ReceiveData()).
+*                        - RXNE pending bit can be also cleared by a read to the 
+*                          USART_DR register (USART_ReceiveData()).
+*                        - TC pending bit can be also cleared by software 
+*                          sequence: a read operation to USART_SR register 
+*                          (USART_GetITStatus()) followed by a write operation
+*                          to USART_DR register (USART_SendData()).                                                      
+*                        - TXE pending bit is cleared only by a write to the 
+*                          USART_DR register (USART_SendData()).  
 * Output         : None
 * Return         : None
 *******************************************************************************/

@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_fsmc.h
 * Author             : MCD Application Team
-* Version            : V2.0.1
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : This file contains all the functions prototypes for the
 *                      FSMC firmware library.
 ********************************************************************************
@@ -48,7 +48,6 @@ typedef struct
   u32 FSMC_WriteOperation;
   u32 FSMC_WaitSignal;
   u32 FSMC_ExtendedMode;
-  u32 FSMC_AsyncWait;
   u32 FSMC_WriteBurst;
   /* Timing Parameters for write and read access if the  ExtendedMode is not used*/
   FSMC_NORSRAMTimingInitTypeDef* FSMC_ReadWriteTimingStruct;
@@ -135,14 +134,12 @@ typedef struct
 
 /* FSMC Memory Type ----------------------------------------------------------*/
 #define FSMC_MemoryType_SRAM                            ((u32)0x00000000)
-#define FSMC_MemoryType_CRAM                            ((u32)0x00000004)
+#define FSMC_MemoryType_PSRAM                           ((u32)0x00000004)
 #define FSMC_MemoryType_NOR                             ((u32)0x00000008)
-#define FSMC_MemoryType_COSMORAM                        ((u32)0x0000000C)
 
 #define IS_FSMC_MEMORY(MEMORY) (((MEMORY) == FSMC_MemoryType_SRAM) || \
-                                ((MEMORY) == FSMC_MemoryType_CRAM)|| \
-                                ((MEMORY) == FSMC_MemoryType_NOR)|| \
-                                ((MEMORY) == FSMC_MemoryType_COSMORAM))
+                                ((MEMORY) == FSMC_MemoryType_PSRAM)|| \
+                                ((MEMORY) == FSMC_MemoryType_NOR))
                                      
 /* FSMC  Data Width ----------------------------------------------------------*/
 #define FSMC_MemoryDataWidth_8b                         ((u32)0x00000000)
@@ -200,14 +197,7 @@ typedef struct
 
 #define IS_FSMC_EXTENDED_MODE(MODE) (((MODE) == FSMC_ExtendedMode_Disable) || \
                                      ((MODE) == FSMC_ExtendedMode_Enable)) 
-                               
-/* FSMC Asynchronous Wait ----------------------------------------------------*/
-#define FSMC_AsyncWait_Disable                          ((u32)0x00000000)
-#define FSMC_AsyncWait_Enable                           ((u32)0x00008000)
-
-#define IS_FSMC_ASYNC_WAIT(WAIT) (((WAIT) == FSMC_AsyncWait_Disable) || \
-                                  ((WAIT) == FSMC_AsyncWait_Enable))
-                                  
+                                                                 
 /* FSMC Write Burst ----------------------------------------------------------*/                                  
 #define FSMC_WriteBurst_Disable                         ((u32)0x00000000)
 #define FSMC_WriteBurst_Enable                          ((u32)0x00080000) 

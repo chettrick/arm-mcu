@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_i2c.c
 * Author             : MCD Application Team
-* Version            : V2.0.1
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : This file provides all the I2C firmware functions.
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
@@ -92,6 +92,9 @@
 
 /* I2C FLAG mask */
 #define FLAG_Mask               ((u32)0x00FFFFFF)
+
+/* I2C Interrupt Enable mask */
+#define ITEN_Mask               ((u32)0x07000000)
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -1003,26 +1006,35 @@ ErrorStatus I2C_CheckEvent(I2C_TypeDef* I2Cx, u32 I2C_EVENT)
 FlagStatus I2C_GetFlagStatus(I2C_TypeDef* I2Cx, u32 I2C_FLAG)
 {
   FlagStatus bitstatus = RESET;
-  u32 i2cstatus = 0;
-  u32 flag1 = 0, flag2 = 0;
+  u32 i2creg = 0, i2cxbase = 0;
 
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_I2C_GET_FLAG(I2C_FLAG));
 
-  /* Read the I2Cx status register */
-  flag1 = I2Cx->SR1;
-  flag2 = I2Cx->SR2;
-  flag2 = (flag2 & FLAG_Mask) << 16;
-
-  /* Get the I2C status value */
-  i2cstatus = flag1 | flag2;
-
+  /* Get the I2Cx peripheral base address */
+  i2cxbase = (*(u32*)&(I2Cx));
+  
+  /* Read flag register index */
+  i2creg = I2C_FLAG >> 28;
+  
   /* Get bit[23:0] of the flag */
   I2C_FLAG &= FLAG_Mask;
-
-  /* Check the status of the specified I2C flag */
-  if ((i2cstatus & I2C_FLAG) != (u32)RESET)
+  
+  if(i2creg != 0)
+  {
+    /* Get the I2Cx SR1 register address */
+    i2cxbase += 0x14;
+  }
+  else
+  {
+    /* Flag in I2Cx SR2 Register */
+    I2C_FLAG = (u32)(I2C_FLAG >> 16);
+    /* Get the I2Cx SR2 register address */
+    i2cxbase += 0x18;
+  }
+  
+  if(((*(vu32 *)i2cxbase) & I2C_FLAG) != (u32)RESET)
   {
     /* I2C_FLAG is set */
     bitstatus = SET;
@@ -1032,6 +1044,7 @@ FlagStatus I2C_GetFlagStatus(I2C_TypeDef* I2Cx, u32 I2C_FLAG)
     /* I2C_FLAG is reset */
     bitstatus = RESET;
   }
+  
   /* Return the I2C_FLAG status */
   return  bitstatus;
 }
@@ -1041,7 +1054,8 @@ FlagStatus I2C_GetFlagStatus(I2C_TypeDef* I2Cx, u32 I2C_FLAG)
 * Description    : Clears the I2Cx's pending flags.
 * Input          : - I2Cx: where x can be 1 or 2 to select the I2C peripheral.
 *                  - I2C_FLAG: specifies the flag to clear. 
-*                    This parameter can be one of the following values:
+*                    This parameter can be any combination of the following
+*                    values:
 *                       - I2C_FLAG_SMBALERT: SMBus Alert flag
 *                       - I2C_FLAG_TIMEOUT: Timeout or Tlow error flag
 *                       - I2C_FLAG_PECERR: PEC error in reception flag
@@ -1049,19 +1063,35 @@ FlagStatus I2C_GetFlagStatus(I2C_TypeDef* I2Cx, u32 I2C_FLAG)
 *                       - I2C_FLAG_AF: Acknowledge failure flag
 *                       - I2C_FLAG_ARLO: Arbitration lost flag (Master mode)
 *                       - I2C_FLAG_BERR: Bus error flag
-*                       - I2C_FLAG_STOPF: Stop detection flag (Slave mode)
-*                       - I2C_FLAG_ADD10: 10-bit header sent flag (Master mode)
-*                       - I2C_FLAG_BTF: Byte transfer finished flag
-*                       - I2C_FLAG_ADDR: Address sent flag (Master mode) “ADSL”
-*                                        Address matched flag (Slave mode)”ENDAD”
-*                       - I2C_FLAG_SB: Start bit flag (Master mode)
+*                       
+*                  Notes: 
+*                        - STOPF (STOP detection) is cleared by software 
+*                          sequence: a read operation to I2C_SR1 register 
+*                          (I2C_GetFlagStatus()) followed by a write operation 
+*                          to I2C_CR1 register (I2C_Cmd() to re-enable the 
+*                          I2C peripheral). 
+*                        - ADD10 (10-bit header sent) is cleared by software 
+*                          sequence: a read operation to I2C_SR1 
+*                          (I2C_GetFlagStatus()) followed by writing the
+*                          second byte of the address in DR register.
+*                        - BTF (Byte Transfer Finished) is cleared by software 
+*                          sequence: a read operation to I2C_SR1 register 
+*                          (I2C_GetFlagStatus()) followed by a read/write to 
+*                          I2C_DR register (I2C_SendData()).
+*                        - ADDR (Address sent) is cleared by software sequence: 
+*                          a read operation to I2C_SR1 register 
+*                          (I2C_GetFlagStatus()) followed by a read operation to 
+*                          I2C_SR2 register ((void)(I2Cx->SR2)).
+*                        - SB (Start Bit) is cleared software sequence: a read 
+*                          operation to I2C_SR1 register (I2C_GetFlagStatus()) 
+*                          followed by a write operation to I2C_DR reigister 
+*                          (I2C_SendData()). 
 * Output         : None
 * Return         : None
 *******************************************************************************/
 void I2C_ClearFlag(I2C_TypeDef* I2Cx, u32 I2C_FLAG)
 {
   u32 flagpos = 0;
-  u32 flagindex = 0;
 
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
@@ -1070,39 +1100,8 @@ void I2C_ClearFlag(I2C_TypeDef* I2Cx, u32 I2C_FLAG)
   /* Get the I2C flag position */
   flagpos = I2C_FLAG & FLAG_Mask;
 
-  /* Get the I2C flag index */
-  flagindex = I2C_FLAG >> 28;
-
-  /* Clear the flag by writing 0 */
-  if (flagindex == 1)
-  {
-    /* Clear the selected I2C flag */
-    I2Cx->SR1 = (u16)~flagpos;
-  }
-  /* Flags that need a read of the SR1 register to be cleared */
-  else if (flagindex == 2)
-  {
-    /* Read the SR1 register */
-    (void)I2Cx->SR1;
-  }
-  /* Flags that need a read of SR1 and a write on CR1 registers to be cleared */
-  else if (flagindex == 6)
-  {
-    /* Read the SR1 register */
-    (void)I2Cx->SR1;
-
-    /* Write on the CR1 register */
-    I2Cx->CR1 |= CR1_PE_Set;
-  }
-  /* Flags that need a read of SR1 and SR2 registers to be cleared */
-  else /*flagindex == 0xA*/
-  {
-    /* Read the SR1 register */
-    (void)I2Cx->SR1;
-
-    /* Read the SR2 register */
-    (void)I2Cx->SR2;
-  }
+  /* Clear the selected I2C flag */
+  I2Cx->SR1 = (u16)~flagpos;
 }
 
 /*******************************************************************************
@@ -1124,7 +1123,7 @@ void I2C_ClearFlag(I2C_TypeDef* I2Cx, u32 I2C_FLAG)
 *                       - I2C_IT_ADD10: 10-bit header sent flag (Master mode)
 *                       - I2C_IT_BTF: Byte transfer finished flag
 *                       - I2C_IT_ADDR: Address sent flag (Master mode) “ADSL”
-*                                        Address matched flag (Slave mode)”ENDAD”
+*                                      Address matched flag (Slave mode)”ENDAD”
 *                       - I2C_IT_SB: Start bit flag (Master mode)
 * Output         : None
 * Return         : The new state of I2C_IT (SET or RESET).
@@ -1132,26 +1131,20 @@ void I2C_ClearFlag(I2C_TypeDef* I2Cx, u32 I2C_FLAG)
 ITStatus I2C_GetITStatus(I2C_TypeDef* I2Cx, u32 I2C_IT)
 {
   ITStatus bitstatus = RESET;
-  u32 i2cstatus = 0;
-  u32 flag1 = 0, flag2 = 0;
+  u32 enablestatus = 0;
 
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_I2C_GET_IT(I2C_IT));
 
-  /* Read the I2Cx status register */
-  flag1 = I2Cx->SR1;
-  flag2 = I2Cx->SR2;
-  flag2 = (flag2 & FLAG_Mask) << 16;
-
-  /* Get the I2C status value */
-  i2cstatus = flag1 | flag2;
+  /* Check if the interrupt source is enabled or not */
+  enablestatus = (u32)(((I2C_IT & ITEN_Mask) >> 16) & (I2Cx->CR2)) ;  
 
   /* Get bit[23:0] of the flag */
   I2C_IT &= FLAG_Mask;
 
   /* Check the status of the specified I2C flag */
-  if ((i2cstatus & I2C_IT) != (u32)RESET)
+  if (((I2Cx->SR1 & I2C_IT) != (u32)RESET) && enablestatus)
   {
     /* I2C_IT is set */
     bitstatus = SET;
@@ -1170,27 +1163,44 @@ ITStatus I2C_GetITStatus(I2C_TypeDef* I2Cx, u32 I2C_IT)
 * Description    : Clears the I2Cx’s interrupt pending bits.
 * Input          : - I2Cx: where x can be 1 or 2 to select the I2C peripheral.
 *                  - I2C_IT: specifies the interrupt pending bit to clear. 
-*                    This parameter can be one of the following values:
-*                       - I2C_IT_SMBALERT: SMBus Alert flag
-*                       - I2C_IT_TIMEOUT: Timeout or Tlow error flag
-*                       - I2C_IT_PECERR: PEC error in reception flag
-*                       - I2C_IT_OVR: Overrun/Underrun flag (Slave mode)
-*                       - I2C_IT_AF: Acknowledge failure flag
-*                       - I2C_IT_ARLO: Arbitration lost flag (Master mode)
-*                       - I2C_IT_BERR: Bus error flag
-*                       - I2C_IT_STOPF: Stop detection flag (Slave mode)
-*                       - I2C_IT_ADD10: 10-bit header sent flag (Master mode)
-*                       - I2C_IT_BTF: Byte transfer finished flag
-*                       - I2C_IT_ADDR: Address sent flag (Master mode) “ADSL”
-*                                        Address matched flag (Slave mode)”ENDAD”
-*                       - I2C_IT_SB: Start bit flag (Master mode)
+*                    This parameter can be any combination of the following 
+*                    values:
+*                       - I2C_IT_SMBALERT: SMBus Alert interrupt
+*                       - I2C_IT_TIMEOUT: Timeout or Tlow error interrupt
+*                       - I2C_IT_PECERR: PEC error in reception  interrupt
+*                       - I2C_IT_OVR: Overrun/Underrun interrupt (Slave mode)
+*                       - I2C_IT_AF: Acknowledge failure interrupt
+*                       - I2C_IT_ARLO: Arbitration lost interrupt (Master mode)
+*                       - I2C_IT_BERR: Bus error interrupt
+*                       
+*                  Notes:
+*                        - STOPF (STOP detection) is cleared by software 
+*                          sequence: a read operation to I2C_SR1 register 
+*                          (I2C_GetITStatus()) followed by a write operation to 
+*                          I2C_CR1 register (I2C_Cmd() to re-enable the I2C 
+*                          peripheral). 
+*                        - ADD10 (10-bit header sent) is cleared by software 
+*                          sequence: a read operation to I2C_SR1 
+*                          (I2C_GetITStatus()) followed by writing the second 
+*                          byte of the address in I2C_DR register.
+*                        - BTF (Byte Transfer Finished) is cleared by software 
+*                          sequence: a read operation to I2C_SR1 register 
+*                          (I2C_GetITStatus()) followed by a read/write to 
+*                          I2C_DR register (I2C_SendData()).
+*                        - ADDR (Address sent) is cleared by software sequence: 
+*                          a read operation to I2C_SR1 register (I2C_GetITStatus()) 
+*                          followed by a read operation to I2C_SR2 register 
+*                          ((void)(I2Cx->SR2)).
+*                        - SB (Start Bit) is cleared by software sequence: a 
+*                          read operation to I2C_SR1 register (I2C_GetITStatus()) 
+*                          followed by a write operation to I2C_DR reigister 
+*                          (I2C_SendData()). 
 * Output         : None
 * Return         : None
 *******************************************************************************/
 void I2C_ClearITPendingBit(I2C_TypeDef* I2Cx, u32 I2C_IT)
 {
   u32 flagpos = 0;
-  u32 flagindex = 0;
 
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
@@ -1199,39 +1209,8 @@ void I2C_ClearITPendingBit(I2C_TypeDef* I2Cx, u32 I2C_IT)
   /* Get the I2C flag position */
   flagpos = I2C_IT & FLAG_Mask;
 
-  /* Get the I2C flag index */
-  flagindex = I2C_IT >> 28;
-
-  /* Clear the flag by writing 0 */
-  if (flagindex == 1)
-  {
-    /* Clear the selected I2C flag */
-    I2Cx->SR1 = (u16)~flagpos;
-  }
-  /* Flags that need a read of the SR1 register to be cleared */
-  else if (flagindex == 2)
-  {
-    /* Read the SR1 register */
-    (void)I2Cx->SR1;
-  }
-  /* Flags that need a read of SR1 and a write on CR1 registers to be cleared */
-  else if (flagindex == 6)
-  {
-    /* Read the SR1 register */
-    (void)I2Cx->SR1;
-
-    /* Write on the CR1 register */
-    I2Cx->CR1 |= CR1_PE_Set;
-  }
-  /* Flags that need a read of SR1 and SR2 registers to be cleared */
-  else /*flagindex == 0xA*/
-  {
-    /* Read the SR1 register */
-    (void)I2Cx->SR1;
-
-    /* Read the SR2 register */
-    (void)I2Cx->SR2;
-  }
+  /* Clear the selected I2C flag */
+  I2Cx->SR1 = (u16)~flagpos;
 }
 
 /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

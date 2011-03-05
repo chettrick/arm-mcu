@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_usart.h
 * Author             : MCD Application Team
-* Version            : V2.0.1
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : This file contains all the functions prototypes for the
 *                      USART firmware library.
 ********************************************************************************
@@ -149,17 +149,14 @@ typedef struct
                                ((IT) == USART_IT_IDLE) || ((IT) == USART_IT_LBD) || \
                                ((IT) == USART_IT_CTS) || ((IT) == USART_IT_ERR))
 
-#define IS_USART_IT(IT) (((IT) == USART_IT_PE) || ((IT) == USART_IT_TXE) || \
-                         ((IT) == USART_IT_TC) || ((IT) == USART_IT_RXNE) || \
-                         ((IT) == USART_IT_IDLE) || ((IT) == USART_IT_LBD) || \
-                         ((IT) == USART_IT_CTS) || ((IT) == USART_IT_ORE) || \
-                         ((IT) == USART_IT_NE) || ((IT) == USART_IT_FE))
+#define IS_USART_GET_IT(IT) (((IT) == USART_IT_PE) || ((IT) == USART_IT_TXE) || \
+                            ((IT) == USART_IT_TC) || ((IT) == USART_IT_RXNE) || \
+                            ((IT) == USART_IT_IDLE) || ((IT) == USART_IT_LBD) || \
+                            ((IT) == USART_IT_CTS) || ((IT) == USART_IT_ORE) || \
+                            ((IT) == USART_IT_NE) || ((IT) == USART_IT_FE))
 
-#define IS_USART_CLEAR_IT(IT) (((IT) == USART_IT_PE) || ((IT) == USART_IT_TC) || \
-                               ((IT) == USART_IT_RXNE) || ((IT) == USART_IT_IDLE) || \
-                               ((IT) == USART_IT_LBD) || ((IT) == USART_IT_CTS) ||  \
-                               ((IT) == USART_IT_ORE) || ((IT) == USART_IT_NE) || \
-                               ((IT) == USART_IT_FE))
+#define IS_USART_CLEAR_IT(IT) (((IT) == USART_IT_TC) || ((IT) == USART_IT_RXNE) || \
+                               ((IT) == USART_IT_LBD) || ((IT) == USART_IT_CTS))
 
 #define IS_USART_PERIPH_IT(PERIPH, USART_IT) ((((*(u32*)&(PERIPH)) != UART4_BASE) && \
                                               ((*(u32*)&(PERIPH)) != UART5_BASE)) \
@@ -211,7 +208,7 @@ typedef struct
                              ((FLAG) == USART_FLAG_CTS) || ((FLAG) == USART_FLAG_ORE) || \
                              ((FLAG) == USART_FLAG_NE) || ((FLAG) == USART_FLAG_FE))
                               
-#define IS_USART_CLEAR_FLAG(FLAG) ((((FLAG) & (u16)0xFC80) == 0x00) && ((FLAG) != (u16)0x00))
+#define IS_USART_CLEAR_FLAG(FLAG) ((((FLAG) & (u16)0xFC9F) == 0x00) && ((FLAG) != (u16)0x00))
 
 #define IS_USART_PERIPH_FLAG(PERIPH, USART_FLAG) ((((*(u32*)&(PERIPH)) != UART4_BASE) &&\
                                                   ((*(u32*)&(PERIPH)) != UART5_BASE)) \

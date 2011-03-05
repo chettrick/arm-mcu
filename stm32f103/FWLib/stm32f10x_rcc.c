@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_rcc.c
 * Author             : MCD Application Team
-* Version            : V2.0.1
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : This file provides all the RCC firmware functions.
 ********************************************************************************
 * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
@@ -101,16 +101,15 @@
 /* BDCR register base address */
 #define BDCR_ADDRESS              (PERIPH_BASE + BDCR_OFFSET)
 
+#ifndef HSEStartUp_TimeOut
 /* Time out for HSE start up */
-#define HSEStartUp_TimeOut        ((u16)0x01FF)
+#define HSEStartUp_TimeOut        ((u16)0x0500)
+#endif
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 static uc8 APBAHBPrescTable[16] = {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 8, 9};
 static uc8 ADCPrescTable[4] = {2, 4, 6, 8};
-
-static volatile FlagStatus HSEStatus;
-static vu32 StartUpCounter = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -198,8 +197,10 @@ void RCC_HSEConfig(u32 RCC_HSE)
 *******************************************************************************/
 ErrorStatus RCC_WaitForHSEStartUp(void)
 {
+  vu32 StartUpCounter = 0;
   ErrorStatus status = ERROR;
-
+  FlagStatus HSEStatus = RESET;
+  
   /* Wait till HSE is ready and if Time out is reached exit */
   do
   {

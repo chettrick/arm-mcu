@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_rcc.h
 * Author             : MCD Application Team
-* Version            : V2.0.1
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : This file contains all the functions prototypes for the
 *                      RCC firmware library.
 ********************************************************************************
@@ -227,7 +227,7 @@ typedef struct
                          ((MCO) == RCC_MCO_PLLCLK_Div2))
 
 /* RCC Flag */
-#define RCC_FLAG_HSIRDY                  ((u8)0x20)
+#define RCC_FLAG_HSIRDY                  ((u8)0x21)
 #define RCC_FLAG_HSERDY                  ((u8)0x31)
 #define RCC_FLAG_PLLRDY                  ((u8)0x39)
 #define RCC_FLAG_LSERDY                  ((u8)0x41)

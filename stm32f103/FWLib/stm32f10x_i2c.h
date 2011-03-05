@@ -1,8 +1,8 @@
 /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
 * File Name          : stm32f10x_i2c.h
 * Author             : MCD Application Team
-* Version            : V2.0.1
-* Date               : 06/13/2008
+* Version            : V2.0.3
+* Date               : 09/22/2008
 * Description        : This file contains all the functions prototypes for the
 *                      I2C firmware library.
 ********************************************************************************
@@ -116,27 +116,22 @@ typedef struct
 #define IS_I2C_CONFIG_IT(IT) ((((IT) & (u16)0xF8FF) == 0x00) && ((IT) != 0x00))
 
 /* I2C interrupts definition */
-#define I2C_IT_SMBALERT                 ((u32)0x10008000)
-#define I2C_IT_TIMEOUT                  ((u32)0x10004000)
-#define I2C_IT_PECERR                   ((u32)0x10001000)
-#define I2C_IT_OVR                      ((u32)0x10000800)
-#define I2C_IT_AF                       ((u32)0x10000400)
-#define I2C_IT_ARLO                     ((u32)0x10000200)
-#define I2C_IT_BERR                     ((u32)0x10000100)
-#define I2C_IT_TXE                      ((u32)0x00000080)
-#define I2C_IT_RXNE                     ((u32)0x00000040)
-#define I2C_IT_STOPF                    ((u32)0x60000010)
-#define I2C_IT_ADD10                    ((u32)0x20000008)
-#define I2C_IT_BTF                      ((u32)0x60000004)
-#define I2C_IT_ADDR                     ((u32)0xA0000002)
-#define I2C_IT_SB                       ((u32)0x20000001)
+#define I2C_IT_SMBALERT                 ((u32)0x01008000)
+#define I2C_IT_TIMEOUT                  ((u32)0x01004000)
+#define I2C_IT_PECERR                   ((u32)0x01001000)
+#define I2C_IT_OVR                      ((u32)0x01000800)
+#define I2C_IT_AF                       ((u32)0x01000400)
+#define I2C_IT_ARLO                     ((u32)0x01000200)
+#define I2C_IT_BERR                     ((u32)0x01000100)
+#define I2C_IT_TXE                      ((u32)0x06000080)
+#define I2C_IT_RXNE                     ((u32)0x06000040)
+#define I2C_IT_STOPF                    ((u32)0x02000010)
+#define I2C_IT_ADD10                    ((u32)0x02000008)
+#define I2C_IT_BTF                      ((u32)0x02000004)
+#define I2C_IT_ADDR                     ((u32)0x02000002)
+#define I2C_IT_SB                       ((u32)0x02000001)
 
-#define IS_I2C_CLEAR_IT(IT) (((IT) == I2C_IT_SMBALERT) || ((IT) == I2C_IT_TIMEOUT) || \
-                             ((IT) == I2C_IT_PECERR) || ((IT) == I2C_IT_OVR) || \
-                             ((IT) == I2C_IT_AF) || ((IT) == I2C_IT_ARLO) || \
-                             ((IT) == I2C_IT_BERR) || ((IT) == I2C_IT_STOPF) || \
-                             ((IT) == I2C_IT_ADD10) || ((IT) == I2C_IT_BTF) || \
-                             ((IT) == I2C_IT_ADDR) || ((IT) == I2C_IT_SB))
+#define IS_I2C_CLEAR_IT(IT) ((((IT) & (u16)0x20FF) == 0x00) && ((IT) != (u16)0x00))                             
 
 #define IS_I2C_GET_IT(IT) (((IT) == I2C_IT_SMBALERT) || ((IT) == I2C_IT_TIMEOUT) || \
                            ((IT) == I2C_IT_PECERR) || ((IT) == I2C_IT_OVR) || \
@@ -147,6 +142,7 @@ typedef struct
                            ((IT) == I2C_IT_ADDR) || ((IT) == I2C_IT_SB))
 
 /* I2C flags definition */
+/* SR2 register flags */
 #define I2C_FLAG_DUALF                  ((u32)0x00800000)
 #define I2C_FLAG_SMBHOST                ((u32)0x00400000)
 #define I2C_FLAG_SMBDEFAULT             ((u32)0x00200000)
@@ -154,6 +150,7 @@ typedef struct
 #define I2C_FLAG_TRA                    ((u32)0x00040000)
 #define I2C_FLAG_BUSY                   ((u32)0x00020000)
 #define I2C_FLAG_MSL                    ((u32)0x00010000)
+/* SR1 register flags */
 #define I2C_FLAG_SMBALERT               ((u32)0x10008000)
 #define I2C_FLAG_TIMEOUT                ((u32)0x10004000)
 #define I2C_FLAG_PECERR                 ((u32)0x10001000)
@@ -161,20 +158,15 @@ typedef struct
 #define I2C_FLAG_AF                     ((u32)0x10000400)
 #define I2C_FLAG_ARLO                   ((u32)0x10000200)
 #define I2C_FLAG_BERR                   ((u32)0x10000100)
-#define I2C_FLAG_TXE                    ((u32)0x00000080)
-#define I2C_FLAG_RXNE                   ((u32)0x00000040)
-#define I2C_FLAG_STOPF                  ((u32)0x60000010)
-#define I2C_FLAG_ADD10                  ((u32)0x20000008)
-#define I2C_FLAG_BTF                    ((u32)0x60000004)
-#define I2C_FLAG_ADDR                   ((u32)0xA0000002)
-#define I2C_FLAG_SB                     ((u32)0x20000001)
-
-#define IS_I2C_CLEAR_FLAG(FLAG) (((FLAG) == I2C_FLAG_SMBALERT) || ((FLAG) == I2C_FLAG_TIMEOUT) || \
-                                 ((FLAG) == I2C_FLAG_PECERR) || ((FLAG) == I2C_FLAG_OVR) || \
-                                 ((FLAG) == I2C_FLAG_AF) || ((FLAG) == I2C_FLAG_ARLO) || \
-                                 ((FLAG) == I2C_FLAG_BERR) || ((FLAG) == I2C_FLAG_STOPF) || \
-                                 ((FLAG) == I2C_FLAG_ADD10) || ((FLAG) == I2C_FLAG_BTF) || \
-                                 ((FLAG) == I2C_FLAG_ADDR) || ((FLAG) == I2C_FLAG_SB))
+#define I2C_FLAG_TXE                    ((u32)0x10000080)
+#define I2C_FLAG_RXNE                   ((u32)0x10000040)
+#define I2C_FLAG_STOPF                  ((u32)0x10000010)
+#define I2C_FLAG_ADD10                  ((u32)0x10000008)
+#define I2C_FLAG_BTF                    ((u32)0x10000004)
+#define I2C_FLAG_ADDR                   ((u32)0x10000002)
+#define I2C_FLAG_SB                     ((u32)0x10000001)
+                               
+#define IS_I2C_CLEAR_FLAG(FLAG) ((((FLAG) & (u16)0x20FF) == 0x00) && ((FLAG) != (u16)0x00))                                  
 
 #define IS_I2C_GET_FLAG(FLAG) (((FLAG) == I2C_FLAG_DUALF) || ((FLAG) == I2C_FLAG_SMBHOST) || \
                                ((FLAG) == I2C_FLAG_SMBDEFAULT) || ((FLAG) == I2C_FLAG_GENCALL) || \
@@ -216,6 +208,9 @@ typedef struct
 #define  I2C_EVENT_MASTER_BYTE_RECEIVED                    ((u32)0x00030040)  /* BUSY, MSL and RXNE flags */
 
 /* EV8 */
+#define I2C_EVENT_MASTER_BYTE_TRANSMITTING                 ((u32)0x00070080) /* TRA, BUSY, MSL, TXE flags */
+
+/* EV8_2 */
 #define  I2C_EVENT_MASTER_BYTE_TRANSMITTED                 ((u32)0x00070084)  /* TRA, BUSY, MSL, TXE and BTF flags */
       
 /* EV9 */
