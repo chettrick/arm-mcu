@@ -18,12 +18,10 @@ extern int errno;
 #include <lpc17xx_pinsel.h>
 #include <lpc17xx_uart.h>
 
-static LPC_UART_TypeDef *UART_TABLE[] =
+static LPC_UART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
 {
-  (LPC_UART_TypeDef *) LPC_UART0,
-  (LPC_UART_TypeDef *) LPC_UART1,
-  (LPC_UART_TypeDef *) LPC_UART2,
-  (LPC_UART_TypeDef *) LPC_UART3
+  LPC_UART0,
+  LPC_UART1,
 };
 
 /* Initialize serial console */
@@ -73,16 +71,16 @@ int serial_init(unsigned port, unsigned long int baudrate)
   uartconfig.Parity = UART_PARITY_NONE;
   uartconfig.Databits = UART_DATABIT_8;
   uartconfig.Stopbits = UART_STOPBIT_1;
-  UART_Init(UART_TABLE[port], &uartconfig);
+  UART_Init(UARTS[port], &uartconfig);
 
 // Configure FIFO
 
   UART_FIFOConfigStructInit(&fifoconfig);
-  UART_FIFOConfig(UART_TABLE[port], &fifoconfig);
+  UART_FIFOConfig(UARTS[port], &fifoconfig);
 
 // Enable the UART transmitter
 
-  UART_TxCmd(UART_TABLE[port], ENABLE);
+  UART_TxCmd(UARTS[port], ENABLE);
 
   return 0;
 }
@@ -147,7 +145,7 @@ int serial_txready(unsigned port)
     return -1;
   }
 
-  if (UART_TABLE[port]->LSR & UART_LSR_THRE)
+  if (UARTS[port]->LSR & UART_LSR_THRE)
     return TRUE;
   else
     return FALSE;
@@ -170,7 +168,7 @@ int serial_write(unsigned port, char *buf, unsigned int count)
   for (n = 0; n < count; n++)
   {
     while (!serial_txready(port));
-    UART_TABLE[port]->THR = *buf++;
+    UARTS[port]->THR = *buf++;
   }
 
   return count;
@@ -188,7 +186,7 @@ int serial_rxready(unsigned port)
     return 0;
   }
 
-  if (UART_TABLE[port]->LSR & UART_LSR_RDR)
+  if (UARTS[port]->LSR & UART_LSR_RDR)
     return TRUE;
   else
     return FALSE;
@@ -208,7 +206,7 @@ int serial_read(unsigned port, char *buf, unsigned int count)
 
   if (serial_rxready(port))
   {
-    *buf = UART_TABLE[port]->RBR;
+    *buf = UARTS[port]->RBR;
     return 1;
   }
   else
