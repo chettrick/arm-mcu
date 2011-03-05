@@ -15,7 +15,12 @@ static const char revision[] = "$Id$";
 #undef errno
 extern int errno;
 
-static USART_TypeDef *UART = (USART_TypeDef *) USART1_BASE;
+static USART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
+{
+  USART1_BASE,
+  USART2_BASE,
+  USART3_BASE,
+};
 
 /* Initialize serial console */
 
@@ -26,12 +31,17 @@ int serial_init(unsigned port, unsigned long int baudrate)
 
   errno = 0;
 
+  if ((port < 1) || (port > MAX_SERIAL_PORTS))
+  {
+    errno = ENODEV;
+    return -1;
+  }
+
 // Turn on USART
 
   switch (port)
   {
     case 1 :
-      UART = (USART_TypeDef *) USART1_BASE;
 
 // Turn on peripheral clocks
 
@@ -54,7 +64,6 @@ int serial_init(unsigned port, unsigned long int baudrate)
       break;
  
     case 2 :
-      UART = (USART_TypeDef *) USART2_BASE;
 
 // Turn on peripheral clocks
 
@@ -77,7 +86,6 @@ int serial_init(unsigned port, unsigned long int baudrate)
       break;
  
     case 3 :
-      UART = (USART_TypeDef *) USART3_BASE;
 
 // Turn on peripheral clocks
 
@@ -89,7 +97,7 @@ int serial_init(unsigned port, unsigned long int baudrate)
       GPIO_config.GPIO_Pin = GPIO_Pin_10;
       GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
       GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
-      GPIO_Init(GPIOA, &GPIO_config);
+      GPIO_Init(GPIOB, &GPIO_config);
 
 // Configure RX pin
 
@@ -108,8 +116,8 @@ int serial_init(unsigned port, unsigned long int baudrate)
 
   USART_StructInit(&USART_config);
   USART_config.USART_BaudRate = baudrate;
-  USART_Init(UART, &USART_config);
-  USART_Cmd(UART, ENABLE);
+  USART_Init(UARTS[port-1], &USART_config);
+  USART_Cmd(UARTS[port-1], ENABLE);
 
   return 0;
 }
@@ -174,7 +182,7 @@ int serial_txready(unsigned port)
     return 0;
   }
 
-  return UART->SR & USART_FLAG_RXNE;
+  return UARTS[port-1]->SR & USART_FLAG_RXNE;
 }
 
 /* Send a buffer to the serial port */
@@ -194,7 +202,7 @@ int serial_write(unsigned port, char *buf, unsigned int count)
   for (n = 0; n < count; n++)
   {
     while (!serial_txready(port));
-    UART->DR = *buf++;
+    UARTS[port-1]->DR = *buf++;
   }
 
   return count;
@@ -212,7 +220,7 @@ int serial_rxready(unsigned port)
     return 0;
   }
 
-  return UART->SR & USART_FLAG_RXNE;
+  return UARTS[port-1]->SR & USART_FLAG_RXNE;
 }
 
 /* Read buffer from the serial port */
@@ -229,7 +237,8 @@ int serial_read(unsigned port, char *buf, unsigned int count)
 
   if (serial_rxready(port))
   {
-    *buf = UART->DR;
+    *buf = UARTS[port-1]->DR;
+
     return 1;
   }
   else
