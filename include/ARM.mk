@@ -75,10 +75,10 @@ default_catch:
 	$(OBJCOPY) -S -O ihex --gap-fill=0 $< $@
 
 .s.o:
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -c -o $@ -c $<
 
 .S.o:
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -c -o $@ -c $<
 
 # OpenOCD targets
 
