@@ -117,6 +117,7 @@ int serial_init(unsigned port, unsigned long int baudrate)
   USART_StructInit(&USART_config);
   USART_config.USART_BaudRate = baudrate;
   USART_Init(UARTS[port-1], &USART_config);
+
   USART_Cmd(UARTS[port-1], ENABLE);
 
   return 0;
