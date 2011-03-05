@@ -23,6 +23,7 @@ RESETEXP	?= $(MCUDEPENDENT)/reset.exp
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
+	for F in $(FWLIB)/*.S ; do $(MAKE) $${F%.S}.o ; done
 	for F in $(FWLIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
 
