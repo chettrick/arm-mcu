@@ -17,14 +17,18 @@ extern int errno;
 
 /* Define relocatable UART register definitions */
 
-static unsigned long int UARTBASE = (unsigned long int) AT91C_BASE_US0;
+static const unsigned long int UARTS[MAX_SERIAL_PORTS] =
+{
+  AT91C_BASE_US0,
+  AT91C_BASE_US1
+};
 
-#define US_CR	(*(volatile unsigned long *)(UARTBASE + 0x00))
-#define US_MR	(*(volatile unsigned long *)(UARTBASE + 0x04))
-#define US_CSR	(*(volatile unsigned long *)(UARTBASE + 0x14))
-#define US_RHR	(*(volatile unsigned long *)(UARTBASE + 0x18))
-#define US_THR	(*(volatile unsigned long *)(UARTBASE + 0x1C))
-#define US_BRGR	(*(volatile unsigned long *)(UARTBASE + 0x20))
+#define US_CR	(*(volatile unsigned long *)(UARTS[port] + 0x00))
+#define US_MR	(*(volatile unsigned long *)(UARTS[port] + 0x04))
+#define US_CSR	(*(volatile unsigned long *)(UARTS[port] + 0x14))
+#define US_RHR	(*(volatile unsigned long *)(UARTS[port] + 0x18))
+#define US_THR	(*(volatile unsigned long *)(UARTS[port] + 0x1C))
+#define US_BRGR	(*(volatile unsigned long *)(UARTS[port] + 0x20))
 
 /* Initialize serial console */
 
@@ -37,14 +41,12 @@ int serial_init(unsigned port, unsigned long int baudrate)
   switch (port)
   {
     case 0 :
-      UARTBASE = (unsigned long int) AT91C_BASE_US0;
       *AT91C_PMC_PCER = 0x00000040;
       *AT91C_PIOA_ASR = 0x00000060;
       *AT91C_PIOA_PDR = 0x00000060;
       break;
 
     case 1 :
-      UARTBASE = (unsigned long int) AT91C_BASE_US1;
       *AT91C_PMC_PCER = 0x00000080;
       *AT91C_PIOA_ASR = 0x00600000;
       *AT91C_PIOA_PDR = 0x00600000;
