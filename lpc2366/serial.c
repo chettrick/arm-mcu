@@ -17,24 +17,30 @@ extern int errno;
 
 /* Define relocatable UART register definitions */
 
-static unsigned long int UARTBASE = UART0_BASE_ADDR;
+static const unsigned long int UARTS[MAX_SERIAL_PORTS] =
+{
+  UART0_BASE_ADDR,
+  UART1_BASE_ADDR,
+  UART2_BASE_ADDR,
+  UART3_BASE_ADDR,
+};
 
-#define UxRBR          (*(volatile unsigned long *)(UARTBASE + 0x00))
-#define UxTHR          (*(volatile unsigned long *)(UARTBASE + 0x00))
-#define UxDLL          (*(volatile unsigned long *)(UARTBASE + 0x00))
-#define UxDLM          (*(volatile unsigned long *)(UARTBASE + 0x04))
-#define UxIER          (*(volatile unsigned long *)(UARTBASE + 0x04))
-#define UxIIR          (*(volatile unsigned long *)(UARTBASE + 0x08))
-#define UxFCR          (*(volatile unsigned long *)(UARTBASE + 0x08))
-#define UxLCR          (*(volatile unsigned long *)(UARTBASE + 0x0C))
-#define UxMCR          (*(volatile unsigned long *)(UARTBASE + 0x10))
-#define UxLSR          (*(volatile unsigned long *)(UARTBASE + 0x14))
-#define UxMSR          (*(volatile unsigned long *)(UARTBASE + 0x18))
-#define UxSCR          (*(volatile unsigned long *)(UARTBASE + 0x1C))
-#define UxACR          (*(volatile unsigned long *)(UARTBASE + 0x20))
-#define UxICR          (*(volatile unsigned long *)(UARTBASE + 0x24))
-#define UxFDR          (*(volatile unsigned long *)(UARTBASE + 0x28))
-#define UxTER          (*(volatile unsigned long *)(UARTBASE + 0x30))
+#define UxRBR          (*(volatile unsigned long *)(UARTS[port] + 0x00))
+#define UxTHR          (*(volatile unsigned long *)(UARTS[port] + 0x00))
+#define UxDLL          (*(volatile unsigned long *)(UARTS[port] + 0x00))
+#define UxDLM          (*(volatile unsigned long *)(UARTS[port] + 0x04))
+#define UxIER          (*(volatile unsigned long *)(UARTS[port] + 0x04))
+#define UxIIR          (*(volatile unsigned long *)(UARTS[port] + 0x08))
+#define UxFCR          (*(volatile unsigned long *)(UARTS[port] + 0x08))
+#define UxLCR          (*(volatile unsigned long *)(UARTS[port] + 0x0C))
+#define UxMCR          (*(volatile unsigned long *)(UARTS[port] + 0x10))
+#define UxLSR          (*(volatile unsigned long *)(UARTS[port] + 0x14))
+#define UxMSR          (*(volatile unsigned long *)(UARTS[port] + 0x18))
+#define UxSCR          (*(volatile unsigned long *)(UARTS[port] + 0x1C))
+#define UxACR          (*(volatile unsigned long *)(UARTS[port] + 0x20))
+#define UxICR          (*(volatile unsigned long *)(UARTS[port] + 0x24))
+#define UxFDR          (*(volatile unsigned long *)(UARTS[port] + 0x28))
+#define UxTER          (*(volatile unsigned long *)(UARTS[port] + 0x30))
 
 /* Initialize serial console */
 
@@ -47,13 +53,11 @@ int serial_init(unsigned port, unsigned long int baudrate)
   switch (port)
   {
     case 0 :
-      UARTBASE = UART0_BASE_ADDR;
       PINSEL0 &= 0xFFFFFF0F;		// Enable UART 0 I/O pins
       PINSEL0 |= 0x00000050;
       break;
 
     case 1 :
-      UARTBASE = UART1_BASE_ADDR;
       PINSEL0 &= 0x3FFFFFFF;		// Enable UART 1 I/O pins
       PINSEL0 |= 0x40000000;
       PINSEL1 &= 0xFFFFFFFC;
@@ -61,13 +65,11 @@ int serial_init(unsigned port, unsigned long int baudrate)
       break;
 
     case 2 :
-      UARTBASE = UART2_BASE_ADDR;
       PINSEL0 &= 0xFF0FFFFF;		// Enable UART 2 I/O pins
       PINSEL0 |= 0x00500000;
       break;
 
     case 3 :
-      UARTBASE = UART3_BASE_ADDR;
       PINSEL0 &= 0xFFFFFFF0;		// Enable UART 3 I/O pins
       PINSEL0 |= 0x0000000A;
       break;
