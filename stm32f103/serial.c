@@ -118,6 +118,8 @@ int serial_init(unsigned port, unsigned long int baudrate)
   USART_config.USART_BaudRate = baudrate;
   USART_Init(UARTS[port-1], &USART_config);
 
+// Enable USART
+
   USART_Cmd(UARTS[port-1], ENABLE);
 
   return 0;
@@ -183,7 +185,7 @@ int serial_txready(unsigned port)
     return 0;
   }
 
-  return UARTS[port-1]->SR & USART_FLAG_RXNE;
+  return UARTS[port-1]->SR & USART_FLAG_TXE;
 }
 
 /* Send a buffer to the serial port */
