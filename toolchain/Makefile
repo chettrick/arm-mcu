@@ -13,21 +13,21 @@ BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
-BINUTILOBJ	= build/binutils-$(BINUTILVER)
+BINUTILBLD	= build/binutils-$(BINUTILVER)
 
 GCCVER		= 4.6.0
 GCCSERVER	= http://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
-GCCOBJ		= build/gcc-$(GCCVER)
+GCCBLD		= build/gcc-$(GCCVER)
 
 NEWLIBVER	= 1.19.0
 NEWLIBSERVER	= http://mirrors.kernel.org/sources.redhat.com/newlib
 NEWLIBDIST	= $(TEMP)/newlib-$(NEWLIBVER).tar.gz
 NEWLIBURL	= $(NEWLIBSERVER)/`basename $(NEWLIBDIST)`
 NEWLIBSRC	= newlib-$(NEWLIBVER)
-NEWLIBOBJ	= build/newlib-$(NEWLIBVER)
+NEWLIBBLD	= build/newlib-$(NEWLIBVER)
 LIBCPDFURL	= $(NEWLIBSERVER)/libc.pdf
 LIBMPDFURL	= $(NEWLIBSERVER)/libm.pdf
 LIBCPDF		= $(TEMP)/libc.pdf
@@ -38,7 +38,7 @@ GDBSERVER	= http://ftp.gnu.org/gnu/gdb
 GDBDIST		= $(TEMP)/gdb-$(GDBVER).tar.bz2
 GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
 GDBSRC		= gdb-$(GDBVER)
-GDBOBJ		= build/gdb-$(GDBVER)
+GDBBLD		= build/gdb-$(GDBVER)
 
 VERSION		= $(BINUTILVER)_$(GCCVER)_$(NEWLIBVER)_$(GDBVER)
 RELEASE		= 1
@@ -86,11 +86,11 @@ $(BINUTILDIST):
 # Compile binutils
 
 binutils.done: source.done
-	rm -rf $(BINUTILOBJ)
-	mkdir -p $(BINUTILOBJ)
-	cd $(BINUTILOBJ) && ../../$(BINUTILSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared --with-float=soft --disable-werror
-	$(MAKE) -C $(BINUTILOBJ)
-	$(MAKE) -C $(BINUTILOBJ) install
+	rm -rf $(BINUTILBLD)
+	mkdir -p $(BINUTILBLD)
+	cd $(BINUTILBLD) && ../../$(BINUTILSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared --with-float=soft --disable-werror
+	$(MAKE) -C $(BINUTILBLD)
+	$(MAKE) -C $(BINUTILBLD) install
 	touch binutils.done
 
 ################################################################################
@@ -103,11 +103,11 @@ $(GCCDIST):
 # Compile gcc
 
 gcc.done: binutils.done
-	rm -rf $(GCCOBJ)
-	mkdir -p $(GCCOBJ)
-	cd $(GCCOBJ) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft --disable-werror $(GCCEXTRACONFIG)
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ) install
+	rm -rf $(GCCBLD)
+	mkdir -p $(GCCBLD)
+	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft --disable-werror $(GCCEXTRACONFIG)
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCBLD)
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCBLD) install
 	touch gcc.done
 
 ################################################################################
@@ -120,11 +120,11 @@ $(NEWLIBDIST):
 # Compile newlib
 
 newlib.done: gcc.done
-	rm -rf $(NEWLIBOBJ)
-	mkdir -p $(NEWLIBOBJ)
-	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBSRC) && ../../$(NEWLIBSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls --disable-nls --disable-shared --with-float=soft
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC)
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC) install
+	rm -rf $(NEWLIBBLD)
+	mkdir -p $(NEWLIBBLD)
+	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBBLD) && ../../$(NEWLIBSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls --disable-nls --disable-shared --with-float=soft
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBBLD)
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBBLD) install
 	touch newlib.done
 
 # Download newlib docs
@@ -153,11 +153,11 @@ $(GDBDIST):
 # Compile gdb
 
 gdb.done: $(GDBDIST)
-	rm -rf $(GDBOBJ)
-	mkdir -p $(GDBOBJ)
-	cd $(GDBOBJ) && ../../$(GDBSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared --disable-werror
-	$(MAKE) -C $(GDBOBJ)
-	$(MAKE) -C $(GDBOBJ) install
+	rm -rf $(GDBBLD)
+	mkdir -p $(GDBBLD)
+	cd $(GDBBLD) && ../../$(GDBSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared --disable-werror
+	$(MAKE) -C $(GDBBLD)
+	$(MAKE) -C $(GDBBLD) install
 	touch gdb.done
 
 ################################################################################
