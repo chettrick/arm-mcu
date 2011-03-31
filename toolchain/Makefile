@@ -61,6 +61,12 @@ endif
 
 # Download all source distributions
 
+download: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPDF)
+
+################################################################################
+
+# Unpack all source distributions
+
 source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPDF)
 	tar xzf $(BINUTILDIST)
 	tar xjf $(GCCDIST)
