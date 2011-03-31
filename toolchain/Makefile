@@ -13,6 +13,7 @@ BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
+BINUTILOBJ	= binutils-$(BINUTILVER).obj
 
 GCCVER		= 4.5.2
 GCCSERVER	= http://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
@@ -31,13 +32,14 @@ LIBMPDFURL	= $(NEWLIBSERVER)/libm.pdf
 LIBCPDF		= $(TEMP)/libc.pdf
 LIBMPDF		= $(TEMP)/libm.pdf
 
-GDBVER		= 6.8-1
-GDBSERVER	= http://mirrors.kernel.org/sources.redhat.com/insight/releases
-GDBDIST		= $(TEMP)/insight-$(GDBVER).tar.bz2
+GDBVER		= 7.2
+GDBSERVER	= http://ftp.gnu.org/gnu/gdb
+GDBDIST		= $(TEMP)/gdb-$(GDBVER).tar.bz2
 GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
-GDBSRC		= insight-$(GDBVER)
+GDBSRC		= gdb-$(GDBVER)
+GDBOBJ		= gdb-$(GDBVER).obj
 
-VERSION		= $(BINUTILVER)_$(GCCVER)_$(NEWLIBVER)_$(subst -,.,$(GDBVER))
+VERSION		= $(BINUTILVER)_$(GCCVER)_$(NEWLIBVER)_$(GDBVER)
 RELEASE		= 1
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
@@ -58,7 +60,12 @@ endif
 
 # Download all source distributions
 
-download: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPDF)
+source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPDF)
+	tar xzf $(BINUTILDIST)
+	tar xjf $(GCCDIST)
+	tar xzf $(NEWLIBDIST)
+	tar xjf $(GDBDIST)
+	touch $@
 
 ################################################################################
 
@@ -69,12 +76,12 @@ $(BINUTILDIST):
 
 # Compile binutils
 
-binutils.done: $(BINUTILDIST)
-	rm -rf $(BINUTILSRC)
-	tar xzf $(BINUTILDIST)
-	cd $(BINUTILSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared --with-float=soft --disable-werror
-	$(MAKE) -C $(BINUTILSRC)
-	$(MAKE) -C $(BINUTILSRC) install
+binutils.done: source.done
+	rm -rf $(BINUTILOBJ)
+	mkdir -p $(BINUTILOBJ)
+	cd $(BINUTILOBJ) && ../$(BINUTILSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared --with-float=soft --disable-werror
+	$(MAKE) -C $(BINUTILOBJ)
+	$(MAKE) -C $(BINUTILOBJ) install
 	touch binutils.done
 
 ################################################################################
@@ -86,12 +93,8 @@ $(GCCDIST):
 
 # Compile gcc
 
-# CentOS 4 wants GCCEXTRACONFIG=--with-mpfr=/usr/local
-
-gcc.done: binutils.done $(GCCDIST)
-	rm -rf $(GCCSRC)
+gcc.done: binutils.done
 	rm -rf $(GCCOBJ)
-	tar xjf $(GCCDIST)
 	mkdir -p $(GCCOBJ)
 	cd $(GCCOBJ) && ../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft --disable-werror $(GCCEXTRACONFIG)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCOBJ)
@@ -107,13 +110,10 @@ $(NEWLIBDIST):
 
 # Compile newlib
 
-newlib.done: gcc.done $(NEWLIBDIST)
-	rm -rf $(NEWLIBSRC)
-	tar xzf $(NEWLIBDIST)
+newlib.done: gcc.done
 	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls --disable-nls --disable-shared --with-float=soft
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBSRC) install
-	
 	touch newlib.done
 
 # Download newlib docs
@@ -142,11 +142,11 @@ $(GDBDIST):
 # Compile gdb
 
 gdb.done: $(GDBDIST)
-	rm -rf $(GDBSRC)
-	tar xjf $(GDBDIST)
-	cd $(GDBSRC) && ./configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared --disable-werror
-	$(MAKE) -C $(GDBSRC)
-	$(MAKE) -C $(GDBSRC) install
+	rm -rf $(GDBOBJ)
+	mkdir -p $(GDBOBJ)
+	cd $(GDBOBJ) && ../$(GDBSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared --disable-werror
+	$(MAKE) -C $(GDBOBJ)
+	$(MAKE) -C $(GDBOBJ) install
 	touch gdb.done
 
 ################################################################################
@@ -204,9 +204,8 @@ clean:
 	rm -rf $(INSTBASE)
 	rm -rf $(BINUTILSRC)
 	rm -rf $(GCCSRC)
-	rm -rf $(GCCOBJ)
 	rm -rf $(NEWLIBSRC)
 	rm -rf $(GDBSRC)
-	rm -rf fakeroot specfile rpmbuild *.rpm
+	rm -rf *.obj fakeroot specfile rpmbuild *.rpm
 
 distclean: clean
