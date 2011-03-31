@@ -89,7 +89,7 @@ binutils.done: source.done
 	rm -rf $(BINUTILBLD)
 	mkdir -p $(BINUTILBLD)
 	cd $(BINUTILBLD) && ../../$(BINUTILSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared --with-float=soft --disable-werror
-	$(MAKE) -C $(BINUTILBLD)
+	$(MAKE) $(MAKEJOBS) -C $(BINUTILBLD)
 	$(MAKE) -C $(BINUTILBLD) install
 	touch binutils.done
 
@@ -106,7 +106,7 @@ gcc.done: binutils.done
 	rm -rf $(GCCBLD)
 	mkdir -p $(GCCBLD)
 	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft --disable-werror $(GCCEXTRACONFIG)
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCBLD)
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) $(MAKEJOBS) -C $(GCCBLD)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCBLD) install
 	touch gcc.done
 
@@ -123,7 +123,7 @@ newlib.done: gcc.done
 	rm -rf $(NEWLIBBLD)
 	mkdir -p $(NEWLIBBLD)
 	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBBLD) && ../../$(NEWLIBSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls --disable-nls --disable-shared --with-float=soft
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBBLD)
+	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) $(MAKEJOBS) -C $(NEWLIBBLD)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBBLD) install
 	touch newlib.done
 
@@ -156,7 +156,7 @@ gdb.done: $(GDBDIST)
 	rm -rf $(GDBBLD)
 	mkdir -p $(GDBBLD)
 	cd $(GDBBLD) && ../../$(GDBSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared --disable-werror
-	$(MAKE) -C $(GDBBLD)
+	$(MAKE) $(MAKEJOBS) -C $(GDBBLD)
 	$(MAKE) -C $(GDBBLD) install
 	touch gdb.done
 
