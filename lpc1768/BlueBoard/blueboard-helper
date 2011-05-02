@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Helper script for udev rule for BlueBoard LPC1768-H USB boot loader
+
+# $Id$
+
+# Skip invocations without the volume label
+
+if [ -z "$ID_FS_LABEL_ENC" ]; then
+  echo "Skipping" >>/tmp/bb.txt
+  exit
+fi
+
+# Decode the volume label
+
+volume=`printf $ID_FS_LABEL_ENC`
+
+# Add device
+
+if [ "$ACTION" = "add" ]; then
+  ln -s -f "/media/$volume" /media/BLUEBOARD
+fi
+
+# Remove device
+
+if [ "$ACTION" = "remove" ]; then
+  rm /media/BLUEBOARD
+fi

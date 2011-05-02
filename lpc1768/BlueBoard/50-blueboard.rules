@@ -1,0 +1,5 @@
+# udev rules for the BlueBoard 1768-H microcomputer board USB boot loader
+
+# $Id$
+
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="c251", ATTRS{idProduct}=="1303", RUN+="/usr/local/bin/blueboard-helper"
