@@ -1,4 +1,4 @@
-# udev rules for the BlueBoard 1768-H microcomputer board USB boot loader
+# udev rule for BlueBoard LPC1768-H USB boot loader
 
 # $Id$
 
