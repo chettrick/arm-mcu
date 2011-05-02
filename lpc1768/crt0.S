@@ -31,7 +31,7 @@ _start: 	.word		__stack_end__
 		.word		MemManage_Handler       // MPU Fault Handler
 		.word		BusFault_Handler        // Bus Fault Handler
 		.word		UsageFault_Handler      // Usage Fault Handler
-		.word		0
+		.word		VectorChecksum
 		.word		0
 		.word		0
 		.word		0

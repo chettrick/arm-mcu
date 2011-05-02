@@ -57,6 +57,10 @@ SECTIONS
 
   . = ALIGN(4);
   end = .;
+
+/* Calculate vector checksum for boot loader */
+
+  VectorChecksum = -(__stack_end__ + Reset_Handler + NMI_Handler + HardFault_Handler + MemManage_Handler + BusFault_Handler + UsageFault_Handler + 6);
 }  
 
 /*  Libraries to link against. */
