@@ -6,12 +6,14 @@ TEMP		?= /tmp
 
 CPU		= cortex-m3
 CPUFLAGS	= -mthumb
+TEXTBASE	?= 0x00000000
 
 BOARDNAME	?= MBED_LPC1768
 
 CMSIS_DIR	= $(MCUDEPENDENT)/CMSIS
 
 CFLAGS		+= -I$(CMSIS_DIR)/include
+LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
