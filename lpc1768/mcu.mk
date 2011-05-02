@@ -15,6 +15,9 @@ CMSIS_DIR	= $(MCUDEPENDENT)/CMSIS
 CFLAGS		+= -I$(CMSIS_DIR)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
+FLASHEXP	?= $(MCUDEPENDENT)/flash.exp
+RESETEXP	?= $(MCUDEPENDENT)/reset.exp
+
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
 MBED		?= /media/MBED
@@ -33,6 +36,16 @@ lib$(MCU).a: $(CMSIS_DIR) $(LIBOBJS) $(LWIP_OBJS)
 	$(AR) crs lib$(MCU).a $(CMSIS_DIR)/source/*.o
 
 lib: lib$(MCU).a
+
+# Reset the target with OpenOCD
+
+reset:
+	$(RESETEXP) $(OPENOCD) $(OPENOCDCFG)
+
+# Define a suffix rule for programming the flash with OpenOCD
+
+.bin.flashocd:
+	$(FLASHEXP) $(OPENOCD) $(OPENOCDCFG) $<
 
 # Define a suffix rule for installing to an mbed board
 
