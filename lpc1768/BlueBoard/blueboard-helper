@@ -4,25 +4,15 @@
 
 # $Id$
 
-# Skip invocations without the volume label
-
-if [ -z "$ID_FS_LABEL_ENC" ]; then
-  echo "Skipping" >>/tmp/bb.txt
-  exit
-fi
-
-# Decode the volume label
-
-volume=`printf $ID_FS_LABEL_ENC`
-
 # Add device
 
-if [ "$ACTION" = "add" ]; then
-  ln -s -f "/media/$volume" /media/BLUEBOARD
+if [ "$ACTION" = "add" -a -n "$ID_FS_LABEL_ENC" ]; then
+  ln -s -f "/media/`printf $ID_FS_LABEL_ENC`" /media/BLUEBOARD
 fi
 
 # Remove device
 
-if [ "$ACTION" = "remove" ]; then
-  rm /media/BLUEBOARD
+if [ "$ACTION" = "remove" -a -L /media/BLUEBOARD ]; then
+  echo "Removing /media/BLUEBOARD" >> /tmp/bb.txt
+  rm /media/BLUEBOARD 2>&1 >>/tmp/bb.txt
 fi
