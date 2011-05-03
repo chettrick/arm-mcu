@@ -13,6 +13,5 @@ fi
 # Remove device
 
 if [ "$ACTION" = "remove" -a -L /media/BLUEBOARD ]; then
-  echo "Removing /media/BLUEBOARD" >> /tmp/bb.txt
-  rm /media/BLUEBOARD 2>&1 >>/tmp/bb.txt
+  rm /media/BLUEBOARD
 fi
