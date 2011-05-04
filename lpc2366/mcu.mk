@@ -36,15 +36,15 @@ lib: lib$(MCU).a
 reset:
 	$(RESETEXP) $(OPENOCD) $(OPENOCDCFG)
 
-# Define a suffix rule for programming the flash with OpenOCD
-
-.bin.flashocd:
-	$(FLASHEXP) $(OPENOCD) $(OPENOCDCFG) $<
-
 # Define a suffix rule for programming the flash with lpc21isp
 
 .hex.flashisp:
 	$(LPC21ISP) $(LPC21ISPFLAGS) $< $(LPC21ISPDEV) $(LPC21ISPBAUD) $(LPC21ISPCLOCK)
+
+# Define a suffix rule for programming the flash with OpenOCD
+
+.bin.flashocd:
+	$(FLASHEXP) $(OPENOCD) $(OPENOCDCFG) $<
 
 # Define a suffix rule for installing to an mbed board
 
