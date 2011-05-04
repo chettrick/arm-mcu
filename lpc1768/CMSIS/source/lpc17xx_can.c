@@ -163,6 +163,7 @@ void CAN_Init(LPC_CAN_TypeDef *CANx, uint32_t baudrate)
 	CANx->CMR = (1<<1)|(1<<2)|(1<<3);
 	/* Read to clear interrupt pending in interrupt capture register */
 	temp = CANx->ICR;
+	(void) temp;
 	CANx->MOD = 0;// Return Normal operating
 
 	//Reset CANAF value
