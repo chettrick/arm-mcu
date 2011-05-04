@@ -20,8 +20,8 @@ extern int errno;
 
 static LPC_UART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
 {
-  LPC_UART0,
-  LPC_UART1,
+  (LPC_UART_TypeDef *) LPC_UART0,
+  (LPC_UART_TypeDef *) LPC_UART1,
 };
 
 /* Initialize serial console */
