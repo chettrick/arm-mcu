@@ -12,25 +12,23 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
+#ifdef BOARD_OLIMEX_LPC_P2378
+#define LEDMASK (1 << 19)
   PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
 
-#ifdef BOARD_OLIMEX_LPC_P2378
-  PINSEL0 = 0x00000000;		// Every P0 pin is a GPIO
-  PINSEL1 = 0x00000000;
-
-  FIO0MASK = 0x00000000;	// Every P0 pin is unmasked
-  FIO0DIR = 0xFFFFFFFF;		// Every P0 pin is an output
+  FIO1MASK = !LEDMASK;		// Unmask LED pin
+  FIO1DIR = LEDMASK;		// Make output LED pin
 
   for (i = 0;; i++)
-    FIO0PIN = i;
+    FIO1PIN = i;
 #endif
 
 #ifdef BOARD_MBED_LPC2368
-  PINSEL2 = 0x00000000;         // Every P1 pin is a GPIO
-  PINSEL3 = 0x00000000;
+#define LEDMASK ((1 << 18)|(1 << 20)|(1 << 21)|(1 << 23))
+  PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
 
-  FIO1MASK = 0x00000000;        // Every P1 pin is unmasked
-  FIO1DIR = 0xFFFFFFFF;         // Every P1 pin is an output
+  FIO1MASK = !LEDMASK;		// Unmask LED pins
+  FIO1DIR = LEDMASK;		// Make output LED pins
 
   for (i = 0;; i++)
     FIO1PIN = i;
