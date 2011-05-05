@@ -66,7 +66,7 @@ default_catch:
 
 .elf.debug:
 	-rm ~/.gdbtkinit
-	$(OPENOCD) -f $(OPENOCDCFG) &
+	$(OPENOCD) -f $(OPENOCDCFG) >openocd.log 2>&1 &
 	sleep 1
 	-$(GDB) -x $(DEBUGGDB) -w $<
 	killall openocd
@@ -83,7 +83,7 @@ default_catch:
 # OpenOCD targets
 
 startocd:
-	$(OPENOCD) -f $(OPENOCDCFG) &
+	$(OPENOCD) -f $(OPENOCDCFG) >openocd.log 2>&1 &
 
 stopocd:
 	killall openocd
@@ -99,7 +99,7 @@ update:
 clean:
 	cd $(MCUDEPENDENT) && $(MAKE) clean_$(MCU)
 	find * -name '*.o' -exec rm {} ";"
-	rm -f *.a *.asm *.bin *.elf *.hex *.map
+	rm -f *.a *.asm *.bin *.elf *.hex *.log *.map
 
 reallyclean: clean
 	cd $(MCUDEPENDENT) && $(MAKE) reallyclean_$(MCU)
