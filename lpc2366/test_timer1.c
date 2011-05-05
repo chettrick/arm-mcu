@@ -27,6 +27,24 @@ int main(void)
   puts("\033[H\033[2JLPC2366 Watchdog and Timer 1 Interrupt Test ("
        __DATE__ " " __TIME__ ")\n");
 
+/* Configure LED(s) */
+
+#ifdef BOARD_OLIMEX_LPC_P2378
+#define LEDMASK (1 << 19)
+  PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
+
+  FIO1MASK = !LEDMASK;		// Unmask LED pin
+  FIO1DIR = LEDMASK;		// Make output LED pin
+#endif
+
+#ifdef BOARD_MBED_LPC2368
+#define LEDMASK ((1 << 18)|(1 << 20)|(1 << 21)|(1 << 23))
+  PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
+
+  FIO1MASK = !LEDMASK;		// Unmask LED pins
+  FIO1DIR = LEDMASK;		// Make output LED pins
+#endif
+
 /* Configure timer 1 to interrupt once every second */
 
   T1TCR = 2;			// Reset timer 1
@@ -66,6 +84,15 @@ int main(void)
     if (Timer1Flag)
     {
       Timer1Flag = FALSE;
+
+#ifdef BOARD_OLIMEX_LPC_P2378
+      FIO1PIN = ~FIO1PIN;	// Toggle LED
+#endif
+
+#ifdef BOARD_MBED_LPC2368
+      FIO1PIN = ~FIO1PIN;	// Toggle LED
+#endif
+
       puts("Tick...");
       fflush(stdout);
 
