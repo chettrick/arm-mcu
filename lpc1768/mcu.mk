@@ -26,11 +26,11 @@ FLASHEXP	?= $(MCUDEPENDENT)/flash.exp
 RESETEXP	?= $(MCUDEPENDENT)/reset.exp
 
 MBED		?= /media/MBED
-BLUEBOARD	?= /media/BLUEBOARD
+USBBOOT		?= /media/LPC1768
 
 .PHONY:		clean_$(MCU) lib reset
 
-.SUFFIXES:	.flashisp .flashocd .mbed .blueboard
+.SUFFIXES:	.flashisp .flashocd .flashmbed .flashusb
 
 include $(ARMSRC)/lwip/LWIP.mk
 
@@ -60,20 +60,19 @@ reset:
 
 # Define a suffix rule for installing to an mbed board
 
-.bin.mbed:
+.bin.flashmbed:
 	test -d $(MBED) -a -w $(MBED)
 	cp $< $(MBED)
 	sync
-	@echo -e "\nPress RESET on the LPC1768 mbed board to start $<\n"
+	@echo -e "\nPress RESET on the mbed LPC1768 board to start $<\n"
 
-# Define a suffix rule for installing to a BlueBoard
+# Define a suffix rule for installing via the NXP USB boot loader
 
-.bin.blueboard:
-	test -d $(BLUEBOARD) -a -w $(BLUEBOARD)
-	cat $< >$(BLUEBOARD)/firmware.bin
+.bin.flashusb:
+	test -d $(USBBOOT) -a -w $(USBBOOT)
+	cat $< >$(USBBOOT)/firmware.bin
 	sync
-	umount /media/CRP*
-	@echo -e "\nPress RESET on the BlueBoard LPC1768-H to start $<\n"
+	@echo -e "\nPress RESET on the target board to start $<\n"
 
 # Clean out working files
 
