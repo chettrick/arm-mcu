@@ -20,7 +20,7 @@ MBED		?= /media/MBED
 
 .PHONY:		clean_$(MCU) lib reset
 
-.SUFFIXES:	.flashisp .flashocd .mbed
+.SUFFIXES:	.flashisp .flashocd .flashmbed
 
 include $(ARMSRC)/lwip/LWIP.mk
 
@@ -48,11 +48,11 @@ reset:
 
 # Define a suffix rule for installing to an mbed board
 
-.bin.mbed:
+.bin.flashmbed:
 	test -d $(MBED) -a -w $(MBED)
 	cp $< $(MBED)
 	sync
-	@echo -e "\nPress RESET on the LPC2368 mbed board to start $<\n"
+	@echo -e "\nPress RESET on the mbed LPC2368 board to start $<\n"
 
 # Clean out working files
 
