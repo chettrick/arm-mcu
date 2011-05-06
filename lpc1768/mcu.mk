@@ -1,4 +1,4 @@
-# Processor dependent make definitions
+# pROcessor dependent make definitions
 
 # $Id$
 
@@ -70,7 +70,7 @@ reset:
 
 .bin.flashusb:
 	test -d $(USBBOOT) -a -w $(USBBOOT)
-	cat $< >$(USBBOOT)/firmware.bin
+	cp $< $(USBBOOT)/firmware.bin
 	sync
 	@echo -e "\nPress RESET on the target board to start $<\n"
 
