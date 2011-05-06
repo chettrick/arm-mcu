@@ -7,11 +7,11 @@
 # Add device
 
 if [ "$ACTION" = "add" -a -n "$ID_FS_LABEL_ENC" ]; then
-  ln -s -f "/media/`printf $ID_FS_LABEL_ENC`" /media/BLUEBOARD
+  ln -s -f "/media/`printf $ID_FS_LABEL_ENC`" /media/LPC1768
 fi
 
 # Remove device
 
-if [ "$ACTION" = "remove" -a -L /media/BLUEBOARD ]; then
-  rm /media/BLUEBOARD
+if [ "$ACTION" = "remove" -a -L /media/LPC1768 ]; then
+  rm /media/LPC1768
 fi
