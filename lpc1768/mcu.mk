@@ -2,8 +2,6 @@
 
 # $Id$
 
-TEMP		?= /tmp
-
 CPU		= cortex-m3
 CPUFLAGS	= -mthumb
 TEXTBASE	?= 0x00000000
@@ -26,7 +24,7 @@ FLASHEXP	?= $(MCUDEPENDENT)/flash.exp
 RESETEXP	?= $(MCUDEPENDENT)/reset.exp
 
 MBED		?= /media/MBED
-USBBOOT		?= /media/LPC1768
+USBBOOT		?= /media/LPC17xx
 
 .PHONY:		clean_$(MCU) lib reset
 
