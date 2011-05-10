@@ -33,16 +33,16 @@ int main(void)
 #define LEDMASK (1 << 19)
   PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
 
-  FIO1MASK = !LEDMASK;		// Unmask LED pin
-  FIO1DIR = LEDMASK;		// Make output LED pin
+  FIO1MASK &= ~LEDMASK;		// Unmask LED pin
+  FIO1DIR |= LEDMASK;		// Make output LED pin
 #endif
 
 #ifdef BOARD_MBED_LPC2368
 #define LEDMASK ((1 << 18)|(1 << 20)|(1 << 21)|(1 << 23))
   PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
 
-  FIO1MASK = !LEDMASK;		// Unmask LED pins
-  FIO1DIR = LEDMASK;		// Make output LED pins
+  FIO1MASK &= ~LEDMASK;		// Unmask LED pins
+  FIO1DIR |= LEDMASK;		// Make output LED pins
 #endif
 
 /* Configure timer 1 to interrupt once every second */
