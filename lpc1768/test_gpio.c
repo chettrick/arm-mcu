@@ -22,8 +22,8 @@ int main(void)
 
 #define LEDMASK	((1 << LED1)|(1 << LED2)|(1 << LED3)|(1 << LED4))
 
-  LPC_GPIO1->FIOMASK = !LEDMASK;
-  LPC_GPIO1->FIODIR = LEDMASK;
+  LPC_GPIO1->FIOMASK &= ~LEDMASK;
+  LPC_GPIO1->FIODIR |= LEDMASK;
 
   for (i = 0;; i++)
     LPC_GPIO1->FIOPIN = i;
@@ -36,8 +36,8 @@ int main(void)
 
 #define LEDMASK	((1 << LED1))
 
-  LPC_GPIO1->FIOMASK = !LEDMASK;
-  LPC_GPIO1->FIODIR = LEDMASK;
+  LPC_GPIO1->FIOMASK &= ~LEDMASK;
+  LPC_GPIO1->FIODIR |= LEDMASK;
 
   for (i = 0;; i++)
     LPC_GPIO1->FIOPIN = i << 7;
