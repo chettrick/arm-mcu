@@ -53,11 +53,15 @@ int serial_init(unsigned port, unsigned long int baudrate)
   switch (port)
   {
     case 0 :
+      PCONP |= (1 << 3);		// Power on UART 0
+      PCLKSEL0 &= 0xFFFFFF3F;		// CCLK/4
       PINSEL0 &= 0xFFFFFF0F;		// Enable UART 0 I/O pins
       PINSEL0 |= 0x00000050;
       break;
 
     case 1 :
+      PCONP |= (1 << 4);		// Power on UART 1
+      PCLKSEL0 &= 0xFFFFFCFF;		// CCLK/4
       PINSEL0 &= 0x3FFFFFFF;		// Enable UART 1 I/O pins
       PINSEL0 |= 0x40000000;
       PINSEL1 &= 0xFFFFFFFC;
@@ -65,11 +69,15 @@ int serial_init(unsigned port, unsigned long int baudrate)
       break;
 
     case 2 :
+      PCONP |= (1 << 24);		// Power on UART 2
+      PCLKSEL1 &= 0xFFFCFFFF;		// CCLK/4
       PINSEL0 &= 0xFF0FFFFF;		// Enable UART 2 I/O pins
       PINSEL0 |= 0x00500000;
       break;
 
     case 3 :
+      PCONP |= (1 << 25);		// Power on UART 3
+      PCLKSEL1 &= 0xFFF3FFFF;		// CCLK/4
       PINSEL0 &= 0xFFFFFFF0;		// Enable UART 3 I/O pins
       PINSEL0 |= 0x0000000A;
       break;
@@ -79,16 +87,20 @@ int serial_init(unsigned port, unsigned long int baudrate)
       return -1;			// Do nothing
   }
 
-  UxFDR = 0x49;				// Scale peripheral clock by 4/13
+  UxFDR = 0x49;				// Set fractional divider
 
   b = CPUFREQ/208/baudrate;
 
+  UxLCR = 0x03;				// Enable access to IER
   UxIER = 0x00;				// Disable UART interrupts
-  UxLCR = 0x80;
+  UxLCR = 0x83;				// Enable access to DLL and DLM
   UxDLM = b / 256;
   UxDLL = b % 256;
   UxLCR = 0x03;				// Always 8 bits no parity 1 stop
-  UxFCR = 0x01;				// Enable FIFO's
+  UxFCR = 0x07;				// Enable and clear FIFO's
+  UxACR = 0x00;				// Disable autobaud
+  if (port == 3) UxICR = 0x00;		// Disable IRDA
+  UxTER = 0x80;				// Enable transmitter
 
   return 0;
 }
