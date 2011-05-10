@@ -1,5 +1,0 @@
-# udev rule for BlueBoard LPC1768-H USB boot loader
-
-# $Id$
-
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="c251", ATTRS{idProduct}=="1303", RUN+="/usr/local/libexec/blueboard-helper"
