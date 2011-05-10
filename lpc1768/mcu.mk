@@ -18,7 +18,7 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
 LPC21ISPDEV	?= /dev/ttyS0
-LPC21ISPBAUD	?= 19200
+LPC21ISPBAUD	?= 115200
 LPC21ISPCLOCK	?= 14746
 LPC21ISPFLAGS	?= -control
 
