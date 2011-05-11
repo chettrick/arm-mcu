@@ -3,8 +3,12 @@
 # $Id$
 
 CPU		= arm7tdmi
+CPUFLAGS	=
+TEXTBASE	?= 0x00000000
 
 BOARDNAME	?= MBED_LPC2368
+
+LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
@@ -17,10 +21,11 @@ FLASHEXP	?= $(MCUDEPENDENT)/flash.exp
 RESETEXP	?= $(MCUDEPENDENT)/reset.exp
 
 MBED		?= /media/MBED
+USBBOOT		?= /media/LPC23xx
 
 .PHONY:		clean_$(MCU) lib reset
 
-.SUFFIXES:	.flashisp .flashocd .flashmbed
+.SUFFIXES:	.flashisp .flashocd .flashmbed .flashusb
 
 include $(ARMSRC)/lwip/LWIP.mk
 
@@ -53,6 +58,14 @@ reset:
 	cp $< $(MBED)
 	sync
 	@echo -e "\nPress RESET on the mbed LPC2368 board to start $<\n"
+
+# Define a suffix rule for installing via the NXP USB boot loader
+
+.bin.flashusb:
+	test -d $(USBBOOT) -a -w $(USBBOOT)
+	cp $< $(USBBOOT)/firmware.bin
+	sync
+	@echo -e "\nPress RESET on the target board to start $<\n"
 
 # Clean out working files
 
