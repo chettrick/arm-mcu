@@ -19,12 +19,10 @@ RESETEXP	?= $(MCUDEPENDENT)/reset.exp
 
 .SUFFIXES:	.flashocd
 
-include $(ARMSRC)/lwip/LWIP.mk
-
 # Build processor dependent support library
 
-lib$(MCU).a: $(LIBOBJS) $(LWIP_OBJS)
-	$(AR) crs lib$(MCU).a $(LIBOBJS) $(LWIP_OBJS)
+lib$(MCU).a: $(LIBOBJS)
+	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	for F in $(FWLIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
@@ -45,7 +43,6 @@ reset:
 # Clean out working files
 
 clean_$(MCU):
-	cd $(LWIP_DIR) && find * -name '*.o' -exec rm {} ";"
 
 reallyclean_$(MCU): clean_$(MCU)
 

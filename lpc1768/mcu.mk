@@ -30,13 +30,11 @@ USBBOOT		?= /media/LPC17xx
 
 .SUFFIXES:	.flashisp .flashocd .flashmbed .flashusb
 
-include $(ARMSRC)/lwip/LWIP.mk
-
 # Build processor dependent support library
 
-lib$(MCU).a: $(CMSIS_DIR) $(LIBOBJS) $(LWIP_OBJS)
+lib$(MCU).a: $(CMSIS_DIR) $(LIBOBJS)
 	for F in $(CMSIS_DIR)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(LIBOBJS) $(LWIP_OBJS)
+	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(CMSIS_DIR)/source/*.o
 
 lib: lib$(MCU).a
@@ -75,7 +73,6 @@ reset:
 # Clean out working files
 
 clean_$(MCU):
-	cd $(LWIP_DIR) && find * -name '*.o' -exec rm {} ";"
 
 reallyclean_$(MCU): clean_$(MCU)
 
