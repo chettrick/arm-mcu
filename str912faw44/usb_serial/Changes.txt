@@ -1,7 +1,7 @@
 Changes Made to ST9x USB Developer Kit
 --------------------------------------
 
-Philip Munts, 9 July 2008
+$Id$
 
 1.  Downloaded um0290.zip, version 2.0.0, 29 September 2008, from www.st.com.
 
@@ -23,3 +23,5 @@ Philip Munts, 9 July 2008
     of hw_config.h.
 
 9.  Added usb_serial.c and usb_serial.h.
+
+10. Rename stmcdc.inf to usb_serial.inf.
