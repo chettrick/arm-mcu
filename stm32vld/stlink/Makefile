@@ -17,7 +17,7 @@ stlink: stlink-download.c
 	$(HOSTCC) $(CFLAGS) -o $@ $<
 
 install: $(PROGRAM)
-	install -csm 04555 $(PROGRAM)	$(DESTDIR)
+	install -csm 0555 $(PROGRAM)	$(DESTDIR)
 	install -cm 0444 $(RULES)	$(UDEVRULES)
 
 uninstall:
