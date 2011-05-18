@@ -90,7 +90,7 @@ static const char usage_msg[] =
 	"Commands are:\n"
 	"  info version blink\n"
 	"  debug reg<regnum> wreg<regnum>=<value> regs reset run step status\n"
-	"  erase=<addr> erase=all<addr>\n"
+	"  erase=<addr> erase=all\n"
 	"  read<memaddr> write<memaddr>=<val>\n"
 	"  flash:r:<file> flash:w:<file> flash:v:<file>\n"
 	"\n"
@@ -788,8 +788,8 @@ static int stl_loader(struct stlink *sl, stm32_addr_t flash_addr,
 	uint32_t prog_base = stm_devids[0].sram_base;
 	uint32_t *params;
 
-	memcpy(sl->q_buf, db_loader_code, sizeof(db_loader_code));
-	offset = sizeof(db_loader_code);
+	memcpy(sl->q_buf, db_loader_code_working, sizeof(db_loader_code_working));
+	offset = sizeof(db_loader_code_working);
 	params = (uint32_t *)(sl->q_buf+offset);
 
 	/* Write params[-4] to change the FLASH_REGS_ADDR base.
