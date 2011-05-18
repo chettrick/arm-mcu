@@ -1,4 +1,7 @@
 /* STLink download/debug interface for Linux. */
+
+// $Id$
+
 /*
   This program interacts with the STMicro USB STLink programming/debug
   interface for STMicro microcontrollers.  The STLink is found on STM8
@@ -80,7 +83,7 @@ Usage notes:
 
 /* $Vbase: 1.54 14 January 2011 00:25:11 becker$ */
 static const char version_msg[] =
-"STLink programmer/debugging utility $Id:$  Copyright Donald Becker";
+"STLink programmer/debugging utility $Id$  Copyright Donald Becker";
 
 static const char usage_msg[] =
 	"\nUsage: %s /dev/sg0 <command> ...\n\n"
