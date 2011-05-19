@@ -1,4 +1,4 @@
-# pROcessor dependent make definitions
+# Processor dependent make definitions
 
 # $Id$
 
