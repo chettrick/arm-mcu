@@ -17,9 +17,9 @@ extern int errno;
 
 static USART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
 {
-  USART1_BASE,
-  USART2_BASE,
-  USART3_BASE,
+  USART1,
+  USART2,
+  USART3,
 };
 
 /* Initialize serial console */
