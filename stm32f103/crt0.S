@@ -26,20 +26,20 @@
 
 _start: 	.word		__stack_end__
 		.word		Reset_Handler
-		.word		NMIException
-		.word		HardFaultException
-		.word		MemManageException
-		.word		BusFaultException
-		.word		UsageFaultException
+		.word		NMI_Handler
+		.word		HardFault_Handler
+		.word		MemManage_Handler
+		.word		BusFault_Handler
+		.word		UsageFault_Handler
 		.word		0
 		.word		0
 		.word		0
 		.word		0
-		.word		SVCHandler
-		.word		DebugMonitor
+		.word		SVC_Handler
+		.word		DebugMon_Handler
 		.word		0
-		.word		PendSVC
-		.word		SysTickHandler
+		.word		PendSV_Handler
+		.word		SysTick_Handler
 
 // Hardware interrupts specific to the STM32F103
 
@@ -172,15 +172,15 @@ Default_Handler: bx		lr
 		.set		\handler, Default_Handler
 		.endm
 
-		IRQ		NMIException
-		IRQ		HardFaultException
-		IRQ		MemManageException
-		IRQ		BusFaultException
-		IRQ		UsageFaultException
-		IRQ		SVCHandler
-		IRQ		DebugMonitor
-		IRQ		PendSVC
-		IRQ		SysTickHandler
+		IRQ		NMI_Handler
+		IRQ		HardFault_Handler
+		IRQ		MemManage_Handler
+		IRQ		BusFault_Handler
+		IRQ		UsageFault_Handler
+		IRQ		SVC_Handler
+		IRQ		DebugMon_Handler
+		IRQ		PendSV_Handler
+		IRQ		SysTick_Handler
 		IRQ		WWDG_IRQHandler
 		IRQ		PVD_IRQHandler
 		IRQ		TAMPER_IRQHandler
