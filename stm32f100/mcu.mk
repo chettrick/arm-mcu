@@ -31,7 +31,7 @@ lib: lib$(MCU).a
 # Define a suffix rule for programming the flash with stlink
 
 .bin.flashstlink:
-	$(STLINK) $(STLINKDEV) erase=all flash:w:$<
+	$(STLINK) $(STLINKDEV) -v erase=all flash:w:$<
 
 # Clean out working files
 
