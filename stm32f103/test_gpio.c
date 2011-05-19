@@ -17,6 +17,7 @@ void main(void)
 
 // Enable peripheral clock
 
+#ifdef BOARD_OLIMEX_STM32_P103
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOA, ENABLE);
 
@@ -36,4 +37,5 @@ void main(void)
     GPIO_ResetBits(GPIOC, GPIO_Pin_12);
     for (i = 0; i < 500000; i++);
   }
+#endif
 }
