@@ -15,5 +15,5 @@ extern void cpu_init(unsigned long int frequency);
 #endif
 
 #ifndef CONSOLE_PORT
-#define CONSOLE_PORT		2
+#define CONSOLE_PORT		1
 #endif
