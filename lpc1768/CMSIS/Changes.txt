@@ -1,5 +1,5 @@
-Changes Made to Files From LPC1700CMSIS
----------------------------------------
+Changes Made to CMSIS Library Files From LPC1700CMSIS
+-----------------------------------------------------
 
 $Id$
 
