@@ -31,7 +31,10 @@ _start: 	.word		__stack_end__
 		.word		MemManageException
 		.word		BusFaultException
 		.word		UsageFaultException
-		.word		0, 0, 0, 0
+		.word		0
+		.word		0
+		.word		0
+		.word		0
 		.word		SVCHandler
 		.word		DebugMonitor
 		.word		0
