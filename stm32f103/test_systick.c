@@ -13,7 +13,7 @@ static const char revision[] = "$Id$";
 volatile int TimerCounter = 0;
 volatile int TimerFlag = FALSE;
 
-void SysTickHandler(void)
+void SysTick_Handler(void)
 {
   if (++TimerCounter == 10)
   {
