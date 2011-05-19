@@ -1,8 +1,8 @@
 /* Simple bit twiddler test program */
 
-// $Id: test_gpio.c 2649 2011-05-19 16:21:44Z svn $
+// $Id$
 
-static const char revision[] = "$Id: test_gpio.c 2649 2011-05-19 16:21:44Z svn $";
+static const char revision[] = "$Id$";
 
 #include <cpu.h>
 

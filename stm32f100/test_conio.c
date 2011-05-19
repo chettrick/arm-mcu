@@ -1,8 +1,8 @@
 /* Simple serial console I/O test program for the STM32F100 ARM MCU */
 
-// $Id: test_conio.c 2380 2011-02-16 08:59:59Z svn $
+// $Id$
 
-static const char revision[] = "$Id: test_conio.c 2380 2011-02-16 08:59:59Z svn $";
+static const char revision[] = "$Id$";
 
 #include <assert.h>
 #include <cpu.h>

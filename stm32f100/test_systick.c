@@ -1,8 +1,8 @@
 /* Simple timer interrupt test program */
 
-// $Id: test_systick.c 2650 2011-05-19 16:40:47Z svn $
+// $Id$
 
-static const char revision[] = "$Id: test_systick.c 2650 2011-05-19 16:40:47Z svn $";
+static const char revision[] = "$Id$";
 
 #include <cpu.h>
 #include <stdio.h>

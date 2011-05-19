@@ -1,7 +1,7 @@
 Changes made to CMSIS library files from STM32F10x_StdPeriph_Lib_V3.5.0
 -----------------------------------------------------------------------
 
-$Id: Changes.txt 2646 2011-05-19 15:26:56Z svn $
+$Id$
 
 1. Copied Libraries/CMSIS/CM3/CoreSupport/*.c to CMSIS/source
 

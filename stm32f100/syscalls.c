@@ -4,9 +4,9 @@
 /*                                                                            */
 /******************************************************************************/
 
-// $Id: syscalls.c 2365 2011-02-15 09:17:51Z svn $
+// $Id$
 
-static const char revision[] = "$Id: syscalls.c 2365 2011-02-15 09:17:51Z svn $";
+static const char revision[] = "$Id$";
 
 #include <cpu.h>
 #include <errno.h>

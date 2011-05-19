@@ -1,8 +1,8 @@
 /* Simple floating point arithmetic test program for the STM32F100 ARM MCU */
 
-// $Id: test_float.c 2433 2011-03-05 16:42:34Z svn $
+// $Id$
 
-static const char revision[] = "$Id: test_float.c 2433 2011-03-05 16:42:34Z svn $";
+static const char revision[] = "$Id$";
 
 #include <cpu.h>
 #include <stdio.h>
