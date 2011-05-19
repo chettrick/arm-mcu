@@ -12,8 +12,6 @@ unsigned long int CPUFREQ;
 
 void cpu_init(unsigned long int frequency)
 {
-  CPUFREQ = DEFAULT_CPU_FREQ;		// Not currently changeable
-	
   *NVIC_CCR = *NVIC_CCR | 0x200;	/* Set STKALIGN in NVIC */
 
 // Turn on crystal oscillator
@@ -42,4 +40,6 @@ void cpu_init(unsigned long int frequency)
 
   RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
   while(RCC_GetSYSCLKSource() != 0x08);
+
+  CPUFREQ = SystemCoreClock;		// Not currently changeable
 }

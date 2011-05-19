@@ -7,8 +7,8 @@ CPUFLAGS	= -mthumb
 
 BOARDNAME	?= OLIMEX_STM32_P103
 
-FWLIB		= $(MCUDEPENDENT)/FWLib
-CFLAGS		+= -I$(FWLIB)
+CMSIS		= $(MCUDEPENDENT)/CMSIS
+CFLAGS		+= -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
@@ -23,9 +23,8 @@ RESETEXP	?= $(MCUDEPENDENT)/reset.exp
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-	for F in $(FWLIB)/*.S ; do $(MAKE) $${F%.S}.o ; done
-	for F in $(FWLIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
+	for F in $(CMSIS)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
+	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
 
 lib: lib$(MCU).a
 

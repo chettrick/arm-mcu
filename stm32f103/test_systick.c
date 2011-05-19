@@ -29,6 +29,8 @@ int main(void)
 
   puts("\033[H\033[2JSTM32F103 System Tick Interrupt Test ("
        __DATE__ " " __TIME__ ")\n");
+  puts(revision);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
 // Interrupt vectors are in flash
 
@@ -36,11 +38,7 @@ int main(void)
 
 // Initialize System Tick with 100ms time interval
 
-  SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
-  SysTick_SetReload(900000);
-  SysTick_CounterCmd(SysTick_Counter_Clear);
-  SysTick_CounterCmd(SysTick_Counter_Enable);
-  SysTick_ITConfig(ENABLE);
+  SysTick_Config(SystemCoreClock / 10);
 
 // Display "Tick..." every second
 
