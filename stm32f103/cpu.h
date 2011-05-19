@@ -8,8 +8,8 @@ extern void cpu_init(unsigned long int frequency);
 
 #include <device.h>
 #include <serial.h>
-#include <FWLib/stm32f10x_lib.h>
-#include <FWLib/stm32f10x_it.h>
+#include <stm32f10x_lib.h>
+#include <stm32f10x_it.h>
 
 #ifndef DEFAULT_CPU_FREQ
 #define DEFAULT_CPU_FREQ	72000000
