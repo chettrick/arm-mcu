@@ -12,8 +12,14 @@ CFLAGS		+= -DSTM32F10X_LD_VL -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
+ifeq ($(shell uname), Linux)
 STLINK		= stlink
 STLINKDEV	= /dev/stlink
+endif
+
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+STLINK		= "/c/Program Files/STMicroelectronics/STM32 ST-LINK Utility/ST-LINK Utility"/ST-LINK_CLI.exe
+endif
 
 .PHONY:		clean_$(MCU) lib reset
 
@@ -30,8 +36,15 @@ lib: lib$(MCU).a
 
 # Define a suffix rule for programming the flash with stlink
 
+ifeq ($(shell uname), Linux)
 .bin.flashstlink:
 	$(STLINK) $(STLINKDEV) -v erase=all flash:w:$<
+endif
+
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+.bin.flashstlink:
+	$(STLINK) -c SWD -ME -P $< 0x08000000 -Rst
+endif
 
 # Clean out working files
 
