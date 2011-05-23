@@ -82,7 +82,7 @@ source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIB
 # Download binutils
 
 $(BINUTILDIST):
-	wget -P $(TEMP) $(BINUTILURL)
+	wget -nv -P $(TEMP) $(BINUTILURL)
 
 # Compile binutils
 
@@ -99,7 +99,7 @@ binutils.done: source.done
 # Download gcc
 
 $(GCCDIST):
-	wget -P $(TEMP) $(GCCURL)
+	wget -nv -P $(TEMP) $(GCCURL)
 
 # Compile gcc
 
@@ -116,7 +116,7 @@ gcc.done: binutils.done
 # Download newlib
 
 $(NEWLIBDIST):
-	wget -P $(TEMP) $(NEWLIBURL)
+	wget -nv -P $(TEMP) $(NEWLIBURL)
 
 # Compile newlib
 
@@ -131,10 +131,10 @@ newlib.done: gcc.done
 # Download newlib docs
 
 $(LIBCPDF): 
-	wget -P $(TEMP) $(LIBCPDFURL)
+	wget -nv -P $(TEMP) $(LIBCPDFURL)
 
 $(LIBMPDF):
-	wget -P $(TEMP) $(LIBMPDFURL)
+	wget -nv -P $(TEMP) $(LIBMPDFURL)
 
 # Install newlib docs
 
@@ -149,7 +149,7 @@ newlibdocs.done: $(LIBCPDF) $(LIBMPDF)
 # Download gdb
 
 $(GDBDIST):
-	wget -P $(TEMP) $(GDBURL)
+	wget -nv -P $(TEMP) $(GDBURL)
 
 # Compile gdb
 
