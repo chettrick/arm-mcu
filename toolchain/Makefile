@@ -71,6 +71,7 @@ source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIB
 	tar xzf $(BINUTILDIST)
 	tar xjf $(GCCDIST)
 	tar xzf $(NEWLIBDIST)
+	cd $(NEWLIBSRC) ; patch -p0 <../newlib.patch
 	tar xjf $(GDBDIST)
 	ln -s "../$(NEWLIBSRC)/newlib" $(GCCSRC)/newlib
 	ln -s "../$(NEWLIBSRC)/libgloss" $(GCCSRC)/libgloss
