@@ -237,7 +237,7 @@ int serial_register(unsigned port, unsigned long int baudrate)
   serial_init(port, baudrate);
 
   memset(name, 0, sizeof(name));
-  sprintf(name, "com%d", port);
+  siprintf(name, "com%d", port);
 
   device_register_char(name, port, (void *) baudrate,
    (device_init_t) serial_init, serial_write, serial_read, serial_txready, serial_rxready);
