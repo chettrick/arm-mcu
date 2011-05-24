@@ -24,12 +24,16 @@ DEBUGGDB	?= $(MCUDEPENDENT)/debug.gdb
 
 CPUFLAGS	?=
 CONFIGFLAGS	?=
-GDBFLAGS	?= -g
+DEBUGFLAGS	?= -g
 OPTFLAGS	?= -O0
-CFLAGS		+= -Wall -mcpu=$(CPU) $(CPUFLAGS) -DMCU_$(MCU) -DBOARD_$(BOARDNAME) -DINTEGER_STDIO
+IOFLAGS		?= -DINTEGER_STDIO
+CFLAGS		+= -Wall -mcpu=$(CPU) $(CPUFLAGS) -DMCU_$(MCU) -DBOARD_$(BOARDNAME)
 CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDEPENDENT)
-CFLAGS		+= $(CONFIGFLAGS) $(GDBFLAGS) $(OPTFLAGS) $(DEBUG) $(EXTRAFLAGS)
+CFLAGS		+= $(CONFIGFLAGS) $(DEBUGFLAGS) $(OPTFLAGS) $(IOFLAGS) $(DEBUG) $(EXTRAFLAGS)
 LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDEPENDENT) -l$(MCU) -Wl,-Map=$*.map,--cref $(EXTRAOBJS)
+
+#GDBGUI		?= ddd --gdb --debugger
+#GDBFLAGS	?= -tui
 
 # Define default target placeholder
 
@@ -65,10 +69,9 @@ default_catch:
 	$(OBJCOPY) -S -O binary --gap-fill=0 $< $@
 
 .elf.debug:
-	-rm ~/.gdbtkinit
 	$(OPENOCD) -f $(OPENOCDCFG) >openocd.log 2>&1 &
 	sleep 1
-	-$(GDB) -x $(DEBUGGDB) -w $<
+	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(DEBUGGDB) $<
 	killall openocd
 
 .elf.hex:
