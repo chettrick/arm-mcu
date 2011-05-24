@@ -8,12 +8,12 @@ static const char revision[] = "$Id$";
 
 int main(void)
 {
-  GPIO_InitTypeDef config;
-  unsigned long int i;
-
   cpu_init(DEFAULT_CPU_FREQ);
 
 #ifdef BOARD_STMICRO_STR910_EVAL
+  GPIO_InitTypeDef config;
+  unsigned long int i;
+
   SCU_APBPeriphClockConfig(__GPIO9, ENABLE);	// Turn on GPIO9 clock
   SCU_APBPeriphReset(__GPIO9, DISABLE);		// Let GPIO9 out of reset
  
