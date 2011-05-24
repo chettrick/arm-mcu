@@ -13,16 +13,18 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-  SCU_APBPeriphClockConfig(__GPIO6, ENABLE);	// Turn on GPIO6 clock
-  SCU_APBPeriphReset(__GPIO6, DISABLE);		// Let GPIO6 out of reset
+#ifdef BOARD_STMICRO_STR910_EVAL
+  SCU_APBPeriphClockConfig(__GPIO9, ENABLE);	// Turn on GPIO9 clock
+  SCU_APBPeriphReset(__GPIO9, DISABLE);		// Let GPIO9 out of reset
  
   GPIO_StructInit(&config);
-  config.GPIO_Pin = GPIO_Pin_All;
-  config.GPIO_Direction = GPIO_PinOutput;	// GPIO6 pins are all outputs
-  config.GPIO_Type = GPIO_Type_PushPull;	// GPIO6 pins are all push pull outputs
-  config.GPIO_Alternate = GPIO_OutputAlt1;	// GPIO6 pins are all GPIO outputs
-  GPIO_Init(GPIO6, &config);
+  config.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1|GPIO_Pin_2|GPIO_Pin_3;
+  config.GPIO_Direction = GPIO_PinOutput;	// LED pins are outputs
+  config.GPIO_Type = GPIO_Type_PushPull;	// LED pins are push pull outputs
+  config.GPIO_Alternate = GPIO_OutputAlt1;	// LED pins are GPIO outputs
+  GPIO_Init(GPIO9, &config);
 
   for (i = 0;; i++)
-    GPIO_Write(GPIO6, i);
+    GPIO_Write(GPIO9, ~(i >> 18));
+#endif
 }
