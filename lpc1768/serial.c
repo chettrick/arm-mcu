@@ -165,13 +165,13 @@ int serial_write(unsigned port, char *buf, unsigned int count)
     return -1;
   }
 
-  for (n = 0; n < count; n++)
+  if (serial_txready(port))
   {
-    while (!serial_txready(port));
     UARTS[port]->THR = *buf++;
+    return 1;
   }
 
-  return count;
+  return 0;
 }
 
 /* Return TRUE if receive data is available */
