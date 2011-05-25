@@ -88,7 +88,7 @@
 #define configCHECK_FOR_STACK_OVERFLOW	2
 #define configUSE_RECURSIVE_MUTEXES	1
 #define configQUEUE_REGISTRY_SIZE	10
-#define configGENERATE_RUN_TIME_STATS	1
+#define configGENERATE_RUN_TIME_STATS	0
 
 /* Set the following definitions to 1 to include the API function, or zero
 to exclude the API function. */

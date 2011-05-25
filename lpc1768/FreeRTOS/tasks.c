@@ -1116,11 +1116,13 @@ portBASE_TYPE xReturn;
 		xSchedulerRunning = pdTRUE;
 		xTickCount = ( portTickType ) 0;
 
+                #if ( configGENERATE_RUN_TIME_STATS == 1 )
 		/* If configGENERATE_RUN_TIME_STATS is defined then the following
 		macro must be defined to configure the timer/counter used to generate
 		the run time counter time base. */
 		portCONFIGURE_TIMER_FOR_RUN_TIME_STATS();
-		
+		#endif
+
 		/* Setting up the timer tick is hardware specific and thus in the
 		portable interface. */
 		if( xPortStartScheduler() )

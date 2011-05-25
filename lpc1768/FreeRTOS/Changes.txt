@@ -3,20 +3,25 @@ Changes Made to FreeRTOS Source Distribution
 
 $Id$
 
-1. Downloaded FreeRTOS v7.0.1.
+1.  Downloaded FreeRTOS v7.0.1.
 
-2. Copied FreeRTOS/Source/* to lpc1768/FreeRTOS.
+2.  Copied FreeRTOS/Source/* to lpc1768/FreeRTOS.
 
-3. Copied FreeRTOS/Source/include/* to lpc1768/FreeRTOS.
+3.  Copied FreeRTOS/Source/include/* to lpc1768/FreeRTOS.
 
-4. Copied FreeRTOS/Source/portable/GCC/ARM_CM3/* to lpc1768/FreeRTOS.
+4.  Copied FreeRTOS/Source/portable/GCC/ARM_CM3/* to lpc1768/FreeRTOS.
 
-5. Copied FreeRTOS/Source/portable/MemMang/heap_3.c to lpc1768/FreeRTOS.
+5.  Copied FreeRTOS/Source/portable/MemMang/heap_3.c to lpc1768/FreeRTOS.
 
-6. Copied FreeRTOS/Demo/CORTEX_LPC1768_GCC_RedSuite/src/FreeRTOSConfig.h to
-   lpc1768/FreeRTOS.
+6.  Copied FreeRTOS/Demo/CORTEX_LPC1768_GCC_RedSuite/src/FreeRTOSConfig.h to
+    lpc1768/FreeRTOS.
 
-7. Changed sprintf() to siprintf() in tasks.c to prevent unnecessarily
-   pulling in floating point libraries at link time.
+7.  Changed sprintf() to siprintf() in tasks.c to prevent unnecessarily
+    pulling in floating point libraries at link time.
 
-8. Changed configUSE_TICK_HOOK to 0 in FreeRTOSConfig.h.
+8.  Changed configUSE_TICK_HOOK to 0 in FreeRTOSConfig.h.
+
+9.  Changed configGENERATE_RUN_TIME_STATS to 0 in FreeRTOSConfig.h.i
+
+10. Added missing #if ( configGENERATE_RUN_TIME_STATS == 1 ) around call to
+    portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() in tasks.c.
