@@ -4,6 +4,10 @@
 
 static const char revision[] = "$Id$";
 
+#ifndef FREERTOS
+#error You must define FREERTOS to compile this FreeRTOS application
+#endif
+
 #include <assert.h>
 #include <cpu.h>
 #include <stdio.h>
