@@ -19,8 +19,8 @@ extern int errno;
 
 static const unsigned long int UARTS[MAX_SERIAL_PORTS] =
 {
-  AT91C_BASE_US0,
-  AT91C_BASE_US1
+  (unsigned long int) AT91C_BASE_US0,
+  (unsigned long int) AT91C_BASE_US1
 };
 
 #define US_CR	(*(volatile unsigned long *)(UARTS[port] + 0x00))
