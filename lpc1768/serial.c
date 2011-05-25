@@ -146,9 +146,9 @@ int serial_txready(unsigned port)
   }
 
   if (UARTS[port]->LSR & UART_LSR_THRE)
-    return TRUE;
+    return 1;
   else
-    return FALSE;
+    return 0;
 }
 
 /* Send a buffer to the serial port */
@@ -181,13 +181,13 @@ int serial_rxready(unsigned port)
   if (port+1 > MAX_SERIAL_PORTS)
   {
     errno = ENODEV;
-    return 0;
+    return -1;
   }
 
   if (UARTS[port]->LSR & UART_LSR_RDR)
-    return TRUE;
+    return 1;
   else
-    return FALSE;
+    return 0;
 }
 
 /* Read buffer from the serial port */
@@ -204,9 +204,9 @@ int serial_read(unsigned port, char *buf, unsigned int count)
 
   if (serial_rxready(port))
   {
-    *buf = UARTS[port]->RBR;
+    *buf++ = UARTS[port]->RBR;
     return 1;
   }
-  else
-    return 0;
+
+  return 0;
 }
