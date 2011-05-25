@@ -14,6 +14,13 @@ static const char revision[] = "$Id$";
 #include <errno.h>
 #include <fcntl.h>
 
+// Compile support for FreeRTOS
+
+#ifdef FREERTOS
+#include <FreeRTOS.h>
+#include <task.h>
+#endif
+
 // Some toolchains don't define O_BINARY
 
 #ifndef O_BINARY
@@ -369,8 +376,18 @@ int device_read_cooked(int fd, char *s, unsigned int count)
 
   for (p = s; p < s + count - 1;)
   {
-    while ((len = d->read(d->subdevice, &c, 1)) == 0);
+    do
+    {
+#ifdef FREERTOS
+      if (xTaskGetCurrentTaskHandle() != NULL)
+        taskYIELD();
+#endif
+    }
+    while (!d->read_ready(d->subdevice));
+
+    len = d->read(d->subdevice, &c, 1);
     if (len < 0) return len;
+    if (len == 0) continue;
 
     switch (c)
     {
@@ -457,12 +474,19 @@ int device_getc(int fd)
     return -1;
   }
 
-  while ((len = device_table[fd].read(device_table[fd].subdevice, &c, 1)) == 0);
+  do
+  {
+#ifdef FREERTOS
+    if (xTaskGetCurrentTaskHandle() != NULL)
+      taskYIELD();
+#endif
+  }
+  while (!device_table[fd].read_ready(device_table[fd].subdevice));
 
-  if (len > 0)
-    return c;
-  else
-    return len;
+  len = device_table[fd].read(device_table[fd].subdevice, &c, 1);
+  if (len < 0) return len;
+
+  return c;
 }
 
 /* Write uncooked output to a device */
@@ -499,8 +523,18 @@ int device_write_raw(int fd, char *s, unsigned int count)
 
   for (i = 0; i < count;)
   {
+    do
+    {
+#ifdef FREERTOS
+      if (xTaskGetCurrentTaskHandle() != NULL)
+        taskYIELD();
+#endif
+    }
+    while (!device_table[fd].write_ready(device_table[fd].subdevice));
+
     len = device_table[fd].write(device_table[fd].subdevice, s, count - i);
     if (len < 0) return len;
+    if (len == 0) continue;
 
     s += len;
     i += len;
