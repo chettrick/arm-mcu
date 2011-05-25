@@ -1,0 +1,12 @@
+# udev rules for mbed-LPC1768
+
+# $Id$
+
+# This file must be placed at:
+#
+# /etc/udev/rules.d/48-mbed.rules    (preferred location)
+#   or
+# /lib/udev/rules.d/48-mbed.rules    (req'd on some broken systems)
+
+# link /dev/ttymbed to ttyACM?
+KERNEL=="ttyACM*", ATTRS{idVendor}=="0d28", ATTRS{idProduct}=="0204", SYMLINK+="ttymbed", MODE:="0666"
