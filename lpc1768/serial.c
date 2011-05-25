@@ -155,8 +155,6 @@ int serial_txready(unsigned port)
 
 int serial_write(unsigned port, char *buf, unsigned int count)
 {
-  int n;
-
   errno = 0;
 
   if (port+1 > MAX_SERIAL_PORTS)
