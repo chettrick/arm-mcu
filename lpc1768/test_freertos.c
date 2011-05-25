@@ -22,7 +22,7 @@ void TaskFunction(void *parameters)
 
   for (;;)
   {
-    serial_write(CONSOLE_PORT, message, strlen(message));
+    cputs(message);
     vTaskDelayUntil(&waketime, (1000 + (rand_r(&seed) % 500))/portTICK_RATE_MS);    
   }
 }
