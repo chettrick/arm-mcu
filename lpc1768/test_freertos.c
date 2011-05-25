@@ -18,7 +18,8 @@ int main(void)
 
   puts("\033[H\033[2JLPC1768 FreeRTOS Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
-  printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s  FreeRTOS:%s\n\n", CPUFREQ, __VERSION__,
+    tskKERNEL_VERSION_NUMBER);
 
   vTaskStartScheduler();
   assert(0);
