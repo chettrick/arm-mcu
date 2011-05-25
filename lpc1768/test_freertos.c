@@ -15,45 +15,67 @@ static const char revision[] = "$Id$";
 #include <string.h>
 
 #include <FreeRTOS.h>
+#include <semphr.h>
 #include <task.h>
+
+#define MESSAGE_PERIOD	4000
+
+xSemaphoreHandle console_lock;
 
 void TaskFunction(void *parameters)
 {
   char *message = parameters;
-  unsigned int seed = (unsigned int) &seed;
 
   portTickType waketime = xTaskGetTickCount();
 
   for (;;)
   {
-    cputs(message);
-    vTaskDelayUntil(&waketime, (1000 + (rand_r(&seed) % 500))/portTICK_RATE_MS);    
+    vTaskDelayUntil(&waketime, (MESSAGE_PERIOD/2 + (lrand48() % (MESSAGE_PERIOD/2)))/portTICK_RATE_MS);
+
+    xSemaphoreTake(console_lock, portMAX_DELAY);
+    puts(message);
+    xSemaphoreGive(console_lock);
   }
 }
 
 int main(void)
 {
   xTaskHandle task1;
+  xTaskHandle task2;
 
   cpu_init(DEFAULT_CPU_FREQ);
 
   serial_stdio(CONSOLE_PORT, 115200);
+
+// Display version information
 
   puts("\033[H\033[2JLPC1768 FreeRTOS Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s  FreeRTOS:%s\n\n", CPUFREQ, __VERSION__,
     tskKERNEL_VERSION_NUMBER);
 
-  if (xTaskCreate(TaskFunction, (signed char *) "Task 1", 240, "This is Task 1\r\n", 1, &task1) != pdPASS)
+// Create mutex to arbitrate console output
+
+  console_lock = xSemaphoreCreateMutex();
+  if (console_lock == NULL)
   {
-    puts("ERROR: xTaskCreate() for task 1 failed!");
+    puts("ERROR: xSemaphoreCreateMutex() for console_lock failed!");
     fflush(stdout);
     assert(0);
   }
 
-  if (xTaskCreate(TaskFunction, (signed char *) "Task 2", 240, "This is Task 2\r\n", 1, &task1) != pdPASS)
+// Create a couple of tasks
+
+  if (xTaskCreate(TaskFunction, (signed char *) "task1", 1240, "This is Task 1", 1, &task1) != pdPASS)
   {
-    puts("ERROR: xTaskCreate() for task 2 failed!");
+    puts("ERROR: xTaskCreate() for task1 failed!");
+    fflush(stdout);
+    assert(0);
+  }
+
+  if (xTaskCreate(TaskFunction, (signed char *) "task2", 1240, "This is Task 2", 1, &task2) != pdPASS)
+  {
+    puts("ERROR: xTaskCreate() for task2 failed!");
     fflush(stdout);
     assert(0);
   }
