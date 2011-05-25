@@ -15,3 +15,6 @@ $Id$
 
 6. Copied FreeRTOS/Demo/CORTEX_LPC1768_GCC_RedSuite/src/FreeRTOSConfig.h to
    lpc1768/FreeRTOS.
+
+7. Changed sprintf() to siprintf() in tasks.c to prevent unnecessarily
+   pulling in floating point libraries at link time.
