@@ -29,3 +29,5 @@ $Id$
 11. Added macros to map FreeRTOS interrupt handler names to framework names
     (xPortSysTickHandler to SysTick_Handler, xPortPendSVHandler to
     PendSV_Handler, and xPortSVCHandler to SVC_Handler).
+
+12. Set INCLUDE_xTaskGetCurrentTaskHandle to 1 in FreeRTOSConfig.h.
