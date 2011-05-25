@@ -21,7 +21,7 @@ $Id$
 
 8.  Changed configUSE_TICK_HOOK to 0 in FreeRTOSConfig.h.
 
-9.  Changed configGENERATE_RUN_TIME_STATS to 0 in FreeRTOSConfig.h.i
+9.  Changed configGENERATE_RUN_TIME_STATS to 0 in FreeRTOSConfig.h.
 
 10. Added missing #if ( configGENERATE_RUN_TIME_STATS == 1 ) around call to
     portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() in tasks.c.
