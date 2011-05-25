@@ -56,7 +56,3 @@ void vApplicationStackOverflowHook(xTaskHandle *pxTask, signed char *pcTaskName)
 {
   assert(0);
 }
-
-void vApplicationTickHook(void)
-{
-}

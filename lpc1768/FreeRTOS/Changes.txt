@@ -18,3 +18,5 @@ $Id$
 
 7. Changed sprintf() to siprintf() in tasks.c to prevent unnecessarily
    pulling in floating point libraries at link time.
+
+8. Changed configUSE_TICK_HOOK to 0 in FreeRTOSConfig.h.
