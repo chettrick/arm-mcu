@@ -9,8 +9,9 @@ TEXTBASE	?= 0x00000000
 BOARDNAME	?= MBED_LPC1768
 
 CMSIS_DIR	= $(MCUDEPENDENT)/CMSIS
+FREERTOS_DIR	= $(MCUDEPENDENT)/FreeRTOS
 
-CFLAGS		+= -I$(CMSIS_DIR)/include
+CFLAGS		+= -I$(CMSIS_DIR)/include -I$(FREERTOS_DIR)
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
@@ -33,9 +34,10 @@ USBBOOT		?= /media/LPC17xx
 # Build processor dependent support library
 
 lib$(MCU).a: $(CMSIS_DIR) $(LIBOBJS)
-	for F in $(CMSIS_DIR)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
+	for F in $(CMSIS_DIR)/source/*.c $(FREERTOS_DIR)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(CMSIS_DIR)/source/*.o
+	$(AR) crs lib$(MCU).a $(FREERTOS_DIR)/*.o
 
 lib: lib$(MCU).a
 
