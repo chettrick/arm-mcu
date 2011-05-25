@@ -155,5 +155,10 @@ extern void vConfigureTimerForRunTimeStats( void );
 #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() vConfigureTimerForRunTimeStats()
 #define portGET_RUN_TIME_COUNTER_VALUE() LPC_TIM0->TC
 
+// Map FreeRTOS interrupt handlers to mine
+
+#define xPortSysTickHandler	SysTick_Handler
+#define xPortPendSVHandler	PendSV_Handler
+#define vPortSVCHandler		SVC_Handler
 
 #endif /* FREERTOS_CONFIG_H */

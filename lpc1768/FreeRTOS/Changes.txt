@@ -25,3 +25,7 @@ $Id$
 
 10. Added missing #if ( configGENERATE_RUN_TIME_STATS == 1 ) around call to
     portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() in tasks.c.
+
+11. Added macros to map FreeRTOS interrupt handler names to framework names
+    (xPortSysTickHandler to SysTick_Handler, xPortPendSVHandler to
+    PendSV_Handler, and xPortSVCHandler to SVC_Handler).
