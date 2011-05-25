@@ -89,6 +89,8 @@ int serial_init(unsigned port, unsigned long int baudrate)
 
 int serial_stdio(unsigned port, unsigned long int baudrate)
 {
+  int status;
+
   errno = 0;
 
   if (port+1 > MAX_SERIAL_PORTS)
@@ -97,7 +99,8 @@ int serial_stdio(unsigned port, unsigned long int baudrate)
     return -1;
   }
 
-  serial_init(port, baudrate);
+  status = serial_init(port, baudrate);
+  if (status) return status;
 
   device_register_char_fd(NULL, 0, port, (void *) baudrate, (device_init_t) serial_init, NULL, serial_read, NULL, serial_rxready);
   device_register_char_fd(NULL, 1, port, (void *) baudrate, (device_init_t) serial_init, serial_write, NULL, serial_txready, NULL);
