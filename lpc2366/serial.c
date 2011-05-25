@@ -109,6 +109,8 @@ int serial_init(unsigned port, unsigned long int baudrate)
 
 int serial_stdio(unsigned port, unsigned long int baudrate)
 {
+  int status;
+
   errno = 0;
 
   if (port+1 > MAX_SERIAL_PORTS)
@@ -117,7 +119,8 @@ int serial_stdio(unsigned port, unsigned long int baudrate)
     return -1;
   }
 
-  serial_init(port, baudrate);
+  status = serial_init(port, baudrate);
+  if (status) return status;
 
   device_register_char_fd(NULL, 0, port, (void *) baudrate, (device_init_t) serial_init, NULL, serial_read, NULL, serial_rxready);
   device_register_char_fd(NULL, 1, port, (void *) baudrate, (device_init_t) serial_init, serial_write, NULL, serial_txready, NULL);
@@ -162,18 +165,19 @@ int serial_txready(unsigned port)
   if (port+1 > MAX_SERIAL_PORTS)
   {
     errno = ENODEV;
-    return 0;
+    return -1;
   }
 
-  return UxLSR & 0x20;
+  if (UxLSR & 0x20)
+    return 1;
+  else
+    return 0;
 }
 
 /* Send a buffer to the serial port */
 
 int serial_write(unsigned port, char *buf, unsigned int count)
 {
-  int n;
-
   errno = 0;
 
   if (port+1 > MAX_SERIAL_PORTS)
@@ -182,13 +186,13 @@ int serial_write(unsigned port, char *buf, unsigned int count)
     return -1;
   }
 
-  for (n = 0; n < count; n++)
+  if (serial_txready(port))
   {
-    while (!serial_txready(port));
     UxTHR = *buf++;
+    return 1;
   }
 
-  return count;
+  return 0;
 }
 
 /* Return TRUE if receive data is available */
@@ -200,10 +204,13 @@ int serial_rxready(unsigned port)
   if (port+1 > MAX_SERIAL_PORTS)
   {
     errno = ENODEV;
-    return 0;
+    return -1;
   }
 
-  return UxLSR & 0x01;
+  if (UxLSR & 0x01)
+    return 1;
+  else
+    return 0;
 }
 
 /* Read buffer from the serial port */
@@ -220,9 +227,9 @@ int serial_read(unsigned port, char *buf, unsigned int count)
 
   if (serial_rxready(port))
   {
-    *buf = UxRBR;
+    *buf++ = UxRBR;
     return 1;
   }
-  else
-    return 0;
+
+  return 0;
 }
