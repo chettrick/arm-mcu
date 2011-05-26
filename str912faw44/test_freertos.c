@@ -45,7 +45,12 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
+#ifdef CONSOLE_USB
+  usb_serial_stdio();
+  getch();
+#else
   serial_stdio(CONSOLE_PORT, 115200);
+#endif
 
 // Display version information
 
