@@ -36,11 +36,11 @@ $Id$
 
 13. Copied lpc1768/FreeRTOS to lpc2366/FreeRTOS.
 
-14. Changed "LPC17xx.h" to "LPC23xx.h" in FreeRTOSConfig.h.
+14. Copied FreeRTOS/Source/portable/GCC/ARM7_LPC23xx/* to lpc2366/FreeRTOS.
 
-15. Copied FreeRTOS/Source/portable/GCC/ARM7_LPC23xx/* to lpc2366/FreeRTOS.
+15. Changed "LPC17xx.h" to "LPC23xx.h" in FreeRTOSConfig.h.
 
 16. Changed configCPU_CLOCK_HZ to 72 MHz in FreeRTOSConfig.h.
 
 17. Removed macro definitions for LPC17xx interrupt handler names (see #11
-    above).
+    above) from FreeRTOSConfig.h.
