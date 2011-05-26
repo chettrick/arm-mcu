@@ -38,3 +38,5 @@ $Id$
 ===============================================================================
 
 14. Changed "lpc17xx.h" to "stm32f10x.h" in FreeRTOSConfig.h.
+
+15. Reduced heap size from 19 KB to 10 KB, since we only have 20 KB of RAM.
