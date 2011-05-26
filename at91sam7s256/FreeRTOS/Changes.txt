@@ -40,3 +40,8 @@ $Id$
 
 15. Copied FreeRTOS/Source/portable/GCC/ARM7_AT91SAM7S/port* to
     at91sam7s256/FreeRTOS.
+
+16. Changed configCPU_CLOCK_HZ to 48 MHz in FreeRTOSConfig.h.
+
+17. Removed macro definitions for LPC17xx interrupt handler names (see #11
+    above).
