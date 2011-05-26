@@ -27,10 +27,10 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	for F in $(AT91LIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(AT91LIB)/*.o
-	for F in $(FREERTOS_DIR)/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(FREERTOS_DIR)/*.o
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
+	for F in $(FREERTOS_DIR)/*.c ; do $(MAKE) $${F%.c}.o ; done
+	$(AR) crs lib$(MCU).a $(FREERTOS_DIR)/*.o
 
 lib: lib$(MCU).a
 
