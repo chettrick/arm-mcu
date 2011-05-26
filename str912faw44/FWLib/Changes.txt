@@ -1,7 +1,7 @@
 Changes Made to ST9x FWLib
 --------------------------
 
-Philip Munts, 23 September 2009
+$Id$
 
 1. Downloaded um0233.zip, version 2.1, February 2009, from www.st.com.
 
@@ -18,3 +18,9 @@ Philip Munts, 23 September 2009
 6. Modified 91x_tim.c to reset the counter to 0x0000, not 0x1234.
 
 7. Removed unused variable i from SCU_PLLCmd() in 91x_scu.c.
+
+8. Added (void) tmp; to RTC_ClearFlag() in 91x_rtc.c to avoid compiler
+   warning from GCC 4.6.
+
+9. Added (void) tmp; to ADC_ClearFlag() in 91x_adc.c to avoid compiler
+   warning from GCC 4.6.

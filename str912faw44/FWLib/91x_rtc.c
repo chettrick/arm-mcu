@@ -391,6 +391,8 @@ void RTC_ClearFlag(u32 RTC_FLAG)
   if (RTC_FLAG == RTC_FLAG_Per)  tmp=RTC->SR; 
   else if (RTC_FLAG == RTC_FLAG_Alarm) RTC->CR&=~0x100000;
   else if (RTC_FLAG == RTC_FLAG_Tamper) RTC->CR&=~0x1;
+
+  (void) tmp; // Avoid compiler warning
 }
 
 

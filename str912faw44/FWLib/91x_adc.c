@@ -336,6 +336,8 @@ void ADC_ClearFlag(u16 ADC_Flag)
    tmp = ADC->DDR;
    else
    ADC->CR |= (1<<(ADC_Flag & ADC_FLAG_MASK));
+
+  (void) tmp; // Avoid compiler warning
 }
 
 /*******************************************************************************
