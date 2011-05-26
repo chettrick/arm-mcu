@@ -47,3 +47,5 @@ $Id$
 
 18. Removed definitions for macros portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()
     and portGET_RUN_TIME_COUNTER_VALUE().
+
+19. Defined configASSERT() as newlib assert() in FreeRTOSConfig.h.

@@ -36,3 +36,5 @@ $Id$
     and portGET_RUN_TIME_COUNTER_VALUE() From FreeRTOSConfig.h.
 
 14. Changed configCPU_CLOCK_HZ to 100 MHz in FreeRTOSConfig.h.
+
+15. Defined configASSERT() as newlib assert() in FreeRTOSConfig.h.

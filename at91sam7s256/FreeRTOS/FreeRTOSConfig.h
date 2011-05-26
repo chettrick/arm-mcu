@@ -66,6 +66,8 @@
  * FreeRTOS API DOCUMENTATION AVAILABLE ON THE FreeRTOS.org WEB SITE.
  *----------------------------------------------------------*/
 
+#include <assert.h>
+#define configASSERT(x)			assert(x)
 #define configUSE_PREEMPTION		1
 #define configUSE_IDLE_HOOK		0
 #define configMAX_PRIORITIES		( ( unsigned portBASE_TYPE ) 5 )

@@ -43,3 +43,5 @@ $Id$
     have 20 KB of RAM.
 
 16. Changed CPU speed to 72 MHz in FreeRTOSConfig.h.
+
+17. Defined configASSERT() as newlib assert() in FreeRTOSConfig.h.
