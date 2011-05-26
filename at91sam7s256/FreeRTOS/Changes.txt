@@ -1,0 +1,42 @@
+Changes Made to FreeRTOS Source Distribution
+--------------------------------------------
+
+$Id$
+
+1.  Downloaded FreeRTOS v7.0.1.
+
+2.  Copied FreeRTOS/Source/* to lpc1768/FreeRTOS.
+
+3.  Copied FreeRTOS/Source/include/* to lpc1768/FreeRTOS.
+
+4.  Copied FreeRTOS/Source/portable/GCC/ARM_CM3/* to lpc1768/FreeRTOS.
+
+5.  Copied FreeRTOS/Source/portable/MemMang/heap_3.c to lpc1768/FreeRTOS.
+
+6.  Copied FreeRTOS/Demo/CORTEX_LPC1768_GCC_RedSuite/src/FreeRTOSConfig.h to
+    lpc1768/FreeRTOS.
+
+7.  Changed sprintf() to siprintf() in tasks.c to prevent unnecessarily
+    pulling in floating point libraries at link time.
+
+8.  Changed configUSE_TICK_HOOK to 0 in FreeRTOSConfig.h.
+
+9.  Changed configGENERATE_RUN_TIME_STATS to 0 in FreeRTOSConfig.h.
+
+10. Added missing #if ( configGENERATE_RUN_TIME_STATS == 1 ) around call to
+    portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() in tasks.c.
+
+11. Added macros to map FreeRTOS interrupt handler names to framework names
+    (xPortSysTickHandler to SysTick_Handler, xPortPendSVHandler to
+    PendSV_Handler, and xPortSVCHandler to SVC_Handler).
+
+12. Set INCLUDE_xTaskGetCurrentTaskHandle to 1 in FreeRTOSConfig.h.
+
+===============================================================================
+
+13. Copied lpc1768/FreeRTOS to at91sam7s256/FreeRTOS.
+
+14. Changed "LPC17xx.h" to "AT91SAM7S256.h" in FreeRTOSConfig.h.
+
+15. Copied FreeRTOS/Source/portable/GCC/ARM7_AT91SAM7S/port* to
+    at91sam7s256/FreeRTOS.

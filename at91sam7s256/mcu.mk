@@ -8,7 +8,9 @@ BOARDNAME	?= OLIMEX_SAM7_P256
 
 AT91LIB		= $(MCUDEPENDENT)/at91lib
 USBSERIAL	= $(MCUDEPENDENT)/usb_serial
-CFLAGS		+= -I$(AT91LIB) -I$(USBSERIAL)
+FREERTOS_DIR	= $(MCUDEPENDENT)/FreeRTOS
+
+CFLAGS		+= -I$(AT91LIB) -I$(USBSERIAL) -I$(FREERTOS_DIR)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
@@ -25,6 +27,8 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	for F in $(AT91LIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(AT91LIB)/*.o
+	for F in $(FREERTOS_DIR)/*.c ; do $(MAKE) $${F%.c}.o ; done
+	$(AR) crs lib$(MCU).a $(FREERTOS_DIR)/*.o
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
 
