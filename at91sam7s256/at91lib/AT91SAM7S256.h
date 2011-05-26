@@ -2226,4 +2226,19 @@ typedef struct _AT91S_UDP {
 #define AT91C_IFLASH_NB_OF_PAGES	 (1024) // Internal FLASH Number of Pages: 1024 bytes
 #define AT91C_IFLASH_NB_OF_LOCK_BITS	 (16) // Internal FLASH Number of Lock Bits: 16 bytes
 
+#define AT91F_AIC_ConfigureIt( irq_id, priority, src_type, newHandler )         \
+{                                                                                                                                                       \
+    unsigned int mask ;                                                                                                         \
+                                                                                                                                                        \
+    mask = 0x1 << irq_id;                                                                                                       \
+    /* Disable the interrupt on the interrupt controller */                                     \
+    AT91C_BASE_AIC->AIC_IDCR = mask ;                                                                           \
+    /* Save the interrupt handler routine pointer and the interrupt priority */ \
+    AT91C_BASE_AIC->AIC_SVR[irq_id] = (unsigned int) newHandler ;                       \
+    /* Store the Source Mode Register */                                                                        \
+    AT91C_BASE_AIC->AIC_SMR[irq_id] = src_type | priority  ;                            \
+    /* Clear the interrupt on the interrupt controller */                                       \
+    AT91C_BASE_AIC->AIC_ICCR = mask ;                                                                           \
+}
+
 #endif
