@@ -31,3 +31,6 @@ $Id$
     PendSV_Handler, and xPortSVCHandler to SVC_Handler).
 
 12. Set INCLUDE_xTaskGetCurrentTaskHandle to 1 in FreeRTOSConfig.h.
+
+13. Removed definitions for macros portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()
+    and portGET_RUN_TIME_COUNTER_VALUE().

@@ -44,3 +44,6 @@ $Id$
 
 17. Removed macro definitions for LPC17xx interrupt handler names (see #11
     above) from FreeRTOSConfig.h.
+
+18. Removed definitions for macros portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()
+    and portGET_RUN_TIME_COUNTER_VALUE().

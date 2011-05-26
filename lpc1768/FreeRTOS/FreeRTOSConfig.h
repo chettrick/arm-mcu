@@ -147,15 +147,6 @@ numeric value the higher the interrupt priority). */
 #define configEMAC_INTERRUPT_PRIORITY		5
 #define configUSB_INTERRUPT_PRIORITY		6
 
-
-
-/*-----------------------------------------------------------
- * Macros required to setup the timer for the run time stats.
- *-----------------------------------------------------------*/
-extern void vConfigureTimerForRunTimeStats( void );
-#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() vConfigureTimerForRunTimeStats()
-#define portGET_RUN_TIME_COUNTER_VALUE() LPC_TIM0->TC
-
 // Map FreeRTOS interrupt handlers to mine
 
 #define xPortSysTickHandler	SysTick_Handler

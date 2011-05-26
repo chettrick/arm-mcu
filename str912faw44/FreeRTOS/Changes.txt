@@ -52,3 +52,6 @@ $Id$
     #define configCPU_PERIPH_HZ		48000000
 
 19. Added #include <stdlib.h> to port.c (for abs()).
+
+20. Removed definitions for macros portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()
+    and portGET_RUN_TIME_COUNTER_VALUE().
