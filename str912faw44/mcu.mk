@@ -8,7 +8,9 @@ BOARDNAME	?= STMICRO_STR910_EVAL
 
 FWLIB		= $(MCUDEPENDENT)/FWLib
 USBSERIAL	= $(MCUDEPENDENT)/usb_serial
-CFLAGS		+= -I$(FWLIB) -I$(USBSERIAL)
+FREERTOS_DIR	= $(MCUDEPENDENT)/FreeRTOS
+
+CFLAGS		+= -I$(FWLIB) -I$(USBSERIAL) -I$(FREERTOS_DIR)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o time.o
 
@@ -27,6 +29,8 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
+	for F in $(FREERTOS_DIR)/*.c ; do $(MAKE) $${F%.c}.o ; done
+	$(AR) crs lib$(MCU).a $(FREERTOS_DIR)/*.o
 
 lib: lib$(MCU).a
 
