@@ -10,8 +10,8 @@ extern void cpu_init(unsigned long int frequency);
 #include <interrupt.h>
 #include <serial.h>
 #include <usb_serial/usb_serial.h>
-#include <FWLib/91x_lib.h>
-#include <FWLib/91x_it.h>
+#include <91x_lib.h>
+#include <91x_it.h>
 
 #ifndef DEFAULT_CPU_FREQ
 #define DEFAULT_CPU_FREQ	48000000
