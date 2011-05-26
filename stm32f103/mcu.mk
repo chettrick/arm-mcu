@@ -8,7 +8,9 @@ CPUFLAGS	= -mthumb
 BOARDNAME	?= OLIMEX_STM32_P103
 
 CMSIS		= $(MCUDEPENDENT)/CMSIS
-CFLAGS		+= -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
+FREERTOS_DIR	= $(MCUDEPENDENT)/FreeRTOS
+
+CFLAGS		+= -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include -I$(FREERTOS_DIR)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
@@ -25,6 +27,8 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	for F in $(CMSIS)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
+	for F in $(FREERTOS_DIR)/*.c ; do $(MAKE) $${F%.c}.o ; done
+	$(AR) crs lib$(MCU).a $(FREERTOS_DIR)/*.o
 
 lib: lib$(MCU).a
 
