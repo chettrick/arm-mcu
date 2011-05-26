@@ -36,12 +36,12 @@ $Id$
 
 13. Copied lpc1768/FreeRTOS to at91sam7s256/FreeRTOS.
 
-14. Changed "LPC17xx.h" to "AT91SAM7S256.h" in FreeRTOSConfig.h.
-
-15. Copied FreeRTOS/Source/portable/GCC/ARM7_AT91SAM7S/port* to
+14. Copied FreeRTOS/Source/portable/GCC/ARM7_AT91SAM7S/port* to
     at91sam7s256/FreeRTOS.
+
+15. Changed "LPC17xx.h" to "AT91SAM7S256.h" in FreeRTOSConfig.h.
 
 16. Changed configCPU_CLOCK_HZ to 48 MHz in FreeRTOSConfig.h.
 
 17. Removed macro definitions for LPC17xx interrupt handler names (see #11
-    above).
+    above) from FreeRTOSConfig.h.
