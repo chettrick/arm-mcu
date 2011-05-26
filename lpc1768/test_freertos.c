@@ -66,14 +66,14 @@ int main(void)
 
 // Create a couple of tasks
 
-  if (xTaskCreate(TaskFunction, (signed char *) "task1", 240, "This is Task 1", 1, &task1) != pdPASS)
+  if (xTaskCreate(TaskFunction, (signed char *) "task1", 256, "This is Task 1", 1, &task1) != pdPASS)
   {
     puts("ERROR: xTaskCreate() for task1 failed!");
     fflush(stdout);
     assert(0);
   }
 
-  if (xTaskCreate(TaskFunction, (signed char *) "task2", 240, "This is Task 2", 1, &task2) != pdPASS)
+  if (xTaskCreate(TaskFunction, (signed char *) "task2", 256, "This is Task 2", 1, &task2) != pdPASS)
   {
     puts("ERROR: xTaskCreate() for task2 failed!");
     fflush(stdout);
