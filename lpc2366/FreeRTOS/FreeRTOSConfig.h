@@ -153,4 +153,6 @@ numeric value the higher the interrupt priority). */
 #define configEMAC_INTERRUPT_PRIORITY		5
 #define configUSB_INTERRUPT_PRIORITY		6
 
+#define vPortYieldProcessor software_interrupt_exception
+
 #endif /* FREERTOS_CONFIG_H */
