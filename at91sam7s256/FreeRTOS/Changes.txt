@@ -50,3 +50,6 @@ $Id$
     and portGET_RUN_TIME_COUNTER_VALUE().
 
 19. Defined configASSERT() as newlib assert() in FreeRTOSConfig.h.
+
+20. Defined vPortYieldProcessor software_interrupt_exception in
+    FreeRTOSConfig.h.
