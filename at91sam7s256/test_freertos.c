@@ -4,6 +4,8 @@
 
 static const char revision[] = "$Id$";
 
+#error This application is currently BROKEN.  I do not currently have FreeRTOS working on the AT91SAM7S256.
+
 #ifndef FREERTOS
 #error You must define FREERTOS to compile this FreeRTOS application
 #endif
