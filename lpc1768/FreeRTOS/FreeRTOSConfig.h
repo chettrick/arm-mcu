@@ -151,7 +151,7 @@ numeric value the higher the interrupt priority). */
 
 // Use integer only siprintf() to avoid linking floating point libraries
 
-// #define portSPRINTF siprintf
+#define portSPRINTF siprintf
 
 // Map FreeRTOS interrupt handlers to mine
 
