@@ -38,3 +38,5 @@ $Id$
 14. Changed configCPU_CLOCK_HZ to 100 MHz in FreeRTOSConfig.h.
 
 15. Defined configASSERT() as newlib assert() in FreeRTOSConfig.h.
+
+16. Ran dos2unix on *.c *.h to strip DOS carriage returns.
