@@ -149,6 +149,10 @@ numeric value the higher the interrupt priority). */
 #define configEMAC_INTERRUPT_PRIORITY		5
 #define configUSB_INTERRUPT_PRIORITY		6
 
+// Use integer only siprintf() to avoid linking floating point libraries
+
+// #define portSPRINTF siprintf
+
 // Map FreeRTOS interrupt handlers to mine
 
 #define xPortSysTickHandler	SysTick_Handler

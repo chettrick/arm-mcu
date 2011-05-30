@@ -40,3 +40,6 @@ $Id$
 15. Defined configASSERT() as newlib assert() in FreeRTOSConfig.h.
 
 16. Ran dos2unix on *.c *.h to strip DOS carriage returns.
+
+17. Changed siprintf() in tasks.c (see #7 above) to portSPRINTF instead.
+    Added #define portSPRINTF siprintf to FreeRTOSConfig.h.
