@@ -8,9 +8,7 @@ TEXTBASE	?= 0x00000000
 
 BOARDNAME	?= MBED_LPC2368
 
-FREERTOS_DIR	= $(MCUDEPENDENT)/FreeRTOS
-
-CFLAGS		+= -I$(FREERTOS_DIR)
+CFLAGS		+= 
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
@@ -34,8 +32,6 @@ USBBOOT		?= /media/LPC23xx
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-	for F in $(FREERTOS_DIR)/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(FREERTOS_DIR)/*.o
 
 lib: lib$(MCU).a
 
