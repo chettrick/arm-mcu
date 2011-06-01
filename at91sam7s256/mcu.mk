@@ -3,6 +3,8 @@
 # $Id$
 
 CPU		= arm7tdmi
+CPUFLAGS	=
+TEXTBASE	?= 0x00000000
 
 BOARDNAME	?= OLIMEX_SAM7_P256
 
@@ -10,6 +12,7 @@ AT91LIB		= $(MCUDEPENDENT)/at91lib
 USBSERIAL	= $(MCUDEPENDENT)/usb_serial
 
 CFLAGS		+= -I$(AT91LIB) -I$(USBSERIAL)
+LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 

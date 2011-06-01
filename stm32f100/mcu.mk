@@ -4,11 +4,14 @@
 
 CPU		= cortex-m3
 CPUFLAGS	= -mthumb
+TEXTBASE	?= 0x00000000
 
 BOARDNAME	?= STM32_VALUE_LINE_DISCOVERY
 
 CMSIS		= $(MCUDEPENDENT)/CMSIS
+
 CFLAGS		+= -DSTM32F10X_LD_VL -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
+LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 

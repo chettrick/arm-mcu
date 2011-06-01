@@ -3,6 +3,8 @@
 # $Id$
 
 CPU		= arm9
+CPUFLAGS	=
+TEXTBASE	?= 0x00000000
 
 BOARDNAME	?= STMICRO_STR910_EVAL
 
@@ -10,6 +12,7 @@ FWLIB		= $(MCUDEPENDENT)/FWLib
 USBSERIAL	= $(MCUDEPENDENT)/usb_serial
 
 CFLAGS		+= -I$(FWLIB) -I$(USBSERIAL)
+LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o time.o
 
