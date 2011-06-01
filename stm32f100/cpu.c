@@ -5,7 +5,6 @@
 static const char revision[] = "$Id$";
 
 #include <cpu.h>
-//#include <stm32f10x_rcc.h>
 
 #define NVIC_CCR ((volatile unsigned long *)(0xE000ED14))
 
