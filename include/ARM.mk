@@ -13,13 +13,17 @@ OBJCOPY		= $(CROSS_COMPILE)objcopy
 OBJDUMP		= $(CROSS_COMPILE)objdump
 GDB		= $(CROSS_COMPILE)gdb
 
+JLINKEXE	?= JLinkExe
+JLINKFLASH	= jlinkflash.tmp
+
 LPC21ISP	?= lpc21isp
+
 OPENOCD		?= openocd
+OPENOCDCFG	?= $(MCUDEPENDENT)/openocd.cfg
 
 MCUDEPENDENT	?= $(ARMSRC)/$(MCU)
 STARTUP		?= $(MCUDEPENDENT)/crt0.o
 LINKERSCRIPT	?= $(MCUDEPENDENT)/linker.ld
-OPENOCDCFG	?= $(MCUDEPENDENT)/openocd.cfg
 DEBUGGDB	?= $(MCUDEPENDENT)/debug.gdb
 
 CPUFLAGS	?=
@@ -83,7 +87,7 @@ default_catch:
 .S.o:
 	$(CC) $(CFLAGS) -c -o $@ -c $<
 
-# OpenOCD targets
+# Start and stop OpenOCD
 
 startocd:
 	$(OPENOCD) -f $(OPENOCDCFG) >openocd.log 2>&1 &
@@ -102,7 +106,7 @@ update:
 clean:
 	cd $(MCUDEPENDENT) && $(MAKE) clean_$(MCU)
 	find * -name '*.o' -exec rm {} ";"
-	rm -f *.a *.asm *.bin *.elf *.hex *.log *.map
+	rm -f *.a *.asm *.bin *.elf *.hex *.log *.map *.tmp
 
 reallyclean: clean
 	cd $(MCUDEPENDENT) && $(MAKE) reallyclean_$(MCU)
