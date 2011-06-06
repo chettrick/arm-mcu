@@ -1,4 +1,4 @@
-/* Simple A/D converter test program for the STR912FAW44 ARM MCU */
+/* Simple A/D converter test program for the STR91x ARM MCU */
 
 // $Id$
 
@@ -52,7 +52,7 @@ int main(void)
   serial_stdio(CONSOLE_PORT, 115200);
 #endif
 
-  puts("\033[H\033[2JSTR912FAW44 A/D Converter Test (" __DATE__ " " __TIME__ ")\n");
+  puts("\033[H\033[2JSTR91x A/D Converter Test (" __DATE__ " " __TIME__ ")\n");
 
 // Turn on peripheral clocks
 

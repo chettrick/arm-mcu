@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*                                                                            */
-/*        Simple serial port I/O routines for the STR912FAW44 ARM MCU         */
+/*        Simple serial port I/O routines for the STR91x ARM MCU              */
 /*                                                                            */
 /******************************************************************************/
 

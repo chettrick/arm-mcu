@@ -1,4 +1,4 @@
-/* Simple serial console I/O test program for the STR912FAW44 ARM MCU */
+/* Simple serial console I/O test program for the STR91x ARM MCU */
 
 // $Id$
 
@@ -24,7 +24,7 @@ int main(void)
   serial_stdio(CONSOLE_PORT, 115200);
 #endif
 
-  puts("\033[H\033[2JSTR912FAW44 Console I/O Test (" __DATE__ " " __TIME__ ")\n");
+  puts("\033[H\033[2JSTR91x Console I/O Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 

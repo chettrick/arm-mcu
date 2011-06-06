@@ -1,6 +1,6 @@
 #!/usr/bin/expect -f
 
-# expect script for resetting the STR912FAW44 target
+# expect script for resetting the STR91x target
 
 # $Id$
 

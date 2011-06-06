@@ -1,4 +1,4 @@
-# GDB startup script for debugging program in STR912FAW44 flash ROM
+# GDB startup script for debugging program in STR91x flash ROM
 
 # $Id$
 
