@@ -32,13 +32,13 @@ expect $prompt
 send "flash probe 0\n"
 expect $prompt
 
-send "flash protect 0 0 15 off\n"
+send "flash protect 0 0 last off\n"
 expect $prompt
 
 send "flash write_image erase $file 0x00100000 bin\n"
 expect -timeout 300 $prompt
 
-send "flash protect 0 0 15 on\n"
+send "flash protect 0 0 last on\n"
 expect $prompt
 
 send "resume\n"
