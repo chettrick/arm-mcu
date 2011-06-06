@@ -3,8 +3,8 @@
 # $Id$
 
 ARMSRC		= ..
-MCU             = str912faw44
 MCUFAMILY	= str91x
+MCU             = str912faw44
 
 default: lib$(MCU).a
 

@@ -2,22 +2,21 @@
 
 # $Id$
 
-CPU		= arm9
+CPU		= arm7tdmi
 CPUFLAGS	=
 TEXTBASE	?= 0x00000000
 
-BOARDNAME	?= STMICRO_STR910_EVAL
+BOARDNAME	?= OLIMEX_SAM7_P256
 
-FWLIB		= $(MCUDEPENDENT)/FWLib
-USBSERIAL	= $(MCUDEPENDENT)/usb_serial
+AT91LIB		= $(MCUDIR)/at91lib
 
-CFLAGS		+= -I$(FWLIB) -I$(USBSERIAL)
+CFLAGS		+= -I$(AT91LIB)
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
-LIBOBJS		= cpu.o device.o serial.o syscalls.o time.o
+LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
-FLASHEXP	?= $(MCUDEPENDENT)/flash.exp
-RESETEXP	?= $(MCUDEPENDENT)/reset.exp
+FLASHEXP	?= $(MCUDIR)/$(MCU).flash.exp
+RESETEXP	?= $(MCUDIR)/$(MCU).reset.exp
 
 .PHONY:		clean_$(MCU) lib reset
 
@@ -27,10 +26,8 @@ RESETEXP	?= $(MCUDEPENDENT)/reset.exp
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-	for F in $(FWLIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
-	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
+	for F in $(AT91LIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
+	$(AR) crs lib$(MCU).a $(AT91LIB)/*.o
 
 lib: lib$(MCU).a
 

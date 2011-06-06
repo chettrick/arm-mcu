@@ -19,12 +19,12 @@ JLINKFLASH	= jlinkflash.tmp
 LPC21ISP	?= lpc21isp
 
 OPENOCD		?= openocd
-OPENOCDCFG	?= $(MCUDEPENDENT)/openocd.cfg
+OPENOCDCFG	?= $(MCUDIR)/$(MCU).openocd
 
-MCUDEPENDENT	?= $(ARMSRC)/$(MCUFAMILY)
-STARTUP		?= $(MCUDEPENDENT)/$(MCU).o
-LINKERSCRIPT	?= $(MCUDEPENDENT)/$(MCU).ld
-DEBUGGDB	?= $(MCUDEPENDENT)/debug.gdb
+MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
+STARTUP		?= $(MCUDIR)/$(MCU).o
+LINKERSCRIPT	?= $(MCUDIR)/$(MCU).ld
+DEBUGGDB	?= $(MCUDIR)/debug.gdb
 
 CPUFLAGS	?=
 CONFIGFLAGS	?=
@@ -32,9 +32,9 @@ DEBUGFLAGS	?= -g
 OPTFLAGS	?= -O0
 IOFLAGS		?= -DINTEGER_STDIO
 CFLAGS		+= -Wall -mcpu=$(CPU) $(CPUFLAGS) -DMCU_$(MCU) -DBOARD_$(BOARDNAME)
-CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDEPENDENT)
+CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDIR)
 CFLAGS		+= $(CONFIGFLAGS) $(DEBUGFLAGS) $(OPTFLAGS) $(IOFLAGS) $(DEBUG) $(EXTRAFLAGS)
-LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDEPENDENT) -l$(MCU) -Wl,-Map=$*.map,--cref $(EXTRAOBJS)
+LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDIR) -l$(MCU) -Wl,-Map=$*.map,--cref $(EXTRAOBJS)
 
 #GDBGUI		?= ddd --gdb --debugger
 #GDBFLAGS	?= -tui
@@ -63,7 +63,7 @@ default_catch:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 .o.elf:
-	cd $(MCUDEPENDENT) && $(MAKE) $(MCU).o lib$(MCU).a
+	cd $(MCUDIR) && $(MAKE) $(MCU).o lib$(MCU).a
 	$(CC) $(CFLAGS) -o $@ $(STARTUP) $< $(LDFLAGS)
 
 .elf.asm:
@@ -104,16 +104,16 @@ update:
 # Clean out working files
 
 clean:
-	cd $(MCUDEPENDENT) && $(MAKE) clean_$(MCU)
+	cd $(MCUDIR) && $(MAKE) clean_$(MCU)
 	find * -name '*.o' -exec rm {} ";"
 	rm -f *.a *.asm *.bin *.elf *.hex *.log *.map *.tmp
 
 reallyclean: clean
-	cd $(MCUDEPENDENT) && $(MAKE) reallyclean_$(MCU)
+	cd $(MCUDIR) && $(MAKE) reallyclean_$(MCU)
 
 distclean: reallyclean
-	cd $(MCUDEPENDENT) && $(MAKE) distclean_$(MCU)
+	cd $(MCUDIR) && $(MAKE) distclean_$(MCU)
 
 # Include MCU dependent makefile
 
-include $(MCUDEPENDENT)/mcu.mk
+include $(MCUDIR)/$(MCU).mk
