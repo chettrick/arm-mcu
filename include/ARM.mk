@@ -21,9 +21,9 @@ LPC21ISP	?= lpc21isp
 OPENOCD		?= openocd
 OPENOCDCFG	?= $(MCUDEPENDENT)/openocd.cfg
 
-MCUDEPENDENT	?= $(ARMSRC)/$(MCU)
-STARTUP		?= $(MCUDEPENDENT)/crt0.o
-LINKERSCRIPT	?= $(MCUDEPENDENT)/linker.ld
+MCUDEPENDENT	?= $(ARMSRC)/$(MCUFAMILY)
+STARTUP		?= $(MCUDEPENDENT)/$(MCU).o
+LINKERSCRIPT	?= $(MCUDEPENDENT)/$(MCU).ld
 DEBUGGDB	?= $(MCUDEPENDENT)/debug.gdb
 
 CPUFLAGS	?=
@@ -63,7 +63,7 @@ default_catch:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 .o.elf:
-	cd $(MCUDEPENDENT) && $(MAKE) crt0.o lib$(MCU).a
+	cd $(MCUDEPENDENT) && $(MAKE) $(MCU).o lib$(MCU).a
 	$(CC) $(CFLAGS) -o $@ $(STARTUP) $< $(LDFLAGS)
 
 .elf.asm:

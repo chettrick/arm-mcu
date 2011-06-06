@@ -3,7 +3,8 @@
 # $Id$
 
 ARMSRC		= ..
-MCU             = at91sam7s256
+MCU		= at91sam7s256
+MCUFAMILY	= at91sam7s256
 
 default: lib$(MCU).a
 
