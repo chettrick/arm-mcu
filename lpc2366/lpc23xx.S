@@ -1,4 +1,4 @@
-// Startup for LPC2366 ARM MCU
+// Startup for LPC23xx ARM MCU
 
 // $Id$
 

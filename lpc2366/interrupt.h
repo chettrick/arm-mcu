@@ -1,9 +1,9 @@
-// Interrupt definitions for LPC2366 ARM MCU
+// Interrupt definitions for LPC23xx ARM MCU
 
 // $Id$
 
-#ifndef LPC2366_INTERRUPT__H
-#define LPC2366_INTERRUPT__H
+#ifndef LPC23xx_INTERRUPT__H
+#define LPC23xx_INTERRUPT__H
 
 // Interrupt sources
 
@@ -70,4 +70,4 @@ static inline void PutCPSR(unsigned x)
 #define DISABLE_INTERRUPTS(mask)	PutCPSR(GetCPSR() | mask)
 #define ENABLE_INTERRUPTS(mask)		PutCPSR(GetCPSR() & ~mask)
 
-#endif // LPC2366_INTERRUPT__H
+#endif // LPC23xx_INTERRUPT__H

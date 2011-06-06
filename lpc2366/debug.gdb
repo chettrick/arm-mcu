@@ -1,4 +1,4 @@
-# GDB startup script for debugging program in LPC2366 flash ROM
+# GDB startup script for debugging program in LPC23xx flash ROM
 
 # $Id$
 

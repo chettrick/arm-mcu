@@ -83,4 +83,4 @@ end = .;
 
 /* Libraries to link against. */
 
-INPUT( -llpc2366 )
+INPUT( -llpc23xx )
