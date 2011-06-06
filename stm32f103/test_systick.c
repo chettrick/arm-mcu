@@ -27,7 +27,7 @@ int main(void)
   cpu_init(DEFAULT_CPU_FREQ);
   serial_stdio(CONSOLE_PORT, 115200);
 
-  puts("\033[H\033[2JSTM32F103 System Tick Interrupt Test ("
+  puts("\033[H\033[2JSTM32 System Tick Interrupt Test ("
        __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);

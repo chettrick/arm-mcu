@@ -1,4 +1,4 @@
-/* Simple floating point arithmetic test program for the STM32F103 ARM MCU */
+/* Simple floating point arithmetic test program for the STM32 ARM MCU */
 
 // $Id$
 
@@ -23,7 +23,7 @@ int main(void)
 
   serial_stdio(CONSOLE_PORT, 115200);
 
-  puts("\033[H\033[2JSTM32F103 Floating Point Arithmetic Test (" __DATE__ " " __TIME__ ")\n");
+  puts("\033[H\033[2JSTM32 Floating Point Arithmetic Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 

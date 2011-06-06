@@ -21,18 +21,38 @@ void cpu_init(unsigned long int frequency)
 
 // Configure flash timing
 
+#ifdef MCU_stm32f103rb
   FLASH_PrefetchBufferCmd(FLASH_PrefetchBuffer_Enable);
   FLASH_SetLatency(FLASH_Latency_2);	// 2 wait states
+#endif
 
 // Configure clocks
 
+#ifdef MCU_stm32f100rb
+  RCC_HCLKConfig(RCC_SYSCLK_Div1);	// HCLK = SYSCLK
+  RCC_PCLK1Config(RCC_HCLK_Div1);	// PCLK1 = HCLK
+  RCC_PCLK2Config(RCC_HCLK_Div1);	// PCLK2 = HCLK
+#endif
+
+#ifdef MCU_stm32f103rb
   RCC_HCLKConfig(RCC_SYSCLK_Div1);	// HCLK = SYSCLK
   RCC_PCLK1Config(RCC_HCLK_Div2);	// PCLK1 = HCLK/2
   RCC_PCLK2Config(RCC_HCLK_Div1);	// PCLK2 = HCLK
+#endif
 
+#ifdef MCU_stm32f100rb
+// Configure PLL for 24 MHz
+
+  RCC_PREDIV1Config(RCC_PREDIV1_Source_HSE, RCC_PREDIV1_Div2);
+  RCC_PLLConfig(RCC_PLLSource_PREDIV1, RCC_PLLMul_6);
+#endif
+
+#ifdef MCU_stm32f103rb
 // Configure PLL for 72 MHz
 
   RCC_PLLConfig(RCC_PLLSource_HSE_Div1, RCC_PLLMul_9); // 8 MHz * 9 = 72 MHz
+#endif
+
   RCC_PLLCmd(ENABLE);
   while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET);
 

@@ -3,7 +3,8 @@
 # $Id$
 
 ARMSRC		= ..
-MCU             = stm32f103
+MCUFAMILY	= stm32
+MCU             ?= stm32f103rb
 
 default: lib$(MCU).a
 

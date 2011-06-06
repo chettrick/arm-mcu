@@ -62,4 +62,4 @@ SECTIONS
 
 /*  Libraries to link against. */
 
-INPUT( -lstm32f103 )
+INPUT( -lstm32f103rb )
