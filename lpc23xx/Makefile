@@ -4,7 +4,7 @@
 
 ARMSRC		= ..
 MCUFAMILY	= lpc23xx
-MCU		= $(MCUFAMILY)
+MCU		?= $(MCUFAMILY)
 
 default: lib$(MCU).a
 

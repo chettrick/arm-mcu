@@ -4,7 +4,7 @@
 
 ARMSRC		= ..
 MCUFAMILY	= str91x
-MCU             = str912faw44
+MCU		?= str912faw44
 
 default: lib$(MCU).a
 
