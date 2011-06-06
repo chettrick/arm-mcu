@@ -8,7 +8,8 @@ ARMSRC	?= ..
 
 # Override the following macro to build for another MCU
 
-MCU	?= lpc2366
+MCU		?= lpc23xx
+MCUFAMILY	?= lpc23xx
 
 # The following targets are of interest:
 
