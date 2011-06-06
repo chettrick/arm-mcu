@@ -1,4 +1,4 @@
-/* Simple FreeRTOS test program for the LPC1768 ARM MCU */
+/* Simple FreeRTOS test program for the LPC17xx ARM MCU */
 
 // $Id$
 
@@ -49,7 +49,7 @@ int main(void)
 
 // Display version information
 
-  puts("\033[H\033[2JLPC1768 FreeRTOS Test (" __DATE__ " " __TIME__ ")\n");
+  puts("\033[H\033[2JLPC17xx FreeRTOS Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s  FreeRTOS:%s\n\n", CPUFREQ, __VERSION__,
     tskKERNEL_VERSION_NUMBER);

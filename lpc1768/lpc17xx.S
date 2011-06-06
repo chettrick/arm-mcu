@@ -1,4 +1,4 @@
-/* Startup for LPC1768 Cortex-M3 ARM MCU */
+/* Startup for LPC17xx Cortex-M3 ARM MCU */
 
 // $Id$
 

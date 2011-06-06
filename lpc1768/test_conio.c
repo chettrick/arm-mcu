@@ -1,4 +1,4 @@
-/* Simple serial console I/O test program for the LPC1768 ARM MCU */
+/* Simple serial console I/O test program for the LPC17xx ARM MCU */
 
 // $Id$
 
@@ -19,7 +19,7 @@ int main(void)
 
   serial_stdio(CONSOLE_PORT, 115200);
 
-  puts("\033[H\033[2JLPC1768 Console I/O Test (" __DATE__ " " __TIME__ ")\n");
+  puts("\033[H\033[2JLPC17xx Console I/O Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 

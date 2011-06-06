@@ -65,4 +65,4 @@ SECTIONS
 
 /*  Libraries to link against. */
 
-INPUT( -llpc1768 )
+INPUT( -llpc17xx )
