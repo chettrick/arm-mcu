@@ -13,7 +13,7 @@ LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
-JLINKMCU	= at91sam7s256
+JLINKMCU	= at91sam7s512
 
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
 
