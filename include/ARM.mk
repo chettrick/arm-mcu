@@ -15,6 +15,7 @@ GDB		= $(CROSS_COMPILE)gdb
 
 JLINKEXE	?= JLinkExe
 JLINKFLASH	= $(MCUDIR)/$(MCU).flashjlink
+JLINKMCU	?= $(MCU)
 
 LPC21ISP	?= lpc21isp
 
@@ -90,7 +91,7 @@ default_catch:
 # Define a suffix rule for programming the flash with J-Link Commander
 
 .bin.flashjlink:
-	$(JLINKFLASH) $(JLINKEXE) $< $(MCU) $(TEXTBASE)
+	$(JLINKFLASH) $(JLINKEXE) $< $(JLINKMCU) $(TEXTBASE)
 
 # Define a suffix rule for programming the flash with OpenOCD
 

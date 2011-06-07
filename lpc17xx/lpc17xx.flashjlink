@@ -14,7 +14,6 @@
 set JLINKPGM [lindex $argv 0]
 set FILE [lindex $argv 1]
 set MCU [lindex $argv 2]
-set MCU lpc1768
 set TEXTBASE [lindex $argv 3]
 set address [format 0x%08X [expr 0x00000000 + $TEXTBASE]]
 set prompt "J-Link>"
