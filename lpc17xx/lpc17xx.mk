@@ -21,13 +21,10 @@ LPC21ISPBAUD	?= 115200
 LPC21ISPCLOCK	?= 14746
 LPC21ISPFLAGS	?= -control
 
-FLASHEXP	?= $(MCUDIR)/$(MCU).flashocd
-RESETEXP	?= $(MCUDIR)/$(MCU).resetocd
-
 MBED		?= /media/MBED
 USBBOOT		?= /media/LPC17xx
 
-.PHONY:		clean_$(MCU) lib reset
+.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib reset
 
 .SUFFIXES:	.flashisp .flashocd .flashmbed .flashusb
 
@@ -44,7 +41,7 @@ lib: lib$(MCU).a
 # Reset the target with OpenOCD
 
 reset:
-	$(RESETEXP) $(OPENOCD) $(OPENOCDCFG)
+	$(OPENOCDRESET) $(OPENOCD) $(OPENOCDCFG)
 
 # Define a suffix rule for programming the flash with lpc21isp
 
@@ -54,7 +51,7 @@ reset:
 # Define a suffix rule for programming the flash with OpenOCD
 
 .bin.flashocd:
-	$(FLASHEXP) $(OPENOCD) $(OPENOCDCFG) $<
+	$(OPENOCDFLASH) $(OPENOCD) $(OPENOCDCFG) $<
 
 # Define a suffix rule for installing to an mbed board
 
