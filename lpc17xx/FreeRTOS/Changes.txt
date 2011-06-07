@@ -43,3 +43,5 @@ $Id$
 
 17. Changed siprintf() in tasks.c (see #7 above) to portSPRINTF instead.
     Added #define portSPRINTF siprintf to FreeRTOSConfig.h.
+
+18. Removed configTOTAL_HEAP_SIZE from FreeRTOSConfig.h since it isn't used.
