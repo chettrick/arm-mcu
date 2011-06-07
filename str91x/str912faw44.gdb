@@ -2,6 +2,10 @@
 
 # $Id$
 
+# Start OpenOCD server
+
+shell make startocd
+
 # Connect to the OpenOCD server
 
 target remote localhost:3333

@@ -24,7 +24,7 @@ OPENOCDCFG	?= $(MCUDIR)/$(MCU).openocd
 MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
 STARTUP		?= $(MCUDIR)/$(MCU).o
 LINKERSCRIPT	?= $(MCUDIR)/$(MCU).ld
-DEBUGGDB	?= $(MCUDIR)/$(MCU).gdb
+DEBUGSCRIPT	?= $(MCUDIR)/$(MCU).gdb
 
 CPUFLAGS	?=
 CONFIGFLAGS	?=
@@ -73,10 +73,7 @@ default_catch:
 	$(OBJCOPY) -S -O binary --gap-fill=0 $< $@
 
 .elf.debug:
-	$(OPENOCD) -f $(OPENOCDCFG) >openocd.log 2>&1 &
-	sleep 1
-	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(DEBUGGDB) $<
-	killall openocd
+	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(DEBUGSCRIPT) $<
 
 .elf.hex:
 	$(OBJCOPY) -S -O ihex --gap-fill=0 $< $@
