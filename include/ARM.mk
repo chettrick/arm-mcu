@@ -95,7 +95,7 @@ default_catch:
 # Define a suffix rule for programming the flash with OpenOCD
 
 .bin.flashocd:
-	$(OPENOCDFLASH) $(OPENOCD) $(OPENOCDCFG) $<
+	$(OPENOCDFLASH) $(OPENOCD) $(OPENOCDCFG) $< $(TEXTBASE)
 
 # Start and stop OpenOCD
 
