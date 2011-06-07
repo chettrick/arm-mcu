@@ -6,8 +6,6 @@ CPU		= arm7tdmi
 CPUFLAGS	=
 TEXTBASE	?= 0x00000000
 
-BOARDNAME	?= OLIMEX_SAM7_P256
-
 AT91LIB		= $(MCUDIR)/at91lib
 
 CFLAGS		+= -I$(AT91LIB)
@@ -15,10 +13,7 @@ LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
-FLASHEXP	?= $(MCUDIR)/$(MCU).flashocd
-RESETEXP	?= $(MCUDIR)/$(MCU).resetocd
-
-.PHONY:		clean_$(MCU) lib reset
+.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib reset
 
 .SUFFIXES:	.flashocd
 
@@ -34,12 +29,12 @@ lib: lib$(MCU).a
 # Reset the target with OpenOCD
 
 reset:
-	$(RESETEXP) $(OPENOCD) $(OPENOCDCFG)
+	$(OPENOCDRESET) $(OPENOCD) $(OPENOCDCFG)
 
 # Define a suffix rule for programming the flash with OpenOCD
 
 .bin.flashocd:
-	$(FLASHEXP) $(OPENOCD) $(OPENOCDCFG) $<
+	$(OPENOCDFLASH) $(OPENOCD) $(OPENOCDCFG) $<
 
 # Clean out working files
 
