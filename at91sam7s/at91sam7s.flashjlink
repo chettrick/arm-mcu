@@ -8,6 +8,7 @@
 
 #   J-Link Commander program file
 #   Binary flash image file
+#   MCU name
 #   Text base address
 
 set JLINKPGM [lindex $argv 0]
