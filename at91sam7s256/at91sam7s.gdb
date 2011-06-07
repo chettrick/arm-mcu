@@ -1,4 +1,4 @@
-# GDB startup script for debugging program in AT91SAM7S256 flash ROM
+# GDB startup script for debugging program in AT91SAM7S flash ROM
 
 # $Id$
 

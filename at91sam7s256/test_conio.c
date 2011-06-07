@@ -1,4 +1,4 @@
-/* Simple serial console I/O test program for the AT91SAM7S256 ARM MCU */
+/* Simple serial console I/O test program for the AT91SAM7S ARM MCU */
 
 // $Id$
 
@@ -19,7 +19,7 @@ int main(void)
 
   serial_stdio(CONSOLE_PORT, 115200);
 
-  puts("\033[H\033[2JAT91SAM7S256 Console I/O Test (" __DATE__ " " __TIME__ ")\n");
+  puts("\033[H\033[2JAT91SAM7S Console I/O Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 

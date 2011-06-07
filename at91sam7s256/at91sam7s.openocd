@@ -1,4 +1,4 @@
-# OpenOCD configuration for AT91SAM7S256 ARM MCU
+# OpenOCD configuration for AT91SAM7S ARM MCU
 
 # $Id$
 
@@ -30,14 +30,14 @@ jtag_ntrst_delay 200
 
 # Target configuration
 
-jtag newtap AT91SAM7S256 cpu -irlen 4 -ircapture 0x1 -irmask 0xF -expected-id 0x3f0f0f0f
+jtag newtap AT91SAM7S cpu -irlen 4 -ircapture 0x1 -irmask 0xF -expected-id 0x3f0f0f0f
 
-target create AT91SAM7S256.cpu arm7tdmi -endian little -chain-position AT91SAM7S256.cpu -variant arm7tdmi
-AT91SAM7S256.cpu configure -work-area-phys 0x00200000 -work-area-virt 0x00200000 -work-area-size 8192 -work-area-backup 0
+target create AT91SAM7S.cpu arm7tdmi -endian little -chain-position AT91SAM7S.cpu -variant arm7tdmi
+AT91SAM7S.cpu configure -work-area-phys 0x00200000 -work-area-virt 0x00200000 -work-area-size 8192 -work-area-backup 0
 
 # Flash configuration
 
-flash bank 0 at91sam7 0 0 0 0 AT91SAM7S256.cpu
+flash bank 0 at91sam7 0 0 0 0 AT91SAM7S.cpu
 
 # Special ARM debug configuration
 

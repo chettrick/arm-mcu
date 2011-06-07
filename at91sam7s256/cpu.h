@@ -9,7 +9,7 @@ extern void cpu_init(unsigned long int frequency);
 #include <device.h>
 #include <serial.h>
 
-#include <AT91SAM7S256.h>
+#include <AT91SAM7S.h>
 
 #ifndef DEFAULT_CPU_FREQ
 #define DEFAULT_CPU_FREQ	48000000

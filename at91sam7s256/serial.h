@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*                                                                            */
-/*        Simple serial port I/O routines for the AT91SAM7S256 ARM MCU        */
+/*      Simple serial port I/O routines for the AT91SAM7S ARM MCU             */
 /*                                                                            */
 /******************************************************************************/
 

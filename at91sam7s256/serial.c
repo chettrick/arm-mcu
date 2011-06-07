@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*                                                                            */
-/*   Simple serial console I/O routines for the Atmel AT91SAM7S256 ARM MCU    */
+/*     Simple serial console I/O routines for the Atmel AT91SAM7S ARM MCU     */
 /*                                                                            */
 /******************************************************************************/
 

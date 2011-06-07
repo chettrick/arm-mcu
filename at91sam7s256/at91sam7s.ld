@@ -1,9 +1,9 @@
-/* Linker script for AT91SAM7S256 ARM MCU */
+/* Linker script for AT91SAM7S ARM MCU */
 
 /* $Id$ */
 
 MEMORY {
-  flash : ORIGIN = 0x00000000, LENGTH = 256K
+  flash : ORIGIN = 0x00000000, LENGTH = 512K
   ram : ORIGIN = 0x00200000, LENGTH = 64K
   }
 
@@ -84,4 +84,4 @@ end = .;
 
 /* Libraries to link against. */
 
-INPUT( -lat91sam7s256 )
+INPUT( -lat91sam7s )

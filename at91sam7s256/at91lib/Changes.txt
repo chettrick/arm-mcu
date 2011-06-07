@@ -46,3 +46,5 @@ $Id$
     at91lib/tsadcc.*
 
 12. Also removed at91lib/dbgu.* since it conflicts with newlib.
+
+13. Renamed AT91SAM7S256.h to AT91SAM7S.h.
