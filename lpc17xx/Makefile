@@ -4,7 +4,8 @@
 
 ARMSRC		= ..
 MCUFAMILY	= lpc17xx
-MCU		?= $(MCUFAMILY)
+MCU		= $(MCUFAMILY)
+BOARDNAME	?= MBED_LPC1768
 
 default: lib$(MCU).a
 
