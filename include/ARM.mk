@@ -50,11 +50,11 @@ default_catch:
 
 # These targets are not files
 
-.PHONY: default_catch update clean
+.PHONY: default_catch update clean resetocd startocd stopocd
 
 # These are the target suffixes
 
-.SUFFIXES: .asm .bin .debug .elf .hex .o
+.SUFFIXES: .asm .bin .debug .elf .flashocd .hex .o
 
 # Don't delete intermediate files
 
@@ -87,6 +87,11 @@ default_catch:
 .S.o:
 	$(CC) $(CFLAGS) -c -o $@ -c $<
 
+# Define a suffix rule for programming the flash with OpenOCD
+
+.bin.flashocd:
+	$(OPENOCDFLASH) $(OPENOCD) $(OPENOCDCFG) $<
+
 # Start and stop OpenOCD
 
 startocd:
@@ -94,6 +99,11 @@ startocd:
 
 stopocd:
 	killall openocd
+
+# Reset the target with OpenOCD
+
+resetocd:
+	$(OPENOCDRESET) $(OPENOCD) $(OPENOCDCFG)
 
 # Update from source code repository
 

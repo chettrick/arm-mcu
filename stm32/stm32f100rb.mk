@@ -22,7 +22,7 @@ ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 STLINK		= "/c/Program Files/STMicroelectronics/STM32 ST-LINK Utility/ST-LINK Utility"/ST-LINK_CLI.exe
 endif
 
-.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib reset
+.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
 
 .SUFFIXES:	.flashstlink
 

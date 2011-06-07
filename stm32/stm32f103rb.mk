@@ -14,9 +14,7 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
-.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib reset
-
-.SUFFIXES:	.flashocd
+.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
 
 # Build processor dependent support library
 
@@ -28,16 +26,6 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(FREERTOS)/*.o
 
 lib: lib$(MCU).a
-
-# Reset the target with OpenOCD
-
-reset:
-	$(OPENOCDRESET) $(OPENOCD) $(OPENOCDCFG)
-
-# Define a suffix rule for programming the flash with OpenOCD
-
-.bin.flashocd:
-	$(OPENOCDFLASH) $(OPENOCD) $(OPENOCDCFG) $<
 
 # Clean out working files
 
