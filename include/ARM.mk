@@ -14,7 +14,7 @@ OBJDUMP		= $(CROSS_COMPILE)objdump
 GDB		= $(CROSS_COMPILE)gdb
 
 JLINKEXE	?= JLinkExe
-JLINKFLASH	= jlinkflash.tmp
+JLINKFLASH	= $(MCUDIR)/$(MCU).flashjlink
 
 LPC21ISP	?= lpc21isp
 
@@ -54,7 +54,7 @@ default_catch:
 
 # These are the target suffixes
 
-.SUFFIXES: .asm .bin .debug .elf .flashocd .hex .o
+.SUFFIXES: .asm .bin .debug .elf .flashjlink .flashocd .hex .o
 
 # Don't delete intermediate files
 
@@ -87,6 +87,11 @@ default_catch:
 .S.o:
 	$(CC) $(CFLAGS) -c -o $@ -c $<
 
+# Define a suffix rule for programming the flash with J-Link Commander
+
+.bin.flashjlink:
+	$(JLINKFLASH) $(JLINKEXE) $< $(MCU) $(TEXTBASE)
+
 # Define a suffix rule for programming the flash with OpenOCD
 
 .bin.flashocd:
@@ -116,7 +121,7 @@ update:
 clean:
 	cd $(MCUDIR) && $(MAKE) clean_$(MCU)
 	find * -name '*.o' -exec rm {} ";"
-	rm -f *.a *.asm *.bin *.elf *.hex *.log *.map *.tmp
+	rm -f *.a *.asm *.bin *.elf *.hex *.log *.map *.tmp Default.ini
 
 reallyclean: clean
 	cd $(MCUDIR) && $(MAKE) reallyclean_$(MCU)
