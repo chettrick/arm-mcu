@@ -16,8 +16,8 @@ LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o time.o
 
-FLASHEXP	?= $(MCUDIR)/flash.exp
-RESETEXP	?= $(MCUDIR)/reset.exp
+FLASHEXP	?= $(MCUDIR)/$(MCU).flashocd
+RESETEXP	?= $(MCUDIR)/$(MCU).resetocd
 
 .PHONY:		clean_$(MCU) lib reset
 

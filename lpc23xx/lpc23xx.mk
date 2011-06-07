@@ -18,8 +18,8 @@ LPC21ISPBAUD	?= 115200
 LPC21ISPCLOCK	?= 14746
 LPC21ISPFLAGS	?= -control
 
-FLASHEXP	?= $(MCUDEPENDENT)/flash.exp
-RESETEXP	?= $(MCUDEPENDENT)/reset.exp
+FLASHEXP	?= $(MCUDIR)/$(MCU).flashocd
+RESETEXP	?= $(MCUDIR)/$(MCU).resetocd
 
 MBED		?= /media/MBED
 USBBOOT		?= /media/LPC23xx
