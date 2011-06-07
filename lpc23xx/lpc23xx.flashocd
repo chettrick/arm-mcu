@@ -9,10 +9,13 @@
 #   OpenOCD program file
 #   OpenOCD configuration file
 #   Binary flash image file
+#   Text base address
 
 set OPENOCDPGM [lindex $argv 0]
 set OPENOCDCFG [lindex $argv 1]
-set file [lindex $argv 2]
+set FILE [lindex $argv 2]
+set TEXTBASE [lindex $argv 3]
+set address [format 0x%08X [expr 0x00000000 + $TEXTBASE]]
 set prompt "> "
 set timeout 10
 
@@ -53,7 +56,7 @@ expect $prompt
 send "flash probe 0\n"
 expect $prompt
 
-send "flash write_image $file 0 bin\n"
+send "flash write_image $FILE $address bin\n"
 expect -timeout 300 $prompt
 
 send "reset run\n"
