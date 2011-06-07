@@ -6,8 +6,6 @@ CPU		= cortex-m3
 CPUFLAGS	= -mthumb
 TEXTBASE	?= 0x00000000
 
-BOARDNAME	?= STM32_VALUE_LINE_DISCOVERY
-
 CMSIS		= $(MCUDIR)/CMSIS
 
 CFLAGS		+= -DSTM32F10X_LD_VL -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
@@ -24,7 +22,7 @@ ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 STLINK		= "/c/Program Files/STMicroelectronics/STM32 ST-LINK Utility/ST-LINK Utility"/ST-LINK_CLI.exe
 endif
 
-.PHONY:		clean_$(MCU) lib reset
+.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib reset
 
 .SUFFIXES:	.flashstlink
 

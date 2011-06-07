@@ -6,8 +6,6 @@ CPU		= cortex-m3
 CPUFLAGS	= -mthumb
 TEXTBASE	?= 0x00000000
 
-BOARDNAME	?= OLIMEX_STM32_P103
-
 CMSIS		= $(MCUDIR)/CMSIS
 FREERTOS	= $(MCUDIR)/FreeRTOS
 
@@ -16,10 +14,7 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
-FLASHEXP	?= $(MCUDIR)/$(MCU).flashocd
-RESETEXP	?= $(MCUDIR)/$(MCU).resetocd
-
-.PHONY:		clean_$(MCU) lib reset
+.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib reset
 
 .SUFFIXES:	.flashocd
 
@@ -37,12 +32,12 @@ lib: lib$(MCU).a
 # Reset the target with OpenOCD
 
 reset:
-	$(RESETEXP) $(OPENOCD) $(OPENOCDCFG)
+	$(OPENOCDRESET) $(OPENOCD) $(OPENOCDCFG)
 
 # Define a suffix rule for programming the flash with OpenOCD
 
 .bin.flashocd:
-	$(FLASHEXP) $(OPENOCD) $(OPENOCDCFG) $<
+	$(OPENOCDFLASH) $(OPENOCD) $(OPENOCDCFG) $<
 
 # Clean out working files
 
