@@ -5,6 +5,7 @@
 ARMSRC		= ..
 MCUFAMILY	= at91sam7s
 MCU		= $(MCUFAMILY)
+BOARDNAME	?= OLIMEX_SAM7_P256
 
 default: lib$(MCU).a
 
