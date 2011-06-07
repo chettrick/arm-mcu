@@ -53,5 +53,4 @@ $Id$
 
 20. Changed CPU speed to 72 MHz in FreeRTOSConfig.h.
 
-21. Reduced heap size from 19 KB to 10 KB in FreeRTOSCOnfig.h, since we only
-    have 20 KB of RAM.
+21. Removed configTOTAL_HEAP_SIZE from FreeRTOSConfig.h since it isn't used.
