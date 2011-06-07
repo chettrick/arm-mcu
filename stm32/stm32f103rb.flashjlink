@@ -1,0 +1,41 @@
+#!/usr/bin/expect -f
+
+# expect script for programming STM32F103 flash
+
+# $Id$
+
+# Script arguments:
+
+#   J-Link Commander program file
+#   Binary flash image file
+#   MCU name
+#   Text base address
+
+set JLINKPGM [lindex $argv 0]
+set FILE [lindex $argv 1]
+set MCU [lindex $argv 2]
+set TEXTBASE [lindex $argv 3]
+set address [format 0x%08X [expr 0x08000000 + $TEXTBASE]]
+set prompt "J-Link>"
+set timeout 10
+
+spawn "$JLINKPGM"
+expect $prompt
+
+send "exec device=$MCU\n"
+expect $prompt
+
+send "h\n"
+expect $prompt
+
+send "loadbin $FILE, $address\n"
+expect $prompt
+
+send "r\n"
+expect $prompt
+
+send "g\n"
+expect $prompt
+
+send "exit\n"
+expect $prompt
