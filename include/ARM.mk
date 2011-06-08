@@ -23,7 +23,6 @@ OPENOCD		?= openocd
 OPENOCDCFG	?= $(MCUDIR)/$(MCU).openocd
 OPENOCDDEBUG	?= $(MCUDIR)/$(MCU).debugocd
 OPENOCDFLASH	?= $(MCUDIR)/$(MCU).flashocd
-OPENOCDRESET	?= $(MCUDIR)/$(MCU).resetocd
 
 MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
 STARTUP		?= $(MCUDIR)/$(MCU).o
@@ -51,7 +50,7 @@ default_catch:
 
 # These targets are not files
 
-.PHONY: default_catch update clean resetocd startocd stopocd
+.PHONY: default_catch update clean startocd stopocd
 
 # These are the target suffixes
 
@@ -105,11 +104,6 @@ startocd:
 
 stopocd:
 	killall openocd
-
-# Reset the target with OpenOCD
-
-resetocd:
-	$(OPENOCDRESET) $(OPENOCD) $(OPENOCDCFG)
 
 # Update from source code repository
 
