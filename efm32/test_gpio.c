@@ -12,7 +12,7 @@ int main(void)
 {
   cpu_init(DEFAULT_CPU_FREQ);
 
-#ifdef BOARD_ENERGYMICRO_EFM32_GECKO_STARTER
+#ifdef BOARD_EFM32_G8XX_STK
   unsigned long int i;
 
   /* Enable GPIO */
