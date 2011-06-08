@@ -7,8 +7,9 @@ CPUFLAGS	= -mthumb
 TEXTBASE	?= 0x00000000
 
 CMSIS		= $(MCUDIR)/CMSIS
+FREERTOS	= $(MCUDIR)/FreeRTOS
 
-CFLAGS		+= -D$(MCU) -I$(CMSIS)/include
+CFLAGS		+= -D$(MCU) -I$(CMSIS)/include -I$(FREERTOS)
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
@@ -18,9 +19,10 @@ LIBOBJS		= cpu.o device.o serial.o syscalls.o
 # Build processor dependent support library
 
 lib$(MCU).a: $(LIBOBJS)
-	for F in $(CMSIS)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
+	for F in $(CMSIS)/source/*.c $(FREERTOS)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
+	$(AR) crs lib$(MCU).a $(FREERTOS)/*.o
 
 lib: lib$(MCU).a
 
