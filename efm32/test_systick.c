@@ -61,7 +61,7 @@ int main(void)
       TimerFlag = FALSE;
 
 #ifdef BOARD_EFM32_G8XX_STK
-      GPIO_PortOutSetVal(gpioPortC, GPIO_PortOutGet(gpioPortC), 0xf);	// Toggle LEDs
+      GPIO_PortOutSetVal(gpioPortC, ~GPIO_PortOutGet(gpioPortC), 0xf);	// Toggle LEDs
 #endif
 
       puts("Tick...");
