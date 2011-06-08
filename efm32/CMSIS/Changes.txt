@@ -1,0 +1,21 @@
+Changes made to CMSIS library files from EFM32_CMSIS_2.0.0.zip
+--------------------------------------------------------------
+
+$Id$
+
+1. Copied CMSIS/CM3/CoreSupport/*.c CMSIS/source
+
+2. Copied CMSIS/CM3/CoreSupport/*.h CMSIS/include
+
+3. Copied CMSIS/CM3/DeviceSupport/EnergyMicro/EFM32/*.c to CMSIS/source
+
+4. Copied CMSIS/CM3/DeviceSupport/EnergyMicro/EFM32/*.h to CMSIS/include
+
+5. Copied efm32lib/inc/*.h to CMSIS/include
+
+6. Copied efm32lib/src/*.c to CMSIS/source
+
+7. Ran dos2unix CMSIS/include/* CMSIS/source/*
+
+8. Added (void) tmp; to I2C_TransferInit() in efm32_i2c.c to avoid compiler
+   warning.
