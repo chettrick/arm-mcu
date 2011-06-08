@@ -33,6 +33,8 @@ int main(void)
   serial_stdio(CONSOLE_PORT, 115200);
 
   puts("\033[H\033[2JAT91SAM7S Timer Interrupt Test (" __DATE__ " " __TIME__ ")\n");
+  puts(revision);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
 /* Configure LED */
 
