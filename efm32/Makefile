@@ -1,0 +1,12 @@
+# Make processor dependent startup and libraries
+
+# $Id$
+
+ARMSRC		= ..
+MCUFAMILY	= efm32
+MCU		= EFM32G890F128
+BOARDNAME	?= ENERGYMICRO_EFM32_GECKO_STARTER
+
+default: lib$(MCU).a
+
+include $(ARMSRC)/include/ARM.mk
