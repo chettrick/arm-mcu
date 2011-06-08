@@ -19,7 +19,7 @@ int main(void)
 
   serial_stdio(CONSOLE_PORT, 115200);
 
-  puts("\033[H\033[2JEFM32G Console I/O Test (" __DATE__ " " __TIME__ ")\n");
+  puts("\033[H\033[2JEFM32 Console I/O Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
