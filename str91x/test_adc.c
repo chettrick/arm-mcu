@@ -53,6 +53,8 @@ int main(void)
 #endif
 
   puts("\033[H\033[2JSTR91x A/D Converter Test (" __DATE__ " " __TIME__ ")\n");
+  puts(revision);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
 // Turn on peripheral clocks
 
