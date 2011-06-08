@@ -30,7 +30,7 @@ USBBOOT		?= /media/LPC17xx
 
 # Build processor dependent support library
 
-lib$(MCU).a: $(CMSIS) $(LIBOBJS)
+lib$(MCU).a: $(LIBOBJS)
 	for F in $(CMSIS)/source/*.c $(FREERTOS)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
