@@ -14,6 +14,10 @@ void cpu_init(unsigned long int frequency)
 {
   *NVIC_CCR = *NVIC_CCR | 0x200;	/* Set STKALIGN in NVIC */
 
+// Interrupt vectors are in flash
+
+  NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x0);
+
 // Turn on crystal oscillator
 
   RCC_HSEConfig(RCC_HSE_ON);

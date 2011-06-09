@@ -32,10 +32,6 @@ int main(void)
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
-// Interrupt vectors are in flash
-
-  NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x0);
-
 // Initialize System Tick with 100ms time interval
 
   SysTick_Config(SystemCoreClock / 10);
