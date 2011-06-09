@@ -7,9 +7,8 @@ CPUFLAGS	= -mthumb
 TEXTBASE	?= 0x00000000
 
 CMSIS		= $(MCUDIR)/CMSIS
-FREERTOS	= $(MCUDIR)/FreeRTOS
 
-CFLAGS		+= -DSTM32F10X_LD_VL -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include -I$(FREERTOS)
+CFLAGS		+= -DSTM32F10X_LD_VL -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
@@ -35,8 +34,6 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	for F in $(CMSIS)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
-	for F in $(FREERTOS)/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(FREERTOS)/*.o
 
 lib: lib$(MCU).a
 
