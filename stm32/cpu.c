@@ -65,5 +65,7 @@ void cpu_init(unsigned long int frequency)
   RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
   while(RCC_GetSYSCLKSource() != 0x08);
 
+  SystemCoreClockUpdate();
+
   CPUFREQ = SystemCoreClock;		// Not currently changeable
 }
