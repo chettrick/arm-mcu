@@ -14,6 +14,9 @@ static const char revision[] = "$Id$";
 #include <stdlib.h>
 #include <string.h>
 
+#include <efm32_cmu.h>
+#include <efm32_gpio.h>
+
 #include <FreeRTOS.h>
 #include <semphr.h>
 #include <task.h>
@@ -22,7 +25,7 @@ static const char revision[] = "$Id$";
 
 xSemaphoreHandle console_lock;
 
-void TaskFunction(void *parameters)
+void putsTaskFunction(void *parameters)
 {
   char *message = parameters;
 
@@ -38,10 +41,39 @@ void TaskFunction(void *parameters)
   }
 }
 
+void LEDTaskFunction(void *parameters)
+{
+  portTickType waketime = xTaskGetTickCount();
+
+#ifdef BOARD_EFM32_G8XX_STK
+  /* Enable GPIO */
+  CMU_ClockEnable(cmuClock_GPIO, true);
+
+  /* Configure GPIO port C 0-3 as LED control outputs */
+  GPIO_PinModeSet(gpioPortC, 0, gpioModePushPull, 1);
+  GPIO_PinModeSet(gpioPortC, 1, gpioModePushPull, 1);
+  GPIO_PinModeSet(gpioPortC, 2, gpioModePushPull, 1);
+  GPIO_PinModeSet(gpioPortC, 3, gpioModePushPull, 1);
+
+  /* Set initial LED states */
+  GPIO_PortOutSetVal(gpioPortC, 0x05, 0xf);
+#endif
+
+  for (;;)
+  {
+    vTaskDelayUntil(&waketime, 1000/portTICK_RATE_MS);
+
+#ifdef BOARD_EFM32_G8XX_STK
+    GPIO_PortOutSetVal(gpioPortC, ~GPIO_PortOutGet(gpioPortC), 0xf);	// Toggle LEDs
+#endif
+  }
+}
+
 int main(void)
 {
   xTaskHandle task1;
   xTaskHandle task2;
+  xTaskHandle task3;
 
   cpu_init(DEFAULT_CPU_FREQ);
 
@@ -66,16 +98,23 @@ int main(void)
 
 // Create a couple of tasks
 
-  if (xTaskCreate(TaskFunction, (signed char *) "task1", 256, "This is Task 1", 1, &task1) != pdPASS)
+  if (xTaskCreate(putsTaskFunction, (signed char *) "task1", 256, "This is Task 1", 1, &task1) != pdPASS)
   {
     puts("ERROR: xTaskCreate() for task1 failed!");
     fflush(stdout);
     assert(0);
   }
 
-  if (xTaskCreate(TaskFunction, (signed char *) "task2", 256, "This is Task 2", 1, &task2) != pdPASS)
+  if (xTaskCreate(putsTaskFunction, (signed char *) "task2", 256, "This is Task 2", 1, &task2) != pdPASS)
   {
     puts("ERROR: xTaskCreate() for task2 failed!");
+    fflush(stdout);
+    assert(0);
+  }
+
+  if (xTaskCreate(LEDTaskFunction, (signed char *) "task3", 256, NULL, 1, &task3) != pdPASS)
+  {
+    puts("ERROR: xTaskCreate() for task3 failed!");
     fflush(stdout);
     assert(0);
   }
