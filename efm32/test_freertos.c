@@ -14,9 +14,6 @@ static const char revision[] = "$Id$";
 #include <stdlib.h>
 #include <string.h>
 
-#include <efm32_cmu.h>
-#include <efm32_gpio.h>
-
 #include <FreeRTOS.h>
 #include <semphr.h>
 #include <task.h>

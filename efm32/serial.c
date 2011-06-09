@@ -15,10 +15,6 @@ static const char revision[] = "$Id$";
 #undef errno
 extern int errno;
 
-#include "efm32_gpio.h"
-#include "efm32_cmu.h"
-#include "efm32_usart.h"
-
 static USART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
 {
   UART0,

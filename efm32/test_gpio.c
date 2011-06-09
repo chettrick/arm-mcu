@@ -5,8 +5,6 @@
 static const char revision[] = "$Id$";
 
 #include <cpu.h>
-#include <efm32_cmu.h>
-#include <efm32_gpio.h>
 
 int main(void)
 {
