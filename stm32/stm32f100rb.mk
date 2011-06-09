@@ -14,6 +14,8 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
+JLINKADDR	= 0x08000000
+
 ifeq ($(shell uname), Linux)
 STLINK		= stlink
 STLINKDEV	= /dev/stlink

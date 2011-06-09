@@ -14,6 +14,8 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o
 
+JLINKADDR	= 0x08000000
+
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
 
 # Build processor dependent support library

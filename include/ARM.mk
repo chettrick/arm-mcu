@@ -14,8 +14,9 @@ OBJDUMP		= $(CROSS_COMPILE)objdump
 GDB		= $(CROSS_COMPILE)gdb
 
 JLINKEXE	?= JLinkExe
-JLINKFLASH	= $(MCUDIR)/$(MCU).flashjlink
-JLINKMCU	?= $(MCU)
+JLINKSCRIPT	= jlinkscript.tmp
+JLINKMCU	= $(MCU)
+JLINKADDR	= 0x00000000
 
 LPC21ISP	?= lpc21isp
 
@@ -90,7 +91,14 @@ default_catch:
 # Define a suffix rule for programming the flash with J-Link Commander
 
 .bin.flashjlink:
-	$(JLINKFLASH) $(JLINKEXE) $< $(JLINKMCU) $(TEXTBASE)
+	@echo "exec device=$(JLINKMCU)"			>$(JLINKSCRIPT)
+	@echo "h"					>>$(JLINKSCRIPT)
+	@echo "loadbin $<, 0x`dc -e '16o 16i $(subst 0x,,$(JLINKADDR)) $(subst 0x,,$(TEXTBASE)) + p'`"	>>$(JLINKSCRIPT)
+	@echo "r"					>>$(JLINKSCRIPT)
+	@echo "g"					>>$(JLINKSCRIPT)
+	@echo "exit"					>>$(JLINKSCRIPT)
+	-$(JLINKEXE) $(JLINKSCRIPT)
+	@rm $(JLINKSCRIPT)
 
 # Define a suffix rule for programming the flash with OpenOCD
 
