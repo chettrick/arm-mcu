@@ -45,3 +45,5 @@ $Id$
     Added #define portSPRINTF siprintf to FreeRTOSConfig.h.
 
 18. Removed configTOTAL_HEAP_SIZE from FreeRTOSConfig.h since it isn't used.
+
+19. Define macro configCPU_CLOCK_HZ as SystemCoreClock in FreeRTOSConfig.h.

@@ -72,7 +72,7 @@
 #define configUSE_IDLE_HOOK		0
 #define configMAX_PRIORITIES		( ( unsigned portBASE_TYPE ) 5 )
 #define configUSE_TICK_HOOK		0
-#define configCPU_CLOCK_HZ		( ( unsigned long ) 72000000 )
+#define configCPU_CLOCK_HZ		SystemCoreClock
 #define configTICK_RATE_HZ		( ( portTickType ) 1000 )
 #define configMINIMAL_STACK_SIZE	( ( unsigned short ) 80 )
 #define configMAX_TASK_NAME_LEN		( 12 )
@@ -151,7 +151,7 @@ numeric value the higher the interrupt priority). */
 // Use integer only siprintf() to avoid linking floating point libraries
 
 #define portSPRINTF siprintf
- 
+
 // Map FreeRTOS interrupt handlers to mine
 
 #define xPortSysTickHandler	SysTick_Handler

@@ -46,8 +46,10 @@ $Id$
 
 18. Removed configTOTAL_HEAP_SIZE from FreeRTOSConfig.h since it isn't used.
 
--------------------------------------------------------------------------------
+19. Define macro configCPU_CLOCK_HZ as SystemCoreClock in FreeRTOSConfig.h.
 
-19. Copied from lpc17xx.
+===============================================================================
 
-20. Changed "LPC17xx.h" to "efm32.h".
+20. Copied from lpc17xx.
+
+21. Changed "LPC17xx.h" to "efm32.h".

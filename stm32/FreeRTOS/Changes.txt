@@ -44,13 +44,12 @@ $Id$
 17. Changed siprintf() in tasks.c (see #7 above) to portSPRINTF instead.
     Added #define portSPRINTF siprintf to FreeRTOSConfig.h.
 
+18. Removed configTOTAL_HEAP_SIZE from FreeRTOSConfig.h since it isn't used.
+
+19. Define macro configCPU_CLOCK_HZ as SystemCoreClock in FreeRTOSConfig.h.
+
 ===============================================================================
 
-18. Copied lpc1768/FreeRTOS/FreeRTOSConfig to
-    stm32f103/FreeRTOS/FreeRTOSConfig.h.
+20. Copied from lpc17xx.
 
-19. Changed "lpc17xx.h" to "stm32f10x.h" in FreeRTOSConfig.h.
-
-20. Changed CPU speed to 72 MHz in FreeRTOSConfig.h.
-
-21. Removed configTOTAL_HEAP_SIZE from FreeRTOSConfig.h since it isn't used.
+21. Changed "lpc17xx.h" to "stm32f10x.h" in FreeRTOSConfig.h.
