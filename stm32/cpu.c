@@ -26,7 +26,7 @@ void cpu_init(unsigned long int frequency)
   FLASH_SetLatency(FLASH_Latency_2);	// 2 wait states
 #endif
 
-// Configure clocks
+// Configure subsystem clock dividers
 
 #ifdef MCU_stm32f100rb
   RCC_HCLKConfig(RCC_SYSCLK_Div1);	// HCLK = SYSCLK
