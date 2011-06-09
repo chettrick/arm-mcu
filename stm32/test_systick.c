@@ -57,6 +57,27 @@ int main(void)
   GPIO_SetBits(GPIOC, GPIO_Pin_12);
 #endif
 
+#ifdef BOARD_STM32_VALUE_LINE_DISCOVERY
+// Enable GPIOC peripheral clock
+
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOA, ENABLE);
+
+// Configure PC.9 as output push-pull (LED)
+
+  GPIO_InitTypeDef config;
+
+  GPIO_StructInit(&config);
+  config.GPIO_Pin =  GPIO_Pin_9;
+  config.GPIO_Mode = GPIO_Mode_Out_PP;
+  config.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(GPIOC, &config);
+
+// Turn LED off
+
+  GPIO_SetBits(GPIOC, GPIO_Pin_9);
+#endif
+
 // Display "Tick..." every second
 
   for (;;)
@@ -69,6 +90,10 @@ int main(void)
 
 #ifdef BOARD_OLIMEX_STM32_P103
       GPIO_WriteBit(GPIOC, GPIO_Pin_12, !GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_12));
+#endif
+
+#ifdef BOARD_STM32_VALUE_LINE_DISCOVERY
+      GPIO_WriteBit(GPIOC, GPIO_Pin_9, !GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_9));
 #endif
     }
   }
