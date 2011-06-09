@@ -21,7 +21,11 @@ extern void cpu_init(unsigned long int frequency);
 #endif
 
 #ifndef CONSOLE_PORT
+#ifdef BOARD_OLIMEX_STM32_P103
 #define CONSOLE_PORT		2
+#else
+#define CONSOLE_PORT		1
+#endif
 #endif
 
 #ifdef INTEGER_STDIO
