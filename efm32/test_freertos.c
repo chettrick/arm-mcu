@@ -45,6 +45,8 @@ void LEDTaskFunction(void *parameters)
 {
   portTickType waketime = xTaskGetTickCount();
 
+// Configure LED(s)
+
 #ifdef BOARD_EFM32_G8XX_STK
   /* Enable GPIO */
   CMU_ClockEnable(cmuClock_GPIO, true);
@@ -63,8 +65,10 @@ void LEDTaskFunction(void *parameters)
   {
     vTaskDelayUntil(&waketime, 1000/portTICK_RATE_MS);
 
+// Toggle LED(s)
+
 #ifdef BOARD_EFM32_G8XX_STK
-    GPIO_PortOutSetVal(gpioPortC, ~GPIO_PortOutGet(gpioPortC), 0xf);	// Toggle LEDs
+    GPIO_PortOutSetVal(gpioPortC, ~GPIO_PortOutGet(gpioPortC), 0xf);
 #endif
   }
 }

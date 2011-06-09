@@ -22,7 +22,7 @@ static const char revision[] = "$Id$";
 
 xSemaphoreHandle console_lock;
 
-void TaskFunction(void *parameters)
+void putsTaskFunction(void *parameters)
 {
   char *message = parameters;
 
@@ -38,10 +38,56 @@ void TaskFunction(void *parameters)
   }
 }
 
+void LEDTaskFunction(void *parameters)
+{
+  portTickType waketime = xTaskGetTickCount();
+
+// Configure LED(s)
+
+#ifdef BOARD_MBED_LPC1768
+#define LED1	18
+#define LED2	20
+#define LED3	21
+#define LED4	23
+
+#define LEDMASK	((1 << LED1)|(1 << LED2)|(1 << LED3)|(1 << LED4))
+
+  LPC_GPIO1->FIOMASK &= ~LEDMASK;
+  LPC_GPIO1->FIODIR |= LEDMASK;
+  LPC_GPIO1->FIOPIN = (1 << LED1)|(0 << LED2)|(1 << LED3)|(0 <<LED4);
+#endif
+
+#ifdef BOARD_BLUEBOARD_LPC1768_H
+#define LED1	29
+
+#define LEDMASK	((1 << LED1))
+
+  LPC_GPIO1->FIOMASK &= ~LEDMASK;
+  LPC_GPIO1->FIODIR |= LEDMASK;
+  LPC_GPIO1->FIOPIN = (1 << LED1);
+#endif
+
+  for (;;)
+  {
+    vTaskDelayUntil(&waketime, 1000/portTICK_RATE_MS);
+
+// Toggle LED(s)
+
+#ifdef BOARD_MBED_LPC1768
+      LPC_GPIO1->FIOPIN = ~LPC_GPIO1->FIOPIN;
+#endif
+
+#ifdef BOARD_BLUEBOARD_LPC1768_H
+      LPC_GPIO1->FIOPIN = ~LPC_GPIO1->FIOPIN;
+#endif
+  }
+}
+
 int main(void)
 {
   xTaskHandle task1;
   xTaskHandle task2;
+  xTaskHandle task3;
 
   cpu_init(DEFAULT_CPU_FREQ);
 
@@ -66,16 +112,23 @@ int main(void)
 
 // Create a couple of tasks
 
-  if (xTaskCreate(TaskFunction, (signed char *) "task1", 256, "This is Task 1", 1, &task1) != pdPASS)
+  if (xTaskCreate(putsTaskFunction, (signed char *) "task1", 256, "This is Task 1", 1, &task1) != pdPASS)
   {
     puts("ERROR: xTaskCreate() for task1 failed!");
     fflush(stdout);
     assert(0);
   }
 
-  if (xTaskCreate(TaskFunction, (signed char *) "task2", 256, "This is Task 2", 1, &task2) != pdPASS)
+  if (xTaskCreate(putsTaskFunction, (signed char *) "task2", 256, "This is Task 2", 1, &task2) != pdPASS)
   {
     puts("ERROR: xTaskCreate() for task2 failed!");
+    fflush(stdout);
+    assert(0);
+  }
+
+  if (xTaskCreate(LEDTaskFunction, (signed char *) "task3", 256, NULL, 1, &task3) != pdPASS)
+  {
+    puts("ERROR: xTaskCreate() for task3 failed!");
     fflush(stdout);
     assert(0);
   }
