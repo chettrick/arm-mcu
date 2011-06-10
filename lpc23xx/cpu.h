@@ -8,6 +8,7 @@ extern void cpu_init(unsigned long int frequency);
 
 #include <device.h>
 #include <interrupt.h>
+#include <leds.h>
 #include <serial.h>
 
 #include <LPC23xx.h>

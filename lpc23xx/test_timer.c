@@ -30,21 +30,8 @@ int main(void)
 
 /* Configure LED(s) */
 
-#ifdef OLIMEX_LPC_P2378
-#define LEDMASK (1 << 19)
-  PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
-
-  FIO1MASK &= ~LEDMASK;		// Unmask LED pin
-  FIO1DIR |= LEDMASK;		// Make output LED pin
-#endif
-
-#ifdef MBED_LPC2368
-#define LEDMASK ((1 << 18)|(1 << 20)|(1 << 21)|(1 << 23))
-  PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
-
-  FIO1MASK &= ~LEDMASK;		// Unmask LED pins
-  FIO1DIR |= LEDMASK;		// Make output LED pins
-#endif
+  LEDS_initialize();
+  LEDS_set(0x55555555);
 
 /* Configure timer 1 to interrupt once every second */
 
@@ -86,16 +73,10 @@ int main(void)
     {
       TimerFlag = FALSE;
 
-#ifdef OLIMEX_LPC_P2378
-      FIO1PIN = ~FIO1PIN;	// Toggle LED
-#endif
-
-#ifdef MBED_LPC2368
-      FIO1PIN = ~FIO1PIN;	// Toggle LED
-#endif
-
       puts("Tick...");
       fflush(stdout);
+
+      LEDS_set(~LEDS_get());
 
 #ifndef DISABLE_WATCHDOG
       DISABLE_INTERRUPTS(IRQ);

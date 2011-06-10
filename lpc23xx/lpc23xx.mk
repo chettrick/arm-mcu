@@ -9,7 +9,7 @@ TEXTBASE	?= 0x00000000
 CFLAGS		+= 
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
-LIBOBJS		= cpu.o device.o serial.o syscalls.o
+LIBOBJS		= cpu.o device.o leds.o serial.o syscalls.o
 
 JLINKMCU	= lpc2378
 
