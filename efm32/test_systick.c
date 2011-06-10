@@ -33,19 +33,8 @@ int main(void)
 
 // Configure LED(s)
 
-#ifdef EFM32_G8XX_STK
-  /* Enable GPIO */
-  CMU_ClockEnable(cmuClock_GPIO, true);
-
-  /* Configure GPIO port C 0-3 as LED control outputs */
-  GPIO_PinModeSet(gpioPortC, 0, gpioModePushPull, 1);
-  GPIO_PinModeSet(gpioPortC, 1, gpioModePushPull, 1);
-  GPIO_PinModeSet(gpioPortC, 2, gpioModePushPull, 1);
-  GPIO_PinModeSet(gpioPortC, 3, gpioModePushPull, 1);
-
-  /* Set initial LED states */
-  GPIO_PortOutSetVal(gpioPortC, 0x05, 0xf);
-#endif
+  LEDS_initialize();
+  LEDS_set(0x55555555);
 
 // Initialize System Tick with 100ms time interval
 
@@ -59,12 +48,10 @@ int main(void)
     {
       TimerFlag = FALSE;
 
-#ifdef EFM32_G8XX_STK
-      GPIO_PortOutSetVal(gpioPortC, ~GPIO_PortOutGet(gpioPortC), 0xf);	// Toggle LEDs
-#endif
-
       puts("Tick...");
       fflush(stdout);
+
+      LEDS_set(~LEDS_get());
     }
   }
 }

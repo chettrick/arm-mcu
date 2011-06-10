@@ -3,6 +3,7 @@
 // $Id$
 
 #include <device.h>
+#include <leds.h>
 #include <serial.h>
 
 #include <efm32.h>
