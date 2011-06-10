@@ -3,8 +3,6 @@
 // $Id$
 
 #include <cpu.h>
-#include <leds.h>
-#include <stdio.h>
 
 #define MAX_LEDS	4
 
