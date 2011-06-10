@@ -8,8 +8,6 @@ static const char revision[] = "$Id$";
 
 #define NVIC_CCR ((volatile unsigned long *)(0xE000ED14))
 
-unsigned long int CPUFREQ;
-
 void cpu_init(unsigned long int frequency)
 {
   *NVIC_CCR = *NVIC_CCR | 0x200;	/* Set STKALIGN in NVIC */
@@ -66,6 +64,4 @@ void cpu_init(unsigned long int frequency)
   while(RCC_GetSYSCLKSource() != 0x08);
 
   SystemCoreClockUpdate();
-
-  CPUFREQ = SystemCoreClock;		// Not currently changeable
 }

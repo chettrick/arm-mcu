@@ -8,8 +8,6 @@ static const char revision[] = "$Id$";
 #include <system_efm32.h>
 #include <efm32_cmu.h>
 
-unsigned long int CPUFREQ;
-
 void cpu_init(unsigned long int frequency)
 {
   CHIP_Init();			// Fix chip errata
@@ -20,6 +18,4 @@ void cpu_init(unsigned long int frequency)
   CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);
 
   SystemCoreClockUpdate();
-
-  CPUFREQ = SystemCoreClock;	// Not currently changeable
 }

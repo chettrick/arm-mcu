@@ -10,6 +10,8 @@ extern void cpu_init(unsigned long int frequency);
 #include <serial.h>
 #include <stm32f10x.h>
 
+#define CPUFREQ			SystemCoreClock
+
 #ifndef DEFAULT_CPU_FREQ
 #ifdef stm32f100rb
 #define DEFAULT_CPU_FREQ	24000000

@@ -37,10 +37,9 @@
 #include <efm32_vcmp.h>
 #include <efm32_wdog.h>
 
-extern unsigned long int CPUFREQ;
-
 extern void cpu_init(unsigned long int frequency);
 
+#define CPUFREQ			SystemCoreClock
 #define DEFAULT_CPU_FREQ	32000000UL
 
 #ifndef CONSOLE_PORT
