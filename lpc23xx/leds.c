@@ -54,7 +54,7 @@ unsigned long int LEDS_get(void)
 #endif
 
 #ifdef OLIMEX_LPC_P2378
-  if (FIO1PIN & (~(1 << LED_PIN)))
+  if (!(FIO1PIN & (1 << LED_PIN)))
     result = 1;
 #endif
 
