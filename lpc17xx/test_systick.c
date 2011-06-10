@@ -33,28 +33,8 @@ int main(void)
 
 // Initialize LED(s)
 
-#ifdef MBED_LPC1768
-#define LED1	18
-#define LED2	20
-#define LED3	21
-#define LED4	23
-
-#define LEDMASK	((1 << LED1)|(1 << LED2)|(1 << LED3)|(1 << LED4))
-
-  LPC_GPIO1->FIOMASK &= ~LEDMASK;
-  LPC_GPIO1->FIODIR |= LEDMASK;
-  LPC_GPIO1->FIOPIN = (1 << LED1)|(0 << LED2)|(1 << LED3)|(0 <<LED4);
-#endif
-
-#ifdef BLUEBOARD_LPC1768_H
-#define LED1	29
-
-#define LEDMASK	((1 << LED1))
-
-  LPC_GPIO1->FIOMASK &= ~LEDMASK;
-  LPC_GPIO1->FIODIR |= LEDMASK;
-  LPC_GPIO1->FIOPIN = (1 << LED1);
-#endif
+  LEDS_initialize();
+  LEDS_set(0x55555555);
 
 // Initialize System Tick with 100ms time interval
 
@@ -70,13 +50,7 @@ int main(void)
       puts("Tick...");
       fflush(stdout);
 
-#ifdef MBED_LPC1768
-      LPC_GPIO1->FIOPIN = ~LPC_GPIO1->FIOPIN;	// Toggle LEDs
-#endif
-
-#ifdef BLUEBOARD_LPC1768_H
-      LPC_GPIO1->FIOPIN = ~LPC_GPIO1->FIOPIN;	// Toggle LED
-#endif
+      LEDS_set(~LEDS_get());
     }
   }
 }

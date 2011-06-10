@@ -7,7 +7,9 @@ extern unsigned long int CPUFREQ;
 extern void cpu_init(unsigned long int frequency);
 
 #include <device.h>
+#include <leds.h>
 #include <serial.h>
+
 #include <LPC17xx.h>
 
 #define CPUFREQ			SystemCoreClock
