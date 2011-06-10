@@ -44,7 +44,7 @@ void LEDTaskFunction(void *parameters)
 
 // Configure LED(s)
 
-#ifdef BOARD_MBED_LPC1768
+#ifdef MBED_LPC1768
 #define LED1	18
 #define LED2	20
 #define LED3	21
@@ -57,7 +57,7 @@ void LEDTaskFunction(void *parameters)
   LPC_GPIO1->FIOPIN = (1 << LED1)|(0 << LED2)|(1 << LED3)|(0 <<LED4);
 #endif
 
-#ifdef BOARD_BLUEBOARD_LPC1768_H
+#ifdef BLUEBOARD_LPC1768_H
 #define LED1	29
 
 #define LEDMASK	((1 << LED1))
@@ -73,11 +73,11 @@ void LEDTaskFunction(void *parameters)
 
 // Toggle LED(s)
 
-#ifdef BOARD_MBED_LPC1768
+#ifdef MBED_LPC1768
       LPC_GPIO1->FIOPIN = ~LPC_GPIO1->FIOPIN;
 #endif
 
-#ifdef BOARD_BLUEBOARD_LPC1768_H
+#ifdef BLUEBOARD_LPC1768_H
       LPC_GPIO1->FIOPIN = ~LPC_GPIO1->FIOPIN;
 #endif
   }

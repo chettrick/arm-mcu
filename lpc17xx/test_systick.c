@@ -33,7 +33,7 @@ int main(void)
 
 // Initialize LED(s)
 
-#ifdef BOARD_MBED_LPC1768
+#ifdef MBED_LPC1768
 #define LED1	18
 #define LED2	20
 #define LED3	21
@@ -46,7 +46,7 @@ int main(void)
   LPC_GPIO1->FIOPIN = (1 << LED1)|(0 << LED2)|(1 << LED3)|(0 <<LED4);
 #endif
 
-#ifdef BOARD_BLUEBOARD_LPC1768_H
+#ifdef BLUEBOARD_LPC1768_H
 #define LED1	29
 
 #define LEDMASK	((1 << LED1))
@@ -70,11 +70,11 @@ int main(void)
       puts("Tick...");
       fflush(stdout);
 
-#ifdef BOARD_MBED_LPC1768
+#ifdef MBED_LPC1768
       LPC_GPIO1->FIOPIN = ~LPC_GPIO1->FIOPIN;	// Toggle LEDs
 #endif
 
-#ifdef BOARD_BLUEBOARD_LPC1768_H
+#ifdef BLUEBOARD_LPC1768_H
       LPC_GPIO1->FIOPIN = ~LPC_GPIO1->FIOPIN;	// Toggle LED
 #endif
     }

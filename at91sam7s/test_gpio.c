@@ -21,7 +21,7 @@ int main(void)
   *AT91C_PIOA_OWDR	= 0xFFFFFFFF;	// All GPIO pins are not synchronous
   *AT91C_PIOA_MDDR	= 0xFFFFFFFF;	// All GPIO pins are push-pull
 
-#ifdef BOARD_OLIMEX_SAM7_P256
+#ifdef OLIMEX_SAM7_P256
 #define LED1		18
 #define LED2		17
 

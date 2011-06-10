@@ -14,7 +14,7 @@ int main(void)
 
 // Flash MBED-LPC1768 LED's
 
-#ifdef BOARD_MBED_LPC1768
+#ifdef MBED_LPC1768
 #define LED1	18
 #define LED2	20
 #define LED3	21
@@ -31,7 +31,7 @@ int main(void)
 
 // Flash BlueBoard LPC1768-H test LED
 
-#ifdef BOARD_BLUEBOARD_LPC1768_H
+#ifdef BLUEBOARD_LPC1768_H
 #define LED1	29
 
 #define LEDMASK	((1 << LED1))

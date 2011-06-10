@@ -12,7 +12,7 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-#ifdef BOARD_OLIMEX_LPC_P2378
+#ifdef OLIMEX_LPC_P2378
 #define LEDMASK (1 << 19)
   PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
 
@@ -23,7 +23,7 @@ int main(void)
     FIO1PIN = i;
 #endif
 
-#ifdef BOARD_MBED_LPC2368
+#ifdef MBED_LPC2368
 #define LEDMASK ((1 << 18)|(1 << 20)|(1 << 21)|(1 << 23))
   PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
 

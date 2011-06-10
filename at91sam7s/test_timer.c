@@ -38,7 +38,7 @@ int main(void)
 
 /* Configure LED */
 
-#ifdef BOARD_OLIMEX_SAM7_P256
+#ifdef OLIMEX_SAM7_P256
 #define LED1            18
 #define LED2            17
 
@@ -70,7 +70,7 @@ int main(void)
       puts("Tick...");
       fflush(stdout);
 
-#ifdef BOARD_OLIMEX_SAM7_P256
+#ifdef OLIMEX_SAM7_P256
       if (*AT91C_PIOA_PDSR & (1 << LED1))
         *AT91C_PIOA_CODR = 1 << LED1;
       else

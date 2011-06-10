@@ -11,17 +11,17 @@ extern void cpu_init(unsigned long int frequency);
 #include <stm32f10x.h>
 
 #ifndef DEFAULT_CPU_FREQ
-#ifdef MCU_stm32f100rb
+#ifdef stm32f100rb
 #define DEFAULT_CPU_FREQ	24000000
 #endif
 
-#ifdef MCU_stm32f103rb
+#ifdef stm32f103rb
 #define DEFAULT_CPU_FREQ	72000000
 #endif
 #endif
 
 #ifndef CONSOLE_PORT
-#ifdef BOARD_OLIMEX_STM32_P103
+#ifdef OLIMEX_STM32_P103
 #define CONSOLE_PORT		2
 #else
 #define CONSOLE_PORT		1

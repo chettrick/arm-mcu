@@ -30,7 +30,7 @@ int main(void)
 
 /* Configure LED(s) */
 
-#ifdef BOARD_OLIMEX_LPC_P2378
+#ifdef OLIMEX_LPC_P2378
 #define LEDMASK (1 << 19)
   PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
 
@@ -38,7 +38,7 @@ int main(void)
   FIO1DIR |= LEDMASK;		// Make output LED pin
 #endif
 
-#ifdef BOARD_MBED_LPC2368
+#ifdef MBED_LPC2368
 #define LEDMASK ((1 << 18)|(1 << 20)|(1 << 21)|(1 << 23))
   PCLKSEL1 = 0x00000004;	// GPIO peripheral clock is CCLK/1
 
@@ -86,11 +86,11 @@ int main(void)
     {
       Timer1Flag = FALSE;
 
-#ifdef BOARD_OLIMEX_LPC_P2378
+#ifdef OLIMEX_LPC_P2378
       FIO1PIN = ~FIO1PIN;	// Toggle LED
 #endif
 
-#ifdef BOARD_MBED_LPC2368
+#ifdef MBED_LPC2368
       FIO1PIN = ~FIO1PIN;	// Toggle LED
 #endif
 

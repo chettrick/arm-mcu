@@ -33,7 +33,7 @@ int main(void)
 
 // Configure LED(s)
 
-#ifdef BOARD_EFM32_G8XX_STK
+#ifdef EFM32_G8XX_STK
   /* Enable GPIO */
   CMU_ClockEnable(cmuClock_GPIO, true);
 
@@ -59,7 +59,7 @@ int main(void)
     {
       TimerFlag = FALSE;
 
-#ifdef BOARD_EFM32_G8XX_STK
+#ifdef EFM32_G8XX_STK
       GPIO_PortOutSetVal(gpioPortC, ~GPIO_PortOutGet(gpioPortC), 0xf);	// Toggle LEDs
 #endif
 

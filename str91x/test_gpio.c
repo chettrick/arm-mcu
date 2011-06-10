@@ -10,7 +10,7 @@ int main(void)
 {
   cpu_init(DEFAULT_CPU_FREQ);
 
-#ifdef BOARD_STMICRO_STR910_EVAL
+#ifdef STMICRO_STR910_EVAL
   GPIO_InitTypeDef config;
   unsigned long int i;
 

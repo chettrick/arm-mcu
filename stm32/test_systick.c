@@ -36,7 +36,7 @@ int main(void)
 
   SysTick_Config(SystemCoreClock / 10);
 
-#ifdef BOARD_OLIMEX_STM32_P103
+#ifdef OLIMEX_STM32_P103
 // Enable GPIOC peripheral clock
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
@@ -57,7 +57,7 @@ int main(void)
   GPIO_SetBits(GPIOC, GPIO_Pin_12);
 #endif
 
-#ifdef BOARD_STM32_VALUE_LINE_DISCOVERY
+#ifdef STM32_VALUE_LINE_DISCOVERY
 // Enable GPIOC peripheral clock
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
@@ -88,11 +88,11 @@ int main(void)
       puts("Tick...");
       fflush(stdout);
 
-#ifdef BOARD_OLIMEX_STM32_P103
+#ifdef OLIMEX_STM32_P103
       GPIO_WriteBit(GPIOC, GPIO_Pin_12, !GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_12));
 #endif
 
-#ifdef BOARD_STM32_VALUE_LINE_DISCOVERY
+#ifdef STM32_VALUE_LINE_DISCOVERY
       GPIO_WriteBit(GPIOC, GPIO_Pin_9, !GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_9));
 #endif
     }

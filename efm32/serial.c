@@ -42,7 +42,7 @@ int serial_init(unsigned port, unsigned long int baudrate)
       GPIO_PinModeSet(gpioPortE, 0, gpioModePushPull, 1);
       GPIO_PinModeSet(gpioPortE, 1, gpioModeInput, 1);
 
-#ifdef BOARD_EFM32_G8XX_STK
+#ifdef EFM32_G8XX_STK
 // Clear BC_EN to disconnect UART0 from board controller
 
       GPIO_PinModeSet(gpioPortD, 13, gpioModePushPull, 1);

@@ -71,7 +71,7 @@ int main(void)
 
   ENABLE_INTERRUPTS(IRQ);
 
-#ifdef BOARD_STMICRO_STR910_EVAL
+#ifdef STMICRO_STR910_EVAL
   GPIO_InitTypeDef config;
 
   SCU_APBPeriphClockConfig(__GPIO9, ENABLE);    // Turn on GPIO9 clock
@@ -96,7 +96,7 @@ int main(void)
       puts("Tick...");
       fflush(stdout);
 
-#ifdef BOARD_STMICRO_STR910_EVAL
+#ifdef STMICRO_STR910_EVAL
       GPIO_Write(GPIO9, ~GPIO_Read(GPIO9));
 #endif
     }

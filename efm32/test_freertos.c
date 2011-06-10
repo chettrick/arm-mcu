@@ -44,7 +44,7 @@ void LEDTaskFunction(void *parameters)
 
 // Configure LED(s)
 
-#ifdef BOARD_EFM32_G8XX_STK
+#ifdef EFM32_G8XX_STK
   /* Enable GPIO */
   CMU_ClockEnable(cmuClock_GPIO, true);
 
@@ -64,7 +64,7 @@ void LEDTaskFunction(void *parameters)
 
 // Toggle LED(s)
 
-#ifdef BOARD_EFM32_G8XX_STK
+#ifdef EFM32_G8XX_STK
     GPIO_PortOutSetVal(gpioPortC, ~GPIO_PortOutGet(gpioPortC), 0xf);
 #endif
   }

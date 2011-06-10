@@ -9,7 +9,7 @@ TEXTBASE	?= 0x00000000
 CMSIS		= $(MCUDIR)/CMSIS
 FREERTOS	= $(MCUDIR)/FreeRTOS
 
-CFLAGS		+= -D$(MCU) -I$(CMSIS)/include -I$(FREERTOS)
+CFLAGS		+= -I$(CMSIS)/include -I$(FREERTOS)
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o device.o serial.o syscalls.o

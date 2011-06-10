@@ -15,7 +15,7 @@ void main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-#ifdef BOARD_OLIMEX_STM32_P103
+#ifdef OLIMEX_STM32_P103
 // Enable peripheral clock
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
@@ -39,7 +39,7 @@ void main(void)
   }
 #endif
 
-#ifdef BOARD_STM32_VALUE_LINE_DISCOVERY
+#ifdef STM32_VALUE_LINE_DISCOVERY
 // Enable peripheral clock
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
