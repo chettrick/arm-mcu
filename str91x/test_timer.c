@@ -37,7 +37,7 @@ int main(void)
   serial_stdio(CONSOLE_PORT, 115200);
 #endif
 
-  puts("\033[H\033[2JSTR91FAW44 Timer 1 Interrupt Test (" __DATE__ " " __TIME__ ")\n");
+  puts("\033[H\033[2JSTR91FAW44 Timer Interrupt Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
