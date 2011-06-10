@@ -15,12 +15,7 @@ int main(void)
 // Flash MBED-LPC1768 LED's
 
 #ifdef MBED_LPC1768
-#define LED1	18
-#define LED2	20
-#define LED3	21
-#define LED4	23
-
-#define LEDMASK	((1 << LED1)|(1 << LED2)|(1 << LED3)|(1 << LED4))
+#define LEDMASK	((1 << 18)|(1 << 20)|(1 << 21)|(1 << 23))
 
   LPC_GPIO1->FIOMASK &= ~LEDMASK;
   LPC_GPIO1->FIODIR |= LEDMASK;
@@ -32,9 +27,7 @@ int main(void)
 // Flash BlueBoard LPC1768-H test LED
 
 #ifdef BLUEBOARD_LPC1768_H
-#define LED1	29
-
-#define LEDMASK	((1 << LED1))
+#define LEDMASK	((1 << 29))
 
   LPC_GPIO1->FIOMASK &= ~LEDMASK;
   LPC_GPIO1->FIODIR |= LEDMASK;
