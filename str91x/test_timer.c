@@ -7,7 +7,7 @@ static const char revision[] = "$Id$";
 #include <cpu.h>
 #include <stdio.h>
 
-volatile int Timer1Flag = FALSE;
+volatile int TimerFlag = FALSE;
 
 __attribute__ ((__interrupt__)) void TIM1_IRQHandler(void)
 {
@@ -16,7 +16,7 @@ __attribute__ ((__interrupt__)) void TIM1_IRQHandler(void)
   if (++ticks == 10)
   {
     ticks = 0;
-    Timer1Flag = TRUE;
+    TimerFlag = TRUE;
   }
 
   TIM1->SR = 0x0000;		// Clear OCF1
@@ -80,9 +80,9 @@ int main(void)
 
   for (;;)
   {
-    if (Timer1Flag)
+    if (TimerFlag)
     {
-      Timer1Flag = FALSE;
+      TimerFlag = FALSE;
       puts("Tick...");
       fflush(stdout);
 

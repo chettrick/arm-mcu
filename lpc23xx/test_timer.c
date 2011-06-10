@@ -10,11 +10,11 @@ static const char revision[] = "$Id$";
 #define TRUE	1
 #define	FALSE	0
 
-volatile int Timer1Flag = FALSE;
+volatile int TimerFlag = FALSE;
 
 __attribute__ ((__interrupt__)) void Timer1ISR(void)
 {
-  Timer1Flag = TRUE;
+  TimerFlag = TRUE;
   T1IR = 0x01;
   VICVectAddr = 0;
 }
@@ -82,9 +82,9 @@ int main(void)
 #endif
 
   for (;;)
-    if (Timer1Flag)
+    if (TimerFlag)
     {
-      Timer1Flag = FALSE;
+      TimerFlag = FALSE;
 
 #ifdef OLIMEX_LPC_P2378
       FIO1PIN = ~FIO1PIN;	// Toggle LED
