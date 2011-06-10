@@ -6,11 +6,10 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 
-unsigned long int CPUFREQ;
+unsigned long int CPUFREQ = DEFAULT_CPU_FREQ;
 
 void cpu_init(unsigned long int frequency)
 {
-  CPUFREQ = DEFAULT_CPU_FREQ;	// Not currently changeable
 
 /* Initialize MAM--See Errata MAM.1 */
 
