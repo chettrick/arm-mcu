@@ -11,7 +11,7 @@ AT91LIB		= $(MCUDIR)/at91lib
 CFLAGS		+= -I$(AT91LIB)
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
-LIBOBJS		= cpu.o device.o serial.o syscalls.o
+LIBOBJS		= cpu.o device.o leds.o serial.o syscalls.o
 
 JLINKMCU	= at91sam7s512
 JLINKADDR	= 0x00100000

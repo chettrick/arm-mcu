@@ -32,24 +32,16 @@ int main(void)
   cpu_init(DEFAULT_CPU_FREQ);
   serial_stdio(CONSOLE_PORT, 115200);
 
+/* Display startup banner */
+
   puts("\033[H\033[2JAT91SAM7S Timer Interrupt Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
-/* Configure LED */
+/* Configure LED(s) */
 
-#ifdef OLIMEX_SAM7_P256
-#define LED1            18
-#define LED2            17
-
-  *AT91C_PMC_PCER       = 0x00000004;   // Enable Port A peripheral clock
-
-  *AT91C_PIOA_PER       = 1 << LED1;    // LED1 pin is GPIO
-  *AT91C_PIOA_PPUDR     = 1 << LED1;    // LED1 pin does not need internal pullup
-  *AT91C_PIOA_OER       = 1 << LED1;    // LED1 pin is output
-  *AT91C_PIOA_MDER      = 1 << LED1;    // LED1 pin is open drain output
-  *AT91C_PIOA_SODR	= 1 << LED1;	// LED1 pin is off
-#endif
+  LEDS_initialize();
+  LEDS_set(0x55555555);
 
 /* Configure timer to interrupt 10 times a second */
 
@@ -63,6 +55,7 @@ int main(void)
   AIC_EnableIT(AT91C_ID_SYS);
 
   for (;;)
+  {
     if (TimerFlag)
     {
       TimerFlag = FALSE;
@@ -70,11 +63,7 @@ int main(void)
       puts("Tick...");
       fflush(stdout);
 
-#ifdef OLIMEX_SAM7_P256
-      if (*AT91C_PIOA_PDSR & (1 << LED1))
-        *AT91C_PIOA_CODR = 1 << LED1;
-      else
-        *AT91C_PIOA_SODR = 1 << LED1;
-#endif
+      LEDS_set(~LEDS_get());
     }
+  }
 }

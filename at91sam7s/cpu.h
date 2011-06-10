@@ -2,14 +2,14 @@
 
 // $Id$
 
-extern unsigned long int CPUFREQ;
-
-extern void cpu_init(unsigned long int frequency);
-
 #include <device.h>
 #include <serial.h>
+#include <leds.h>
 
 #include <AT91SAM7S.h>
+
+extern void cpu_init(unsigned long int frequency);
+extern unsigned long int CPUFREQ;
 
 #ifndef DEFAULT_CPU_FREQ
 #define DEFAULT_CPU_FREQ	48000000
