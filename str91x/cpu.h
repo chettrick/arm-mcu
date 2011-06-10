@@ -8,7 +8,9 @@ extern void cpu_init(unsigned long int frequency);
 
 #include <device.h>
 #include <interrupt.h>
+#include <leds.h>
 #include <serial.h>
+
 #include <usb_serial/usb_serial.h>
 #include <91x_lib.h>
 #include <91x_it.h>
