@@ -11,7 +11,7 @@ CMSIS		= $(MCUDIR)/CMSIS
 CFLAGS		+= -DSTM32F10X_LD_VL -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
-LIBOBJS		= cpu.o device.o serial.o syscalls.o
+LIBOBJS		= cpu.o device.o leds.o serial.o syscalls.o
 
 JLINKADDR	= 0x08000000
 

@@ -32,51 +32,14 @@ int main(void)
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
+// Initialize LED's
+
+  LEDS_initialize();
+  LEDS_set(0x55555555);
+
 // Initialize System Tick with 100ms time interval
 
   SysTick_Config(SystemCoreClock / 10);
-
-#ifdef OLIMEX_STM32_P103
-// Enable GPIOC peripheral clock
-
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOA, ENABLE);
-
-// Configure PC.12 as output push-pull (LED)
-
-  GPIO_InitTypeDef config;
-
-  GPIO_StructInit(&config);
-  config.GPIO_Pin =  GPIO_Pin_12;
-  config.GPIO_Mode = GPIO_Mode_Out_PP;
-  config.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOC, &config);
-
-// Turn LED off
-
-  GPIO_SetBits(GPIOC, GPIO_Pin_12);
-#endif
-
-#ifdef STM32_VALUE_LINE_DISCOVERY
-// Enable GPIOC peripheral clock
-
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOA, ENABLE);
-
-// Configure PC.9 as output push-pull (LED)
-
-  GPIO_InitTypeDef config;
-
-  GPIO_StructInit(&config);
-  config.GPIO_Pin =  GPIO_Pin_9;
-  config.GPIO_Mode = GPIO_Mode_Out_PP;
-  config.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOC, &config);
-
-// Turn LED off
-
-  GPIO_SetBits(GPIOC, GPIO_Pin_9);
-#endif
 
 // Display "Tick..." every second
 
@@ -88,13 +51,7 @@ int main(void)
       puts("Tick...");
       fflush(stdout);
 
-#ifdef OLIMEX_STM32_P103
-      GPIO_WriteBit(GPIOC, GPIO_Pin_12, !GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_12));
-#endif
-
-#ifdef STM32_VALUE_LINE_DISCOVERY
-      GPIO_WriteBit(GPIOC, GPIO_Pin_9, !GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_9));
-#endif
+      LEDS_set(~LEDS_get());
     }
   }
 }
