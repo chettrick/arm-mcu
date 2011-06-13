@@ -16,12 +16,12 @@ LIBOBJS		= cpu.o device.o leds.o serial.o syscalls.o
 JLINKADDR	= 0x08000000
 
 ifeq ($(shell uname), Linux)
-STLINK		= stlink
+STLINKEXE	?= stlink
 STLINKDEV	= /dev/stlink
 endif
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-STLINK		= "/c/Program Files/STMicroelectronics/STM32 ST-LINK Utility/ST-LINK Utility"/ST-LINK_CLI.exe
+STLINKEXE	?= ST-LINK_CLI.exe
 endif
 
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
@@ -41,12 +41,12 @@ lib: lib$(MCU).a
 
 ifeq ($(shell uname), Linux)
 .bin.flashstlink:
-	$(STLINK) $(STLINKDEV) -v erase=all flash:w:$<
+	$(STLINKEXE) $(STLINKDEV) -v erase=all flash:w:$<
 endif
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 .bin.flashstlink:
-	$(STLINK) -c SWD -ME -P $< 0x08000000 -Rst
+	$(STLINKEXE) -c SWD -ME -P $< 0x08000000 -Rst
 endif
 
 # Clean out working files
