@@ -22,3 +22,7 @@ $Id$
 9.  Changed #include "lpc17xx.h" to #include "LPC17xx.h" in lpc17xx_pinsel.h
 
 10. Changed float to uint32_t in lpc17xx_systick.c
+
+11. Removed lpc17xx_libcfg_default.c
+
+12. Changed lpc17xx_libcfg_default.h to define CHECK_PARAM(expr) as assert(expr)

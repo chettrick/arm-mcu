@@ -27,6 +27,7 @@
 #define LPC17XX_LIBCFG_DEFAULT_H_
 
 /* Includes ------------------------------------------------------------------- */
+#include <assert.h>
 #include "lpc_types.h"
 
 
@@ -138,7 +139,7 @@
 *                    - If expr is true, it returns no value.
 * @return		None
 *******************************************************************************/
-#define CHECK_PARAM(expr) ((expr) ? (void)0 : check_failed((uint8_t *)__FILE__, __LINE__))
+#define CHECK_PARAM(expr) assert(expr)
 #else
 #define CHECK_PARAM(expr)
 #endif /* DEBUG */
