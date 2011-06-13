@@ -50,20 +50,11 @@
 extern "C" {
 #endif
 
+#include <assert.h>
+
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
-#if defined(DEBUG_EFM) || defined(DEBUG_EFM_USER)
-
-/* Due to footprint considerations, we only pass file name and line number, */
-/* not the assert expression (nor function name (C99)) */
-void assertEFM(const char *file, int line);
-#define EFM_ASSERT(expr)    ((expr) ? ((void)0) : assertEFM(__FILE__, __LINE__))
-
-#else
-
-#define EFM_ASSERT(expr)    ((void)0)
-
-#endif /* defined(DEBUG_EFM) || defined(DEBUG_EFM_USER) */
+#define EFM_ASSERT(expr) assert(expr)
 
 /** @endcond */
 

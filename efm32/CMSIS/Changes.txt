@@ -19,3 +19,7 @@ $Id$
 
 8. Added (void) tmp; to I2C_TransferInit() in efm32_i2c.c to avoid compiler
    warning.
+
+9. Removed efm32_assert.c
+
+10. Defined EFM_ASSERT(expr) as assert(expr) in efm32_assert.h
