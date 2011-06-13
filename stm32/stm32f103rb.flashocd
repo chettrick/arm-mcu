@@ -38,7 +38,10 @@ expect $prompt
 send "flash probe 0\n"
 expect $prompt
 
-send "flash write_image erase $FILE $address bin\n"
+send "stm32x mass_erase 0\n"
+expect $prompt
+
+send "flash write_image $FILE $address bin\n"
 expect -timeout 300 $prompt
 
 send "reset run\n"
