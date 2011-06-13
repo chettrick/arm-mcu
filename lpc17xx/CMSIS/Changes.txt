@@ -26,3 +26,6 @@ $Id$
 11. Removed lpc17xx_libcfg_default.c
 
 12. Changed lpc17xx_libcfg_default.h to define CHECK_PARAM(expr) as assert(expr)
+
+13. Removed debug_frmwrk.h, debug_frmwrk.c, and associated goop in
+    lpc17xx_libcfg_default.h
