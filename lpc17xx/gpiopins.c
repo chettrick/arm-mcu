@@ -35,5 +35,4 @@ void gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
 
   PORTS[port]->FIOMASK &= ~(1 << pin);
   PORTS[port]->FIODIR  |= (direction << pin);
-  return 0;
 }
