@@ -12,7 +12,7 @@ FREERTOS	= $(MCUDIR)/FreeRTOS
 CFLAGS		+= -I$(CMSIS)/include -I$(FREERTOS)
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
-LIBOBJS		= cpu.o leds.o device.o serial.o syscalls.o
+LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o syscalls.o
 
 JLINKMCU	= lpc1768
 

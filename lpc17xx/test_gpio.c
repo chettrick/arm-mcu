@@ -15,24 +15,26 @@ int main(void)
 // Flash MBED-LPC1768 LED's
 
 #ifdef MBED_LPC1768
-#define LEDMASK	((1 << 18)|(1 << 20)|(1 << 21)|(1 << 23))
-
-  LPC_GPIO1->FIOMASK &= ~LEDMASK;
-  LPC_GPIO1->FIODIR |= LEDMASK;
+  gpiopin_configure(GPIOPIN50, GPIOPIN_OUTPUT);
+  gpiopin_configure(GPIOPIN52, GPIOPIN_OUTPUT);
+  gpiopin_configure(GPIOPIN53, GPIOPIN_OUTPUT);
+  gpiopin_configure(GPIOPIN55, GPIOPIN_OUTPUT);
 
   for (i = 0;; i++)
-    LPC_GPIO1->FIOPIN = i;
+  {
+    GPIOPIN50OUT = i >> 22;
+    GPIOPIN52OUT = i >> 21;
+    GPIOPIN53OUT = i >> 20;
+    GPIOPIN55OUT = i >> 19;
+  }
 #endif
 
 // Flash BlueBoard LPC1768-H test LED
 
 #ifdef BLUEBOARD_LPC1768_H
-#define LEDMASK	((1 << 29))
-
-  LPC_GPIO1->FIOMASK &= ~LEDMASK;
-  LPC_GPIO1->FIODIR |= LEDMASK;
+  gpiopin_configure(GPIOPIN61, GPIOPIN_OUTOUT);
 
   for (i = 0;; i++)
-    LPC_GPIO1->FIOPIN = i << 7;
+    GPIOPIN61OUT = i >> 22;
 #endif
 }
