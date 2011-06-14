@@ -27,15 +27,14 @@ int main(void)
   cpu_init(DEFAULT_CPU_FREQ);
   serial_stdio(CONSOLE_PORT, 115200);
 
-  puts("\033[H\033[2JSTM32 System Tick Interrupt Test ("
-       __DATE__ " " __TIME__ ")\n");
+  puts("\033[H\033[2JSTM32 System Tick Interrupt Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
-// Initialize LED's
+// Configure LED(s)
 
   LEDS_initialize();
-  LEDS_set(0x55555555);
+  LEDS_set(LED2|LED4|LED6|LED8);
 
 // Initialize System Tick with 100ms time interval
 

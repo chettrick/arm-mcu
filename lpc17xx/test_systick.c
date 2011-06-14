@@ -31,10 +31,10 @@ int main(void)
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
-// Initialize LED(s)
+// Configure LED(s)
 
   LEDS_initialize();
-  LEDS_set(0x55555555);
+  LEDS_set(LED2|LED4|LED6|LED8);
 
 // Initialize System Tick with 100ms time interval
 

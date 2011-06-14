@@ -31,7 +31,7 @@ int main(void)
 /* Configure LED(s) */
 
   LEDS_initialize();
-  LEDS_set(0x55555555);
+  LEDS_set(LED2|LED4|LED6|LED8);
 
 /* Configure timer 1 to interrupt once every second */
 
