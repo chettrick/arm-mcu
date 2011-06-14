@@ -2,11 +2,8 @@
 
 // $Id$
 
+#include <assert.h>
 #include <cpu.h>
-#include <errno.h>
-
-#undef errno
-extern int errno;
 
 #define MAX_GPIO_PORTS		5
 #define PINS_PER_GPIO_PORT	32
@@ -20,11 +17,9 @@ static LPC_GPIO_TypeDef * const PORTS[] =
   LPC_GPIO4
 };
 
-int gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
+void gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
 {
   unsigned int port;
-
-  errno = 0;
 
 // Split into port and pin components
 
@@ -33,17 +28,8 @@ int gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
 
 // Validate parameters
 
-  if (port >= MAX_GPIO_PORTS)
-  {
-    errno = EINVAL;
-    return 1;
-  }
-
-  if (direction > GPIOPIN_OUTPUT)
-  {
-    errno = EINVAL;
-    return 1;
-  }
+  assert(port < MAX_GPIO_PORTS);
+  assert(direction <= GPIOPIN_OUTPUT);
 
 // Configure the pin
 

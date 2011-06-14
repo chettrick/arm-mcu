@@ -12,6 +12,10 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
+#ifndef NDEBUG
+  serial_stdio(CONSOLE_PORT, 115200);	// For assert()
+#endif
+
 // Flash MBED-LPC1768 LED's
 
 #ifdef MBED_LPC1768
