@@ -48,18 +48,21 @@
 
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
+#ifndef UART_COUNT
+#define UART_COUNT 0
+#endif
 
 /** Validation of USART register block pointer reference for assert statements. */
 #if (USART_COUNT == 1)
-#define USART_REF_VALID(ref)    ((ref) == USART0)
+#define USART_REF_VALID(ref)    (((ref) == USART0) || ((UART_COUNT == 1) && ((ref) == UART0)))
 #elif (USART_COUNT == 2)
-#define USART_REF_VALID(ref)    (((ref) == USART0) || ((ref) == USART1))
+#define USART_REF_VALID(ref)    (((ref) == USART0) || ((ref) == USART1) || ((UART_COUNT == 1) && ((ref) == UART0)))
 #elif (USART_COUNT == 3)
 #define USART_REF_VALID(ref)    (((ref) == USART0) || ((ref) == USART1) || \
-                                 ((ref) == USART2))
+                                 ((ref) == USART2) || ((UART_COUNT == 1) && ((ref) == UART0)))
 #elif (USART_COUNT == 4)
 #define USART_REF_VALID(ref)    (((ref) == USART0) || ((ref) == USART1) || \
-                                 ((ref) == USART2) || ((ref) == USART3))
+                                 ((ref) == USART2) || ((ref) == USART3) || ((UART_COUNT == 1) && ((ref) == UART0)))
 #else
 #error Undefined number of USARTs.
 #endif
