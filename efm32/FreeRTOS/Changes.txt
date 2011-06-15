@@ -48,8 +48,10 @@ $Id$
 
 19. Define macro configCPU_CLOCK_HZ as SystemCoreClock in FreeRTOSConfig.h.
 
+20. Define macro configUSE_COUNTING_SEMAPHORES as 1 in FreeRTOSConfig.h.
+
 ===============================================================================
 
-20. Copied from lpc17xx.
+21. Copied from lpc17xx.
 
-21. Changed "LPC17xx.h" to "efm32.h".
+22. Changed "LPC17xx.h" to "efm32.h".

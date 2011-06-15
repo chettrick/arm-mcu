@@ -47,3 +47,5 @@ $Id$
 18. Removed configTOTAL_HEAP_SIZE from FreeRTOSConfig.h since it isn't used.
 
 19. Define macro configCPU_CLOCK_HZ as SystemCoreClock in FreeRTOSConfig.h.
+
+20. Define macro configUSE_COUNTING_SEMAPHORES as 1 in FreeRTOSConfig.h.
