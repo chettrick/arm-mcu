@@ -50,6 +50,6 @@ void LEDS_set(unsigned long int mask)
 
 #ifdef STM32_VALUE_LINE_DISCOVERY
   GPIOPIN40OUT = mask;
-  GPIOPIN41OUT = mask << 1;
+  GPIOPIN41OUT = mask >> 1;
 #endif
 }
