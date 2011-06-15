@@ -3,7 +3,6 @@
 // $Id$
 
 #include <cpu.h>
-#include <leds.h>
 
 // Initialize the LED's (to the off state)
 

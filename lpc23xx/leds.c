@@ -3,7 +3,6 @@
 // $Id$
 
 #include <cpu.h>
-#include <leds.h>
 
 #ifdef MBED_LPC2368
 #define MAX_LEDS	4

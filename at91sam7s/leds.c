@@ -3,7 +3,6 @@
 // $Id$
 
 #include <cpu.h>
-#include <leds.h>
 
 #ifdef OLIMEX_SAM7_P256
 #define MAX_LEDS	2
