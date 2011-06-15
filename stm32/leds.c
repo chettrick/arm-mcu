@@ -3,53 +3,18 @@
 // $Id$
 
 #include <cpu.h>
-#include <leds.h>
-
-#ifdef STM32_VALUE_LINE_DISCOVERY
-#define MAX_LEDS	2
-static const char LED_PINS[MAX_LEDS] = { 8, 9 };	// All are on GPIOC pins
-#endif
 
 // Initialize the LED's (to the off state)
 
 void LEDS_initialize(void)
 {
-#ifdef STM32_VALUE_LINE_DISCOVERY
-  int i;
-  GPIO_InitTypeDef config;
-
-// Enable GPIOC peripheral clock
-
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOA, ENABLE);
-
-// Configure LED pins as output push-pull
-
-  for (i = 0; i < MAX_LEDS; i++)
-  {
-    GPIO_StructInit(&config);
-    config.GPIO_Pin =  (1 << LED_PINS[i]);
-    config.GPIO_Mode = GPIO_Mode_Out_PP;
-    config.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOC, &config);
-  }
+#ifdef OLIMEX_STM32_P103
+  gpiopin_configure(GPIOPIN44, GPIOPIN_OUTPUT);
 #endif
 
-#ifdef OLIMEX_STM32_P103
-  GPIO_InitTypeDef config;
-
-// Enable GPIOC peripheral clock
-
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOA, ENABLE);
-
-// Configure LED pin as output push-pull
-
-  GPIO_StructInit(&config);
-  config.GPIO_Pin =  GPIO_Pin_12;
-  config.GPIO_Mode = GPIO_Mode_Out_PP;
-  config.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOC, &config);
+#ifdef STM32_VALUE_LINE_DISCOVERY
+  gpiopin_configure(GPIOPIN40, GPIOPIN_OUTPUT);
+  gpiopin_configure(GPIOPIN41, GPIOPIN_OUTPUT);
 #endif
 
   LEDS_set(0);						// Turn off all LEDs at startup
@@ -62,18 +27,13 @@ unsigned long int LEDS_get(void)
 {
   unsigned long int result = 0;
 
-#ifdef STM32_VALUE_LINE_DISCOVERY
-  int i;
-
-  for (i = 0; i < MAX_LEDS; i++)
-  {
-    if (GPIO_ReadOutputDataBit(GPIOC, (1 << LED_PINS[i])))
-      result |= (1 << i);
-  }
+#ifdef OLIMEX_STM32_P103
+  result += !GPIOPIN44IN;
 #endif
 
-#ifdef OLIMEX_STM32_P103
-  result = !GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_12);
+#ifdef STM32_VALUE_LINE_DISCOVERY
+  result += GPIOPIN40IN;
+  result += GPIOPIN41IN << 1;
 #endif
 
   return result;
@@ -84,24 +44,12 @@ unsigned long int LEDS_get(void)
 
 void LEDS_set(unsigned long int mask)
 {
-#ifdef STM32_VALUE_LINE_DISCOVERY
-  int i;
-
-  for (i = 0; i < MAX_LEDS; i++)
-  {
-    if (mask & 0x01)
-      GPIO_SetBits(GPIOC, (1 << LED_PINS[i]));
-    else
-      GPIO_ResetBits(GPIOC, (1 << LED_PINS[i]));
-
-    mask >>= 1;
-  }
+#ifdef OLIMEX_STM32_P103
+  GPIOPIN44OUT = ~mask;
 #endif
 
-#ifdef OLIMEX_STM32_P103
-  if (mask & 0x01)
-    GPIO_ResetBits(GPIOC, GPIO_Pin_12);
-  else
-    GPIO_SetBits(GPIOC, GPIO_Pin_12);
+#ifdef STM32_VALUE_LINE_DISCOVERY
+  GPIOPIN40OUT = mask;
+  GPIOPIN41OUT = mask << 1;
 #endif
 }
