@@ -23,3 +23,5 @@ $Id$
 9. Removed efm32_assert.c
 
 10. Defined EFM_ASSERT(expr) as assert(expr) in efm32_assert.h
+
+11. Fixed USART_REF_VALID() in efm32_usart.c to check for UART0.
