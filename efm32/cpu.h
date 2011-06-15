@@ -3,6 +3,7 @@
 // $Id$
 
 #include <device.h>
+#include <gpiopins.h>
 #include <leds.h>
 #include <serial.h>
 

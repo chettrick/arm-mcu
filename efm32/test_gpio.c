@@ -17,16 +17,17 @@ int main(void)
 #endif
 
 #ifdef EFM32_G8XX_STK
-  /* Enable GPIO */
-  CMU_ClockEnable(cmuClock_GPIO, true);
-
-  /* Configure GPIO port C 0-3 as LED control outputs */
-  GPIO_PinModeSet(gpioPortC, 0, gpioModePushPull, 1);
-  GPIO_PinModeSet(gpioPortC, 1, gpioModePushPull, 1);
-  GPIO_PinModeSet(gpioPortC, 2, gpioModePushPull, 1);
-  GPIO_PinModeSet(gpioPortC, 3, gpioModePushPull, 1);
+  gpiopin_configure(32, GPIOPIN_OUTPUT);
+  gpiopin_configure(33, GPIOPIN_OUTPUT);
+  gpiopin_configure(34, GPIOPIN_OUTPUT);
+  gpiopin_configure(35, GPIOPIN_OUTPUT);
 
   for (i = 0;; i++)
-    GPIO_PortOutSetVal(gpioPortC, i >> 16, 0xf);
+  {
+    GPIOPIN32OUT = i >> 16;
+    GPIOPIN33OUT = i >> 17;
+    GPIOPIN34OUT = i >> 18;
+    GPIOPIN35OUT = i >> 19;
+  }
 #endif
 }
