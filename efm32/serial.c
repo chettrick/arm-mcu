@@ -33,7 +33,6 @@ int serial_init(unsigned port, unsigned long int baudrate)
     case 0 :
 // Enable peripheral clocks
 
-      CMU_ClockEnable(cmuClock_HF, true);
       CMU_ClockEnable(cmuClock_GPIO, true);
       CMU_ClockEnable(cmuClock_UART0, true);
 
