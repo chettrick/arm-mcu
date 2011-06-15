@@ -8,11 +8,15 @@ static const char revision[] = "$Id$";
 
 int main(void)
 {
-  cpu_init(DEFAULT_CPU_FREQ);
-
-#ifdef EFM32_G8XX_STK
   unsigned long int i;
 
+  cpu_init(DEFAULT_CPU_FREQ);
+
+#ifndef NDEBUG
+  serial_stdio(CONSOLE_PORT, 115200);	// For assert()
+#endif
+
+#ifdef EFM32_G8XX_STK
   /* Enable GPIO */
   CMU_ClockEnable(cmuClock_GPIO, true);
 
