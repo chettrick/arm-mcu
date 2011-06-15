@@ -29,7 +29,7 @@ void main(void)
   gpiopin_configure(GPIOPIN40, GPIOPIN_OUTPUT);
   gpiopin_configure(GPIOPIN41, GPIOPIN_OUTPUT);
 
-  for (i = 0;; ++)
+  for (i = 0;; i++)
   {
     GPIOPIN40OUT = i >> 19;
     GPIOPIN41OUT = i >> 20;
