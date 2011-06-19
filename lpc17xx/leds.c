@@ -16,7 +16,7 @@ void LEDS_initialize(void)
 #endif
 
 #ifdef BLUEBOARD_LPC1768_H
-  gpiopin_configure(GPIOPIN61, GPIOPIN_OUTOUT);
+  gpiopin_configure(GPIOPIN61, GPIOPIN_OUTPUT);
 #endif
 
   LEDS_set(0);						// Turn off all LEDs at startup

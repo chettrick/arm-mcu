@@ -36,7 +36,7 @@ int main(void)
 // Flash BlueBoard LPC1768-H test LED
 
 #ifdef BLUEBOARD_LPC1768_H
-  gpiopin_configure(GPIOPIN61, GPIOPIN_OUTOUT);
+  gpiopin_configure(GPIOPIN61, GPIOPIN_OUTPUT);
 
   for (i = 0;; i++)
     GPIOPIN61OUT = i >> 22;
