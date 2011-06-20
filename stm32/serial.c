@@ -42,7 +42,30 @@ int serial_init(unsigned port, unsigned long int baudrate)
   switch (port)
   {
     case 1 :
+#ifdef OLIMEX_STM32_P107
+// Turn on peripheral clocks
 
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB|RCC_APB2Periph_AFIO, ENABLE);
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+
+// Configure TX pin
+
+      GPIO_config.GPIO_Pin = GPIO_Pin_6;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOB, &GPIO_config);
+
+// Configure RX pin
+
+      GPIO_config.GPIO_Pin = GPIO_Pin_7;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+      GPIO_Init(GPIOB, &GPIO_config);
+
+// Remap USART1 pins
+
+      GPIO_PinRemapConfig(GPIO_Remap_USART1, ENABLE);
+#else
 // Turn on peripheral clocks
 
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_AFIO, ENABLE);
@@ -61,10 +84,34 @@ int serial_init(unsigned port, unsigned long int baudrate)
       GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
       GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
       GPIO_Init(GPIOA, &GPIO_config);
+#endif
       break;
  
     case 2 :
+#ifdef OLIMEX_STM32_P107
+// Turn on peripheral clocks
 
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD|RCC_APB2Periph_AFIO, ENABLE);
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+
+// Configure TX pin
+
+      GPIO_config.GPIO_Pin = GPIO_Pin_5;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOD, &GPIO_config);
+
+// Configure RX pin
+
+      GPIO_config.GPIO_Pin = GPIO_Pin_6;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+      GPIO_Init(GPIOD, &GPIO_config);
+
+// Remap USART2 pins
+
+      GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
+#else
 // Turn on peripheral clocks
 
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_AFIO, ENABLE);
@@ -83,10 +130,34 @@ int serial_init(unsigned port, unsigned long int baudrate)
       GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
       GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
       GPIO_Init(GPIOA, &GPIO_config);
+#endif
       break;
  
     case 3 :
+#ifdef OLIMEX_STM32_P107
+// Turn on peripheral clocks
 
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD|RCC_APB2Periph_AFIO, ENABLE);
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+
+// Configure TX pin
+
+      GPIO_config.GPIO_Pin = GPIO_Pin_8;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOD, &GPIO_config);
+
+// Configure RX pin
+
+      GPIO_config.GPIO_Pin = GPIO_Pin_9;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+      GPIO_Init(GPIOD, &GPIO_config);
+
+// Remap USART3 pins
+
+      GPIO_PinRemapConfig(GPIO_FullRemap_USART3, ENABLE);
+#else
 // Turn on peripheral clocks
 
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB|RCC_APB2Periph_AFIO, ENABLE);
@@ -105,6 +176,7 @@ int serial_init(unsigned port, unsigned long int baudrate)
       GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
       GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
       GPIO_Init(GPIOB, &GPIO_config);
+#endif
       break;
 
     default :
@@ -116,6 +188,7 @@ int serial_init(unsigned port, unsigned long int baudrate)
 
   USART_StructInit(&USART_config);
   USART_config.USART_BaudRate = baudrate;
+  USART_config.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_Init(UARTS[port-1], &USART_config);
 
 // Enable USART

@@ -22,12 +22,22 @@ extern void cpu_init(unsigned long int frequency);
 #ifdef stm32f103rb
 #define DEFAULT_CPU_FREQ	72000000
 #endif
+
+#ifdef stm32f107rb
+#define DEFAULT_CPU_FREQ	72000000
+#endif
 #endif
 
 #ifndef CONSOLE_PORT
 #ifdef OLIMEX_STM32_P103
 #define CONSOLE_PORT		2
-#else
+#endif
+
+#ifdef OLIMEX_STM32_P107
+#define CONSOLE_PORT		3
+#endif
+
+#ifdef STM32_VALUE_LINE_DISCOVERY
 #define CONSOLE_PORT		1
 #endif
 #endif

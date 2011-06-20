@@ -12,6 +12,11 @@ void LEDS_initialize(void)
   gpiopin_configure(GPIOPIN44, GPIOPIN_OUTPUT);
 #endif
 
+#ifdef OLIMEX_STM32_P107
+  gpiopin_configure(GPIOPIN38, GPIOPIN_OUTPUT);
+  gpiopin_configure(GPIOPIN39, GPIOPIN_OUTPUT);
+#endif
+
 #ifdef STM32_VALUE_LINE_DISCOVERY
   gpiopin_configure(GPIOPIN40, GPIOPIN_OUTPUT);
   gpiopin_configure(GPIOPIN41, GPIOPIN_OUTPUT);
@@ -31,6 +36,11 @@ unsigned long int LEDS_get(void)
   result += !GPIOPIN44IN;
 #endif
 
+#ifdef OLIMEX_STM32_P107
+  result += !GPIOPIN38IN;
+  result += !GPIOPIN39IN << 1;
+#endif
+
 #ifdef STM32_VALUE_LINE_DISCOVERY
   result += GPIOPIN40IN;
   result += GPIOPIN41IN << 1;
@@ -46,6 +56,11 @@ void LEDS_set(unsigned long int mask)
 {
 #ifdef OLIMEX_STM32_P103
   GPIOPIN44OUT = ~mask;
+#endif
+
+#ifdef OLIMEX_STM32_P107
+  GPIOPIN38OUT = ~mask;
+  GPIOPIN39OUT = ~mask >> 1;
 #endif
 
 #ifdef STM32_VALUE_LINE_DISCOVERY
