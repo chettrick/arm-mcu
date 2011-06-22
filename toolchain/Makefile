@@ -6,7 +6,6 @@ PKGNAME		= arm-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 TEMP		= /tmp
 TARGETNAME	= arm-elf
-MACHTYPE	= $(shell uname -i)
 
 BINUTILVER	= 2.21
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
@@ -203,9 +202,8 @@ specfile: specfile.template fakeroot
 	find fakeroot/usr/local/arm-tools -type l | cut -c 9- >>specfile
 
 rpm: specfile
-	mkdir -p rpmbuild/RPMS/$(MACHTYPE)
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
-	cp rpmbuild/RPMS/$(MACHTYPE)/*.rpm .
+	cp rpmbuild/RPMS/*/*.rpm .
 
 ################################################################################
 
