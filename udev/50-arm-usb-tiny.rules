@@ -1,0 +1,7 @@
+# udev rules for Olimex ARM-USB-Tiny JTAG pod
+
+# $Id$
+
+ACTION!="add", SUBSYSTEM!=="usb_device", GOTO="kcontrol_rules_end"
+ATTRS{idVendor}=="15ba", ATTRS{idProduct}=="0004", MODE="660", GROUP="wheel"
+LABEL="kcontrol_rules_end"

@@ -1,0 +1,6 @@
+# udev rules for mbed-LPC1768 and mbed-LPC2366
+
+# $Id$
+
+# link /dev/ttymbed to ttyACM?
+KERNEL=="ttyACM*", ATTRS{idVendor}=="0d28", ATTRS{idProduct}=="0204", SYMLINK+="ttymbed", MODE:="0660"

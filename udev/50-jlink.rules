@@ -1,0 +1,10 @@
+# udev rules for Segger JLink JTAG pod
+
+# $Id$
+
+ACTION!="add", SUBSYSTEM!=="usb_device", GOTO="kcontrol_rules_end"
+ATTRS{idVendor}=="1366", ATTRS{idProduct}=="0101", MODE="660", GROUP="wheel"
+ATTRS{idVendor}=="1366", ATTRS{idProduct}=="0102", MODE="660", GROUP="wheel"
+ATTRS{idVendor}=="1366", ATTRS{idProduct}=="0103", MODE="660", GROUP="wheel"
+ATTRS{idVendor}=="1366", ATTRS{idProduct}=="0104", MODE="660", GROUP="wheel"
+LABEL="kcontrol_rules_end"
