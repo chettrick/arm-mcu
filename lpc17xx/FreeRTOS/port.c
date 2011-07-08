@@ -155,9 +155,10 @@ void vPortStartFirstTask( void )
 					" ldr r0, [r0] 			\n"
 					" ldr r0, [r0] 			\n"
 					" msr msp, r0			\n" /* Set the msp back to the start of the stack. */
-					" cpsie i				\n" /* Globally enable interrupts. */
-					" svc 0					\n" /* System call to start first task. */
-					" nop					\n"
+					" cpsie i			\n" /* Globally enable interrupts. */
+//					" svc 0				\n" /* System call to start first task. */
+					" .short 0xdf00			\n" /* Work around bug in recent binutils */
+					" nop				\n"
 				);
 }
 /*-----------------------------------------------------------*/
