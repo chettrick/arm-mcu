@@ -13,7 +13,7 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 ifeq ($(WITH_FREERTOS), yes)
 FREERTOS	= $(ARMSRC)/FreeRTOS/Cortex-M3
-CFLAGS		+= -DFREERTOS -I$(FREERTOS)
+include $(FREERTOS)/FreeRTOS.mk
 endif
 
 LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o syscalls.o
@@ -29,8 +29,7 @@ lib$(MCU).a: $(LIBOBJS)
 	for F in $(CMSIS)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
 ifeq ($(WITH_FREERTOS), yes)
-	for F in $(FREERTOS)/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(FREERTOS)/*.o
+	$(MAKE) freertos_lib
 endif
 
 lib: lib$(MCU).a
@@ -39,7 +38,7 @@ lib: lib$(MCU).a
 
 clean_$(MCU):
 ifeq ($(WITH_FREERTOS), yes)
-	-rm $(FREERTOS)/*.o
+	$(MAKE) freertos_clean
 endif
 
 reallyclean_$(MCU): clean_$(MCU)
