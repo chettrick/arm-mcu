@@ -2,19 +2,19 @@
 
 # $Id$
 
-CFLAGS		+= -DFREERTOS -I$(FREERTOS)
+CFLAGS		+= -DFREERTOS -I$(FREERTOS_DIR)
 
 .PHONY: freertos_lib freertos_clean
 
 # These are the FreeRTOS object files
 
-FREERTOS_OBJS	= $(FREERTOS)/croutine.o	\
-		  $(FREERTOS)/heap_3.o		\
-		  $(FREERTOS)/list.o		\
-		  $(FREERTOS)/port.o		\
-		  $(FREERTOS)/queue.o		\
-		  $(FREERTOS)/tasks.o		\
-		  $(FREERTOS)/timers.o
+FREERTOS_OBJS	= $(FREERTOS_DIR)/croutine.o		\
+		  $(FREERTOS_DIR)/heap_3.o		\
+		  $(FREERTOS_DIR)/list.o		\
+		  $(FREERTOS_DIR)/port.o		\
+		  $(FREERTOS_DIR)/queue.o		\
+		  $(FREERTOS_DIR)/tasks.o		\
+		  $(FREERTOS_DIR)/timers.o
 
 # Add FreeRTOS object files to the MCU library
 

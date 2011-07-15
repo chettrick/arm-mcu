@@ -12,8 +12,8 @@ CFLAGS		+= -DSTM32F10X -DSTM32F10X_CL -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 ifeq ($(WITH_FREERTOS), yes)
-FREERTOS	= $(ARMSRC)/FreeRTOS/Cortex-M3
-include $(FREERTOS)/FreeRTOS.mk
+FREERTOS_DIR	= $(ARMSRC)/FreeRTOS/Cortex-M3
+include $(FREERTOS_DIR)/FreeRTOS.mk
 endif
 
 LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o syscalls.o
