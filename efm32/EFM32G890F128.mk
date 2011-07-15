@@ -7,10 +7,14 @@ CPUFLAGS	= -mthumb
 TEXTBASE	?= 0x00000000
 
 CMSIS		= $(MCUDIR)/CMSIS
-FREERTOS	= $(MCUDIR)/FreeRTOS
 
-CFLAGS		+= -I$(CMSIS)/include -I$(FREERTOS)
+CFLAGS		+= -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
+
+ifeq ($(WITH_FREERTOS), yes)
+FREERTOS	= $(MCUDIR)/FreeRTOS
+CFLAGS		+= -DFREERTOS -I$(FREERTOS)
+endif
 
 LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o syscalls.o
 
@@ -19,10 +23,13 @@ LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o syscalls.o
 # Build processor dependent support library
 
 lib$(MCU).a: $(LIBOBJS)
-	for F in $(CMSIS)/source/*.c $(FREERTOS)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
+	for F in $(CMSIS)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
+ifeq ($(WITH_FREERTOS), yes)
+	for F in $(FREERTOS)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(FREERTOS)/*.o
+endif
 
 lib: lib$(MCU).a
 
