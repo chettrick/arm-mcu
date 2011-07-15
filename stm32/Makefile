@@ -7,15 +7,15 @@ MCUFAMILY	= stm32
 BOARDNAME	?= OLIMEX_STM32_P107
 
 ifeq ($(BOARDNAME), OLIMEX_STM32_P103)
-MCU             ?= stm32f103rb
+MCU             = stm32f103rb
 endif
 
 ifeq ($(BOARDNAME), OLIMEX_STM32_P107)
-MCU             ?= stm32f107rb
+MCU             = stm32f107rb
 endif
 
 ifeq ($(BOARDNAME), STM32_VALUE_LINE_DISCOVERY)
-MCU             ?= stm32f100rb
+MCU             = stm32f100rb
 endif
 
 default: lib$(MCU).a
