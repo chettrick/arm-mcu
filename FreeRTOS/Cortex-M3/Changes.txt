@@ -49,3 +49,6 @@ $Id$
 19. Define macro configCPU_CLOCK_HZ as SystemCoreClock in FreeRTOSConfig.h.
 
 20. Define macro configUSE_COUNTING_SEMAPHORES as 1 in FreeRTOSConfig.h.
+
+21. Use ".short 0xdf00" instead of "svc 0" in port.c to work around a bug
+    in recent binutils versions.
