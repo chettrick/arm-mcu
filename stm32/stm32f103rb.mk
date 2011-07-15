@@ -8,11 +8,11 @@ TEXTBASE	?= 0x00000000
 
 CMSIS		= $(MCUDIR)/CMSIS
 
-CFLAGS		+= -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
+CFLAGS		+= -DSTM32F10X -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 ifeq ($(WITH_FREERTOS), yes)
-FREERTOS	= $(MCUDIR)/FreeRTOS
+FREERTOS	= $(ARMSRC)/FreeRTOS/Cortex-M3
 CFLAGS		+= -DFREERTOS -I$(FREERTOS)
 endif
 
@@ -38,6 +38,9 @@ lib: lib$(MCU).a
 # Clean out working files
 
 clean_$(MCU):
+ifeq ($(WITH_FREERTOS), yes)
+	-rm $(FREERTOS)/*.o
+endif
 
 reallyclean_$(MCU): clean_$(MCU)
 

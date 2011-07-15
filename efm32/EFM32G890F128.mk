@@ -8,11 +8,11 @@ TEXTBASE	?= 0x00000000
 
 CMSIS		= $(MCUDIR)/CMSIS
 
-CFLAGS		+= -I$(CMSIS)/include
+CFLAGS		+= -DEFM32 -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 ifeq ($(WITH_FREERTOS), yes)
-FREERTOS	= $(MCUDIR)/FreeRTOS
+FREERTOS	= $(ARMSRC)/FreeRTOS/Cortex-M3
 CFLAGS		+= -DFREERTOS -I$(FREERTOS)
 endif
 
@@ -36,6 +36,9 @@ lib: lib$(MCU).a
 # Clean out working files
 
 clean_$(MCU):
+ifeq ($(WITH_FREERTOS), yes)
+	-rm $(FREERTOS)/*.o
+endif
 
 reallyclean_$(MCU): clean_$(MCU)
 

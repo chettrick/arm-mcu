@@ -54,7 +54,17 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
+#ifdef EFM32
 #include "efm32.h"
+#endif
+
+#ifdef LPC17XX
+#include "LPC17xx.h"
+#endif
+
+#ifdef STM3210X
+#include "stm32f10x.h"
+#endif
 
 /*-----------------------------------------------------------
  * Application specific definitions.
