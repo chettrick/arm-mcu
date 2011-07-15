@@ -38,6 +38,9 @@ lib: lib$(MCU).a
 # Clean out working files
 
 clean_$(MCU):
+ifeq ($(WITH_FREERTOS), yes)
+	-rm $(FREERTOS)/*.o
+endif
 
 reallyclean_$(MCU): clean_$(MCU)
 
