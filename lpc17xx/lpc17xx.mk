@@ -16,6 +16,11 @@ FREERTOS_DIR	= $(ARMSRC)/FreeRTOS/Cortex-M3
 include $(FREERTOS_DIR)/FreeRTOS.mk
 endif
 
+ifeq ($(WITH_LWIP), yes)
+LWIP_DIR	= $(ARMSRC)/lwip
+include $(LWIP_DIR)/LWIP.mk
+endif
+
 LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o syscalls.o
 
 JLINKMCU	= lpc1768
@@ -40,6 +45,9 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
 ifeq ($(WITH_FREERTOS), yes)
 	$(MAKE) freertos_lib
+endif
+ifeq ($(WITH_LWIP), yes)
+	$(MAKE) lwip_lib
 endif
 
 lib: lib$(MCU).a
@@ -70,6 +78,9 @@ lib: lib$(MCU).a
 clean_$(MCU):
 ifeq ($(WITH_FREERTOS), yes)
 	$(MAKE) freertos_clean
+endif
+ifeq ($(WITH_LWIP), yes)
+	$(MAKE) lwip_clean
 endif
 
 reallyclean_$(MCU): clean_$(MCU)
