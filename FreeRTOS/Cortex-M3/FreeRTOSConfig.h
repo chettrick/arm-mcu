@@ -62,7 +62,7 @@
 #include "LPC17xx.h"
 #endif
 
-#ifdef STM3210X
+#ifdef STM32F10X
 #include "stm32f10x.h"
 #endif
 
