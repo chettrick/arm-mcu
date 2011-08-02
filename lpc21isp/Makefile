@@ -11,6 +11,8 @@ LPC21ISP_DIR	= $(LPC21ISP_NAME)_$(shell echo $(LPC21ISP_VER) | awk -F '.' '{ pri
 LPC21ISP_PROG	= $(LPC21ISP_DIR)/$(LPC21ISP_NAME)
 LPC21ISP_DEST	= /usr/local/bin
 
+TAR		= tar
+
 .PHONY: default install clean distclean
 
 default: $(LPC21ISP_PROG)
@@ -20,7 +22,7 @@ $(LPC21ISP_DIST):
 
 $(LPC21ISP_DIR): $(LPC21ISP_DIST)
 	mkdir -p $(LPC21ISP_DIR)
-	tar xzf $(LPC21ISP_DIST) --directory=$(LPC21ISP_DIR)
+	$(TAR) xzf $(LPC21ISP_DIST) --directory=$(LPC21ISP_DIR)
 
 $(LPC21ISP_PROG): $(LPC21ISP_DIR)
 	$(MAKE) -C $(LPC21ISP_DIR) CFLAGS=-Dstrnicmp=strncasecmp clean all
