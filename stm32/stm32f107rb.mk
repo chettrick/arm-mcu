@@ -11,6 +11,9 @@ CMSIS		= $(MCUDIR)/CMSIS
 CFLAGS		+= -DSTM32F10X -DSTM32F10X_CL -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
+STM32FLASH	= stm32flash
+STM32FLASH_PORT	= /dev/ttyS0
+
 ifeq ($(WITH_FREERTOS), yes)
 FREERTOS_DIR	= $(ARMSRC)/FreeRTOS/Cortex-M3
 include $(FREERTOS_DIR)/FreeRTOS.mk
@@ -27,6 +30,8 @@ JLINKADDR	= 0x08000000
 
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
 
+.SUFFIXES:	.stm32flash
+
 # Build processor dependent support library
 
 lib$(MCU).a: $(LIBOBJS)
@@ -41,6 +46,11 @@ ifeq ($(WITH_LWIP), yes)
 endif
 
 lib: lib$(MCU).a
+
+# Define a suffix rule for programming the flash with serial boot loader and stm32flash
+
+.bin.stm32flash:
+	$(STM32FLASH) -w $< -v -g 0x0 $(STM32FLASH_PORT)
 
 # Clean out working files
 
