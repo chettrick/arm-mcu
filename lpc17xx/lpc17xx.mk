@@ -25,6 +25,7 @@ LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o syscalls.o
 
 JLINKMCU	= lpc1768
 
+LPC21ISP	?= lpc21isp
 LPC21ISPDEV	?= /dev/ttyS0
 LPC21ISPBAUD	?= 115200
 LPC21ISPCLOCK	?= 14746

@@ -18,8 +18,6 @@ JLINKSCRIPT	= jlinkscript.tmp
 JLINKMCU	= $(MCU)
 JLINKADDR	= 0x00000000
 
-LPC21ISP	?= lpc21isp
-
 OPENOCD		?= openocd
 OPENOCDCFG	?= $(MCUDIR)/$(MCU).openocd
 OPENOCDDEBUG	?= $(MCUDIR)/$(MCU).debugocd
