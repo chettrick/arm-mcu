@@ -46,4 +46,15 @@ void main(void)
     GPIOPIN41OUT = i >> 20;
   }
 #endif
+
+#ifdef W5200E01_M3
+  gpiopin_configure(GPIOPIN0, GPIOPIN_OUTPUT);
+  gpiopin_configure(GPIOPIN1, GPIOPIN_OUTPUT);
+
+  for (i = 0;; i++)
+  {
+    GPIOPIN0OUT = i >> 19;
+    GPIOPIN1OUT = i >> 20;
+  }
+#endif
 }

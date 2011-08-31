@@ -18,6 +18,10 @@ ifeq ($(BOARDNAME), STM32_VALUE_LINE_DISCOVERY)
 MCU             = stm32f100rb
 endif
 
+ifeq ($(BOARDNAME), W5200E01_M3)
+MCU             = stm32f103c8
+endif
+
 default: lib$(MCU).a
 
 include $(ARMSRC)/include/ARM.mk

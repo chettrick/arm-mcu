@@ -19,6 +19,10 @@ extern void cpu_init(unsigned long int frequency);
 #define DEFAULT_CPU_FREQ	24000000
 #endif
 
+#ifdef stm32f103c8
+#define DEFAULT_CPU_FREQ	72000000
+#endif
+
 #ifdef stm32f103rb
 #define DEFAULT_CPU_FREQ	72000000
 #endif
@@ -40,6 +44,10 @@ extern void cpu_init(unsigned long int frequency);
 #ifdef STM32_VALUE_LINE_DISCOVERY
 #define CONSOLE_PORT		1
 #endif
+#endif
+
+#ifdef W5200E01_M3
+#define CONSOLE_PORT		1
 #endif
 
 #ifdef INTEGER_STDIO

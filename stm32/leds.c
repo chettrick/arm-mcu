@@ -22,6 +22,11 @@ void LEDS_initialize(void)
   gpiopin_configure(GPIOPIN41, GPIOPIN_OUTPUT);
 #endif
 
+#ifdef W5200E01_M3
+  gpiopin_configure(GPIOPIN0, GPIOPIN_OUTPUT);
+  gpiopin_configure(GPIOPIN1, GPIOPIN_OUTPUT);
+#endif
+
   LEDS_set(0);						// Turn off all LEDs at startup
 }
 
@@ -37,13 +42,18 @@ unsigned long int LEDS_get(void)
 #endif
 
 #ifdef OLIMEX_STM32_P107
-  result += !GPIOPIN38IN;
-  result += !GPIOPIN39IN << 1;
+  result += GPIOPIN38IN;
+  result += GPIOPIN39IN << 1;
 #endif
 
 #ifdef STM32_VALUE_LINE_DISCOVERY
   result += GPIOPIN40IN;
   result += GPIOPIN41IN << 1;
+#endif
+
+#ifdef W5200E01_M3
+  result += !GPIOPIN0;
+  result += !GPIOPIN1 << 1;
 #endif
 
   return result;
@@ -59,12 +69,17 @@ void LEDS_set(unsigned long int mask)
 #endif
 
 #ifdef OLIMEX_STM32_P107
-  GPIOPIN38OUT = ~mask;
-  GPIOPIN39OUT = ~mask >> 1;
+  GPIOPIN38OUT = mask;
+  GPIOPIN39OUT = mask >> 1;
 #endif
 
 #ifdef STM32_VALUE_LINE_DISCOVERY
   GPIOPIN40OUT = mask;
   GPIOPIN41OUT = mask >> 1;
+#endif
+
+#ifdef W5200E01_M3
+  GPIOPIN0OUT = mask;
+  GPIOPIN1OUT = make >> 1;
 #endif
 }
