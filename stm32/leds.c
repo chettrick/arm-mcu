@@ -79,7 +79,7 @@ void LEDS_set(unsigned long int mask)
 #endif
 
 #ifdef W5200E01_M3
-  GPIOPIN0OUT = mask;
-  GPIOPIN1OUT = mask >> 1;
+  GPIOPIN0OUT = ~mask;
+  GPIOPIN1OUT = ~mask >> 1;
 #endif
 }
