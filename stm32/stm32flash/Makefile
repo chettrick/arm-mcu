@@ -25,6 +25,7 @@ $(STM32FLASH_DIST):
 
 $(STM32FLASH_DIR): $(STM32FLASH_DIST)
 	$(TAR) xzf $(STM32FLASH_DIST)
+	cd $(STM32FLASH_DIR) ; patch -p0 <../cygwin.patch
 
 # Compile
 
