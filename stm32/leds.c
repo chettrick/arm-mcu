@@ -52,8 +52,8 @@ unsigned long int LEDS_get(void)
 #endif
 
 #ifdef W5200E01_M3
-  result += !GPIOPIN0;
-  result += !GPIOPIN1 << 1;
+  result += !GPIOPIN0IN;
+  result += !GPIOPIN1IN << 1;
 #endif
 
   return result;
