@@ -21,7 +21,7 @@ LWIP_DIR	= $(ARMSRC)/lwip
 include $(LWIP_DIR)/LWIP.mk
 endif
 
-LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o syscalls.o
+LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o spi.o syscalls.o
 
 JLINKADDR	= 0x08000000
 

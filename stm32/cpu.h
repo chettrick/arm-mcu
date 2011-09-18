@@ -10,6 +10,7 @@ extern void cpu_init(unsigned long int frequency);
 #include <gpiopins.h>
 #include <leds.h>
 #include <serial.h>
+#include <spi.h>
 #include <stm32f10x.h>
 
 #define CPUFREQ			SystemCoreClock
