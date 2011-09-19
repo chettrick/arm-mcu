@@ -39,7 +39,7 @@
 #include <efm32_vcmp.h>
 #include <efm32_wdog.h>
 
-extern void cpu_init(unsigned long int frequency);
+#define errno_r			(*(__errno()))
 
 #ifndef TRUE
 #define TRUE			1
@@ -68,3 +68,6 @@ extern void cpu_init(unsigned long int frequency);
 #define sscanf(...)		siscanf(__VA_ARGS__)
 #define fscanf(...)		fiscanf(__VA_ARGS__)
 #endif
+
+extern void __use_custom_syscalls(void);
+extern void cpu_init(unsigned long int frequency);

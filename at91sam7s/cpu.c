@@ -10,6 +10,7 @@ unsigned long int CPUFREQ = DEFAULT_CPU_FREQ;
 
 void cpu_init(unsigned long int frequency)
 {
+  __use_custom_syscalls();
 
 /* Configure watchdog timer */
 

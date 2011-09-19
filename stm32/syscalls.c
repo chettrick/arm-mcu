@@ -13,11 +13,17 @@ static const char revision[] = "$Id$";
 #include <string.h>
 #include <sys/stat.h>
 
-#undef errno
-int errno;
-
 extern char end[];
 static char *heap_ptr;
+
+// Calling this function from cpu_init() tricks the linker into using these
+// syscall functions instead of those in libc.a.
+
+void __use_custom_syscalls(void)
+{
+}
+
+// Rudimentary heap manager
 
 char *_sbrk_r(struct _reent *reent, size_t incr)
 {
@@ -103,7 +109,6 @@ void __attribute__ ((weak)) abort(void)
 
 int __attribute__ ((weak)) isatty(int fd)
 {
-  errno = 0;
   return device_isatty(fd);
 }
 

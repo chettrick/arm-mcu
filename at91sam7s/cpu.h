@@ -8,8 +8,7 @@
 
 #include <AT91SAM7S.h>
 
-extern void cpu_init(unsigned long int frequency);
-extern unsigned long int CPUFREQ;
+#define errno_r			(*(__errno()))
 
 #ifndef TRUE
 #define TRUE			1
@@ -39,3 +38,7 @@ extern unsigned long int CPUFREQ;
 #define sscanf(...)		siscanf(__VA_ARGS__)
 #define fscanf(...)		fiscanf(__VA_ARGS__)
 #endif
+
+extern void __use_custom_syscalls(void);
+extern void cpu_init(unsigned long int frequency);
+extern unsigned long int CPUFREQ;

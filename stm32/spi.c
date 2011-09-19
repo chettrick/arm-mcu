@@ -5,10 +5,8 @@
 static const char revision[] = "$Id$";
 
 #include <cpu.h>
-#include <stdint.h>
 #include <errno.h>
-#undef errno
-extern int errno;
+#include <stdint.h>
 
 // Map SPI port number to pointer to control structure
 
@@ -22,7 +20,7 @@ static SPI_TypeDef * const SPI_PORTS[MAX_SPI_PORTS] =
 /*****************************************************************************/
 
 // Calculate the SPI clock prescaler for a given SPI clock rate.  Return an
-//  error if the requested SPI clock rate isn't possible.
+// error if the requested SPI clock rate isn't possible.
 
 static int SPI_Clock_Prescaler(uint32_t port,
                                uint32_t speed,
@@ -30,6 +28,8 @@ static int SPI_Clock_Prescaler(uint32_t port,
 {
   RCC_ClocksTypeDef RCC_Clocks;
   uint32_t PCLK;
+
+  errno_r = 0;
 
 // Get peripheral clock frequencies
 
@@ -49,7 +49,7 @@ static int SPI_Clock_Prescaler(uint32_t port,
       break;
 
     default :
-      errno = EINVAL;
+      errno_r = ENODEV;
       return 1;
   }
 
@@ -72,11 +72,11 @@ static int SPI_Clock_Prescaler(uint32_t port,
   else if (speed == PCLK/2)
     *prescaler = SPI_BaudRatePrescaler_2;
 
-// Only the above SPI clock rates are possible.  Others are errnoneous.
+// Only the above SPI clock rates are possible.  Others are unrealizable.
 
   else
   {
-    errno = EINVAL;
+    errno_r = EINVAL;
     return 1;
   }
 
@@ -94,29 +94,31 @@ int spimaster_init(uint32_t port,
   SPI_InitTypeDef  SPI_InitStructure;
   uint32_t prescaler;
 
+  errno_r = 0;
+
 // Validate parameters
 
   if ((port < 1) && (port > MAX_SPI_PORTS))
   {
-    errno = EINVAL;
+    errno_r = ENODEV;
     return 1;
   }
 
   if (clockmode > 3)
   {
-    errno = EINVAL;
+    errno_r = EINVAL;
     return 1;
   }
 
   if ((wordsize != 8) && (wordsize != 16))
   {
-    errno = EINVAL;
+    errno_r = EINVAL;
     return 1;
   }
 
   if (bigendian > 1)
   {
-    errno = EINVAL;
+    errno_r = EINVAL;
     return 1;
   }
 

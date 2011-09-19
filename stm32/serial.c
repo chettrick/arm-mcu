@@ -9,11 +9,9 @@
 static const char revision[] = "$Id$";
 
 #include <cpu.h>
+#include <errno.h>
 #include <stdio.h>
 #include <string.h>
-#include <errno.h>
-#undef errno
-extern int errno;
 
 static USART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
 {
@@ -29,11 +27,11 @@ int serial_init(unsigned port, unsigned long int baudrate)
   USART_InitTypeDef USART_config;
   GPIO_InitTypeDef GPIO_config;
 
-  errno = 0;
+  errno_r = 0;
 
   if ((port < 1) || (port > MAX_SERIAL_PORTS))
   {
-    errno = ENODEV;
+    errno_r = ENODEV;
     return -1;
   }
 
@@ -180,7 +178,7 @@ int serial_init(unsigned port, unsigned long int baudrate)
       break;
 
     default :
-      errno = ENODEV;
+      errno_r = ENODEV;
       return -1;
   }
 
@@ -204,11 +202,11 @@ int serial_stdio(unsigned port, unsigned long int baudrate)
 {
   int status;
 
-  errno = 0;
+  errno_r = 0;
 
   if ((port < 1) || (port > MAX_SERIAL_PORTS))
   {
-    errno = ENODEV;
+    errno_r = ENODEV;
     return -1;
   }
 
@@ -229,11 +227,11 @@ int serial_register(unsigned port, unsigned long int baudrate)
   int status;
   char name[DEVICE_NAME_SIZE];
 
-  errno = 0;
+  errno_r = 0;
 
   if ((port < 1) || (port > MAX_SERIAL_PORTS))
   {
-    errno = ENODEV;
+    errno_r = ENODEV;
     return -1;
   }
 
@@ -253,11 +251,11 @@ int serial_register(unsigned port, unsigned long int baudrate)
 
 int serial_txready(unsigned port)
 {
-  errno = 0;
+  errno_r = 0;
 
   if ((port < 1) || (port > MAX_SERIAL_PORTS))
   {
-    errno = ENODEV;
+    errno_r = ENODEV;
     return -1;
   }
 
@@ -271,11 +269,11 @@ int serial_txready(unsigned port)
 
 int serial_write(unsigned port, char *buf, unsigned int count)
 {
-  errno = 0;
+  errno_r = 0;
 
   if ((port < 1) || (port > MAX_SERIAL_PORTS))
   {
-    errno = ENODEV;
+    errno_r = ENODEV;
     return -1;
   }
 
@@ -292,11 +290,11 @@ int serial_write(unsigned port, char *buf, unsigned int count)
 
 int serial_rxready(unsigned port)
 {
-  errno = 0;
+  errno_r = 0;
 
   if ((port < 1) || (port > MAX_SERIAL_PORTS))
   {
-    errno = ENODEV;
+    errno_r = ENODEV;
     return -1;
   }
 
@@ -310,11 +308,11 @@ int serial_rxready(unsigned port)
 
 int serial_read(unsigned port, char *buf, unsigned int count)
 {
-  errno = 0;
+  errno_r = 0;
 
   if ((port < 1) || (port > MAX_SERIAL_PORTS))
   {
-    errno = ENODEV;
+    errno_r = ENODEV;
     return -1;
   }
 

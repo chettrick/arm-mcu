@@ -2,16 +2,14 @@
 
 // $Id$
 
-extern unsigned long int CPUFREQ;
-
-extern void cpu_init(unsigned long int frequency);
-
 #include <device.h>
 #include <gpiopins.h>
 #include <leds.h>
 #include <serial.h>
 #include <spi.h>
 #include <stm32f10x.h>
+
+#define errno_r			(*(__errno()))
 
 #ifndef TRUE
 #define TRUE			1
@@ -71,3 +69,6 @@ extern void cpu_init(unsigned long int frequency);
 #define sscanf(...)		siscanf(__VA_ARGS__)
 #define fscanf(...)		fiscanf(__VA_ARGS__)
 #endif
+
+extern void __use_custom_syscalls(void);
+extern void cpu_init(unsigned long int frequency);
