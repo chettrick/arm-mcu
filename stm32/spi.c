@@ -7,14 +7,26 @@ static const char revision[] = "$Id$";
 #include <cpu.h>
 #include <errno.h>
 #include <stdint.h>
+#include <stdio.h>
 
-// Map SPI port number to pointer to control structure
+// Map SPI port number to control structure
 
 static SPI_TypeDef * const SPI_PORTS[MAX_SPI_PORTS] =
 {
   SPI1,
   SPI2,
   SPI3,
+};
+
+// Map SPI port number to GPIO pin for NSS.  We manipulate NSS via GPIO bit
+// banding, because the STM32 SPI controller doesn't automatically assert
+// and deassert NSS.
+
+static uint32_t * const SPI_NSS_PIN[MAX_SPI_PORTS] =
+{
+  &GPIOPIN4OUT,
+  &GPIOPIN28OUT,
+  &GPIOPIN41OUT,
 };
 
 /*****************************************************************************/
@@ -85,6 +97,134 @@ static int SPI_Clock_Prescaler(uint32_t port,
 
 /*****************************************************************************/
 
+static int SPI_Configure_Pins(uint32_t port)
+{
+  GPIO_InitTypeDef GPIO_config;
+
+  switch (port)
+  {
+    case 1 :
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+
+      // Configure NSS pin
+
+      gpiopin_configure(GPIOPIN4, GPIOPIN_OUTPUT);	// Use PA4 for NSS
+
+      // Configure SCK pin
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_5;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOA, &GPIO_config);
+
+      // Configure MISO pin
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_6;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOA, &GPIO_config);
+
+      // Configure MOSI pin
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_7;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOA, &GPIO_config);
+      break;
+
+    case 2 :
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+
+      // Configure NSS pin
+
+      gpiopin_configure(GPIOPIN28, GPIOPIN_OUTPUT);	// Use PB12 for NSS
+
+      // Configure SCK pin
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_13;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOB, &GPIO_config);
+
+      // Configure MISO pin
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_14;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOB, &GPIO_config);
+
+      // Configure MOSI pin
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_15;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOB, &GPIO_config);
+      break;
+
+    case 3 :
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE);
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+
+      // Configure NSS pin--Note we are using PC9 instead of PA4 or PA15!
+
+      gpiopin_configure(GPIOPIN41, GPIOPIN_OUTPUT);	// Use PC9 for NSS
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_9;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_Out_PP;
+      GPIO_Init(GPIOC, &GPIO_config);
+
+      // Configure SCK pin
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_10;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOC, &GPIO_config);
+
+      // Configure MISO pin
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_11;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOC, &GPIO_config);
+
+      // Configure MOSI pin
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_12;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_Init(GPIOC, &GPIO_config);
+
+      // Remap SPI3 pins; default pinout conflicts with JTAG
+
+      GPIO_PinRemapConfig(GPIO_Remap_SPI3, ENABLE);
+      break;
+
+    default :
+      errno_r = EINVAL;
+      return 1;
+  }
+
+  return 0;
+}
+
+/*****************************************************************************/
+
 int spimaster_init(uint32_t port,
                    uint32_t clockmode,
                    uint32_t speed,
@@ -127,6 +267,15 @@ int spimaster_init(uint32_t port,
   if (SPI_Clock_Prescaler(port, speed, &prescaler))
     return 1;
 
+// Configure I/O pins
+
+  if (SPI_Configure_Pins(port))
+    return 1;
+
+// Deassert NSS
+
+  *SPI_NSS_PIN[port-1] = 0;
+
 // Initialize the SPI port
 
   SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
@@ -140,10 +289,65 @@ int spimaster_init(uint32_t port,
   SPI_InitStructure.SPI_FirstBit = 
     bigendian ? SPI_FirstBit_MSB : SPI_FirstBit_LSB;
   SPI_InitStructure.SPI_CRCPolynomial = 7;
-  SPI_Init(SPI_PORTS[port], &SPI_InitStructure);
+  SPI_Init(SPI_PORTS[port-1], &SPI_InitStructure);
 
 // Enable SPI port
 
-  SPI_Cmd(SPI_PORTS[port], ENABLE);
+  SPI_Cmd(SPI_PORTS[port-1], ENABLE);
+  return 0;
+}
+
+/*****************************************************************************/
+
+// Transmit data
+
+int spimaster_transmit(uint32_t port,
+                       void *src,
+                       size_t count)
+{
+  errno_r = 0;
+
+// Validate parameters
+
+  if ((port < 1) && (port > MAX_SPI_PORTS))
+  {
+    errno_r = ENODEV;
+    return 1;
+  }
+
+// Assert NSS
+
+  *SPI_NSS_PIN[port-1] = 0;
+
+// Transfer data out
+
+  if (SPI_PORTS[port-1]->CR1 & SPI_DataSize_16b)
+  {
+    uint16_t *wordptr = src;
+
+    while (count--)
+    {
+      while (SPI_I2S_GetFlagStatus(SPI_PORTS[port-1], SPI_I2S_FLAG_TXE) == RESET);
+      SPI_I2S_SendData(SPI1, *wordptr++);
+    }
+  }
+  else
+  {
+    uint8_t *byteptr = src;
+
+    while (count--)
+    {
+      while (SPI_I2S_GetFlagStatus(SPI_PORTS[port-1], SPI_I2S_FLAG_TXE) == RESET);
+      SPI_I2S_SendData(SPI1, *byteptr++);
+    }
+  }
+
+// Wait until the transfer is complete
+
+  while (SPI_I2S_GetFlagStatus(SPI_PORTS[port-1], SPI_I2S_FLAG_BSY) != RESET);
+
+// Deassert NSS
+
+  *SPI_NSS_PIN[port-1] = 1;
   return 0;
 }

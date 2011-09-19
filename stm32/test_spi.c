@@ -47,5 +47,17 @@ int main(void)
     assert(FALSE);
   }
 
-  exit(0);
+  for (;;)
+  {
+    printf("Press ENTER to send a byte...");
+    fflush(stdout);
+    fflush(stdin);
+    getchar();
+
+    if (spimaster_transmit(SPI_PORT, "AA", 2))
+    {
+      fprintf(stderr, "ERROR: spimaster_transmit() failed, %s\n", strerror(errno));
+      assert(FALSE);
+    }
+  }
 }
