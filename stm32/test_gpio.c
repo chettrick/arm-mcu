@@ -6,7 +6,7 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 
-void main(void)
+int main(void)
 {
   unsigned long i;
 
