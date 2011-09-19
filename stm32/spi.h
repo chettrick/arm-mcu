@@ -8,6 +8,8 @@
 
 #define MAX_SPI_PORTS		3
 
-int spimaster_init8(uint32_t port, uint32_t clockmode, uint32_t speed, int bigendian);
-
-int spimaster_init16(uint32_t port, uint32_t clockmode, uint32_t speed, int bigendian);
+int spimaster_init(uint32_t port,
+                   uint32_t clockmode,
+                   uint32_t speed,
+                   uint32_t wordsize,
+                   uint32_t bigendian);
