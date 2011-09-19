@@ -13,6 +13,14 @@ extern void cpu_init(unsigned long int frequency);
 
 #include <LPC17xx.h>
 
+#ifndef TRUE
+#define TRUE			1
+#endif
+
+#ifndef FALSE
+#define FALSE			0
+#endif
+
 #define CPUFREQ			SystemCoreClock
 #define DEFAULT_CPU_FREQ	100000000
 

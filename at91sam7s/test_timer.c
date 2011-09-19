@@ -10,9 +10,6 @@ static const char revision[] = "$Id$";
 #include "aic.h"
 #include "pit.h"
 
-#define TRUE	1
-#define	FALSE	0
-
 volatile int TimerCounter = 0;
 volatile int TimerFlag = FALSE;
 

@@ -13,6 +13,14 @@ extern void cpu_init(unsigned long int frequency);
 
 #include <LPC23xx.h>
 
+#ifndef TRUE
+#define TRUE			1
+#endif
+
+#ifndef FALSE
+#define FALSE			0
+#endif
+
 #ifndef DEFAULT_CPU_FREQ
 #ifdef REVISION_A
 #define DEFAULT_CPU_FREQ	48000000

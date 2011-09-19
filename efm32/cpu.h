@@ -41,6 +41,14 @@
 
 extern void cpu_init(unsigned long int frequency);
 
+#ifndef TRUE
+#define TRUE			1
+#endif
+
+#ifndef FALSE
+#define FALSE			0
+#endif
+
 #define CPUFREQ			SystemCoreClock
 #define DEFAULT_CPU_FREQ	32000000UL
 

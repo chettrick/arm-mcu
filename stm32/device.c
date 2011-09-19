@@ -697,7 +697,7 @@ int device_stat(int fd, struct stat *st)
       break;
 
     default :
-      assert(0);
+      assert(FALSE);
   }
 
   return 0;

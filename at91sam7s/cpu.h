@@ -11,6 +11,14 @@
 extern void cpu_init(unsigned long int frequency);
 extern unsigned long int CPUFREQ;
 
+#ifndef TRUE
+#define TRUE			1
+#endif
+
+#ifndef FALSE
+#define FALSE			0
+#endif
+
 #ifndef DEFAULT_CPU_FREQ
 #define DEFAULT_CPU_FREQ	48000000
 #endif

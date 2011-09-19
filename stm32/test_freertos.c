@@ -81,7 +81,7 @@ int main(void)
   {
     puts("ERROR: xSemaphoreCreateMutex() for console_lock failed!");
     fflush(stdout);
-    assert(0);
+    assert(FALSE);
   }
 
 // Create a couple of tasks
@@ -90,30 +90,30 @@ int main(void)
   {
     puts("ERROR: xTaskCreate() for task1 failed!");
     fflush(stdout);
-    assert(0);
+    assert(FALSE);
   }
 
   if (xTaskCreate(putsTaskFunction, (signed char *) "task2", 256, "This is Task 2", 1, &task2) != pdPASS)
   {
     puts("ERROR: xTaskCreate() for task2 failed!");
     fflush(stdout);
-    assert(0);
+    assert(FALSE);
   }
 
   if (xTaskCreate(LEDTaskFunction, (signed char *) "task3", 256, NULL, 1, &task3) != pdPASS)
   {
     puts("ERROR: xTaskCreate() for task3 failed!");
     fflush(stdout);
-    assert(0);
+    assert(FALSE);
   }
 
   vTaskStartScheduler();
-  assert(0);
+  assert(FALSE);
 }
 
 void vApplicationStackOverflowHook(xTaskHandle *pxTask, signed char *pcTaskName)
 {
   printf("ERROR: vApplicationStackOverflowHook(): Task \"%s\" overflowed its stack\n", pcTaskName);
   fflush(stdout);
-  assert(0);
+  assert(FALSE);
 }

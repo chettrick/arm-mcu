@@ -29,3 +29,5 @@ $Id$
 
 13. Removed debug_frmwrk.h, debug_frmwrk.c, and associated goop in
     lpc17xx_libcfg_default.h
+
+14. Undefine macros for TRUE and FALSE in lpc_types.h before the Bool typedef.
