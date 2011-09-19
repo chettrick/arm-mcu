@@ -13,10 +13,26 @@ static const char revision[] = "$Id$";
 #include <string.h>
 #include <unistd.h>
 
+#ifndef SPI_PORT
+#ifdef OLIMEX_STM32_P103
+#define SPI_PORT	1
+#endif
+
+#ifdef OLIMEX_STM32_P107
+#define SPI_PORT	3
+#endif
+
+#ifdef STM32_VALUE_LINE_DISCOVERY
+#define SPI_PORT	1
+#endif
+
+#ifdef W5200E01_M3
+#define SPI_PORT	2
+#endif
+#endif
+
 int main(void)
 {
-  int status;
-
   cpu_init(DEFAULT_CPU_FREQ);
 
   serial_stdio(CONSOLE_PORT, 115200);
@@ -25,8 +41,7 @@ int main(void)
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
-  status = spimaster_init(1, 0, 12000000, 8, TRUE);
-  if (status)
+  if (spimaster_init(SPI_PORT, 0, 281250, 8, TRUE))
   {
     fprintf(stderr, "ERROR: spimaster_init() failed, %s\n", strerror(errno));
     assert(FALSE);
