@@ -47,5 +47,5 @@ int main(void)
     assert(FALSE);
   }
 
-  assert(FALSE);
+  exit(0);
 }
