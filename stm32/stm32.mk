@@ -21,6 +21,11 @@ LWIP_DIR	= $(ARMSRC)/lwip
 include $(LWIP_DIR)/LWIP.mk
 endif
 
+ifeq ($(WITH_WIZNET), yes)
+WIZNET_DIR	= $(ARMSRC)/wiznet
+include $(WIZNET_DIR)/wiznet.mk
+endif
+
 LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o spi.o syscalls.o
 
 JLINKADDR	= 0x08000000
@@ -53,6 +58,9 @@ endif
 ifeq ($(WITH_LWIP), yes)
 	$(MAKE) lwip_lib
 endif
+ifeq ($(WITH_WIZNET), yes)
+	$(MAKE) wiznet_lib
+endif
 
 lib: lib$(MCU).a
 
@@ -81,6 +89,9 @@ ifeq ($(WITH_FREERTOS), yes)
 endif
 ifeq ($(WITH_LWIP), yes)
 	$(MAKE) lwip_clean
+endif
+ifeq ($(WITH_WIZNET), yes)
+	$(MAKE) wiznet_clean
 endif
 
 reallyclean_$(MCU): clean_$(MCU)
