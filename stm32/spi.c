@@ -314,9 +314,9 @@ int spimaster_init(uint32_t port,
 
 int spimaster_transfer(uint32_t port,
                        uint8_t *txbuf,
-                       size_t txcount,
+                       uint32_t txcount,
                        uint8_t *rxbuf,
-                       size_t rxcount)
+                       uint32_t rxcount)
 {
   errno_r = 0;
 
