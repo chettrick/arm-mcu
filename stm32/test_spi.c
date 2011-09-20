@@ -41,7 +41,7 @@ int main(void)
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
-  if (spimaster_init(SPI_PORT, 0, 281250, 8, TRUE))
+  if (spimaster_init(SPI_PORT, 0, 281250, TRUE))
   {
     fprintf(stderr, "ERROR: spimaster_init() failed, %s\n", strerror(errno));
     assert(FALSE);
@@ -54,7 +54,7 @@ int main(void)
     fflush(stdin);
     getchar();
 
-    if (spimaster_transmit(SPI_PORT, "AA", 2))
+    if (spimaster_transmit(SPI_PORT, (unsigned char *) "AA", 2))
     {
       fprintf(stderr, "ERROR: spimaster_transmit() failed, %s\n", strerror(errno));
       assert(FALSE);

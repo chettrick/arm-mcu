@@ -239,7 +239,6 @@ static int SPI_Configure_Pins(uint32_t port)
 int spimaster_init(uint32_t port,
                    uint32_t clockmode,
                    uint32_t speed,
-                   uint32_t wordsize,
                    uint32_t bigendian)
 {
   SPI_InitTypeDef  SPI_InitStructure;
@@ -256,12 +255,6 @@ int spimaster_init(uint32_t port,
   }
 
   if (clockmode > 3)
-  {
-    errno_r = EINVAL;
-    return 1;
-  }
-
-  if ((wordsize != 8) && (wordsize != 16))
   {
     errno_r = EINVAL;
     return 1;
@@ -291,8 +284,7 @@ int spimaster_init(uint32_t port,
 
   SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
   SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
-  SPI_InitStructure.SPI_DataSize =
-    (wordsize == 8) ? SPI_DataSize_8b : SPI_DataSize_16b;
+  SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
   SPI_InitStructure.SPI_CPOL = clockmode & 0x02;
   SPI_InitStructure.SPI_CPHA = clockmode & 0x01;
   SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
@@ -313,8 +305,8 @@ int spimaster_init(uint32_t port,
 // Transmit data
 
 int spimaster_transmit(uint32_t port,
-                       void *src,
-                       size_t count)
+                       uint8_t *txbuf,
+                       size_t txcount)
 {
   errno_r = 0;
 
@@ -332,25 +324,10 @@ int spimaster_transmit(uint32_t port,
 
 // Transfer data out
 
-  if (SPI_PORTS[port-1]->CR1 & SPI_DataSize_16b)
+  while (txcount--)
   {
-    uint16_t *wordptr = src;
-
-    while (count--)
-    {
-      while (SPI_I2S_GetFlagStatus(SPI_PORTS[port-1], SPI_I2S_FLAG_TXE) == RESET);
-      SPI_I2S_SendData(SPI1, *wordptr++);
-    }
-  }
-  else
-  {
-    uint8_t *byteptr = src;
-
-    while (count--)
-    {
-      while (SPI_I2S_GetFlagStatus(SPI_PORTS[port-1], SPI_I2S_FLAG_TXE) == RESET);
-      SPI_I2S_SendData(SPI1, *byteptr++);
-    }
+    while (SPI_I2S_GetFlagStatus(SPI_PORTS[port-1], SPI_I2S_FLAG_TXE) == RESET);
+    SPI_I2S_SendData(SPI1, *txbuf++);
   }
 
 // Wait until the transfer is complete
