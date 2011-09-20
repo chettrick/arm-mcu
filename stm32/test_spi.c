@@ -13,6 +13,8 @@ static const char revision[] = "$Id$";
 #include <string.h>
 #include <unistd.h>
 
+#define SPI_PORT 1
+
 #ifndef SPI_PORT
 #ifdef OLIMEX_STM32_P103
 #define SPI_PORT	1
@@ -33,6 +35,11 @@ static const char revision[] = "$Id$";
 
 int main(void)
 {
+  int status;
+  char buf[256];
+  uint8_t commandbyte;
+  uint8_t responsebyte;
+
   cpu_init(DEFAULT_CPU_FREQ);
 
   serial_stdio(CONSOLE_PORT, 115200);
@@ -41,23 +48,26 @@ int main(void)
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
-  if (spimaster_init(SPI_PORT, 0, 281250, TRUE))
+  if ((status = spimaster_init(SPI_PORT, 0, 281250, TRUE)))
   {
-    fprintf(stderr, "ERROR: spimaster_init() failed, %s\n", strerror(errno));
+    fprintf(stderr, "ERROR: spimaster_init() failed at line %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
 
   for (;;)
   {
-    printf("Press ENTER to send a byte...");
+    printf("Enter a value to send: ");
     fflush(stdout);
     fflush(stdin);
-    getchar();
+    gets(buf);
+    commandbyte = atoi(buf);
 
-    if (spimaster_transmit(SPI_PORT, (unsigned char *) "AA", 2))
+    if ((status = spimaster_transfer(SPI_PORT, &commandbyte, 1, &responsebyte, 1)))
     {
-      fprintf(stderr, "ERROR: spimaster_transmit() failed, %s\n", strerror(errno));
+      fprintf(stderr, "ERROR: spimaster_transfer() failed at line %d, %s\n", status, strerror(errno));
       assert(FALSE);
     }
+
+    printf("Response was %02X\n\n", responsebyte);
   }
 }

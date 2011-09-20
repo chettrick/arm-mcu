@@ -6,8 +6,6 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 #include <errno.h>
-#include <stdint.h>
-#include <stdio.h>
 
 // Map SPI port number to control structure
 
@@ -17,6 +15,8 @@ static SPI_TypeDef * const SPI_PORTS[MAX_SPI_PORTS] =
   SPI2,
   SPI3,
 };
+
+#define SPIx	(SPI_PORTS[port-1])
 
 // Map SPI port number to GPIO pin for NSS.  We manipulate NSS via GPIO bit
 // banding, because the STM32 SPI controller doesn't automatically assert
@@ -35,6 +35,8 @@ static uint32_t * const SPI_NSS_PIN[MAX_SPI_PORTS] =
   &GPIOPIN41OUT,
 #endif
 };
+
+#define SPIx_NSS	(*SPI_NSS_PIN[port-1])
 
 /*****************************************************************************/
 
@@ -69,7 +71,7 @@ static int SPI_Clock_Prescaler(uint32_t port,
 
     default :
       errno_r = ENODEV;
-      return 1;
+      return __LINE__;
   }
 
 // Calculate SPI clock prescaler from desired SPI clock rate and PCLK rate
@@ -96,7 +98,7 @@ static int SPI_Clock_Prescaler(uint32_t port,
   else
   {
     errno_r = EINVAL;
-    return 1;
+    return __LINE__;
   }
 
   return 0;
@@ -107,6 +109,8 @@ static int SPI_Clock_Prescaler(uint32_t port,
 static int SPI_Configure_Pins(uint32_t port)
 {
   GPIO_InitTypeDef GPIO_config;
+
+  errno_r = 0;
 
   switch (port)
   {
@@ -228,7 +232,7 @@ static int SPI_Configure_Pins(uint32_t port)
 
     default :
       errno_r = EINVAL;
-      return 1;
+      return __LINE__;
   }
 
   return 0;
@@ -236,13 +240,16 @@ static int SPI_Configure_Pins(uint32_t port)
 
 /*****************************************************************************/
 
+// Initialize SPI port for bidirection master mode
+
 int spimaster_init(uint32_t port,
                    uint32_t clockmode,
                    uint32_t speed,
                    uint32_t bigendian)
 {
-  SPI_InitTypeDef  SPI_InitStructure;
+  int status;
   uint32_t prescaler;
+  SPI_InitTypeDef  SPI_InitStructure;
 
   errno_r = 0;
 
@@ -251,34 +258,34 @@ int spimaster_init(uint32_t port,
   if ((port < 1) && (port > MAX_SPI_PORTS))
   {
     errno_r = ENODEV;
-    return 1;
+    return __LINE__;
   }
 
   if (clockmode > 3)
   {
     errno_r = EINVAL;
-    return 1;
+    return __LINE__;
   }
 
   if (bigendian > 1)
   {
     errno_r = EINVAL;
-    return 1;
+    return __LINE__;
   }
 
 // Get SPI clock prescaler
 
-  if (SPI_Clock_Prescaler(port, speed, &prescaler))
-    return 1;
+  if ((status = SPI_Clock_Prescaler(port, speed, &prescaler)))
+    return status;
 
 // Configure I/O pins
 
-  if (SPI_Configure_Pins(port))
-    return 1;
+  if ((status = SPI_Configure_Pins(port)))
+    return status;
 
 // Deassert NSS
 
-  *SPI_NSS_PIN[port-1] = 0;
+  SPIx_NSS = 1;
 
 // Initialize the SPI port
 
@@ -297,16 +304,19 @@ int spimaster_init(uint32_t port,
 // Enable SPI port
 
   SPI_Cmd(SPI_PORTS[port-1], ENABLE);
+
   return 0;
 }
 
 /*****************************************************************************/
 
-// Transmit data
+// Transmit command and/or receive result in bidirectional master mode
 
-int spimaster_transmit(uint32_t port,
+int spimaster_transfer(uint32_t port,
                        uint8_t *txbuf,
-                       size_t txcount)
+                       size_t txcount,
+                       uint8_t *rxbuf,
+                       size_t rxcount)
 {
   errno_r = 0;
 
@@ -315,27 +325,63 @@ int spimaster_transmit(uint32_t port,
   if ((port < 1) && (port > MAX_SPI_PORTS))
   {
     errno_r = ENODEV;
-    return 1;
+    return __LINE__;
+  }
+
+  if ((txbuf == NULL) && (txcount != 0))
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
+
+  if ((txcount == 0) && (txbuf != NULL))
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
+
+  if ((rxbuf == NULL) && (rxcount != 0))
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
+
+  if ((rxcount == 0) && (rxbuf != NULL))
+  {
+    errno_r = EINVAL;
+    return __LINE__;
   }
 
 // Assert NSS
 
-  *SPI_NSS_PIN[port-1] = 0;
+  SPIx_NSS = 0;
 
-// Transfer data out
+// Transfer command data out
 
   while (txcount--)
   {
-    while (SPI_I2S_GetFlagStatus(SPI_PORTS[port-1], SPI_I2S_FLAG_TXE) == RESET);
-    SPI_I2S_SendData(SPI1, *txbuf++);
+    while (!(SPIx->SR & SPI_I2S_FLAG_TXE));
+    SPIx->DR = *txbuf++;
+    while (!(SPIx->SR & SPI_I2S_FLAG_RXNE));
+    (void) SPIx->DR;
+  }
+
+// Transfer response data in
+
+  while (rxcount--)
+  {
+    while (!(SPIx->SR & SPI_I2S_FLAG_TXE));
+    SPIx->DR = 0;
+    while (!(SPIx->SR & SPI_I2S_FLAG_RXNE));
+    *rxbuf++ = SPIx->DR;
   }
 
 // Wait until the transfer is complete
 
-  while (SPI_I2S_GetFlagStatus(SPI_PORTS[port-1], SPI_I2S_FLAG_BSY) != RESET);
+  while (SPIx->SR & SPI_I2S_FLAG_BSY);
 
 // Deassert NSS
 
-  *SPI_NSS_PIN[port-1] = 1;
+  SPIx_NSS = 1;
   return 0;
 }
