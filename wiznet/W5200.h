@@ -2,6 +2,8 @@
 
 // $Id$
 
+#include <stdint.h>
+
 // Common Registers
 
 #define	W5200_MR		0x0000
@@ -48,3 +50,11 @@
 #define W5200_Sn_RX_WR(s)	(W5200_SOCKET_REG(s) + 0x2A)
 #define W5200_Sn_IMR(s)		(W5200_SOCKET_REG(s) + 0x2C)
 #define W5200_Sn_FRAG(s)	(W5200_SOCKET_REG(s) + 0x2D)
+
+int W5200_initialize(uint32_t spiport);
+
+int W5200_write_register(uint16_t address, uint8_t data);
+
+int W5200_read_register(uint16_t address, uint8_t *data);
+
+int W5200_set_gateway(uint32_t address);
