@@ -51,10 +51,26 @@
 #define W5200_Sn_IMR(s)		(W5200_SOCKET_REG(s) + 0x2C)
 #define W5200_Sn_FRAG(s)	(W5200_SOCKET_REG(s) + 0x2D)
 
-int W5200_initialize(uint32_t spiport);
+// W5200 register bit masks
 
+#define W5200_MR_RST		0x80
+#define W5200_MR_PB		0x10
+#define W5200_MR_PPPOE_ENABLE	0x08
+
+#define W5200_IR_CONFLICT	0x80
+#define W5200_IR_PPPOE_CLOSE	0x20
+
+#define W5200_IMR_CONFLICT	0x80
+#define W5200_IMR_PPPOE_CLOSE	0x20
+
+#define W5200_PSTATUS_LINK	0x20
+#define W5200_PSTATUS_POWERDOWN	0x08
+
+// W5200 driver functions
+
+int W5200_initialize(uint32_t spiportnum);
 int W5200_write_register(uint16_t address, uint8_t data);
-
 int W5200_read_register(uint16_t address, uint8_t *data);
-
-int W5200_set_gateway(uint32_t address);
+int W5200_set_hardware_address(uint8_t *address);
+int W5200_get_hardware_address(uint8_t *address);
+int W5200_configure_network(uint32_t ipaddress, uint32_t subnet, uint32_t gateway);
