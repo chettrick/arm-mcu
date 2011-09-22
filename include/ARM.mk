@@ -117,12 +117,55 @@ update:
 	svn status
 	svn update
 
+# Support for FreeRTOS
+
+ifeq ($(WITH_FREERTOS), yes)
+FREERTOS_DIR	= $(ARMSRC)/FreeRTOS/Cortex-M3
+include $(FREERTOS_DIR)/FreeRTOS.mk
+endif
+
+# Support for LWIP TCP/IP protocol stack
+
+ifeq ($(WITH_LWIP), yes)
+LWIP_DIR        = $(ARMSRC)/lwip
+include $(LWIP_DIR)/LWIP.mk
+endif
+
+# Support for WizNet device drivers
+
+ifeq ($(WITH_WIZNET), yes)
+WIZNET_DIR      = $(ARMSRC)/wiznet
+include $(WIZNET_DIR)/wiznet.mk
+endif
+
+# Build other library components
+
+otherlibs:
+ifeq ($(WITH_FREERTOS), yes)
+	$(MAKE) freertos_lib
+endif
+ifeq ($(WITH_LWIP), yes)
+	$(MAKE) lwip_lib
+endif
+ifeq ($(WITH_WIZNET), yes)
+	$(MAKE) wiznet_lib
+endif
+
 # Clean out working files
 
 clean:
 	cd $(MCUDIR) && $(MAKE) clean_$(MCU)
 	find * -name '*.o' -exec rm {} ";"
 	rm -f *.a *.asm *.bin *.elf *.hex *.log *.map *.tmp Default.ini
+ifeq ($(WITH_FREERTOS), yes)
+	$(MAKE) freertos_clean
+endif
+ifeq ($(WITH_LWIP), yes)
+	$(MAKE) lwip_clean
+endif
+ifeq ($(WITH_WIZNET), yes)
+	$(MAKE) wiznet_clean
+endif
 
 reallyclean: clean
 	cd $(MCUDIR) && $(MAKE) reallyclean_$(MCU)

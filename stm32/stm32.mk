@@ -11,21 +11,6 @@ CMSIS		= $(MCUDIR)/CMSIS
 CFLAGS		+= -DSTM32F10X -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
-ifeq ($(WITH_FREERTOS), yes)
-FREERTOS_DIR	= $(ARMSRC)/FreeRTOS/Cortex-M3
-include $(FREERTOS_DIR)/FreeRTOS.mk
-endif
-
-ifeq ($(WITH_LWIP), yes)
-LWIP_DIR	= $(ARMSRC)/lwip
-include $(LWIP_DIR)/LWIP.mk
-endif
-
-ifeq ($(WITH_WIZNET), yes)
-WIZNET_DIR	= $(ARMSRC)/wiznet
-include $(WIZNET_DIR)/wiznet.mk
-endif
-
 LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o spi.o syscalls.o
 
 JLINKADDR	= 0x08000000
@@ -52,15 +37,7 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	for F in $(CMSIS)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
-ifeq ($(WITH_FREERTOS), yes)
-	$(MAKE) freertos_lib
-endif
-ifeq ($(WITH_LWIP), yes)
-	$(MAKE) lwip_lib
-endif
-ifeq ($(WITH_WIZNET), yes)
-	$(MAKE) wiznet_lib
-endif
+	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
 
@@ -84,15 +61,6 @@ endif
 # Clean out working files
 
 clean_$(MCU):
-ifeq ($(WITH_FREERTOS), yes)
-	$(MAKE) freertos_clean
-endif
-ifeq ($(WITH_LWIP), yes)
-	$(MAKE) lwip_clean
-endif
-ifeq ($(WITH_WIZNET), yes)
-	$(MAKE) wiznet_clean
-endif
 
 reallyclean_$(MCU): clean_$(MCU)
 
