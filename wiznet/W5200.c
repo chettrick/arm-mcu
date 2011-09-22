@@ -4,30 +4,12 @@
 
 static const char revision[] = "$Id$";
 
-#include <spi.h>
-#include <stdint.h>
-#include <stdlib.h>
+#include <cpu.h>
 #include <W5200.h>
 
 static uint32_t spiport;
 
-int W5200_initialize(uint32_t spiportnum)
-{
-  int status;
-
-// Save SPI port number
-
-  spiport = spiportnum;
-
-// Initialize mode register
-
-  if ((status = W5200_write_register(W5200_MR, W5200_MR_PB)))
-    return status;
-
-  return 0;
-}
-
-int W5200_write_register(uint16_t address, uint8_t data)
+int W5200_write_register(uint16_t address, const uint8_t data)
 {
   uint8_t txbuf[5];
 
@@ -52,46 +34,88 @@ int W5200_read_register(uint16_t address, uint8_t *data)
   return spimaster_transfer(spiport, txbuf, 4, data, 1);
 }
 
-int W5200_set_hardware_address(uint8_t *address)
+int W5200_initialize(uint32_t const spiportnum)
+{
+  int status = 0;
+
+// Save SPI port number
+
+  spiport = spiportnum;
+
+// Initialize mode register
+
+  if ((status = W5200_write_register(W5200_MR, 0)))
+    return status;
+
+  return status;
+}
+
+int W5200_set_hardware_address(const uint8_t *address)
 {
   int i;
-  int status;
+  int status = 0;
 
   for (i = 0; i < 6; i++)
     if ((status = W5200_write_register(W5200_SHAR+i, *address++)))
       return status;
 
-  return 0;
+  return status;
 }
 
 int W5200_get_hardware_address(uint8_t *address)
 {
   int i;
-  int status;
+  int status = 0;
 
   for (i = 0; i < 6; i++)
     if ((status = W5200_read_register(W5200_SHAR+i, address++)))
       return status;
 
-  return 0;
+  return status;
 }
 
-int W5200_configure_network(uint32_t ipaddress, uint32_t subnet, uint32_t gateway)
+int W5200_configure_network(const ipv4address_t address,
+                            const ipv4address_t subnet,
+                            const ipv4address_t gateway)
 {
   int i;
-  int status;
+  int status = 0;
 
   for (i = 0; i < 4; i++)
-    if ((status = W5200_write_register(W5200_SIPR+i, (ipaddress >> ((3-i)*8)) & 0xFF)))
+    if ((status = W5200_write_register(W5200_SIPR+i, address[i])))
       return status;
 
   for (i = 0; i < 4; i++)
-    if ((status = W5200_write_register(W5200_SUBR+i, (ipaddress >> ((3-i)*8)) & 0xFF)))
+    if ((status = W5200_write_register(W5200_SUBR+i, subnet[i])))
       return status;
 
   for (i = 0; i < 4; i++)
-    if ((status = W5200_write_register(W5200_GAR+i,  (ipaddress >> ((3-i)*8)) & 0xFF)))
+    if ((status = W5200_write_register(W5200_GAR+i,  gateway[i])))
       return status;
 
-  return 0;
+  return status;
+}
+
+int W5200_get_ipaddress(ipv4address_t address)
+{
+  int i;
+  int status = 0;
+
+  for (i = 0; i < 4; i++)
+    if ((status = W5200_read_register(W5200_SIPR+i, &address[i])))
+      return status;
+
+  return status;
+}
+
+int W5200_get_linkstate(int *linkstate)
+{
+  int status = 0;
+  uint8_t data;
+
+  if ((status = W5200_read_register(W5200_PSTATUS, &data)))
+    return status;
+
+  *linkstate = data & W5200_PSTATUS_LINK ? TRUE : FALSE;
+  return status;
 }
