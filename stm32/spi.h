@@ -8,6 +8,9 @@
 
 #define MAX_SPI_PORTS		3
 
+#define SPI_BIGENDIAN		1
+#define SPI_LITTLEENDIAN	0
+
 // Initialize SPI port for bidirection master mode
 
 int spimaster_init(uint32_t port,
