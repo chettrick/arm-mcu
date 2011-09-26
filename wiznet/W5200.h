@@ -89,3 +89,5 @@ int W5200_configure_network(const ipv4address_t address,
 int W5200_get_ipaddress(ipv4address_t address);
 
 int W5200_get_linkstate(int *linkstate);
+
+void W5200_tick(void);

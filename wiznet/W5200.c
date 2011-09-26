@@ -4,8 +4,16 @@
 
 static const char revision[] = "$Id$";
 
-#include <cpu.h>
+#include <spi.h>
 #include <W5200.h>
+
+#ifndef TRUE
+#define TRUE	1
+#endif
+
+#ifndef FALSE
+#define FALSE	0
+#endif
 
 static uint32_t spiport;
 
@@ -118,4 +126,8 @@ int W5200_get_linkstate(int *linkstate)
 
   *linkstate = data & W5200_PSTATUS_LINK ? TRUE : FALSE;
   return status;
+}
+
+void W5200_tick(void)
+{
 }
