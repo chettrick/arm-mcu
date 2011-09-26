@@ -12,10 +12,6 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-#ifndef NDEBUG
-  serial_stdio(CONSOLE_PORT, 115200);	// For assert()
-#endif
-
 #ifdef OLIMEX_STM32_P103
   gpiopin_configure(GPIOPIN44, GPIOPIN_OUTPUT);
 

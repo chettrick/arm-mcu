@@ -12,10 +12,6 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-#ifndef NDEBUG
-  serial_stdio(CONSOLE_PORT, 115200);	// For assert()
-#endif
-
 #ifdef EFM32_G8XX_STK
   gpiopin_configure(32, GPIOPIN_OUTPUT);
   gpiopin_configure(33, GPIOPIN_OUTPUT);
