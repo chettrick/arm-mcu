@@ -41,12 +41,22 @@ char *inet_ntop(int af, const void *src, char *dst, int size)
 int inet_pton(int af, const char *src, void *dst)
 {
   uint8_t *bytes = dst;
+  unsigned a, b, c, d;
 
   switch (af)
   {
     case AF_INET :
-      if (sscanf(src, "%hhu.%hhu.%hhu.%hhu", bytes+0, bytes+1, bytes+2, bytes+3) == 4)
+      // NOTE: sscanf() with %hhu corrupts the byte following the last argument
+      // so we convert to unsigned integers first and then copy them to the bytes.
+      if (sscanf(src, "%u.%u.%u.%u", &a, &b, &c, &d) == 4)
+      {
+        bytes[0] = a;
+        bytes[1] = b;
+        bytes[2] = c;
+        bytes[3] = d;
         return 1;
+      }
+      break;
 
       errno_r = EINVAL;
       return 0;
