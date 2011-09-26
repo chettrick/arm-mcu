@@ -5,6 +5,7 @@
 static const char revision[] = "$Id$";
 
 #include <spi.h>
+#include <stdlib.h>
 #include <W5200.h>
 
 #ifndef TRUE
