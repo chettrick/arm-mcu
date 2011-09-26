@@ -7,6 +7,8 @@ static const char revision[] = "$Id$";
 #include <cpu.h>
 #include <errno.h>
 
+#define MAX_SPI_PORTS		3
+
 // Map SPI port number to control structure
 
 static SPI_TypeDef * const SPI_PORTS[MAX_SPI_PORTS] =

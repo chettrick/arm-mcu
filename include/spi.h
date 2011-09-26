@@ -1,12 +1,8 @@
-/* Simple SPI master routines for STM32 */
+/* Simple SPI master routines */
 
 // $Id$
 
 #include <stdint.h>
-
-// STM32 SPI ports count from 1 (SPI1, SPI2)
-
-#define MAX_SPI_PORTS		3
 
 #define SPI_BIGENDIAN		1
 #define SPI_LITTLEENDIAN	0
