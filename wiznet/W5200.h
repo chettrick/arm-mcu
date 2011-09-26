@@ -72,9 +72,9 @@ typedef uint8_t ipv4address_t[4];
 
 // W5200 driver functions
 
-int W5200_write_register(uint16_t address, const uint8_t data);
+int W5200_write_register(const uint16_t address, const uint8_t data);
 
-int W5200_read_register(uint16_t address, uint8_t *data);
+int W5200_read_register(const uint16_t address, uint8_t *data);
 
 int W5200_initialize(const uint32_t spiportnum);
 

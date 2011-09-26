@@ -17,8 +17,9 @@ static const char revision[] = "$Id$";
 #endif
 
 static uint32_t spiport;
+static volatile uint32_t delaycounter = 0;
 
-int W5200_write_register(uint16_t address, const uint8_t data)
+int W5200_write_register(const uint16_t address, const uint8_t data)
 {
   uint8_t txbuf[5];
 
@@ -31,7 +32,7 @@ int W5200_write_register(uint16_t address, const uint8_t data)
   return spimaster_transfer(spiport, txbuf, 5, NULL, 0);
 }
 
-int W5200_read_register(uint16_t address, uint8_t *data)
+int W5200_read_register(const uint16_t address, uint8_t *data)
 {
   uint8_t txbuf[4];
 
@@ -43,7 +44,7 @@ int W5200_read_register(uint16_t address, uint8_t *data)
   return spimaster_transfer(spiport, txbuf, 4, data, 1);
 }
 
-int W5200_initialize(uint32_t const spiportnum)
+int W5200_initialize(const uint32_t spiportnum)
 {
   int status = 0;
 
@@ -59,25 +60,25 @@ int W5200_initialize(uint32_t const spiportnum)
   return status;
 }
 
-int W5200_set_hardware_address(const uint8_t *address)
+int W5200_set_hardware_address(const macaddress_t address)
 {
   int i;
   int status = 0;
 
   for (i = 0; i < 6; i++)
-    if ((status = W5200_write_register(W5200_SHAR+i, *address++)))
+    if ((status = W5200_write_register(W5200_SHAR+i, address[i])))
       return status;
 
   return status;
 }
 
-int W5200_get_hardware_address(uint8_t *address)
+int W5200_get_hardware_address(macaddress_t address)
 {
   int i;
   int status = 0;
 
   for (i = 0; i < 6; i++)
-    if ((status = W5200_read_register(W5200_SHAR+i, address++)))
+    if ((status = W5200_read_register(W5200_SHAR+i, &address[i])))
       return status;
 
   return status;
@@ -131,4 +132,6 @@ int W5200_get_linkstate(int *linkstate)
 
 void W5200_tick(void)
 {
+  if (delaycounter)
+    delaycounter--;
 }
