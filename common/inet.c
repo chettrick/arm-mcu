@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <inet.h>
 #include <stdio.h>
+#include <string.h>
 
 char *inet_ntop(int af, const void *src, char *dst, int size)
 {
