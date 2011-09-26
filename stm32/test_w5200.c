@@ -7,6 +7,7 @@ static const char revision[] = "$Id$";
 #include <assert.h>
 #include <cpu.h>
 #include <errno.h>
+#include <inet.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,6 +29,11 @@ const ipv4address_t ipaddress	= { 10, 0, 4, 129 };
 const ipv4address_t subnet	= { 255, 255, 255, 0 };
 const ipv4address_t gateway	= { 10, 0, 4, 1 };
 
+void SysTick_Handler(void)
+{
+  W5200_tick();
+}
+
 int main(void)
 {
   int status;
@@ -41,6 +47,10 @@ int main(void)
   puts("\033[H\033[2JSTM32 WizNet W5200 Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
+
+// Initialize System Tick with 10 ms time interval
+
+  SysTick_Config(SystemCoreClock / 100);
 
 // Initialize SPI hardware
 
