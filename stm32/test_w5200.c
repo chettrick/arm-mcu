@@ -15,29 +15,48 @@ static const char revision[] = "$Id$";
 #include <unistd.h>
 #include <W5200.h>
 
+#ifdef W5200E01_M3
+#define SPIPORT		1
+#define W5200_INT_PIN	GPIOPIN16
+#define W5200_INT	GPIOPIN16IN
+#define W5200_RESET_PIN	GPIOPIN24
+#define W5200_RESET	GPIOPIN24OUT
+#define W5200_PWDN_PIN	GPIOPIN25
+#define W5200_PWDN	GPIOPIN25OUT
+#endif
+
 // SPI port configuration
 
-#define SPIPORT		1
 #define SPICLOCKMODE	0
 #define SPISPEED	281250
-#define SPIENDIAN	TRUE
+#define SPIENDIAN	SPI_BIGENDIAN
 
 // Predefined addresses
 
 const macaddress_t macaddress	= { 0x02, 0x00, 0x00, 0x00, 0x00, 0x01 };
-const ipv4address_t ipaddress	= { 10, 0, 4, 129 };
-const ipv4address_t subnet	= { 255, 255, 255, 0 };
-const ipv4address_t gateway	= { 10, 0, 4, 1 };
+
+static volatile uint32_t delaycounter = 0;
 
 void SysTick_Handler(void)
 {
-  W5200_tick();
+  if (delaycounter)	// Decrement delay counter
+    delaycounter--;
+
+  W5200_tick();		// Call W5200 driver tick routine
+}
+
+void delay(uint32_t ticks)
+{
+  delaycounter = ticks;
+  while (delaycounter);
 }
 
 int main(void)
 {
   int status;
-  uint8_t buf[256];
+  macaddress_t macaddr;
+  ipv4address_t ipaddr, subnet, gateway;
+  char buf[256];
   int linkstate = FALSE;
 
   cpu_init(DEFAULT_CPU_FREQ);
@@ -52,6 +71,27 @@ int main(void)
 
   SysTick_Config(SystemCoreClock / 100);
 
+// Configure GPIO pins
+
+  gpiopin_configure(W5200_INT_PIN, GPIOPIN_INPUT);
+  gpiopin_configure(W5200_RESET_PIN, GPIOPIN_OUTPUT);
+  gpiopin_configure(W5200_PWDN_PIN, GPIOPIN_OUTPUT);
+
+// Deassert PWDN
+
+  W5200_PWDN = 0;
+  delay(2);
+
+// Assert nRST
+
+  W5200_RESET = 0;
+  delay(2);
+
+// Deassert nRST
+
+  W5200_RESET = 1;
+  delay(20);
+
 // Initialize SPI hardware
 
   if ((status = spimaster_init(SPIPORT, SPICLOCKMODE, SPISPEED, SPIENDIAN)))
@@ -59,6 +99,8 @@ int main(void)
     fprintf(stderr, "ERROR: spimaster_init() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
+
+// Initialize the W5200
 
   if ((status = W5200_initialize(SPIPORT)))
   {
@@ -72,28 +114,50 @@ int main(void)
     assert(FALSE);
   }
 
-  if ((status = W5200_get_hardware_address(buf)))
+  if ((status = W5200_get_hardware_address(macaddr)))
   {
     fprintf(stderr, "ERROR: W5200_get_hardware_address() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
 
   printf("W5200 MAC address is %02X:%02X:%02X:%02X:%02X:%02X\n",
-    buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]);
+    macaddr[0], macaddr[1], macaddr[2], macaddr[3], macaddr[4], macaddr[5]);
 
-  if ((status = W5200_configure_network(ipaddress, subnet, gateway)))
+  if (inet_pton(AF_INET, "10.0.4.129", ipaddr) != 1)
+  {
+    fprintf(stderr, "ERROR: inet_pton() failed, %s\n", strerror(errno));
+    assert(FALSE);
+  }
+  if (inet_pton(AF_INET, "255.255.255.0", subnet) != 1)
+  {
+    fprintf(stderr, "ERROR: inet_pton() failed, %s\n", strerror(errno));
+    assert(FALSE);
+  }
+  if (inet_pton(AF_INET, "10.0.4.1", gateway) != 1)
+  {
+    fprintf(stderr, "ERROR: inet_pton() failed, %s\n", strerror(errno));
+    assert(FALSE);
+  }
+
+  if ((status = W5200_configure_network(ipaddr, subnet, gateway)))
   {
     fprintf(stderr, "ERROR: W5200_configure_network() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
 
-  if ((status = W5200_get_ipaddress(buf)))
+  if ((status = W5200_get_ipaddress(ipaddr)))
   {
     fprintf(stderr, "ERROR: W5200_get_ip_address() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
 
-  printf("W5200 IP address is  %d.%d.%d.%d\n\n", buf[0], buf[1], buf[2], buf[3]);
+  if (inet_ntop(AF_INET, ipaddr, buf, sizeof(buf)))
+  {
+    fprintf(stderr, "ERROR: inet_ntop() failed, %s\n", strerror(errno));
+    assert(FALSE);
+  }
+
+  printf("W5200 IP address is  %d.%d.%d.%d\n\n", ipaddr[0], ipaddr[1], ipaddr[2], ipaddr[3]);
 
   for (;;)
   {

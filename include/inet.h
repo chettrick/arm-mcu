@@ -2,6 +2,11 @@
 
 // $Id$
 
+// Network protocol macros
+
+#define	AF_INET			2
+#define AF_INET6		10
+
 // Network byte order macros
 
 #if BYTE_ORDER == BIG_ENDIAN
@@ -17,3 +22,10 @@
 #else
 #error "Unsupported byte order!"
 #endif
+
+#define INET_ADDRSTRLEN		16
+#define INET6_ADDRSTRLEN	46
+
+char *inet_ntop(int af, const void *src, char *dst, int size);
+
+int inet_pton(int af, const char *src, void *dst);
