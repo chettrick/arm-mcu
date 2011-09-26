@@ -13,6 +13,8 @@ static const char revision[] = "$Id$";
 #include <stdio.h>
 #include <string.h>
 
+#define MAX_SERIAL_PORTS	2
+
 /* Define relocatable UART register definitions */
 
 static const unsigned long int UARTS[MAX_SERIAL_PORTS] =

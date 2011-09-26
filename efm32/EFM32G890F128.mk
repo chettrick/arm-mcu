@@ -11,7 +11,7 @@ CMSIS		= $(MCUDIR)/CMSIS
 CFLAGS		+= -DEFM32 -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
-LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o syscalls.o
+LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
 

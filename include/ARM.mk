@@ -117,6 +117,11 @@ update:
 	svn status
 	svn update
 
+# Support for common library functions
+
+COMMON_DIR	= $(ARMSRC)/common
+include $(COMMON_DIR)/common.mk
+
 # Support for FreeRTOS
 
 ifeq ($(WITH_FREERTOS), yes)
@@ -141,6 +146,7 @@ endif
 # Build other library components
 
 otherlibs:
+	$(MAKE) common_lib
 ifeq ($(WITH_FREERTOS), yes)
 	$(MAKE) freertos_lib
 endif
@@ -157,6 +163,7 @@ clean:
 	cd $(MCUDIR) && $(MAKE) clean_$(MCU)
 	find * -name '*.o' -exec rm {} ";"
 	rm -f *.a *.asm *.bin *.elf *.hex *.log *.map *.tmp Default.ini
+	$(MAKE) common_clean
 ifeq ($(WITH_FREERTOS), yes)
 	$(MAKE) freertos_clean
 endif

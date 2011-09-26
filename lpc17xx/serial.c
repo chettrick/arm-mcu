@@ -16,6 +16,8 @@ static const char revision[] = "$Id$";
 #include <lpc17xx_pinsel.h>
 #include <lpc17xx_uart.h>
 
+#define MAX_SERIAL_PORTS	2
+
 static LPC_UART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
 {
   (LPC_UART_TypeDef *) LPC_UART0,

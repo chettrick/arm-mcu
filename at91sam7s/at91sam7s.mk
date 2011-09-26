@@ -11,7 +11,7 @@ AT91LIB		= $(MCUDIR)/at91lib
 CFLAGS		+= -I$(AT91LIB)
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
-LIBOBJS		= cpu.o device.o leds.o serial.o syscalls.o
+LIBOBJS		= cpu.o leds.o serial.o
 
 JLINKMCU	= at91sam7s512
 JLINKADDR	= 0x00100000
@@ -24,6 +24,7 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	for F in $(AT91LIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(AT91LIB)/*.o
+	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
 

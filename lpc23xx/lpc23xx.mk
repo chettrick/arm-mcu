@@ -9,7 +9,7 @@ TEXTBASE	?= 0x00000000
 CFLAGS		+= 
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
-LIBOBJS		= cpu.o device.o leds.o serial.o syscalls.o
+LIBOBJS		= cpu.o leds.o serial.o
 
 JLINKMCU	= lpc2378
 
@@ -30,6 +30,7 @@ USBBOOT		?= /media/LPC23xx
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
+	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
 

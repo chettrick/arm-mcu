@@ -11,7 +11,7 @@ CMSIS		= $(MCUDIR)/CMSIS
 CFLAGS		+= -DLPC17XX -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
-LIBOBJS		= cpu.o device.o gpiopins.o leds.o serial.o syscalls.o
+LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
 JLINKMCU	= lpc1768
 

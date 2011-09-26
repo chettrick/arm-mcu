@@ -13,6 +13,8 @@ static const char revision[] = "$Id$";
 #include <stdio.h>
 #include <string.h>
 
+#define MAX_SERIAL_PORTS	1
+
 static USART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
 {
   UART0,

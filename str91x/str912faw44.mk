@@ -12,7 +12,7 @@ USBSERIAL	= $(MCUDIR)/usb_serial
 CFLAGS		+= -I$(FWLIB) -I$(USBSERIAL)
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
-LIBOBJS		= cpu.o device.o leds.o serial.o syscalls.o time.o
+LIBOBJS		= cpu.o leds.o serial.o time.o
 
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
 
@@ -24,6 +24,7 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
+	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
 
