@@ -128,11 +128,13 @@ int main(void)
     fprintf(stderr, "ERROR: inet_pton() failed, %s\n", strerror(errno));
     assert(FALSE);
   }
+
   if (inet_pton(AF_INET, "255.255.255.0", subnet) != 1)
   {
     fprintf(stderr, "ERROR: inet_pton() failed, %s\n", strerror(errno));
     assert(FALSE);
   }
+
   if (inet_pton(AF_INET, "10.0.4.1", gateway) != 1)
   {
     fprintf(stderr, "ERROR: inet_pton() failed, %s\n", strerror(errno));
@@ -145,19 +147,21 @@ int main(void)
     assert(FALSE);
   }
 
+  memset(ipaddr, 0, sizeof(ipaddr));
+
   if ((status = W5200_get_ipaddress(ipaddr)))
   {
     fprintf(stderr, "ERROR: W5200_get_ip_address() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
 
-  if (inet_ntop(AF_INET, ipaddr, buf, sizeof(buf)))
+  if (inet_ntop(AF_INET, ipaddr, buf, sizeof(buf)) == NULL)
   {
     fprintf(stderr, "ERROR: inet_ntop() failed, %s\n", strerror(errno));
     assert(FALSE);
   }
 
-  printf("W5200 IP address is  %d.%d.%d.%d\n\n", ipaddr[0], ipaddr[1], ipaddr[2], ipaddr[3]);
+  printf("W5200 IP address is %s\n", buf);
 
   for (;;)
   {
