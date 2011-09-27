@@ -13,9 +13,11 @@ static const char revision[] = "$Id$";
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <wiznet.h>
+
+// WizNet configuration for W5200E01-M3 board
 
 #ifdef W5200E01_M3
+#define WIZNET_W5200
 #define WIZNET_SPIPORT		1
 #define WIZNET_SPICLOCKMODE	0
 #define WIZNET_SPISPEED		281250
@@ -27,6 +29,8 @@ static const char revision[] = "$Id$";
 #define WIZNET_PWDN_PIN		GPIOPIN25
 #define WIZNET_PWDN		GPIOPIN25OUT
 #endif
+
+#include <wiznet.h>
 
 // Predefined addresses
 
