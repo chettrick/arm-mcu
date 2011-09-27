@@ -3,7 +3,17 @@
 # $Id$
 
 WIZNET_DIR	?= $(ARMSRC)/wiznet
-CFLAGS		+= -I$(WIZNET_DIR)
+WIZNET_DEVICE	?= W5200
+
+CFLAGS		+= -DWIZNET -I$(WIZNET_DIR)
+
+ifeq ($(WIZNET_DEVICE), W5100)
+CFLAGS		+= -DW5100
+endif
+
+ifeq ($(WIZNET_DEVICE), W5200)
+CFLAGS		+= -DW5200
+endif
 
 .PHONY: wiznet_lib wiznet_clean
 
