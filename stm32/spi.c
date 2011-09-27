@@ -18,7 +18,7 @@ static SPI_TypeDef * const SPI_PORTS[MAX_SPI_PORTS] =
   SPI3,
 };
 
-#define SPIx	(SPI_PORTS[port-1])
+#define SPIx			(SPI_PORTS[port-1])
 
 // Map SPI port number to GPIO pin for NSS.  We manipulate NSS via GPIO bit
 // banding, because the STM32 SPI controller doesn't automatically assert
@@ -38,7 +38,7 @@ static uint32_t * const SPI_NSS_PIN[MAX_SPI_PORTS] =
 #endif
 };
 
-#define SPIx_NSS	(*SPI_NSS_PIN[port-1])
+#define SPIx_NSS		(*SPI_NSS_PIN[port-1])
 
 /*****************************************************************************/
 
@@ -301,11 +301,11 @@ int spimaster_init(uint32_t port,
   SPI_InitStructure.SPI_FirstBit = 
     bigendian ? SPI_FirstBit_MSB : SPI_FirstBit_LSB;
   SPI_InitStructure.SPI_CRCPolynomial = 7;
-  SPI_Init(SPI_PORTS[port-1], &SPI_InitStructure);
+  SPI_Init(SPIx, &SPI_InitStructure);
 
 // Enable SPI port
 
-  SPI_Cmd(SPI_PORTS[port-1], ENABLE);
+  SPI_Cmd(SPIx, ENABLE);
 
   return 0;
 }
