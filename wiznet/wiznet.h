@@ -2,7 +2,7 @@
 
 // $Id$
 
-#if defined(W5200)
+#if defined(WIZNET_W5200)
 #include "W5200.h"
 
 #define wiznet_initialize(x)			W5200_initialize(x)
