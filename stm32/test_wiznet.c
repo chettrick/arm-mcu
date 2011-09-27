@@ -13,23 +13,20 @@ static const char revision[] = "$Id$";
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <W5200.h>
+#include <wiznet.h>
 
 #ifdef W5200E01_M3
-#define SPIPORT		1
-#define W5200_INT_PIN	GPIOPIN16
-#define W5200_INT	GPIOPIN16IN
-#define W5200_RESET_PIN	GPIOPIN24
-#define W5200_RESET	GPIOPIN24OUT
-#define W5200_PWDN_PIN	GPIOPIN25
-#define W5200_PWDN	GPIOPIN25OUT
+#define WIZNET_SPIPORT		1
+#define WIZNET_SPICLOCKMODE	0
+#define WIZNET_SPISPEED		281250
+#define WIZNET_SPIENDIAN	SPI_BIGENDIAN
+#define WIZNET_INT_PIN		GPIOPIN16
+#define WIZNET_INT		GPIOPIN16IN
+#define WIZNET_NRESET_PIN	GPIOPIN24
+#define WIZNET_NRESET		GPIOPIN24OUT
+#define WIZNET_PWDN_PIN		GPIOPIN25
+#define WIZNET_PWDN		GPIOPIN25OUT
 #endif
-
-// SPI port configuration
-
-#define SPICLOCKMODE	0
-#define SPISPEED	281250
-#define SPIENDIAN	SPI_BIGENDIAN
 
 // Predefined addresses
 
@@ -42,12 +39,12 @@ void SysTick_Handler(void)
   if (delaycounter)	// Decrement delay counter
     delaycounter--;
 
-  W5200_tick();		// Call W5200 driver tick routine
+  wiznet_tick();	// Call WizNet driver tick routine
 }
 
-void delay(uint32_t ticks)
+void delay(uint32_t milliseconds)
 {
-  delaycounter = ticks;
+  delaycounter = milliseconds/10;
   while (delaycounter);
 }
 
@@ -63,7 +60,7 @@ int main(void)
 
   serial_stdio(CONSOLE_PORT, 115200);
 
-  puts("\033[H\033[2JSTM32 WizNet W5200 Test (" __DATE__ " " __TIME__ ")\n");
+  puts("\033[H\033[2JSTM32 WizNet Network Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
@@ -73,54 +70,69 @@ int main(void)
 
 // Configure GPIO pins
 
-  gpiopin_configure(W5200_INT_PIN, GPIOPIN_INPUT);
-  gpiopin_configure(W5200_RESET_PIN, GPIOPIN_OUTPUT);
-  gpiopin_configure(W5200_PWDN_PIN, GPIOPIN_OUTPUT);
+#ifdef WIZNET_INT
+  gpiopin_configure(WIZNET_INT_PIN, GPIOPIN_INPUT);
+#endif
 
+#ifdef WIZNET_NRESET
+  gpiopin_configure(WIZNET_NRESET_PIN, GPIOPIN_OUTPUT);
+#endif
+
+#ifdef WIZNET_PWDN
+  gpiopin_configure(WIZNET_PWDN_PIN, GPIOPIN_OUTPUT);
+#endif
+
+#ifdef WIZNET_PWDN
 // Deassert PWDN
 
-  W5200_PWDN = 0;
-  delay(2);
+  WIZNET_PWDN = 0;
+  delay(20);
+#endif
 
+#ifdef WIZNET_NRESET
 // Assert nRST
 
-  W5200_RESET = 0;
-  delay(2);
+  WIZNET_NRESET = 0;
+  delay(20);
 
 // Deassert nRST
 
-  W5200_RESET = 1;
-  delay(20);
+  WIZNET_NRESET = 1;
+#endif
+
+// Wait for WizNet reset to complete
+
+  delay(200);
 
 // Initialize SPI hardware
 
-  if ((status = spimaster_init(SPIPORT, SPICLOCKMODE, SPISPEED, SPIENDIAN)))
+  if ((status = spimaster_init(WIZNET_SPIPORT, WIZNET_SPICLOCKMODE, WIZNET_SPISPEED, WIZNET_SPIENDIAN)))
   {
     fprintf(stderr, "ERROR: spimaster_init() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
 
-// Initialize the W5200
+// Initialize the WizNet device
 
-  if ((status = W5200_initialize(SPIPORT)))
+  if ((status = wiznet_initialize(WIZNET_SPIPORT)))
   {
-    fprintf(stderr, "ERROR: W5200_initialize() returned %d, %s\n", status, strerror(errno));
+    fprintf(stderr, "ERROR: wiznet_initialize() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
 
-  if ((status = W5200_set_hardware_address(macaddress)))
+  if ((status = wiznet_set_hardware_address(macaddress)))
   {
-    fprintf(stderr, "ERROR: W5200_set_hardware_address() returned %d, %s\n", status, strerror(errno));
+    fprintf(stderr, "ERROR: wiznet_set_hardware_address() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
 
-  if ((status = W5200_get_hardware_address(macaddr)))
+  if ((status = wiznet_get_hardware_address(macaddr)))
   {
-    fprintf(stderr, "ERROR: W5200_get_hardware_address() returned %d, %s\n", status, strerror(errno));
+    fprintf(stderr, "ERROR: wiznet_get_hardware_address() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
 
-  printf("W5200 MAC address is %02X:%02X:%02X:%02X:%02X:%02X\n",
+  printf("MAC address is %02X:%02X:%02X:%02X:%02X:%02X\n",
     macaddr[0], macaddr[1], macaddr[2], macaddr[3], macaddr[4], macaddr[5]);
 
   if (inet_pton(AF_INET, "10.0.4.129", ipaddr) != 1)
@@ -141,17 +153,17 @@ int main(void)
     assert(FALSE);
   }
 
-  if ((status = W5200_configure_network(ipaddr, subnet, gateway)))
+  if ((status = wiznet_configure_network(ipaddr, subnet, gateway)))
   {
-    fprintf(stderr, "ERROR: W5200_configure_network() returned %d, %s\n", status, strerror(errno));
+    fprintf(stderr, "ERROR: wiznet_configure_network() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
 
   memset(ipaddr, 0, sizeof(ipaddr));
 
-  if ((status = W5200_get_ipaddress(ipaddr)))
+  if ((status = wiznet_get_ipaddress(ipaddr)))
   {
-    fprintf(stderr, "ERROR: W5200_get_ip_address() returned %d, %s\n", status, strerror(errno));
+    fprintf(stderr, "ERROR: wiznet_get_ip_address() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
 
@@ -161,13 +173,13 @@ int main(void)
     assert(FALSE);
   }
 
-  printf("W5200 IP address is %s\n", buf);
+  printf("IP address is %s\n", buf);
 
   for (;;)
   {
-    if ((status = W5200_get_linkstate(&linkstate)))
+    if ((status = wiznet_get_linkstate(&linkstate)))
     {
-      fprintf(stderr, "ERROR: W5200_get_linkstate() returned %d, %s\n", status, strerror(errno));
+      fprintf(stderr, "ERROR: wiznet_get_linkstate() returned %d, %s\n", status, strerror(errno));
       assert(FALSE);
     }
 
