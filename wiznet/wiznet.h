@@ -2,9 +2,9 @@
 
 // $Id$
 
-#include <W5200.h>
-
 #if defined(W5200)
+#include "W5200.h"
+
 #define wiznet_initialize(x)			W5200_initialize(x)
 #define wiznet_set_hardware_address(x)		W5200_set_hardware_address(x)
 #define wiznet_get_hardware_address(x)		W5200_get_hardware_address(x)
