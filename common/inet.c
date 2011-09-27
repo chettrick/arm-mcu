@@ -56,7 +56,6 @@ int inet_pton(int af, const char *src, void *dst)
         bytes[3] = d;
         return 1;
       }
-      break;
 
       errno_r = EINVAL;
       return 0;
