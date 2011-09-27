@@ -4,6 +4,10 @@
 
 static const char revision[] = "$Id$";
 
+#ifndef WIZNET
+#error You must define WIZNET to compile this application
+#endif
+
 #include <assert.h>
 #include <cpu.h>
 #include <errno.h>
@@ -20,7 +24,7 @@ static const char revision[] = "$Id$";
 #define WIZNET_W5200
 #define WIZNET_SPIPORT		1
 #define WIZNET_SPICLOCKMODE	0
-#define WIZNET_SPISPEED		281250
+#define WIZNET_SPISPEED		18000000
 #define WIZNET_SPIENDIAN	SPI_BIGENDIAN
 #define WIZNET_INT_PIN		GPIOPIN16
 #define WIZNET_INT		GPIOPIN16IN
