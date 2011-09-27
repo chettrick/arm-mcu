@@ -18,7 +18,7 @@ static const char revision[] = "$Id$";
 #include <string.h>
 #include <unistd.h>
 
-// WizNet configuration for on W5200E01-M3 board
+// WizNet configuration for W5200E01-M3 board
 
 #ifdef W5200E01_M3
 #define WIZNET_W5200
