@@ -6,15 +6,8 @@ static const char revision[] = "$Id$";
 
 #include <spi.h>
 #include <stdlib.h>
-#include <W5200.h>
-
-#ifndef TRUE
-#define TRUE	1
-#endif
-
-#ifndef FALSE
-#define FALSE	0
-#endif
+#define WIZNET_W5200
+#include <wiznet.h>
 
 static uint32_t spiport;
 static volatile uint32_t delaycounter = 0;

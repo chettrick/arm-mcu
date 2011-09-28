@@ -3,21 +3,11 @@
 # $Id$
 
 WIZNET_DIR	?= $(ARMSRC)/wiznet
-WIZNET_DEVICE	?= UNDEFINED
-
 CFLAGS		+= -DWIZNET -I$(WIZNET_DIR)
-
-ifeq ($(WIZNET_DEVICE), W5100)
-CFLAGS		+= -DWIZNET_W5100
-endif
-
-ifeq ($(WIZNET_DEVICE), W5200)
-CFLAGS		+= -DWIZNET_W5200
-endif
 
 .PHONY: wiznet_lib wiznet_clean
 
-WIZNET_OBJS	= $(WIZNET_DIR)/W5200.o
+WIZNET_OBJS	= $(WIZNET_DIR)/W5100.o $(WIZNET_DIR)/W5200.o
 
 # Add WizNet object files to the MCU library
 

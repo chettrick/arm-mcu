@@ -66,10 +66,6 @@
 #define W5200_PSTATUS_LINK	0x20
 #define W5200_PSTATUS_POWERDOWN	0x08
 
-typedef uint8_t macaddress_t[6];
-
-typedef uint8_t ipv4address_t[4];
-
 // W5200 driver functions
 
 int W5200_write_register(const uint16_t address, const uint8_t data);
