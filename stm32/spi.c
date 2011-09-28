@@ -28,7 +28,7 @@ static uint32_t * const SPI_NSS_PIN[MAX_SPI_PORTS] =
 {
   &GPIOPIN4OUT,
   &GPIOPIN28OUT,
-#ifdef OLIMEX_STM32_P107_UEXT_SPI3_HACK
+#ifdef OLIMEX_STM32_P107
 // For some reason, Olimex connected PB15 (SPI2 MOSI) to the UEXT NSS signal.
 // This means we can't use both SPI3 on the UEXT connector and SPI2 on the
 // expansion connector at the same time.
@@ -191,7 +191,7 @@ static int SPI_Configure_Pins(uint32_t port)
 
       // Configure NSS pin--Note we are using PC9 instead of PA4 or PA15!
 
-#ifdef OLIMEX_STM32_P107_UEXT_SPI3_HACK
+#ifdef OLIMEX_STM32_P107
       gpiopin_configure(GPIOPIN31, GPIOPIN_OUTPUT);	// Use PB15 for NSS
 #else
       gpiopin_configure(GPIOPIN41, GPIOPIN_OUTPUT);	// Use PC9 for NSS
