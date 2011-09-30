@@ -10,7 +10,7 @@ static const char revision[] = "$Id$";
 #include <wiznet.h>
 #include <W5200.h>
 
-#define errno_r			(*(__errno()))
+#define errno_r (*(__errno()))
 
 static uint32_t spiport;
 
