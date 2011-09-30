@@ -118,11 +118,3 @@ int wiznet_get_ipaddress(ipv4address_t address)
 
   return status;
 }
-
-int wiznet_get_linkstate(int *linkstate)
-{
-  int status = 0;
-
-  *linkstate = TRUE;
-  return status;
-}
