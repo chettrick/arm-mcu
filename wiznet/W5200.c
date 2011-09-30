@@ -4,10 +4,13 @@
 
 static const char revision[] = "$Id$";
 
+#include <errno.h>
 #include <spi.h>
 #include <stdlib.h>
 #define WIZNET_W5200
 #include <wiznet.h>
+
+#define errno_r			(*(__errno()))
 
 static uint32_t spiport;
 static volatile uint32_t delaycounter = 0;
