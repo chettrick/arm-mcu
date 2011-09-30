@@ -29,3 +29,10 @@ int wiznet_configure_network(const ipv4address_t address,
 int wiznet_get_ipaddress(ipv4address_t address);
 
 int wiznet_get_linkstate(int *linkstate);
+
+int wiznet_udp_open(int socket, uint16_t sourceport);
+
+int wiznet_bootp(ipv4address_t address,
+                 ipv4address_t subnet,
+                 ipv4address_t gateway,
+                 ipv4address_t nameserver);
