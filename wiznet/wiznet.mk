@@ -14,10 +14,12 @@ WIZNET_OBJS	+= $(WIZNET_DIR)/wiznet.o
 # Device dependent object files
 
 ifeq ($(WITH_W5100),yes)
+CFLAGS		+= -DW5100
 WIZNET_OBJS	+= $(WIZNET_DIR)/W5100.o
 endif
 
 ifeq ($(WITH_W5200),yes)
+CFLAGS		+= -DW5200
 WIZNET_OBJS	+= $(WIZNET_DIR)/W5200.o
 endif
 
