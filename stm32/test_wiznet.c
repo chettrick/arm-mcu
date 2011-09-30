@@ -209,6 +209,7 @@ int main(void)
 
   for (;;)
   {
+#ifdef W5200
     if ((status = wiznet_get_linkstate(&linkstate)))
     {
       fprintf(stderr, "ERROR: wiznet_get_linkstate() returned %d, %s\n", status, strerror(errno));
@@ -216,5 +217,6 @@ int main(void)
     }
 
     printf("Link state: %s\r", linkstate ? "YES" : "NO ");
+#endif
   }
 }
