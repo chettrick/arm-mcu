@@ -86,7 +86,9 @@ int main(void)
   macaddress_t macaddr;
   ipv4address_t ipaddr, subnet, gateway;
   char buf[256];
+#ifdef W5200
   int linkstate = FALSE;
+#endif
 
   cpu_init(DEFAULT_CPU_FREQ);
 
