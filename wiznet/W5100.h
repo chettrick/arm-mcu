@@ -61,24 +61,8 @@
 #define W5100_IMR_UNREACH	0x40
 #define W5100_IMR_PPPOE_CLOSE	0x20
 
-// W5100 driver functions
+// W5100 specific driver functions
 
 int W5100_write_register(const uint16_t address, const uint8_t data);
 
 int W5100_read_register(const uint16_t address, uint8_t *data);
-
-int W5100_initialize(const uint32_t spiportnum);
-
-int W5100_set_hardware_address(const macaddress_t address);
-
-int W5100_get_hardware_address(macaddress_t address);
-
-int W5100_configure_network(const ipv4address_t address,
-                            const ipv4address_t subnet,
-                            const ipv4address_t gateway);
-
-int W5100_get_ipaddress(ipv4address_t address);
-
-int W5100_get_linkstate(int *linkstate);
-
-void W5100_tick(void);

@@ -7,19 +7,13 @@ static const char revision[] = "$Id$";
 #include <errno.h>
 #include <spi.h>
 #include <stdlib.h>
-#define WIZNET_W5200
 #include <wiznet.h>
+#include <W5200.h>
 
 #define errno_r			(*(__errno()))
 
 static uint32_t spiport;
 static volatile uint32_t delaycounter = 0;
-
-void W5200_tick(void)
-{
-  if (delaycounter)
-    delaycounter--;
-}
 
 int W5200_write_register(const uint16_t address, const uint8_t data)
 {
@@ -46,7 +40,13 @@ int W5200_read_register(const uint16_t address, uint8_t *data)
   return spimaster_transfer(spiport, txbuf, 4, data, 1);
 }
 
-int W5200_initialize(const uint32_t spiportnum)
+void wiznet_tick(void)
+{
+  if (delaycounter)
+    delaycounter--;
+}
+
+int wiznet_initialize(const uint32_t spiportnum)
 {
   int status = 0;
   int s;
@@ -102,7 +102,7 @@ int W5200_initialize(const uint32_t spiportnum)
   return status;
 }
 
-int W5200_set_hardware_address(const macaddress_t address)
+int wiznet_set_hardware_address(const macaddress_t address)
 {
   int i;
   int status = 0;
@@ -114,7 +114,7 @@ int W5200_set_hardware_address(const macaddress_t address)
   return status;
 }
 
-int W5200_get_hardware_address(macaddress_t address)
+int wiznet_get_hardware_address(macaddress_t address)
 {
   int i;
   int status = 0;
@@ -126,9 +126,9 @@ int W5200_get_hardware_address(macaddress_t address)
   return status;
 }
 
-int W5200_configure_network(const ipv4address_t address,
-                            const ipv4address_t subnet,
-                            const ipv4address_t gateway)
+int wiznet_configure_network(const ipv4address_t address,
+                             const ipv4address_t subnet,
+                             const ipv4address_t gateway)
 {
   int i;
   int status = 0;
@@ -148,7 +148,7 @@ int W5200_configure_network(const ipv4address_t address,
   return status;
 }
 
-int W5200_get_ipaddress(ipv4address_t address)
+int wiznet_get_ipaddress(ipv4address_t address)
 {
   int i;
   int status = 0;
@@ -160,7 +160,7 @@ int W5200_get_ipaddress(ipv4address_t address)
   return status;
 }
 
-int W5200_get_linkstate(int *linkstate)
+int wiznet_get_linkstate(int *linkstate)
 {
   int status = 0;
   uint8_t data;
@@ -172,7 +172,7 @@ int W5200_get_linkstate(int *linkstate)
   return status;
 }
 
-int W5200_udp_open(int socket, uint16_t sourceport)
+int wiznet_udp_open(int socket, uint16_t sourceport)
 {
   int status = 0;
   uint8_t data;
@@ -206,4 +206,3 @@ int W5200_udp_open(int socket, uint16_t sourceport)
   errno_r = ETIMEDOUT;
   return __LINE__;
 }
-

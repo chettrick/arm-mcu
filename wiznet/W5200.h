@@ -105,24 +105,8 @@
 #define W5200_Sn_SR_SOCK_MACRAW		0x42
 #define W5200_Sn_SR_SOCK_PPPOE		0x5F
 
-// W5200 driver functions
+// W5200 specific driver functions
 
 int W5200_write_register(const uint16_t address, const uint8_t data);
 
 int W5200_read_register(const uint16_t address, uint8_t *data);
-
-int W5200_initialize(const uint32_t spiportnum);
-
-int W5200_set_hardware_address(const macaddress_t address);
-
-int W5200_get_hardware_address(macaddress_t address);
-
-int W5200_configure_network(const ipv4address_t address,
-                            const ipv4address_t subnet,
-                            const ipv4address_t gateway);
-
-int W5200_get_ipaddress(ipv4address_t address);
-
-int W5200_get_linkstate(int *linkstate);
-
-void W5200_tick(void);

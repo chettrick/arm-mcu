@@ -14,32 +14,18 @@ typedef uint8_t macaddress_t[6];		// Ethernet MAC address
 
 typedef uint8_t ipv4address_t[4];		// IPv4 address
 
-// Map generic WizNet driver functions to W5100 driver functions
+void wiznet_tick(void);
 
-#if defined(WIZNET_W5100)
-#include "W5100.h"
+int wiznet_initialize(const uint32_t spiportnum);
 
-#define wiznet_initialize(x)			W5100_initialize(x)
-#define wiznet_set_hardware_address(x)		W5100_set_hardware_address(x)
-#define wiznet_get_hardware_address(x)		W5100_get_hardware_address(x)
-#define wiznet_configure_network(x,y,z)		W5100_configure_network(x,y,z)
-#define wiznet_get_ipaddress(x)			W5100_get_ipaddress(x)
-#define wiznet_get_linkstate(x)			W5100_get_linkstate(x)
-#define wiznet_tick()				W5100_tick()
+int wiznet_set_hardware_address(const macaddress_t address);
 
-// Map generic WizNet driver functions to W5200 driver functions
+int wiznet_get_hardware_address(macaddress_t address);
 
-#elif defined(WIZNET_W5200)
-#include "W5200.h"
+int wiznet_configure_network(const ipv4address_t address,
+                            const ipv4address_t subnet,
+                            const ipv4address_t gateway);
 
-#define wiznet_initialize(x)			W5200_initialize(x)
-#define wiznet_set_hardware_address(x)		W5200_set_hardware_address(x)
-#define wiznet_get_hardware_address(x)		W5200_get_hardware_address(x)
-#define wiznet_configure_network(x,y,z)		W5200_configure_network(x,y,z)
-#define wiznet_get_ipaddress(x)			W5200_get_ipaddress(x)
-#define wiznet_get_linkstate(x)			W5200_get_linkstate(x)
-#define wiznet_tick()				W5200_tick()
+int wiznet_get_ipaddress(ipv4address_t address);
 
-#else
-#error WizNet device must be selected by defining WIZNET_W5100 or WIZNET_W5200
-#endif
+int wiznet_get_linkstate(int *linkstate);

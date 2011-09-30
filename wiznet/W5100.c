@@ -4,10 +4,13 @@
 
 static const char revision[] = "$Id$";
 
+#include <errno.h>
 #include <spi.h>
 #include <stdlib.h>
-#define WIZNET_W5100
 #include <wiznet.h>
+#include <W5100.h>
+
+#define errno_r			(*(__errno()))
 
 static uint32_t spiport;
 static volatile uint32_t delaycounter = 0;
@@ -35,7 +38,13 @@ int W5100_read_register(const uint16_t address, uint8_t *data)
   return spimaster_transfer(spiport, txbuf, 3, data, 1);
 }
 
-int W5100_initialize(const uint32_t spiportnum)
+void wiznet_tick(void)
+{
+  if (delaycounter)
+    delaycounter--;
+}
+
+int wiznet_initialize(const uint32_t spiportnum)
 {
   int status = 0;
 
@@ -51,7 +60,7 @@ int W5100_initialize(const uint32_t spiportnum)
   return status;
 }
 
-int W5100_set_hardware_address(const macaddress_t address)
+int wiznet_set_hardware_address(const macaddress_t address)
 {
   int i;
   int status = 0;
@@ -63,7 +72,7 @@ int W5100_set_hardware_address(const macaddress_t address)
   return status;
 }
 
-int W5100_get_hardware_address(macaddress_t address)
+int wiznet_get_hardware_address(macaddress_t address)
 {
   int i;
   int status = 0;
@@ -75,9 +84,9 @@ int W5100_get_hardware_address(macaddress_t address)
   return status;
 }
 
-int W5100_configure_network(const ipv4address_t address,
-                            const ipv4address_t subnet,
-                            const ipv4address_t gateway)
+int wiznet_configure_network(const ipv4address_t address,
+                             const ipv4address_t subnet,
+                             const ipv4address_t gateway)
 {
   int i;
   int status = 0;
@@ -97,7 +106,7 @@ int W5100_configure_network(const ipv4address_t address,
   return status;
 }
 
-int W5100_get_ipaddress(ipv4address_t address)
+int wiznet_get_ipaddress(ipv4address_t address)
 {
   int i;
   int status = 0;
@@ -109,16 +118,10 @@ int W5100_get_ipaddress(ipv4address_t address)
   return status;
 }
 
-int W5100_get_linkstate(int *linkstate)
+int wiznet_get_linkstate(int *linkstate)
 {
   int status = 0;
 
   *linkstate = TRUE;
   return status;
-}
-
-void W5100_tick(void)
-{
-  if (delaycounter)
-    delaycounter--;
 }
