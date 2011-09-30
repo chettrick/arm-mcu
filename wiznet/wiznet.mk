@@ -7,6 +7,12 @@ CFLAGS		+= -DWIZNET -I$(WIZNET_DIR)
 
 .PHONY: wiznet_lib wiznet_clean
 
+# Device independent object files
+
+WIZNET_OBJS	+= $(WIZNET_DIR)/wiznet.o
+
+# Device dependent object files
+
 ifeq ($(WITH_W5100),yes)
 WIZNET_OBJS	+= $(WIZNET_DIR)/W5100.o
 endif
