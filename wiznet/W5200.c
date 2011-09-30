@@ -13,7 +13,6 @@ static const char revision[] = "$Id$";
 #define errno_r			(*(__errno()))
 
 static uint32_t spiport;
-static volatile uint32_t delaycounter = 0;
 
 int W5200_write_register(const uint16_t address, const uint8_t data)
 {
@@ -39,6 +38,8 @@ int W5200_read_register(const uint16_t address, uint8_t *data)
 
   return spimaster_transfer(spiport, txbuf, 4, data, 1);
 }
+
+static volatile uint32_t delaycounter = 0;
 
 void wiznet_tick(void)
 {
