@@ -4,6 +4,8 @@
 
 #include <stdint.h>
 
+#define MAX_SOCKETS		4
+
 // Common Registers
 
 #define	W5100_MR		0x0000
@@ -58,10 +60,6 @@
 #define W5100_IMR_CONFLICT	0x80
 #define W5100_IMR_UNREACH	0x40
 #define W5100_IMR_PPPOE_CLOSE	0x20
-
-typedef uint8_t macaddress_t[6];
-
-typedef uint8_t ipv4address_t[4];
 
 // W5100 driver functions
 
