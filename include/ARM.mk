@@ -53,7 +53,7 @@ default_catch:
 
 # These are the target suffixes
 
-.SUFFIXES: .asm .bin .debug .elf .flashjlink .flashocd .hex .o
+.SUFFIXES: .asm .c .bin .debug .elf .flashjlink .flashocd .hex .o .s .S
 
 # Don't delete intermediate files
 
