@@ -2,13 +2,13 @@
 
 // $Id$
 
-#include <assert.h>
 #include <cpu.h>
+#include <errno.h>
 
 #define MAX_GPIO_PORTS		6
 #define PINS_PER_GPIO_PORT	16
 
-void gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
+int gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
 {
   unsigned int port;
 
@@ -19,8 +19,17 @@ void gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
 
 // Validate parameters
 
-  assert(port < MAX_GPIO_PORTS);
-  assert(direction <= GPIOPIN_OUTPUT);
+  if (port >= MAX_GPIO_PORTS)
+  {
+    errno_r = EINVAL;
+    return __LINE__ - 3;
+  }
+
+  if (direction > GPIOPIN_OUTPUT)
+  {
+    errno_r = EINVAL;
+    return __LINE__ - 3;
+  }
 
 // Enable GPIO peripheral clock
 
@@ -29,4 +38,5 @@ void gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
 // Configure the pin
 
   GPIO_PinModeSet(port, pin, gpioModePushPull, direction);
+  return 0;
 }

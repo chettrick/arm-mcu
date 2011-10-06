@@ -2,8 +2,8 @@
 
 // $Id$
 
-#include <assert.h>
 #include <cpu.h>
+#include <errno.h>
 
 #define MAX_GPIO_PORTS		7
 #define PINS_PER_GPIO_PORT	16
@@ -23,7 +23,7 @@ static const struct
   { GPIOG, RCC_APB2Periph_GPIOG }
 };
 
-void gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
+int gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
 {
   unsigned int port;
   GPIO_InitTypeDef config;
@@ -35,8 +35,17 @@ void gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
 
 // Validate parameters
 
-  assert(port < MAX_GPIO_PORTS);
-  assert(direction <= GPIOPIN_OUTPUT);
+  if (port >= MAX_GPIO_PORTS)
+  {
+    errno_r = EINVAL;
+    return __LINE__ - 3;
+  }
+
+  if (direction > GPIOPIN_OUTPUT)
+  {
+    errno_r = EINVAL;
+    return __LINE__ - 3;
+  }
 
 // Configure peripheral clocks 
 
@@ -50,4 +59,5 @@ void gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
   config.GPIO_Mode = direction ? GPIO_Mode_Out_PP : GPIO_Mode_IN_FLOATING;
   config.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(PORTS[port].gpiobase, &config);
+  return 0;
 }

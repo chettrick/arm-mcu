@@ -2,8 +2,8 @@
 
 // $Id$
 
-#include <assert.h>
 #include <cpu.h>
+#include <errno.h>
 
 #define MAX_GPIO_PORTS		5
 #define PINS_PER_GPIO_PORT	32
@@ -17,7 +17,7 @@ static LPC_GPIO_TypeDef * const PORTS[] =
   LPC_GPIO4
 };
 
-void gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
+int gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
 {
   unsigned int port;
 
@@ -28,11 +28,21 @@ void gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
 
 // Validate parameters
 
-  assert(port < MAX_GPIO_PORTS);
-  assert(direction <= GPIOPIN_OUTPUT);
+  if (port >= MAX_GPIO_PORTS)
+  {
+    errno_r = EINVAL;
+    return __LINE__ - 3;
+  }
+
+  if (direction > GPIOPIN_OUTPUT)
+  {
+    errno_r = EINVAL;
+    return __LINE__ - 3;
+  }
 
 // Configure the pin
 
   PORTS[port]->FIOMASK &= ~(1 << pin);
   PORTS[port]->FIODIR  |= (direction << pin);
+  return 0;
 }
