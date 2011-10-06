@@ -23,7 +23,7 @@ typedef enum
   GPIOPIN_OUTPUT,
 } gpiopin_direction_t;
 
-void gpiopin_configure(unsigned int pin, gpiopin_direction_t direction);
+int gpiopin_configure(unsigned int pin, gpiopin_direction_t direction);
 
 // P0.0 is GPIOPIN0
 #define GPIOPIN0	0
