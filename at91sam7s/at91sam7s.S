@@ -22,8 +22,7 @@ arm-aout too. */
 	.extern __data_end__
 	.extern __data_beg_src__
 
-	.global	start 
-	.global	endless_loop
+	.global	_start 
 
 	.set INIT_FIQ_MODE,		0x11
 	.set INIT_IRQ_MODE,		0x12
