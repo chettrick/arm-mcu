@@ -8,7 +8,6 @@
 
 static const char revision[] = "$Id$";
 
-#include <assert.h>
 #include <cpu.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -692,7 +691,8 @@ int device_stat(int fd, struct stat *st)
       break;
 
     default :
-      assert(FALSE);
+      errno_r = ENODEV;
+      return -1;
   }
 
   return 0;
