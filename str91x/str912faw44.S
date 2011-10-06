@@ -24,8 +24,7 @@ arm-aout too. */
 	.extern __ram_size__
 	.extern __rom_size__
 
-	.global	start 
-	.global	endless_loop
+	.global	_start 
 
 	.set INIT_FIQ_MODE,		0x11
 	.set INIT_IRQ_MODE,		0x12
