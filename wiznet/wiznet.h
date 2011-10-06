@@ -16,21 +16,49 @@ typedef uint8_t ipv4address_t[4];		// IPv4 address
 
 void wiznet_tick(void);
 
-int wiznet_initialize(const uint32_t spiportnum);
+int wiznet_initialize(const uint32_t spiportnum,
+                      const int numsockets);
 
 int wiznet_set_hardware_address(const macaddress_t address);
 
 int wiznet_get_hardware_address(macaddress_t address);
 
 int wiznet_configure_network(const ipv4address_t address,
-                            const ipv4address_t subnet,
-                            const ipv4address_t gateway);
+                             const ipv4address_t subnet,
+                             const ipv4address_t gateway);
 
 int wiznet_get_ipaddress(ipv4address_t address);
 
 int wiznet_get_linkstate(int *linkstate);
 
-int wiznet_udp_open(int socket, uint16_t sourceport);
+int wiznet_get_port(const int socket,
+                    uint16_t *port);
+
+int wiznet_get_receive_ready(const int socket,
+                             uint32_t *count);
+
+int wiznet_get_transmit_free(const int socket,
+                             uint32_t *count);
+
+int wiznet_read_receive_ram(const int socket,
+                            uint32_t *rampointer,
+                            void *dst,
+                            const unsigned int count);
+
+int wiznet_udp_open(const int socket,
+                    const uint16_t port);
+
+int wiznet_udp_receive(const int socket,
+                       ipv4address_t srcaddr,
+                       uint16_t *srcport,
+                       void *buf,
+                       uint32_t *count);
+
+int wiznet_udp_send(const int socket,
+                    const ipv4address_t destaddr,
+                    const uint16_t destport,
+                    void *buf,
+                    const uint32_t count);
 
 int wiznet_bootp(ipv4address_t address,
                  ipv4address_t subnet,

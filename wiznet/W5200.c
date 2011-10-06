@@ -6,13 +6,47 @@ static const char revision[] = "$Id$";
 
 #include <errno.h>
 #include <spi.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <wiznet.h>
 #include <W5200.h>
 
 #define errno_r (*(__errno()))
 
-static uint32_t spiport;
+static uint32_t spiport = 0;
+static int numsockets = 0;
+static uint32_t addressmask = 0;
+
+/* This table abstracts the W5200 RAM size configuration for 1 to 8 sockets. */
+/* We divide available RAM equally amoung the number of configured sockets.  */
+/* We don't try to give unequal amounts of RAM to different sockets.         */
+
+static const struct
+{
+  uint32_t SIZE;
+  uint32_t CONFIG;
+} RAMSIZE_TABLE[W5200_MAX_SOCKETS+1] =
+{
+  { 0,			0				},
+  { W5200_RAMSIZE,	W5200_RAMSIZE_CONFIG_WHOLE	},
+  { W5200_RAMSIZE/2,	W5200_RAMSIZE_CONFIG_HALF	},
+  { W5200_RAMSIZE/4,	W5200_RAMSIZE_CONFIG_QUARTER	},
+  { W5200_RAMSIZE/4,	W5200_RAMSIZE_CONFIG_QUARTER	},
+  { W5200_RAMSIZE/8,	W5200_RAMSIZE_CONFIG_EIGHTH	},
+  { W5200_RAMSIZE/8,	W5200_RAMSIZE_CONFIG_EIGHTH	},
+  { W5200_RAMSIZE/8,	W5200_RAMSIZE_CONFIG_EIGHTH	},
+  { W5200_RAMSIZE/8,	W5200_RAMSIZE_CONFIG_EIGHTH	},
+};
+
+/* This table holds precalculated TX and RX RAM base addresses for */
+/* each socket.                                                    */
+
+static struct
+{
+  uint32_t TX_RAM_base;
+  uint32_t RX_RAM_base;
+} socket_table[W5200_MAX_SOCKETS];
 
 int W5200_write_register(const uint16_t address, const uint8_t data)
 {
@@ -47,23 +81,36 @@ void wiznet_tick(void)
     delaycounter--;
 }
 
-int wiznet_initialize(const uint32_t spiportnum)
+int wiznet_initialize(const uint32_t spiportnum,
+                      const int sockets)
 {
   int status = 0;
   int s;
+
+// Validate parameters
+
+  if ((numsockets < 1) || (numsockets > W5200_MAX_SOCKETS))
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
 
 // Save SPI port number
 
   spiport = spiportnum;
 
+// Save the number of allowed sockets
+
+  numsockets = sockets;
+
 // Initialize mode register
 
-  if ((status = W5200_write_register(W5200_MR, 0)))		// Disable ping block
+  if ((status = W5200_write_register(W5200_MR, 0)))	// Disable ping block
     return status;
 
 // Initialize interrupt mask register
 
-  if ((status = W5200_write_register(W5200_IMR, 0)))		// Disable common interrupts
+  if ((status = W5200_write_register(W5200_IMR, 0))) 	// Disable interrupts
     return status;
 
 // Initialize retry time
@@ -86,19 +133,51 @@ int wiznet_initialize(const uint32_t spiportnum)
 
 // Initialize socket interrupt mask register
 
-  if ((status = W5200_write_register(W5200_IMR2, 0)))		// All disabled
+  if ((status = W5200_write_register(W5200_IMR2, 0)))	// All disabled
     return status;
 
-// Initialize memory size registers
+// Zero the socket table
 
-  for (s = 0; s < W5200_MAX_SOCKETS; s++)
+  memset(socket_table, 0, sizeof(socket_table));
+
+  for (s = 0; s < numsockets; s++)
   {
-    if ((status = W5200_write_register(W5200_Sn_RXMEMSIZE(s), 2))) // 2K RAM
+
+// Initialize memory size registers for this socket
+
+    if ((status = W5200_write_register(W5200_Sn_RXMEMSIZE(s),
+         RAMSIZE_TABLE[numsockets].CONFIG)))
       return status;
 
-    if ((status = W5200_write_register(W5200_Sn_TXMEM_SIZE(s), 2))) // 2K RAM
+    if ((status = W5200_write_register(W5200_Sn_TXMEM_SIZE(s),
+         RAMSIZE_TABLE[numsockets].CONFIG)))
+      return status;
+
+// Precalculate transmit and receive buffer base addresses
+
+    socket_table[s].TX_RAM_base = W5200_TX_RAM_ADDR + s*RAMSIZE_TABLE[numsockets].SIZE;
+    socket_table[s].RX_RAM_base = W5200_RX_RAM_ADDR + s*RAMSIZE_TABLE[numsockets].SIZE;
+
+// Initialize the transmit buffer pointers for this socket
+
+    if ((status = W5200_write_register(W5200_Sn_TX_RD(s), 0x0000)))
+      return status;
+
+    if ((status = W5200_write_register(W5200_Sn_TX_WR(s), 0x0000)))
+      return status;
+
+// Initialize the receive buffer pointers for this socket
+
+    if ((status = W5200_write_register(W5200_Sn_RX_RD(s), 0x0000)))
+      return status;
+
+    if ((status = W5200_write_register(W5200_Sn_RX_WR(s), 0x0000)))
       return status;
   }
+
+// Precalculate address mask
+
+  addressmask = RAMSIZE_TABLE[numsockets].SIZE - 1;
 
   return status;
 }
@@ -166,6 +245,12 @@ int wiznet_get_linkstate(int *linkstate)
   int status = 0;
   uint8_t data;
 
+  if (linkstate == NULL)
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
+
   if ((status = W5200_read_register(W5200_PSTATUS, &data)))
     return status;
 
@@ -173,37 +258,262 @@ int wiznet_get_linkstate(int *linkstate)
   return status;
 }
 
-int wiznet_udp_open(int socket, uint16_t sourceport)
+int wiznet_get_port(const int socket,
+                    uint16_t *port)
+{
+  int status = 0;
+  uint8_t hibyte, lobyte;
+
+  if (socket >= numsockets)
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
+
+  if (port == NULL)
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
+
+  if ((status = W5200_read_register(W5200_Sn_SR(socket)+0, &hibyte)))
+    return status;
+
+  if ((status = W5200_read_register(W5200_Sn_SR(socket)+1, &lobyte)))
+    return status;
+
+  *port = (hibyte << 8) + lobyte;
+  return status;
+}
+
+int wiznet_get_receive_ready(const int socket,
+                             uint32_t *count)
+{
+  int status = 0;
+  uint8_t hibyte, lobyte;
+
+  if (socket >= numsockets)
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
+
+  if (count == NULL)
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
+
+  if ((status = W5200_read_register(W5200_Sn_RX_RSR(socket)+0, &hibyte)))
+    return status;
+
+  if ((status = W5200_read_register(W5200_Sn_RX_RSR(socket)+1, &lobyte)))
+    return status;
+
+  *count = (hibyte << 8) + lobyte;
+  return status;
+}
+
+int wiznet_get_transmit_free(const int socket,
+                             uint32_t *count)
+{
+  int status = 0;
+  uint8_t hibyte, lobyte;
+
+  if (socket >= numsockets)
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
+
+  if (count == NULL)
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
+
+  if ((status = W5200_read_register(W5200_Sn_TX_FSR(socket)+0, &hibyte)))
+    return status;
+
+  if ((status = W5200_read_register(W5200_Sn_TX_FSR(socket)+1, &lobyte)))
+    return status;
+
+  *count = (hibyte << 8) + lobyte;
+  return status;
+}
+
+int wiznet_read_receive_ram(const int socket,
+                            uint32_t *rampointer,
+                            void *dst,
+                            const unsigned int count)
+{
+  int status = 0;
+
+  return status;
+}
+
+int wiznet_udp_open(const int socket,
+                    uint16_t port)
 {
   int status = 0;
   uint8_t data;
 
+  // Validate parameters
+
+  if (socket >= numsockets)
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
+
+  // Make sure requested socket is idle
+
+  if ((status = W5200_read_register(W5200_Sn_SR(socket), &data)))
+    return status;
+
+  if (data != W5200_Sn_SR_SOCK_CLOSED)
+  {
+    errno_r = EALREADY;
+    return __LINE__;
+  }
+
+  // Pick random ephemeral port
+
+  while (port == 0)
+  {
+    int i;
+    uint16_t p;
+
+    // Pick a random port number
+    port = 49152 + rand() % 16384;
+
+    // See if it is already in use
+    for (i = 0; i < W5200_MAX_SOCKETS; i++)
+    {
+      // Skip if this socket is not UDP
+      if (status != W5200_Sn_SR_SOCK_UDP)
+        continue;
+
+      if ((status = wiznet_get_port(i, &p)))
+        return status;
+
+      // If we have a match, try another random port
+      if (port == p)
+      {
+        port = 0;
+        break;
+      }
+    }
+  }
+
   if ((status = W5200_write_register(W5200_Sn_MR(socket), W5200_Sn_MR_UDP)))
     return status;
 
-  if ((status = W5200_write_register(W5200_Sn_PORT(socket), sourceport / 256)))
+  if ((status = W5200_write_register(W5200_Sn_PORT(socket)+0, port / 256)))
     return status;
 
-  if ((status = W5200_write_register(W5200_Sn_PORT(socket), sourceport % 256)))
+  if ((status = W5200_write_register(W5200_Sn_PORT(socket)+1, port % 256)))
     return status;
 
   if ((status = W5200_write_register(W5200_Sn_CR(socket), W5200_Sn_CR_OPEN)))
     return status;
 
-  delaycounter = 10;
+  return status;
+}
 
-  while (delaycounter > 0)
+int wiznet_udp_receive(const int socket,
+                       ipv4address_t srcaddr,
+                       uint16_t *srcport,
+                       void *buf,
+                       uint32_t *count)
+{
+  int status = 0;
+  uint8_t hibyte, lobyte;
+  uint32_t rampointer;
+
+  // Validate parameters
+
+  if (socket >= numsockets)
   {
-    if ((status = W5200_read_register(W5200_Sn_SR(socket), &data)))
-      return status;
-
-    if (data == W5200_Sn_SR_SOCK_UDP)
-    {
-      delaycounter = 0;
-      return 0;
-    }  
+    errno_r = EINVAL;
+    return __LINE__;
   }
 
-  errno_r = ETIMEDOUT;
-  return __LINE__;
+  // Get number of received bytes available
+
+  if ((status = wiznet_get_receive_ready(socket, count)))
+    return status;
+
+  // Error if no data available
+
+  if (*count == 0)
+  {
+    errno_r = ENODATA;
+    return __LINE__;
+  }
+
+  // Get receive buffer read pointer
+
+  if ((status = W5200_read_register(W5200_Sn_RX_RD(socket)+0, &hibyte)))
+    return status;
+
+  if ((status = W5200_read_register(W5200_Sn_RX_RD(socket)+1, &lobyte)))
+    return status;
+
+  rampointer = ((hibyte << 8) + lobyte) & addressmask;
+
+  // Read source IP address from W5200 RAM
+
+  if ((status = wiznet_read_receive_ram(socket, &rampointer, srcaddr, 4)))
+    return status;
+
+  // Read source UDP port from W5200 RAM
+
+  if ((status = wiznet_read_receive_ram(socket, &rampointer, &srcport, 2)))
+    return status;
+
+  // Read UDP datagram size from W5200 RAM
+
+  if ((status = wiznet_read_receive_ram(socket, &rampointer, count, 2)))
+    return status;
+
+  // Read UDP datagram from W5200 RAM
+
+  if ((status = wiznet_read_receive_ram(socket, &rampointer, buf, *count)))
+    return status;
+
+  return status;
+}
+
+int wiznet_udp_send(const int socket,
+                    const ipv4address_t destaddr,
+                    const uint16_t destport,
+                    void *buf,
+                    const uint32_t count)
+{
+  int status = 0;
+  uint32_t free;
+
+  // Validate parameters
+
+  if (socket >= W5200_MAX_SOCKETS)
+  {
+    errno_r = EINVAL;
+    return __LINE__;
+  }
+
+  // Get number of transmit bytes free
+
+  if ((status = wiznet_get_transmit_free(socket, &free)))
+    return status;
+
+  // Error if no room available
+
+  if (count > free)
+  {
+    errno_r = ENOBUFS;
+    return __LINE__;
+  }
+
+  return status;
 }
