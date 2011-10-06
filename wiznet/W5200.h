@@ -4,6 +4,8 @@
 
 #include <stdint.h>
 
+#define W5200_MAX_SOCKETS	8
+
 // Common Registers
 
 #define	W5200_MR		0x0000
@@ -25,8 +27,6 @@
 #define W5200_IMR2		0x0036
 
 // Socket Registers
-
-#define W5200_MAX_SOCKETS	8
 
 #define W5200_SOCKET_REG(s)	(0x4000 + (s << 8))
 
@@ -104,6 +104,16 @@
 #define W5200_Sn_SR_SOCK_IPRAW		0x32
 #define W5200_Sn_SR_SOCK_MACRAW		0x42
 #define W5200_Sn_SR_SOCK_PPPOE		0x5F
+
+#define W5200_RAMSIZE			16384
+
+#define W5200_TX_RAM_ADDR		0x8000
+#define W5200_RX_RAM_ADDR		0xC000
+
+#define W5200_RAMSIZE_CONFIG_WHOLE	0x0F
+#define W5200_RAMSIZE_CONFIG_HALF	0x08
+#define W5200_RAMSIZE_CONFIG_QUARTER	0x04
+#define W5200_RAMSIZE_CONFIG_EIGHTH	0x02
 
 // W5200 specific driver functions
 
