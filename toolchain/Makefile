@@ -9,7 +9,7 @@ TARGETNAME	= arm-elf
 
 BINUTILVER	= 2.21.1
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
-BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
+BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 BINUTILBLD	= build/binutils-$(BINUTILVER)
@@ -32,7 +32,7 @@ LIBMPDFURL	= $(NEWLIBSERVER)/libm.pdf
 LIBCPDF		= $(TEMP)/libc.pdf
 LIBMPDF		= $(TEMP)/libm.pdf
 
-GDBVER		= 7.2
+GDBVER		= 7.3.1
 GDBSERVER	= http://ftp.gnu.org/gnu/gdb
 GDBDIST		= $(TEMP)/gdb-$(GDBVER).tar.bz2
 GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
@@ -67,7 +67,7 @@ download: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPD
 # Unpack all source distributions
 
 source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPDF)
-	tar xzf $(BINUTILDIST)
+	tar xjf $(BINUTILDIST)
 	tar xjf $(GCCDIST)
 	tar xzf $(NEWLIBDIST)
 	cd $(NEWLIBSRC) ; patch -p0 <../newlib.patch
@@ -103,6 +103,9 @@ $(GCCDIST):
 # Compile gcc
 
 gcc.done: binutils.done
+	test -f /usr/include/gmp.h
+	test -f /usr/include/mpc.h
+	test -f /usr/include/mpfr.h
 	rm -rf $(GCCBLD)
 	mkdir -p $(GCCBLD)
 	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft --disable-werror $(GCCEXTRACONFIG)
@@ -153,6 +156,7 @@ $(GDBDIST):
 # Compile gdb
 
 gdb.done: $(GDBDIST)
+	test -f /usr/include/expat.h
 	rm -rf $(GDBBLD)
 	mkdir -p $(GDBBLD)
 	cd $(GDBBLD) && ../../$(GDBSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared --disable-werror
