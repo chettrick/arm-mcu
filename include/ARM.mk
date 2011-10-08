@@ -33,7 +33,7 @@ CONFIGFLAGS	?=
 DEBUGFLAGS	?= -g
 OPTFLAGS	?= -O0
 IOFLAGS		?= -DINTEGER_STDIO
-CFLAGS		+= -Wall -mcpu=$(CPU) $(CPUFLAGS) -D$(MCU) -D$(BOARDNAME) -fdata-sections -ffunction-sections
+CFLAGS		+= -Wall -mcpu=$(CPU) $(CPUFLAGS) -D$(MCU) -D$(BOARDNAME) -ffunction-sections
 CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDIR)
 CFLAGS		+= $(CONFIGFLAGS) $(DEBUGFLAGS) $(OPTFLAGS) $(IOFLAGS) $(DEBUG) $(EXTRAFLAGS)
 LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDIR) -l$(MCU) -Wl,-Map=$*.map,--cref,--entry=_start,--gc-sections $(EXTRAOBJS)
