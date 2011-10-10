@@ -211,6 +211,7 @@ int main(void)
   }
 
   printf("IP address is %s\n", buf);
+  fflush(stdout);
 
   wiznet_udp_open(0, 1234);
 
@@ -223,7 +224,8 @@ int main(void)
       assert(FALSE);
     }
 
-    printf("\0338;1HLink state: %s\r", linkstate ? "YES" : "NO ");
+    printf("\033[9;1HLink state: %s", linkstate ? "YES" : "NO ");
+    fflush(stdout);
 #endif
 
     if ((status = wiznet_get_receive_ready(0, &count)))
@@ -232,17 +234,20 @@ int main(void)
       assert(FALSE);
     }
 
+    printf("\033[10;1HReceive bytes available: %-5lu", count);
+    fflush(stdout);
+
+#if 0
     if (count)
     {
-      printf("\0339:1HReceive bytes available: %lu\n", count);
-
       if ((status = wiznet_udp_receive(0, senderaddr, &senderport, buf, &count)))
       {
         fprintf(stderr, "ERROR: wiznet_udp_receive() returned %d, %s\n", status, strerror(errno));
         assert(FALSE);
       }
 
-      printf("\03310:1HReceived %lu bytes\n", count);
+      printf("\033[11:1HReceived %lu bytes\n", count);
     }
+#endif
   }
 }
