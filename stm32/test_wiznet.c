@@ -89,6 +89,9 @@ int main(void)
 #ifdef W5200
   int linkstate = FALSE;
 #endif
+  uint32_t count;
+  ipv4address_t senderaddr;
+  uint16_t senderport;
 
   cpu_init(DEFAULT_CPU_FREQ);
 
@@ -148,7 +151,7 @@ int main(void)
 
 // Initialize the WizNet device
 
-  if ((status = wiznet_initialize(WIZNET_SPIPORT)))
+  if ((status = wiznet_initialize(WIZNET_SPIPORT, 4)))
   {
     fprintf(stderr, "ERROR: wiznet_initialize() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
@@ -209,6 +212,8 @@ int main(void)
 
   printf("IP address is %s\n", buf);
 
+  wiznet_udp_open(0, 1234);
+
   for (;;)
   {
 #ifdef W5200
@@ -218,7 +223,26 @@ int main(void)
       assert(FALSE);
     }
 
-    printf("Link state: %s\r", linkstate ? "YES" : "NO ");
+    printf("\0338;1HLink state: %s\r", linkstate ? "YES" : "NO ");
 #endif
+
+    if ((status = wiznet_get_receive_ready(0, &count)))
+    {
+      fprintf(stderr, "ERROR: wiznet_get_receive_ready() returned %d, %s\n", status, strerror(errno));
+      assert(FALSE);
+    }
+
+    if (count)
+    {
+      printf("\0339:1HReceive bytes available: %lu\n", count);
+
+      if ((status = wiznet_udp_receive(0, senderaddr, &senderport, buf, &count)))
+      {
+        fprintf(stderr, "ERROR: wiznet_udp_receive() returned %d, %s\n", status, strerror(errno));
+        assert(FALSE);
+      }
+
+      printf("\03310:1HReceived %lu bytes\n", count);
+    }
   }
 }
