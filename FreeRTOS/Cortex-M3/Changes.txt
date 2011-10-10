@@ -52,3 +52,5 @@ $Id$
 
 21. Use ".short 0xdf00" instead of "svc 0" in port.c to work around a bug
     in recent binutils versions.
+
+22. Upgraded to FreeRTOS 7.0.2.
