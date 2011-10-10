@@ -89,10 +89,10 @@ int wiznet_initialize(const uint32_t spiportnum,
 
 // Validate parameters
 
-  if ((numsockets < 1) || (numsockets > W5200_MAX_SOCKETS))
+  if ((sockets < 1) || (sockets > W5200_MAX_SOCKETS))
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
 // Save SPI port number
@@ -248,7 +248,7 @@ int wiznet_get_linkstate(int *linkstate)
   if (linkstate == NULL)
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if ((status = W5200_read_register(W5200_PSTATUS, &data)))
@@ -267,13 +267,13 @@ int wiznet_get_port(const int socket,
   if (socket >= numsockets)
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if (port == NULL)
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if ((status = W5200_read_register(W5200_Sn_SR(socket)+0, &hibyte)))
@@ -295,13 +295,13 @@ int wiznet_get_receive_ready(const int socket,
   if (socket >= numsockets)
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if (count == NULL)
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if ((status = W5200_read_register(W5200_Sn_RX_RSR(socket)+0, &hibyte)))
@@ -323,13 +323,13 @@ int wiznet_get_transmit_free(const int socket,
   if (socket >= numsockets)
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if (count == NULL)
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if ((status = W5200_read_register(W5200_Sn_TX_FSR(socket)+0, &hibyte)))
@@ -348,6 +348,22 @@ int wiznet_read_receive_ram(const int socket,
                             const unsigned int count)
 {
   int status = 0;
+  uint8_t txbuf[4];
+
+  // Validate parameters
+
+  if (socket >= numsockets)
+  {
+    errno_r = EINVAL;
+    return __LINE__ - 3;
+  }
+
+  txbuf[0] = (*rampointer >> 8) & 0xFF;
+  txbuf[1] = *rampointer & 0xFF;
+  txbuf[2] = 0x00;
+  txbuf[3] = 0x01;
+
+  status = spimaster_transfer(spiport, txbuf, 4, dst, count);
 
   return status;
 }
@@ -363,7 +379,7 @@ int wiznet_udp_open(const int socket,
   if (socket >= numsockets)
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   // Make sure requested socket is idle
@@ -374,7 +390,7 @@ int wiznet_udp_open(const int socket,
   if (data != W5200_Sn_SR_SOCK_CLOSED)
   {
     errno_r = EALREADY;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   // Pick random ephemeral port
@@ -436,7 +452,7 @@ int wiznet_udp_receive(const int socket,
   if (socket >= numsockets)
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   // Get number of received bytes available
@@ -449,7 +465,7 @@ int wiznet_udp_receive(const int socket,
   if (*count == 0)
   {
     errno_r = ENODATA;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   // Get receive buffer read pointer
@@ -499,7 +515,7 @@ int wiznet_udp_send(const int socket,
   if (socket >= W5200_MAX_SOCKETS)
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   // Get number of transmit bytes free
@@ -512,7 +528,7 @@ int wiznet_udp_send(const int socket,
   if (count > free)
   {
     errno_r = ENOBUFS;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   return status;
