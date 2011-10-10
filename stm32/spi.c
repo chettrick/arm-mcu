@@ -260,19 +260,19 @@ int spimaster_init(uint32_t port,
   if ((port < 1) && (port > MAX_SPI_PORTS))
   {
     errno_r = ENODEV;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if (clockmode > 3)
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if (bigendian > 1)
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
 // Get SPI clock prescaler
@@ -327,31 +327,31 @@ int spimaster_transfer(uint32_t port,
   if ((port < 1) && (port > MAX_SPI_PORTS))
   {
     errno_r = ENODEV;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if ((txbuf == NULL) && (txcount != 0))
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if ((txcount == 0) && (txbuf != NULL))
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if ((rxbuf == NULL) && (rxcount != 0))
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
   if ((rxcount == 0) && (rxbuf != NULL))
   {
     errno_r = EINVAL;
-    return __LINE__;
+    return __LINE__ - 3;
   }
 
 // Assert NSS
