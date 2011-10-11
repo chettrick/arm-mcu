@@ -349,6 +349,8 @@ int wiznet_read_receive_ram(const int socket,
 {
   int status = 0;
   uint8_t txbuf[4];
+int i;
+uint8_t *p = dst;
 
   // Validate parameters
 
@@ -364,12 +366,18 @@ int wiznet_read_receive_ram(const int socket,
     return __LINE__ - 3;
   }
 
+printf("\nReading %d bytes from receive RAM at %04lX:", count, *rampointer);
+
   txbuf[0] = (*rampointer >> 8) & 0xFF;
   txbuf[1] = *rampointer & 0xFF;
   txbuf[2] = 0x00;
   txbuf[3] = 0x01;
 
   status = spimaster_transfer(spiport, txbuf, 4, dst, count);
+
+for (i = 0; i < count; i++) printf(" %02X", *p++); putchar('\n'); fflush(stdout);
+
+  *rampointer += count;
 
   return status;
 }
@@ -450,6 +458,7 @@ int wiznet_udp_receive(const int socket,
                        uint32_t *count)
 {
   int status = 0;
+  uint32_t rxready;
   uint8_t hibyte, lobyte;
   uint32_t rampointer;
 
@@ -463,12 +472,12 @@ int wiznet_udp_receive(const int socket,
 
   // Get number of received bytes available
 
-  if ((status = wiznet_get_receive_ready(socket, count)))
+  if ((status = wiznet_get_receive_ready(socket, &rxready)))
     return status;
 
   // Error if no data available
 
-  if (*count == 0)
+  if (rxready == 0)
   {
     errno_r = ENODATA;
     return __LINE__ - 3;
@@ -482,7 +491,7 @@ int wiznet_udp_receive(const int socket,
   if ((status = W5200_read_register(W5200_Sn_RX_RD(socket)+1, &lobyte)))
     return status;
 
-  rampointer = ((hibyte << 8) + lobyte) & addressmask;
+  rampointer = socket_table[socket].RX_RAM_base + (((hibyte << 8) + lobyte) & addressmask);
 
   // Read source IP address from W5200 RAM
 
@@ -491,7 +500,7 @@ int wiznet_udp_receive(const int socket,
 
   // Read source UDP port from W5200 RAM
 
-  if ((status = wiznet_read_receive_ram(socket, &rampointer, &srcport, 2)))
+  if ((status = wiznet_read_receive_ram(socket, &rampointer, srcport, 2)))
     return status;
 
   // Read UDP datagram size from W5200 RAM
