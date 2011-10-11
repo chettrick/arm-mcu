@@ -92,6 +92,7 @@ int main(void)
   uint32_t count;
   ipv4address_t senderaddr;
   uint16_t senderport;
+  char senderaddrbuf[256];
 
   cpu_init(DEFAULT_CPU_FREQ);
 
@@ -237,7 +238,6 @@ int main(void)
     printf("\033[10;1HReceive bytes available: %-5lu", count);
     fflush(stdout);
 
-#if 0
     if (count)
     {
       if ((status = wiznet_udp_receive(0, senderaddr, &senderport, buf, &count)))
@@ -246,8 +246,11 @@ int main(void)
         assert(FALSE);
       }
 
-      printf("\033[11:1HReceived %lu bytes\n", count);
+      memset(senderaddrbuf, 0, sizeof(senderaddrbuf));
+      inet_ntop(AF_INET, senderaddr, senderaddrbuf, sizeof(senderaddrbuf));
+      printf("\033[11:1HReceived %lu bytes from %s:%d\n", count, senderaddrbuf, senderport);
     }
-#endif
+
+    delay(100);
   }
 }
