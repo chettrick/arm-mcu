@@ -42,7 +42,7 @@
 #define W5200_Sn_PROTO(s)	(W5200_SOCKET_REG(s) + 0x14)
 #define W5200_Sn_IP_TOS(s)	(W5200_SOCKET_REG(s) + 0x15)
 #define W5200_Sn_IP_TTL(s)	(W5200_SOCKET_REG(s) + 0x16)
-#define W5200_Sn_RXMEMSIZE(s)	(W5200_SOCKET_REG(s) + 0x1E)
+#define W5200_Sn_RXMEM_SIZE(s)	(W5200_SOCKET_REG(s) + 0x1E)
 #define W5200_Sn_TXMEM_SIZE(s)	(W5200_SOCKET_REG(s) + 0x1F)
 #define W5200_Sn_TX_FSR(s)	(W5200_SOCKET_REG(s) + 0x20)
 #define W5200_Sn_TX_RD(s)	(W5200_SOCKET_REG(s) + 0x22)
