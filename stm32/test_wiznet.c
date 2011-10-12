@@ -102,6 +102,11 @@ int main(void)
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
 
+  printf("Press ENTER to begin test...");
+  fflush(stdout);
+  fflush(stdin);
+  fgets(senderaddrbuf, sizeof(senderaddrbuf), stdin);
+
 // Initialize System Tick with 10 ms time interval
 
   SysTick_Config(SystemCoreClock / 100);
@@ -152,7 +157,7 @@ int main(void)
 
 // Initialize the WizNet device
 
-  if ((status = wiznet_initialize(WIZNET_SPIPORT, 4)))
+  if ((status = wiznet_initialize(WIZNET_SPIPORT, 8)))
   {
     fprintf(stderr, "ERROR: wiznet_initialize() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
@@ -170,10 +175,11 @@ int main(void)
     assert(FALSE);
   }
 
-  printf("MAC address is %02X:%02X:%02X:%02X:%02X:%02X\n",
+  printf("\033[H\033[2JMAC address is %02X:%02X:%02X:%02X:%02X:%02X\n",
     macaddr[0], macaddr[1], macaddr[2], macaddr[3], macaddr[4], macaddr[5]);
+  fflush(stdout);
 
-  if (inet_pton(AF_INET, "10.0.4.129", ipaddr) != 1)
+  if (inet_pton(AF_INET, "10.0.5.100", ipaddr) != 1)
   {
     fprintf(stderr, "ERROR: inet_pton() failed, %s\n", strerror(errno));
     assert(FALSE);
@@ -185,7 +191,7 @@ int main(void)
     assert(FALSE);
   }
 
-  if (inet_pton(AF_INET, "10.0.4.1", gateway) != 1)
+  if (inet_pton(AF_INET, "10.0.5.1", gateway) != 1)
   {
     fprintf(stderr, "ERROR: inet_pton() failed, %s\n", strerror(errno));
     assert(FALSE);
@@ -225,7 +231,7 @@ int main(void)
       assert(FALSE);
     }
 
-    printf("\033[9;1HLink state: %s", linkstate ? "YES" : "NO ");
+    printf("\033[3;1HLink state: %s", linkstate ? "YES" : "NO ");
     fflush(stdout);
 #endif
 
@@ -235,12 +241,12 @@ int main(void)
       assert(FALSE);
     }
 
-    printf("\033[10;1HReceive bytes available: %-5lu", count);
+    printf("\033[4;1HReceive bytes available: %-5lu", count);
     fflush(stdout);
 
     if (count)
     {
-      if ((status = wiznet_udp_receive(0, senderaddr, &senderport, buf, &count)))
+      if ((status = wiznet_udp_receive(0, senderaddr, &senderport, buf, &count)) && (errno != ENODATA))
       {
         fprintf(stderr, "ERROR: wiznet_udp_receive() returned %d, %s\n", status, strerror(errno));
         assert(FALSE);
@@ -248,7 +254,7 @@ int main(void)
 
       memset(senderaddrbuf, 0, sizeof(senderaddrbuf));
       inet_ntop(AF_INET, senderaddr, senderaddrbuf, sizeof(senderaddrbuf));
-      printf("\033[11:1HReceived %lu bytes from %s:%d\n", count, senderaddrbuf, senderport);
+      printf("\033[5;1HReceived %lu bytes from %s:%d\n", count, senderaddrbuf, senderport);
     }
 
     delay(100);
