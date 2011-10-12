@@ -145,7 +145,7 @@ int wiznet_initialize(const uint32_t spiportnum,
 
 // Initialize memory size registers for this socket
 
-    if ((status = W5200_write_register(W5200_Sn_RXMEMSIZE(s),
+    if ((status = W5200_write_register(W5200_Sn_RXMEM_SIZE(s),
          RAMSIZE_TABLE[numsockets].CONFIG)))
       return status;
 
@@ -349,8 +349,6 @@ int wiznet_read_receive_ram(const int socket,
 {
   int status = 0;
   uint8_t txbuf[4];
-int i;
-uint8_t *p = dst;
 
   // Validate parameters
 
@@ -366,16 +364,12 @@ uint8_t *p = dst;
     return __LINE__ - 3;
   }
 
-printf("\nReading %d bytes from receive RAM at %04lX:", count, *rampointer);
-
   txbuf[0] = (*rampointer >> 8) & 0xFF;
   txbuf[1] = *rampointer & 0xFF;
   txbuf[2] = 0x00;
   txbuf[3] = 0x01;
 
   status = spimaster_transfer(spiport, txbuf, 4, dst, count);
-
-for (i = 0; i < count; i++) printf(" %02X", *p++); putchar('\n'); fflush(stdout);
 
   *rampointer += count;
 
