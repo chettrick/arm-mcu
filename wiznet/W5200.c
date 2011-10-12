@@ -366,8 +366,8 @@ int wiznet_read_receive_ram(const int socket,
 
   txbuf[0] = (*rampointer >> 8) & 0xFF;
   txbuf[1] = *rampointer & 0xFF;
-  txbuf[2] = 0x00;
-  txbuf[3] = 0x01;
+  txbuf[2] = (count >> 8) & 0xFF;
+  txbuf[3] = count & 0xFF;
 
   status = spimaster_transfer(spiport, txbuf, 4, dst, count);
 
