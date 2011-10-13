@@ -85,14 +85,14 @@ int main(void)
   int status;
   macaddress_t macaddr;
   ipv4address_t ipaddr, subnet, gateway;
-  char buf[256];
 #ifdef W5200
   uint32_t linkstate = FALSE;
 #endif
   uint32_t count;
   ipv4address_t senderaddr;
   uint32_t senderport;
-  char senderaddrbuf[256];
+  char ipaddrbuf[256];
+  uint8_t udpdgbuf[2048];
 
   cpu_init(DEFAULT_CPU_FREQ);
 
@@ -206,13 +206,13 @@ int main(void)
     assert(FALSE);
   }
 
-  if (inet_ntop(AF_INET, ipaddr, buf, sizeof(buf)) == NULL)
+  if (inet_ntop(AF_INET, ipaddr, ipaddrbuf, sizeof(ipaddrbuf)) == NULL)
   {
     fprintf(stderr, "ERROR: inet_ntop() failed, %s\n", strerror(errno));
     assert(FALSE);
   }
 
-  printf("IP address is %s\n", buf);
+  printf("IP address is %s\n", ipaddrbuf);
   fflush(stdout);
 
   wiznet_udp_open(0, 1234);
@@ -241,15 +241,15 @@ int main(void)
 
     if (count)
     {
-      if ((status = wiznet_udp_receive_from(0, senderaddr, &senderport, buf, &count)) && (errno != ENODATA))
+      if ((status = wiznet_udp_receive_from(0, senderaddr, &senderport, udpdgbuf, &count)) && (errno != ENODATA))
       {
         fprintf(stderr, "ERROR: wiznet_udp_receive() returned %d, %s\n", status, strerror(errno));
         assert(FALSE);
       }
 
-      memset(senderaddrbuf, 0, sizeof(senderaddrbuf));
-      inet_ntop(AF_INET, senderaddr, senderaddrbuf, sizeof(senderaddrbuf));
-      printf("\033[10;1HReceived %lu bytes from %s:%-5lu\n", count, senderaddrbuf, senderport);
+      memset(ipaddrbuf, 0, sizeof(ipaddrbuf));
+      inet_ntop(AF_INET, senderaddr, ipaddrbuf, sizeof(ipaddrbuf));
+      printf("\033[10;1HReceived %lu bytes from %s:%-5lu\n", count, ipaddrbuf, senderport);
     }
 
     delay(100);
