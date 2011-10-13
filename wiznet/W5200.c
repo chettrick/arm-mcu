@@ -17,7 +17,7 @@ static const char revision[] = "$Id$";
 
 static uint32_t spiport = 0;
 static uint32_t numsockets = 0;
-static uint32_t addressmask = 0;
+static uint16_t addressmask = 0;
 
 /* This table abstracts the W5200 RAM size configuration for 1 to 8 sockets. */
 /* We divide available RAM equally amoung the number of configured sockets.  */
@@ -455,6 +455,7 @@ int wiznet_udp_receive_from(const uint32_t socket,
   int status = 0;
   uint32_t rxready;
   uint8_t hibyte, lobyte;
+  uint16_t Sn_RX_RD;
   uint32_t rampointer;
   uint16_t word;
 
@@ -487,7 +488,9 @@ int wiznet_udp_receive_from(const uint32_t socket,
   if ((status = W5200_read_register(W5200_Sn_RX_RD(socket)+1, &lobyte)))
     return status;
 
-  rampointer = socket_table[socket].RX_RAM_base + (((hibyte << 8) + lobyte) & addressmask);
+  Sn_RX_RD = (hibyte << 8) + lobyte;
+
+  rampointer = socket_table[socket].RX_RAM_base + (Sn_RX_RD & addressmask);
 
   // Read source IP address from W5200 RAM
 
@@ -511,6 +514,21 @@ int wiznet_udp_receive_from(const uint32_t socket,
   // Read UDP datagram from W5200 RAM
 
   if ((status = wiznet_read_receive_ram(socket, &rampointer, buf, *count)))
+    return status;
+
+  // Advance Sn_RX_RD
+
+  Sn_RX_RD = (Sn_RX_RD + 8 + *count) & addressmask;
+
+  if ((status = W5200_write_register(W5200_Sn_RX_RD(socket)+0, Sn_RX_RD >> 8)))
+    return status;
+
+  if ((status = W5200_write_register(W5200_Sn_RX_RD(socket)+1, Sn_RX_RD & 0xFF)))
+    return status;
+
+  // Issue RECV command
+
+  if ((status = W5200_write_register(W5200_Sn_CR(socket), W5200_Sn_CR_RECV)))
     return status;
 
   return status;
