@@ -4,6 +4,7 @@
 
 static const char revision[] = "$Id$";
 
+#include <assert.h>
 #include <errno.h>
 #include <inet.h>
 #include <spi.h>
@@ -50,7 +51,8 @@ static struct
   uint32_t RX_RAM_base;
 } socket_table[W5200_MAX_SOCKETS];
 
-int W5200_write_register(const uint16_t address, const uint8_t data)
+int W5200_write_register(const uint16_t address,
+                         const uint8_t data)
 {
   uint8_t txbuf[5];
 
@@ -63,7 +65,8 @@ int W5200_write_register(const uint16_t address, const uint8_t data)
   return spimaster_transfer(spiport, txbuf, 5, NULL, 0);
 }
 
-int W5200_read_register(const uint16_t address, uint8_t *data)
+int W5200_read_register(const uint16_t address,
+                        uint8_t *data)
 {
   uint8_t txbuf[4];
 
@@ -73,6 +76,91 @@ int W5200_read_register(const uint16_t address, uint8_t *data)
   txbuf[3] = 0x01;
 
   return spimaster_transfer(spiport, txbuf, 4, data, 1);
+}
+
+int W5200_read_receive_ram(const uint32_t socket,
+                           uint16_t *rxbufptr,
+                           uint8_t *dst,
+                           const uint16_t count)
+{
+  int status = 0;
+  uint16_t srcaddr;
+  uint16_t maxbeforewrap;
+  uint8_t txbuf[4];
+  
+  // Validate parameters
+
+  if (socket >= numsockets)
+  {
+    errno_r = EINVAL;
+    return __LINE__ - 3;
+  }
+
+  if (rxbufptr == NULL)
+  {
+    errno_r = EINVAL;
+    return __LINE__ - 3;
+  }
+
+  if (dst == NULL)
+  {
+    errno_r = EINVAL;
+    return __LINE__ - 3;
+  }
+
+  if (count == 0)
+  {
+    errno_r = EINVAL;
+    return __LINE__ - 3;
+  }
+
+  // Check for impending buffer wraparound
+
+  maxbeforewrap = (addressmask + 1) - *rxbufptr;
+
+  if (count > maxbeforewrap)
+  {
+    srcaddr = socket_table[socket].RX_RAM_base + *rxbufptr;
+
+    txbuf[0] = srcaddr >> 8;
+    txbuf[1] = srcaddr & 0xFF;
+    txbuf[2] = maxbeforewrap >> 8;
+    txbuf[3] = maxbeforewrap & 0xFF;
+
+    status = spimaster_transfer(spiport, txbuf, 4, dst, maxbeforewrap);
+
+    *rxbufptr += maxbeforewrap;
+    *rxbufptr &= addressmask;
+assert(*rxbufptr == 0);
+
+    srcaddr = socket_table[socket].RX_RAM_base + *rxbufptr;
+
+    txbuf[0] = srcaddr >> 8;
+    txbuf[1] = srcaddr & 0xFF;
+    txbuf[2] = (count - maxbeforewrap) >> 8;
+    txbuf[3] = (count - maxbeforewrap) & 0xFF;
+
+    status = spimaster_transfer(spiport, txbuf, 4, dst + maxbeforewrap, count - maxbeforewrap);
+
+    *rxbufptr += count - maxbeforewrap;
+    *rxbufptr &= addressmask;
+  }
+  else
+  {
+    srcaddr = socket_table[socket].RX_RAM_base + *rxbufptr;
+
+    txbuf[0] = srcaddr >> 8;
+    txbuf[1] = srcaddr & 0xFF;
+    txbuf[2] = count >> 8;
+    txbuf[3] = count & 0xFF;
+
+    status = spimaster_transfer(spiport, txbuf, 4, dst, count);
+
+    *rxbufptr += count;
+    *rxbufptr &= addressmask;
+  }
+
+  return status;
 }
 
 static volatile uint32_t delaycounter = 0;
@@ -344,40 +432,6 @@ int wiznet_get_transmit_free(const uint32_t socket,
   return status;
 }
 
-int wiznet_read_receive_ram(const uint32_t socket,
-                            uint32_t *rampointer,
-                            void *dst,
-                            const uint32_t count)
-{
-  int status = 0;
-  uint8_t txbuf[4];
-
-  // Validate parameters
-
-  if (socket >= numsockets)
-  {
-    errno_r = EINVAL;
-    return __LINE__ - 3;
-  }
-
-  if (dst == NULL)
-  {
-    errno_r = EINVAL;
-    return __LINE__ - 3;
-  }
-
-  txbuf[0] = (*rampointer >> 8) & 0xFF;
-  txbuf[1] = *rampointer & 0xFF;
-  txbuf[2] = (count >> 8) & 0xFF;
-  txbuf[3] = count & 0xFF;
-
-  status = spimaster_transfer(spiport, txbuf, 4, dst, count);
-
-  *rampointer += count;
-
-  return status;
-}
-
 int wiznet_udp_open(const uint32_t socket,
                     uint32_t port)
 {
@@ -450,14 +504,13 @@ int wiznet_udp_open(const uint32_t socket,
 int wiznet_udp_receive_from(const uint32_t socket,
                             ipv4address_t srcaddr,
                             uint32_t *srcport,
-                            void *buf,
+                            uint8_t *buf,
                             uint32_t *count)
 {
   int status = 0;
   uint32_t rxready;
   uint8_t hibyte, lobyte;
-  uint16_t Sn_RX_RD;
-  uint32_t rampointer;
+  uint16_t rxbufptr;
   uint16_t word;
 
   // Validate parameters
@@ -489,42 +542,41 @@ int wiznet_udp_receive_from(const uint32_t socket,
   if ((status = W5200_read_register(W5200_Sn_RX_RD(socket)+1, &lobyte)))
     return status;
 
-  Sn_RX_RD = (hibyte << 8) + lobyte;
-
-  rampointer = socket_table[socket].RX_RAM_base + (Sn_RX_RD & addressmask);
+  rxbufptr = ((hibyte << 8) + lobyte) & addressmask;
 
   // Read source IP address from W5200 RAM
 
-  if ((status = wiznet_read_receive_ram(socket, &rampointer, srcaddr, 4)))
+  if ((status = W5200_read_receive_ram(socket, &rxbufptr, (uint8_t *) srcaddr, 4)))
     return status;
 
+assert(srcaddr[0] > 0);
   // Read source UDP port from W5200 RAM
 
-  if ((status = wiznet_read_receive_ram(socket, &rampointer, &word, 2)))
+  if ((status = W5200_read_receive_ram(socket, &rxbufptr, (uint8_t *) &word, 2)))
     return status;
 
   *srcport = ntohs(word);
+assert(*srcport > 0);
 
   // Read UDP datagram size from W5200 RAM
 
-  if ((status = wiznet_read_receive_ram(socket, &rampointer, &word, 2)))
+  if ((status = W5200_read_receive_ram(socket, &rxbufptr, (uint8_t *) &word, 2)))
     return status;
 
   *count = ntohs(word);
+assert(*count > 0);
 
   // Read UDP datagram from W5200 RAM
 
-  if ((status = wiznet_read_receive_ram(socket, &rampointer, buf, *count)))
+  if ((status = W5200_read_receive_ram(socket, &rxbufptr, buf, *count)))
     return status;
 
-  // Advance Sn_RX_RD
+  // Write rxbufptr to Sn_RX_RD
 
-  Sn_RX_RD = (Sn_RX_RD + 8 + *count) & addressmask;
-
-  if ((status = W5200_write_register(W5200_Sn_RX_RD(socket)+0, Sn_RX_RD >> 8)))
+  if ((status = W5200_write_register(W5200_Sn_RX_RD(socket)+0, rxbufptr >> 8)))
     return status;
 
-  if ((status = W5200_write_register(W5200_Sn_RX_RD(socket)+1, Sn_RX_RD & 0xFF)))
+  if ((status = W5200_write_register(W5200_Sn_RX_RD(socket)+1, rxbufptr & 0xFF)))
     return status;
 
   // Issue RECV command
@@ -538,7 +590,7 @@ int wiznet_udp_receive_from(const uint32_t socket,
 int wiznet_udp_send_to(const uint32_t socket,
                        const ipv4address_t destaddr,
                        const uint32_t destport,
-                       void *buf,
+                       uint8_t *buf,
                        const uint32_t count)
 {
   int status = 0;
