@@ -241,7 +241,7 @@ int main(void)
 
     if (count)
     {
-      if ((status = wiznet_udp_receive(0, senderaddr, &senderport, buf, &count)) && (errno != ENODATA))
+      if ((status = wiznet_udp_receive_from(0, senderaddr, &senderport, buf, &count)) && (errno != ENODATA))
       {
         fprintf(stderr, "ERROR: wiznet_udp_receive() returned %d, %s\n", status, strerror(errno));
         assert(FALSE);

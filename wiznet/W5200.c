@@ -16,7 +16,7 @@ static const char revision[] = "$Id$";
 #define errno_r (*(__errno()))
 
 static uint32_t spiport = 0;
-static int numsockets = 0;
+static uint32_t numsockets = 0;
 static uint32_t addressmask = 0;
 
 /* This table abstracts the W5200 RAM size configuration for 1 to 8 sockets. */
@@ -83,7 +83,7 @@ void wiznet_tick(void)
 }
 
 int wiznet_initialize(const uint32_t spiportnum,
-                      const int sockets)
+                      const uint32_t sockets)
 {
   int status = 0;
   int s;
@@ -241,7 +241,7 @@ int wiznet_get_ipaddress(ipv4address_t address)
   return status;
 }
 
-int wiznet_get_linkstate(int *linkstate)
+int wiznet_get_linkstate(uint32_t *linkstate)
 {
   int status = 0;
   uint8_t data;
@@ -259,8 +259,8 @@ int wiznet_get_linkstate(int *linkstate)
   return status;
 }
 
-int wiznet_get_port(const int socket,
-                    uint16_t *port)
+int wiznet_get_port(const uint32_t socket,
+                    uint32_t *port)
 {
   int status = 0;
   uint8_t hibyte, lobyte;
@@ -287,7 +287,7 @@ int wiznet_get_port(const int socket,
   return status;
 }
 
-int wiznet_get_receive_ready(const int socket,
+int wiznet_get_receive_ready(const uint32_t socket,
                              uint32_t *count)
 {
   int status = 0;
@@ -315,7 +315,7 @@ int wiznet_get_receive_ready(const int socket,
   return status;
 }
 
-int wiznet_get_transmit_free(const int socket,
+int wiznet_get_transmit_free(const uint32_t socket,
                              uint32_t *count)
 {
   int status = 0;
@@ -343,10 +343,10 @@ int wiznet_get_transmit_free(const int socket,
   return status;
 }
 
-int wiznet_read_receive_ram(const int socket,
+int wiznet_read_receive_ram(const uint32_t socket,
                             uint32_t *rampointer,
                             void *dst,
-                            const unsigned int count)
+                            const uint32_t count)
 {
   int status = 0;
   uint8_t txbuf[4];
@@ -377,8 +377,8 @@ int wiznet_read_receive_ram(const int socket,
   return status;
 }
 
-int wiznet_udp_open(const int socket,
-                    uint16_t port)
+int wiznet_udp_open(const uint32_t socket,
+                    uint32_t port)
 {
   int status = 0;
   uint8_t data;
@@ -407,7 +407,7 @@ int wiznet_udp_open(const int socket,
   while (port == 0)
   {
     int i;
-    uint16_t p;
+    uint32_t p;
 
     // Pick a random port number
     port = 49152 + rand() % 16384;
@@ -446,11 +446,11 @@ int wiznet_udp_open(const int socket,
   return status;
 }
 
-int wiznet_udp_receive(const int socket,
-                       ipv4address_t srcaddr,
-                       uint16_t *srcport,
-                       void *buf,
-                       uint32_t *count)
+int wiznet_udp_receive_from(const uint32_t socket,
+                            ipv4address_t srcaddr,
+                            uint32_t *srcport,
+                            void *buf,
+                            uint32_t *count)
 {
   int status = 0;
   uint32_t rxready;
@@ -516,11 +516,11 @@ int wiznet_udp_receive(const int socket,
   return status;
 }
 
-int wiznet_udp_send(const int socket,
-                    const ipv4address_t destaddr,
-                    const uint16_t destport,
-                    void *buf,
-                    const uint32_t count)
+int wiznet_udp_send_to(const uint32_t socket,
+                       const ipv4address_t destaddr,
+                       const uint32_t destport,
+                       void *buf,
+                       const uint32_t count)
 {
   int status = 0;
   uint32_t free;

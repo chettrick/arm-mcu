@@ -2,6 +2,8 @@
 
 // $Id$
 
+#include <stdint.h>
+
 #ifndef TRUE
 #define TRUE    1
 #endif
@@ -17,7 +19,7 @@ typedef uint8_t ipv4address_t[4];		// IPv4 address
 void wiznet_tick(void);
 
 int wiznet_initialize(const uint32_t spiportnum,
-                      const int numsockets);
+                      const uint32_t numsockets);
 
 int wiznet_set_hardware_address(const macaddress_t address);
 
@@ -29,36 +31,36 @@ int wiznet_configure_network(const ipv4address_t address,
 
 int wiznet_get_ipaddress(ipv4address_t address);
 
-int wiznet_get_linkstate(int *linkstate);
+int wiznet_get_linkstate(uint32_t *linkstate);
 
-int wiznet_get_port(const int socket,
-                    uint16_t *port);
+int wiznet_get_port(const uint32_t socket,
+                    uint32_t *port);
 
-int wiznet_get_receive_ready(const int socket,
+int wiznet_get_receive_ready(const uint32_t socket,
                              uint32_t *count);
 
-int wiznet_get_transmit_free(const int socket,
+int wiznet_get_transmit_free(const uint32_t socket,
                              uint32_t *count);
 
-int wiznet_read_receive_ram(const int socket,
+int wiznet_read_receive_ram(const uint32_t socket,
                             uint32_t *rampointer,
                             void *dst,
-                            const unsigned int count);
+                            const uint32_t count);
 
-int wiznet_udp_open(const int socket,
-                    const uint16_t port);
+int wiznet_udp_open(const uint32_t socket,
+                    const uint32_t port);
 
-int wiznet_udp_receive(const int socket,
-                       ipv4address_t srcaddr,
-                       uint16_t *srcport,
+int wiznet_udp_receive_from(const uint32_t socket,
+                            ipv4address_t srcaddr,
+                            uint32_t *srcport,
+                            void *buf,
+                            uint32_t *count);
+
+int wiznet_udp_send_to(const uint32_t socket,
+                       const ipv4address_t destaddr,
+                       const uint32_t destport,
                        void *buf,
-                       uint32_t *count);
-
-int wiznet_udp_send(const int socket,
-                    const ipv4address_t destaddr,
-                    const uint16_t destport,
-                    void *buf,
-                    const uint32_t count);
+                       const uint32_t count);
 
 int wiznet_bootp(ipv4address_t address,
                  ipv4address_t subnet,
