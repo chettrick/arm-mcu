@@ -87,11 +87,11 @@ int main(void)
   ipv4address_t ipaddr, subnet, gateway;
   char buf[256];
 #ifdef W5200
-  int linkstate = FALSE;
+  uint32_t linkstate = FALSE;
 #endif
   uint32_t count;
   ipv4address_t senderaddr;
-  uint16_t senderport;
+  uint32_t senderport;
   char senderaddrbuf[256];
 
   cpu_init(DEFAULT_CPU_FREQ);
@@ -249,7 +249,7 @@ int main(void)
 
       memset(senderaddrbuf, 0, sizeof(senderaddrbuf));
       inet_ntop(AF_INET, senderaddr, senderaddrbuf, sizeof(senderaddrbuf));
-      printf("\033[10;1HReceived %lu bytes from %s:%d\n", count, senderaddrbuf, senderport);
+      printf("\033[10;1HReceived %lu bytes from %s:%-5lu\n", count, senderaddrbuf, senderport);
     }
 
     delay(100);
