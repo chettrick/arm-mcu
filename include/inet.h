@@ -19,8 +19,8 @@
 #elif BYTE_ORDER == LITTLE_ENDIAN
 #define htonl(x)	__bswap_32(x)
 #define ntohl(x)	__bswap_32(x)
-#define htons(x)	__bswap_16(x)
-#define ntohs(x)	__bswap_16(x)
+#define htons(x)	(((x << 8) & 0xff00) | ((x >> 8) & 0x00ff))
+#define ntohs(x)	(((x << 8) & 0xff00) | ((x >> 8) & 0x00ff))
 #else
 #error "Unsupported byte order!"
 #endif
