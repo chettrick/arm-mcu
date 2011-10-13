@@ -152,7 +152,7 @@ int main(void)
 
 // Initialize the WizNet device
 
-  if ((status = wiznet_initialize(WIZNET_SPIPORT, 8)))
+  if ((status = wiznet_initialize(WIZNET_SPIPORT, 4)))
   {
     fprintf(stderr, "ERROR: wiznet_initialize() returned %d, %s\n", status, strerror(errno));
     assert(FALSE);
