@@ -48,13 +48,13 @@ int wiznet_udp_open(const uint32_t socket,
 int wiznet_udp_receive_from(const uint32_t socket,
                             ipv4address_t srcaddr,
                             uint32_t *srcport,
-                            void *buf,
+                            uint8_t *buf,
                             uint32_t *count);
 
 int wiznet_udp_send_to(const uint32_t socket,
                        const ipv4address_t destaddr,
                        const uint32_t destport,
-                       void *buf,
+                       uint8_t *buf,
                        const uint32_t count);
 
 int wiznet_bootp(ipv4address_t address,
