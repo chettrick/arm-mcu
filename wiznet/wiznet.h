@@ -42,11 +42,6 @@ int wiznet_get_receive_ready(const uint32_t socket,
 int wiznet_get_transmit_free(const uint32_t socket,
                              uint32_t *count);
 
-int wiznet_read_receive_ram(const uint32_t socket,
-                            uint32_t *rampointer,
-                            void *dst,
-                            const uint32_t count);
-
 int wiznet_udp_open(const uint32_t socket,
                     const uint32_t port);
 

@@ -117,6 +117,13 @@
 
 // W5200 specific driver functions
 
-int W5200_write_register(const uint16_t address, const uint8_t data);
+int W5200_write_register(const uint16_t address,
+                         const uint8_t data);
 
-int W5200_read_register(const uint16_t address, uint8_t *data);
+int W5200_read_register(const uint16_t address,
+                        uint8_t *data);
+
+int W5200_read_receive_ram(const uint32_t socket,
+                           uint16_t *rampointer,
+                           void *dst,
+                           const uint16_t count);
