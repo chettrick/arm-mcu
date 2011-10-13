@@ -5,6 +5,7 @@
 static const char revision[] = "$Id$";
 
 #include <errno.h>
+#include <inet.h>
 #include <spi.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -455,6 +456,7 @@ int wiznet_udp_receive(const int socket,
   uint32_t rxready;
   uint8_t hibyte, lobyte;
   uint32_t rampointer;
+  uint16_t word;
 
   // Validate parameters
 
@@ -494,13 +496,17 @@ int wiznet_udp_receive(const int socket,
 
   // Read source UDP port from W5200 RAM
 
-  if ((status = wiznet_read_receive_ram(socket, &rampointer, srcport, 2)))
+  if ((status = wiznet_read_receive_ram(socket, &rampointer, &word, 2)))
     return status;
+
+  *srcport = ntohs(word);
 
   // Read UDP datagram size from W5200 RAM
 
-  if ((status = wiznet_read_receive_ram(socket, &rampointer, count, 2)))
+  if ((status = wiznet_read_receive_ram(socket, &rampointer, &word, 2)))
     return status;
+
+  *count = ntohs(word);
 
   // Read UDP datagram from W5200 RAM
 
