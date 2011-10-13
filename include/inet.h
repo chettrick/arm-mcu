@@ -2,6 +2,8 @@
 
 // $Id$
 
+#include <sys/param.h>
+
 // Network protocol macros
 
 #define	AF_INET			2
