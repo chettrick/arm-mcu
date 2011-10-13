@@ -131,7 +131,8 @@ int W5200_read_receive_ram(const uint32_t socket,
 
     *rxbufptr += maxbeforewrap;
     *rxbufptr &= addressmask;
-assert(*rxbufptr == 0);
+
+    assert(*rxbufptr == 0);
 
     srcaddr = socket_table[socket].RX_RAM_base + *rxbufptr;
 
@@ -549,14 +550,15 @@ int wiznet_udp_receive_from(const uint32_t socket,
   if ((status = W5200_read_receive_ram(socket, &rxbufptr, (uint8_t *) srcaddr, 4)))
     return status;
 
-assert(srcaddr[0] > 0);
+  assert(srcaddr[0] > 0);
+
   // Read source UDP port from W5200 RAM
 
   if ((status = W5200_read_receive_ram(socket, &rxbufptr, (uint8_t *) &word, 2)))
     return status;
 
   *srcport = ntohs(word);
-assert(*srcport > 0);
+  assert(*srcport > 0);
 
   // Read UDP datagram size from W5200 RAM
 
@@ -564,7 +566,7 @@ assert(*srcport > 0);
     return status;
 
   *count = ntohs(word);
-assert(*count > 0);
+  assert(*count > 0);
 
   // Read UDP datagram from W5200 RAM
 
