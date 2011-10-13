@@ -162,7 +162,7 @@ endif
 clean:
 	cd $(MCUDIR) && $(MAKE) clean_$(MCU)
 	find * -name '*.o' -exec rm {} ";"
-	rm -f *.a *.asm *.bin *.elf *.hex *.log *.map *.tmp Default.ini
+	rm -f *.a *.asm *.bin *.elf *.hex *.log *.map *.stackdump *.tmp Default.ini
 	$(MAKE) common_clean
 ifeq ($(WITH_FREERTOS), yes)
 	$(MAKE) freertos_clean
