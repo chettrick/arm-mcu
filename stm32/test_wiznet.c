@@ -88,9 +88,9 @@ int main(void)
 #ifdef W5200
   uint32_t linkstate = FALSE;
 #endif
-  uint32_t count;
+  size_t count;
   ipv4address_t senderaddr;
-  uint32_t senderport;
+  uint16_t senderport;
   char ipaddrbuf[256];
   uint8_t udpdgbuf[2048];
 
@@ -249,7 +249,7 @@ int main(void)
 
       memset(ipaddrbuf, 0, sizeof(ipaddrbuf));
       inet_ntop(AF_INET, senderaddr, ipaddrbuf, sizeof(ipaddrbuf));
-      printf("\033[10;1HReceived %lu bytes from %s:%-5lu\n", count, ipaddrbuf, senderport);
+      printf("\033[10;1HReceived %lu bytes from %s:%-5u\n", count, ipaddrbuf, senderport);
     }
 
     delay(100);
