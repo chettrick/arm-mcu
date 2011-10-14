@@ -79,11 +79,12 @@ int W5200_read_register(const uint16_t address,
 }
 
 int W5200_read_receive_ram(const uint32_t socket,
-                           uint16_t *rxbufptr,
+                           const uint16_t rampointer,
                            uint8_t *dst,
-                           const uint16_t count)
+                           const size_t count)
 {
   int status = 0;
+  uint16_t srcmask;
   uint16_t srcaddr;
   uint16_t maxbeforewrap;
   uint8_t txbuf[4];
@@ -91,12 +92,6 @@ int W5200_read_receive_ram(const uint32_t socket,
   // Validate parameters
 
   if (socket >= numsockets)
-  {
-    errno_r = EINVAL;
-    return __LINE__ - 3;
-  }
-
-  if (rxbufptr == NULL)
   {
     errno_r = EINVAL;
     return __LINE__ - 3;
@@ -114,51 +109,41 @@ int W5200_read_receive_ram(const uint32_t socket,
     return __LINE__ - 3;
   }
 
-  // Check for impending buffer wraparound
+  srcmask = rampointer & addressmask;
+  srcaddr = socket_table[socket].RX_RAM_base + srcmask;
 
-  maxbeforewrap = (addressmask + 1) - *rxbufptr;
+  maxbeforewrap = addressmask + 1 - srcmask;
+
+  // Check for impending buffer wraparound
 
   if (count > maxbeforewrap)
   {
-    srcaddr = socket_table[socket].RX_RAM_base + *rxbufptr;
+    srcaddr = socket_table[socket].RX_RAM_base + srcmask;
 
     txbuf[0] = srcaddr >> 8;
     txbuf[1] = srcaddr & 0xFF;
     txbuf[2] = maxbeforewrap >> 8;
     txbuf[3] = maxbeforewrap & 0xFF;
 
-    status = spimaster_transfer(spiport, txbuf, 4, dst, maxbeforewrap);
+    spimaster_transfer(spiport, txbuf, 4, dst, maxbeforewrap);
 
-    *rxbufptr += maxbeforewrap;
-    *rxbufptr &= addressmask;
-
-    assert(*rxbufptr == 0);
-
-    srcaddr = socket_table[socket].RX_RAM_base + *rxbufptr;
+    srcaddr = socket_table[socket].RX_RAM_base;
 
     txbuf[0] = srcaddr >> 8;
     txbuf[1] = srcaddr & 0xFF;
     txbuf[2] = (count - maxbeforewrap) >> 8;
     txbuf[3] = (count - maxbeforewrap) & 0xFF;
 
-    status = spimaster_transfer(spiport, txbuf, 4, dst + maxbeforewrap, count - maxbeforewrap);
-
-    *rxbufptr += count - maxbeforewrap;
-    *rxbufptr &= addressmask;
+    spimaster_transfer(spiport, txbuf, 4, dst + maxbeforewrap, count - maxbeforewrap);
   }
   else
   {
-    srcaddr = socket_table[socket].RX_RAM_base + *rxbufptr;
-
     txbuf[0] = srcaddr >> 8;
     txbuf[1] = srcaddr & 0xFF;
     txbuf[2] = count >> 8;
     txbuf[3] = count & 0xFF;
 
-    status = spimaster_transfer(spiport, txbuf, 4, dst, count);
-
-    *rxbufptr += count;
-    *rxbufptr &= addressmask;
+    spimaster_transfer(spiport, txbuf, 4, dst, count);
   }
 
   return status;
@@ -434,9 +419,10 @@ int wiznet_get_transmit_free(const uint32_t socket,
 }
 
 int wiznet_udp_open(const uint32_t socket,
-                    uint32_t port)
+                    const uint16_t port)
 {
   int status = 0;
+  uint16_t myport = port;
   uint8_t data;
 
   // Validate parameters
@@ -460,13 +446,13 @@ int wiznet_udp_open(const uint32_t socket,
 
   // Pick random ephemeral port
 
-  while (port == 0)
+  while (myport == 0)
   {
     int i;
     uint32_t p;
 
     // Pick a random port number
-    port = 49152 + rand() % 16384;
+    myport = 49152 + rand() % 16384;
 
     // See if it is already in use
     for (i = 0; i < W5200_MAX_SOCKETS; i++)
@@ -479,9 +465,9 @@ int wiznet_udp_open(const uint32_t socket,
         return status;
 
       // If we have a match, try another random port
-      if (port == p)
+      if (myport == p)
       {
-        port = 0;
+        myport = 0;
         break;
       }
     }
@@ -490,10 +476,10 @@ int wiznet_udp_open(const uint32_t socket,
   if ((status = W5200_write_register(W5200_Sn_MR(socket), W5200_Sn_MR_UDP)))
     return status;
 
-  if ((status = W5200_write_register(W5200_Sn_PORT(socket)+0, port / 256)))
+  if ((status = W5200_write_register(W5200_Sn_PORT(socket)+0, myport / 256)))
     return status;
 
-  if ((status = W5200_write_register(W5200_Sn_PORT(socket)+1, port % 256)))
+  if ((status = W5200_write_register(W5200_Sn_PORT(socket)+1, myport % 256)))
     return status;
 
   if ((status = W5200_write_register(W5200_Sn_CR(socket), W5200_Sn_CR_OPEN)))
@@ -504,15 +490,16 @@ int wiznet_udp_open(const uint32_t socket,
 
 int wiznet_udp_receive_from(const uint32_t socket,
                             ipv4address_t srcaddr,
-                            uint32_t *srcport,
+                            uint16_t *srcport,
                             uint8_t *buf,
                             uint32_t *count)
 {
   int status = 0;
   uint32_t rxready;
   uint8_t hibyte, lobyte;
-  uint16_t rxbufptr;
+  uint16_t Sn_RX_RD;
   uint16_t word;
+  uint8_t cr;
 
   // Validate parameters
 
@@ -543,18 +530,18 @@ int wiznet_udp_receive_from(const uint32_t socket,
   if ((status = W5200_read_register(W5200_Sn_RX_RD(socket)+1, &lobyte)))
     return status;
 
-  rxbufptr = ((hibyte << 8) + lobyte) & addressmask;
+  Sn_RX_RD = (hibyte << 8) + lobyte;
 
   // Read source IP address from W5200 RAM
 
-  if ((status = W5200_read_receive_ram(socket, &rxbufptr, (uint8_t *) srcaddr, 4)))
+  if ((status = W5200_read_receive_ram(socket, Sn_RX_RD+0, (uint8_t *) srcaddr, 4)))
     return status;
 
   assert(srcaddr[0] > 0);
 
   // Read source UDP port from W5200 RAM
 
-  if ((status = W5200_read_receive_ram(socket, &rxbufptr, (uint8_t *) &word, 2)))
+  if ((status = W5200_read_receive_ram(socket, Sn_RX_RD+4, (uint8_t *) &word, 2)))
     return status;
 
   *srcport = ntohs(word);
@@ -562,7 +549,7 @@ int wiznet_udp_receive_from(const uint32_t socket,
 
   // Read UDP datagram size from W5200 RAM
 
-  if ((status = W5200_read_receive_ram(socket, &rxbufptr, (uint8_t *) &word, 2)))
+  if ((status = W5200_read_receive_ram(socket, Sn_RX_RD+6, (uint8_t *) &word, 2)))
     return status;
 
   *count = ntohs(word);
@@ -570,21 +557,30 @@ int wiznet_udp_receive_from(const uint32_t socket,
 
   // Read UDP datagram from W5200 RAM
 
-  if ((status = W5200_read_receive_ram(socket, &rxbufptr, buf, *count)))
+  if ((status = W5200_read_receive_ram(socket, Sn_RX_RD+8, buf, *count)))
     return status;
 
-  // Write rxbufptr to Sn_RX_RD
+  // Advance Sn_RX_RD
 
-  if ((status = W5200_write_register(W5200_Sn_RX_RD(socket)+0, rxbufptr >> 8)))
+  Sn_RX_RD += 8 + *count;
+
+  if ((status = W5200_write_register(W5200_Sn_RX_RD(socket)+0, Sn_RX_RD >> 8)))
     return status;
 
-  if ((status = W5200_write_register(W5200_Sn_RX_RD(socket)+1, rxbufptr & 0xFF)))
+  if ((status = W5200_write_register(W5200_Sn_RX_RD(socket)+1, Sn_RX_RD & 0xFF)))
     return status;
 
   // Issue RECV command
 
   if ((status = W5200_write_register(W5200_Sn_CR(socket), W5200_Sn_CR_RECV)))
     return status;
+
+  do
+  {
+    if ((status = W5200_read_register(W5200_Sn_CR(socket), &cr)))
+      return status;
+  }
+  while (cr);
 
   return status;
 }
