@@ -2,6 +2,7 @@
 
 // $Id$
 
+#include <stddef.h>
 #include <stdint.h>
 
 #ifndef TRUE
@@ -37,19 +38,19 @@ int wiznet_get_port(const uint32_t socket,
                     uint32_t *port);
 
 int wiznet_get_receive_ready(const uint32_t socket,
-                             uint32_t *count);
+                             size_t *count);
 
 int wiznet_get_transmit_free(const uint32_t socket,
-                             uint32_t *count);
+                             size_t *count);
 
 int wiznet_udp_open(const uint32_t socket,
-                    const uint32_t port);
+                    const uint16_t port);
 
 int wiznet_udp_receive_from(const uint32_t socket,
                             ipv4address_t srcaddr,
-                            uint32_t *srcport,
+                            uint16_t *srcport,
                             uint8_t *buf,
-                            uint32_t *count);
+                            size_t *count);
 
 int wiznet_udp_send_to(const uint32_t socket,
                        const ipv4address_t destaddr,
