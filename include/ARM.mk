@@ -114,7 +114,7 @@ stopocd:
 # Update from source code repository
 
 update:
-	svn status
+	svn status --no-ignore
 	svn update
 
 # Support for common library functions
