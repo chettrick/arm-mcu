@@ -126,10 +126,10 @@ int W5200_read_register(const uint16_t address,
 
 int W5200_read_receive_ram(const uint32_t socket,
                            const uint16_t rampointer,
-                           uint8_t *dst,
+                           uint8_t *buf,
                            const size_t count);
 
 int W5200_write_transmit_ram(const uint32_t socket,
                              const uint16_t rampointer,
-                             uint8_t *src,
+                             uint8_t *buf,
                              const size_t count);
