@@ -217,14 +217,6 @@ int W5200_write_transmit_ram(const uint32_t socket,
   return status;
 }
 
-static volatile uint32_t delaycounter = 0;
-
-void wiznet_tick(void)
-{
-  if (delaycounter)
-    delaycounter--;
-}
-
 int wiznet_initialize(const uint32_t spiportnum,
                       const uint32_t sockets)
 {
