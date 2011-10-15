@@ -37,7 +37,7 @@
 #define W5200_Sn_PORT(s)	(W5200_SOCKET_REG(s) + 0x04)
 #define W5200_Sn_DHAR(s)	(W5200_SOCKET_REG(s) + 0x06)
 #define W5200_Sn_DIPR(s)	(W5200_SOCKET_REG(s) + 0x0C)
-#define W5200_Sn_DPORT(s)	(W5200_SOCKET_REG(s) + 0x10
+#define W5200_Sn_DPORT(s)	(W5200_SOCKET_REG(s) + 0x10)
 #define W5200_Sn_MSSR(s)	(W5200_SOCKET_REG(s) + 0x12)
 #define W5200_Sn_PROTO(s)	(W5200_SOCKET_REG(s) + 0x14)
 #define W5200_Sn_IP_TOS(s)	(W5200_SOCKET_REG(s) + 0x15)
@@ -78,6 +78,7 @@
 #define W5200_Sn_MR_IPRAW	0x03
 #define W5200_Sn_MR_MACRAW	0x04
 
+#define W5200_Sn_CR_IDLE	0x00
 #define W5200_Sn_CR_OPEN	0x01
 #define W5200_Sn_CR_LISTEN	0x02
 #define W5200_Sn_CR_CONNECT	0x04
@@ -127,3 +128,8 @@ int W5200_read_receive_ram(const uint32_t socket,
                            const uint16_t rampointer,
                            uint8_t *dst,
                            const size_t count);
+
+int W5200_write_transmit_ram(const uint32_t socket,
+                             const uint16_t rampointer,
+                             uint8_t *src,
+                             const size_t count);
