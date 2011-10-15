@@ -93,6 +93,7 @@ int main(void)
   uint16_t senderport;
   char ipaddrbuf[256];
   uint8_t udpdgbuf[2048];
+  int i;
 
   cpu_init(DEFAULT_CPU_FREQ);
 
@@ -241,15 +242,36 @@ int main(void)
 
     if (count)
     {
-      if ((status = wiznet_udp_receive_from(0, senderaddr, &senderport, udpdgbuf, &count)) && (errno != ENODATA))
+      do
       {
-        fprintf(stderr, "ERROR: wiznet_udp_receive() returned %d, %s\n", status, strerror(errno));
+        status = wiznet_udp_receive_from(0, senderaddr, &senderport, udpdgbuf, &count);
+      }
+      while (status && ((errno == ENODATA) || (errno == EBUSY)));
+
+      if (status)
+      {
+        fprintf(stderr, "ERROR: wiznet_udp_receive_to() returned %d, %s\n", status, strerror(errno));
         assert(FALSE);
       }
 
       memset(ipaddrbuf, 0, sizeof(ipaddrbuf));
       inet_ntop(AF_INET, senderaddr, ipaddrbuf, sizeof(ipaddrbuf));
       printf("\033[10;1HReceived %lu bytes from %s:%-5u\n", count, ipaddrbuf, senderport);
+
+      for (i = 0; i < count; i++)
+        udpdgbuf[i] = count - i;
+
+      do
+      {
+        status = wiznet_udp_send_to(0, senderaddr, senderport, udpdgbuf, count);
+      }
+      while (status && ((errno == ENOBUFS) || (errno == EBUSY)));
+
+      if (status)
+      {
+        fprintf(stderr, "ERROR: wiznet_udp_send_to() returned %d, %s\n", status, strerror(errno));
+        assert(FALSE);
+      }
     }
 
     delay(100);
