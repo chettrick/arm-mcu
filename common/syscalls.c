@@ -53,7 +53,7 @@ int _close_r(struct _reent *reent, int fd)
   reent->_errno = 0;
   return device_close(fd);
 }
-
+
 long _read_r(struct _reent *reent, int fd, void *dst, size_t size)
 {
   reent->_errno = 0;
