@@ -33,8 +33,11 @@ static device_t device_table[MAX_DEVICES];
 /* Register a character device driver to the next available file descriptor */
 
 int device_register_char(char *name,
-                         device_init_t init, device_write_t write, device_read_t read,
-                         device_write_ready_t write_ready, device_read_ready_t read_ready)
+                         device_init_t init,
+                         device_write_t write,
+                         device_read_t read,
+                         device_write_ready_t write_ready,
+                         device_read_ready_t read_ready)
 {
   int fd;
 
@@ -83,9 +86,12 @@ int device_register_char(char *name,
 
 /* Register a character device driver to a specific file descripter */
 
-int device_register_char_fd(int fd, unsigned int subdevice,
-                            device_write_t write, device_read_t read,
-                            device_write_ready_t write_ready, device_read_ready_t read_ready)
+int device_register_char_fd(int fd,
+                            unsigned int subdevice,
+                            device_write_t write,
+                            device_read_t read,
+                            device_write_ready_t write_ready,
+                            device_read_ready_t read_ready)
 {
   errno_r = 0;
 
@@ -120,7 +126,9 @@ int device_register_char_fd(int fd, unsigned int subdevice,
 /* Register a block device driver to the next available file descriptor */
 
 int device_register_block(char *name,
-                          device_init_t init, device_write_t write, device_read_t read,
+                          device_init_t init,
+                          device_write_t write,
+                          device_read_t read,
                           device_seek_t seek)
 {
   int fd;
@@ -153,7 +161,7 @@ int device_register_block(char *name,
     if (device_table[fd].type == DEVICE_TYPE_UNUSED)
     {
       memset(&device_table[fd], 0, sizeof(device_t));
-      if (name) strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
+      strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
       device_table[fd].type = DEVICE_TYPE_BLOCK;
       device_table[fd].init = init;
       device_table[fd].write = write;
@@ -482,7 +490,7 @@ int device_read_cooked(int fd, char *s, unsigned int count)
   }
 
   memset(s, 0, count);
-
+
 // Handle cooked character device input here
 
   for (p = s; p < s + count - 1;)
@@ -570,7 +578,8 @@ int device_read(int fd, char *s, unsigned int count)
     return -1;
   }
 
-  if ((device_table[fd].type != DEVICE_TYPE_CHAR) || (device_table[fd].flags & O_BINARY))
+  if ((device_table[fd].type != DEVICE_TYPE_CHAR) ||
+      (device_table[fd].flags & O_BINARY))
     return device_read_raw(fd, s, count);
   else
     return device_read_cooked(fd, s, count);
@@ -667,8 +676,7 @@ int device_write_raw(int fd, char *s, unsigned int count)
     do
     {
 #ifdef FREERTOS
-      if (xTaskGetCurrentTaskHandle() != NULL)
-        taskYIELD();
+      if (xTaskGetCurrentTaskHandle() != NULL) taskYIELD();
 #endif
     }
     while (!device_table[fd].write_ready(device_table[fd].subdevice));
@@ -719,7 +727,7 @@ int device_write_cooked(int fd, char *s, unsigned int count)
     errno_r = EIO;
     return -1;
   }
-
+
 // Handle cooked character device output here
 
   for (i = 0; i < count;)
@@ -785,7 +793,8 @@ int device_write(int fd, char *s, unsigned int count)
     return -1;
   }
 
-  if ((device_table[fd].type != DEVICE_TYPE_CHAR) || (device_table[fd].flags & O_BINARY))
+  if ((device_table[fd].type != DEVICE_TYPE_CHAR) ||
+      (device_table[fd].flags & O_BINARY))
     return device_write_raw(fd, s, count);
   else
     return device_write_cooked(fd, s, count);
@@ -826,7 +835,7 @@ int device_isatty(int fd)
 
   return (device_table[fd].type == DEVICE_TYPE_CHAR);
 }
-
+
 /* Return file information */
 
 int device_stat(int fd, struct stat *st)
