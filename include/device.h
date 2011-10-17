@@ -24,11 +24,17 @@ typedef enum
 } device_type_t;
 
 typedef int (*device_init_t)		(char *name, unsigned int *subdevice);
-typedef int (*device_write_t)		(unsigned int subdevice, char *buf, unsigned int count);
-typedef int (*device_read_t)		(unsigned int subdevice, char *buf, unsigned int count);
+typedef int (*device_write_t)		(unsigned int subdevice,
+                                         char *buf,
+                                         unsigned int count);
+typedef int (*device_read_t)		(unsigned int subdevice,
+                                         char *buf,
+                                         unsigned int count);
 typedef int (*device_write_ready_t)	(unsigned int subdevice);
 typedef int (*device_read_ready_t)	(unsigned int subdevice);
-typedef int (*device_seek_t)		(unsigned int subdevice, off_t pos, int whence);
+typedef int (*device_seek_t)		(unsigned int subdevice,
+                                         off_t pos,
+                                         int whence);
 
 typedef struct
 {
@@ -49,15 +55,23 @@ typedef struct
 // Device registration functions
 
 int device_register_char(char *name,
-                         device_init_t init, device_write_t write, device_read_t read,
-                         device_write_ready_t write_ready, device_read_ready_t read_ready);
+                         device_init_t init,
+                         device_write_t write,
+                         device_read_t read,
+                         device_write_ready_t write_ready,
+                         device_read_ready_t read_ready);
 
-int device_register_char_fd(int fd, unsigned int subdevice,
-                            device_write_t write, device_read_t read,
-                            device_write_ready_t write_ready, device_read_ready_t read_ready);
+int device_register_char_fd(int fd, 
+                            unsigned int subdevice,
+                            device_write_t write,
+                            device_read_t read,
+                            device_write_ready_t write_ready,
+                            device_read_ready_t read_ready);
 
 int device_register_block(char *name,
-                          device_init_t init, device_write_t write, device_read_t read,
+                          device_init_t init,
+                          device_write_t write,
+                          device_read_t read,
                           device_seek_t seek);
 
 int device_unregister(int fd);

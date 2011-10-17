@@ -29,7 +29,8 @@ char *inet_ntop(int af, const void *src, char *dst, int size)
       }
 
       memset(dst, 0, size);
-      snprintf(dst, size, "%d.%d.%d.%d", bytes[0], bytes[1], bytes[2], bytes[3]);
+      snprintf(dst, size, "%d.%d.%d.%d",
+               bytes[0], bytes[1], bytes[2], bytes[3]);
       return dst;
       break;
 
@@ -48,7 +49,7 @@ int inet_pton(int af, const char *src, void *dst)
   {
     case AF_INET :
       // NOTE: sscanf() with %hhu corrupts the byte following the last argument
-      // so we convert to unsigned integers first and then copy them to the bytes.
+      // so we convert to unsigned integer first and then copy to the bytes.
       if (sscanf(src, "%u.%u.%u.%u", &a, &b, &c, &d) == 4)
       {
         bytes[0] = a;
