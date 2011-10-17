@@ -65,7 +65,7 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-  serial_stdio(CONSOLE_PORT, 115200);
+  serial_stdio(CONSOLE_PORT);
 
 // Display version information
 
