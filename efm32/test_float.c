@@ -8,6 +8,7 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #ifndef __ARM_EABI__
@@ -21,7 +22,7 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-  serial_stdio(CONSOLE_PORT, 115200);
+  serial_stdio(CONSOLE_PORT);
 
   puts("\033[H\033[2JEFM32 Floating Point Arithmetic Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
@@ -32,4 +33,5 @@ int main(void)
   z = x + y;
 
   printf("x is %f, y is %f, x+y is %f, z is %d\n", x, y, x+y, z);
+  exit(0);
 }

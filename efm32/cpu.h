@@ -53,7 +53,7 @@
 #define DEFAULT_CPU_FREQ	32000000UL
 
 #ifndef CONSOLE_PORT
-#define CONSOLE_PORT		0
+#define CONSOLE_PORT		"com1:115200,n,8,1"
 #endif
 
 #ifdef INTEGER_STDIO
