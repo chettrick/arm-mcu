@@ -27,7 +27,8 @@ __attribute__ ((__interrupt__)) void TimerISR(void)
 int main(void)
 {
   cpu_init(DEFAULT_CPU_FREQ);
-  serial_stdio(CONSOLE_PORT, 115200);
+
+  serial_stdio(CONSOLE_PORT);
 
 /* Display startup banner */
 
