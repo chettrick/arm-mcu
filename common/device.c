@@ -123,7 +123,6 @@ int device_register_block(char *name,
                           device_init_t init, device_write_t write, device_read_t read,
                           device_seek_t seek)
 {
-  unsigned int subdevice;
   int fd;
 
   errno_r = 0;
@@ -150,18 +149,12 @@ int device_register_block(char *name,
     return -1;
   }
 
-  // Initialize the device and retrieve its subdevice number
-
-  if (init(name, &subdevice))
-    return -1;
-
   for (fd = 3; fd < MAX_DEVICES; fd++)
     if (device_table[fd].type == DEVICE_TYPE_UNUSED)
     {
       memset(&device_table[fd], 0, sizeof(device_t));
       if (name) strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
       device_table[fd].type = DEVICE_TYPE_BLOCK;
-      device_table[fd].subdevice = subdevice;
       device_table[fd].init = init;
       device_table[fd].write = write;
       device_table[fd].read = read;
@@ -284,7 +277,7 @@ int device_open(char *name, int flags, int mode)
 
   // Initialize the device
 
-  if (device_table[fd].init(name, NULL))
+  if (device_table[fd].init(name, &device_table[fd].subdevice))
     return -1;
 
   return fd;
@@ -324,6 +317,7 @@ int device_close(int fd)
     return -1;
   }
 
+  device_table[fd].subdevice = 0;
   device_table[fd].open = FALSE;
   device_table[fd].flags = 0;
   device_table[fd].mode = 0;
