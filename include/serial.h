@@ -8,28 +8,28 @@
 
 /* Initialize serial port */
 
-int serial_init(unsigned port, unsigned long int baudrate);
+int serial_init(unsigned int port, unsigned long int baudrate);
 
 /* Register serial port for standard I/O */
 
-int serial_stdio(unsigned port, unsigned long int baudrate);
+int serial_stdio(unsigned int port, unsigned long int baudrate);
 
 /* Register a serial port device */
 
-int serial_register(unsigned port, unsigned long int baudrate);
+int serial_register(unsigned int port, unsigned long int baudrate);
 
 /* Return TRUE if transmitter is ready to accept data */
 
-int serial_txready(unsigned port);
+int serial_txready(unsigned int port);
 
 /* Write data to the serial port */
 
-int serial_write(unsigned port, char *buf, unsigned int count);
+int serial_write(unsigned int port, char *buf, unsigned int count);
 
 /* Return TRUE if receive data is available */
 
-int serial_rxready(unsigned port);
+int serial_rxready(unsigned int port);
 
 /* Read data from the serial port */
 
-int serial_read(unsigned port, char *buf, unsigned int count);
+int serial_read(unsigned int port, char *buf, unsigned int count);
