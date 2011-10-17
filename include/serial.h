@@ -8,15 +8,15 @@
 
 /* Initialize serial port */
 
-int serial_init(unsigned int port, unsigned long int baudrate);
+int serial_init(char *name, unsigned int *subdevice);
 
 /* Register serial port for standard I/O */
 
-int serial_stdio(unsigned int port, unsigned long int baudrate);
+int serial_stdio(char *name);
 
 /* Register a serial port device */
 
-int serial_register(unsigned int port, unsigned long int baudrate);
+int serial_register(char *name);
 
 /* Return TRUE if transmitter is ready to accept data */
 
