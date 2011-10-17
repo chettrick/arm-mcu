@@ -10,6 +10,7 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 
@@ -25,30 +26,53 @@ static const unsigned long int UARTS[MAX_SERIAL_PORTS] =
   UART3_BASE_ADDR,
 };
 
-#define UxRBR          (*(volatile unsigned long *)(UARTS[port] + 0x00))
-#define UxTHR          (*(volatile unsigned long *)(UARTS[port] + 0x00))
-#define UxDLL          (*(volatile unsigned long *)(UARTS[port] + 0x00))
-#define UxDLM          (*(volatile unsigned long *)(UARTS[port] + 0x04))
-#define UxIER          (*(volatile unsigned long *)(UARTS[port] + 0x04))
-#define UxIIR          (*(volatile unsigned long *)(UARTS[port] + 0x08))
-#define UxFCR          (*(volatile unsigned long *)(UARTS[port] + 0x08))
-#define UxLCR          (*(volatile unsigned long *)(UARTS[port] + 0x0C))
-#define UxMCR          (*(volatile unsigned long *)(UARTS[port] + 0x10))
-#define UxLSR          (*(volatile unsigned long *)(UARTS[port] + 0x14))
-#define UxMSR          (*(volatile unsigned long *)(UARTS[port] + 0x18))
-#define UxSCR          (*(volatile unsigned long *)(UARTS[port] + 0x1C))
-#define UxACR          (*(volatile unsigned long *)(UARTS[port] + 0x20))
-#define UxICR          (*(volatile unsigned long *)(UARTS[port] + 0x24))
-#define UxFDR          (*(volatile unsigned long *)(UARTS[port] + 0x28))
-#define UxTER          (*(volatile unsigned long *)(UARTS[port] + 0x30))
+#define UxRBR          (*(volatile unsigned long int *)(UARTS[port] + 0x00))
+#define UxTHR          (*(volatile unsigned long int *)(UARTS[port] + 0x00))
+#define UxDLL          (*(volatile unsigned long int *)(UARTS[port] + 0x00))
+#define UxDLM          (*(volatile unsigned long int *)(UARTS[port] + 0x04))
+#define UxIER          (*(volatile unsigned long int *)(UARTS[port] + 0x04))
+#define UxIIR          (*(volatile unsigned long int *)(UARTS[port] + 0x08))
+#define UxFCR          (*(volatile unsigned long int *)(UARTS[port] + 0x08))
+#define UxLCR          (*(volatile unsigned long int *)(UARTS[port] + 0x0C))
+#define UxMCR          (*(volatile unsigned long int *)(UARTS[port] + 0x10))
+#define UxLSR          (*(volatile unsigned long int *)(UARTS[port] + 0x14))
+#define UxMSR          (*(volatile unsigned long int *)(UARTS[port] + 0x18))
+#define UxSCR          (*(volatile unsigned long int *)(UARTS[port] + 0x1C))
+#define UxACR          (*(volatile unsigned long int *)(UARTS[port] + 0x20))
+#define UxICR          (*(volatile unsigned long int *)(UARTS[port] + 0x24))
+#define UxFDR          (*(volatile unsigned long int *)(UARTS[port] + 0x28))
+#define UxTER          (*(volatile unsigned long int *)(UARTS[port] + 0x30))
 
 /* Initialize serial console */
 
-int serial_init(unsigned port, unsigned long int baudrate)
+int serial_init(char *name, unsigned int *subdevice)
 {
+  unsigned int port;
+  unsigned int baudrate;
   unsigned short int b;
 
   errno_r = 0;
+
+// Map serial port device name to port number
+
+  if (!strncasecmp(name, "com1:", 5))
+    port = 0;
+  else if (!strncasecmp(name, "com2:", 5))
+    port = 1;
+  else
+  {
+    errno_r = ENODEV;
+    return -1;
+  }
+
+// Pass up port number, if requested
+
+  if (subdevice != NULL)
+    *subdevice = port;
+
+// Extract baud rate from device name
+
+  baudrate = atoi(name+5);
 
   switch (port)
   {
@@ -107,58 +131,42 @@ int serial_init(unsigned port, unsigned long int baudrate)
 
 /* Register serial port for standard I/O */
 
-int serial_stdio(unsigned port, unsigned long int baudrate)
+int serial_stdio(char *name)
 {
-  int status;
+  unsigned int subdevice;
 
   errno_r = 0;
 
-  if (port+1 > MAX_SERIAL_PORTS)
-  {
-    errno_r = ENODEV;
+  if (serial_init(name, &subdevice))
     return -1;
-  }
 
-  status = serial_init(port, baudrate);
-  if (status) return status;
+  // Nuke existing stdin, stdout, stderr
 
-  device_register_char_fd(NULL, 0, port, (void *) baudrate, (device_init_t) serial_init, NULL, serial_read, NULL, serial_rxready);
-  device_register_char_fd(NULL, 1, port, (void *) baudrate, (device_init_t) serial_init, serial_write, NULL, serial_txready, NULL);
-  device_register_char_fd(NULL, 2, port, (void *) baudrate, (device_init_t) serial_init, serial_write, NULL, serial_txready, NULL);
+  device_unregister(0);
+  device_unregister(1);
+  device_unregister(2);
+
+  // Register new stdin, stdout, stderr
+
+  device_register_char_fd(0, subdevice, NULL, serial_read, NULL, serial_rxready);
+  device_register_char_fd(1, subdevice, serial_write, NULL, serial_txready, NULL);
+  device_register_char_fd(2, subdevice, serial_write, NULL, serial_txready, NULL);
 
   return 0;
 }
 
 /* Register a serial port device */
 
-int serial_register(unsigned port, unsigned long int baudrate)
+int serial_register(char *name)
 {
-  int status;
-  char name[DEVICE_NAME_SIZE];
-
   errno_r = 0;
 
-  if (port+1 > MAX_SERIAL_PORTS)
-  {
-    errno_r = ENODEV;
-    return -1;
-  }
-
-  status = serial_init(port, baudrate);
-  if (status) return status;
-
-  memset(name, 0, sizeof(name));
-  siprintf(name, "com%d", port);
-
-  device_register_char(name, port, (void *) baudrate,
-   (device_init_t) serial_init, serial_write, serial_read, serial_txready, serial_rxready);
-
-  return 0;
+  return device_register_char(name, serial_init, serial_write, serial_read, serial_txready, serial_rxready);
 }
 
 /* Return TRUE if transmitter is ready to accept data */
 
-int serial_txready(unsigned port)
+int serial_txready(unsigned int port)
 {
   errno_r = 0;
 
@@ -176,7 +184,7 @@ int serial_txready(unsigned port)
 
 /* Send a buffer to the serial port */
 
-int serial_write(unsigned port, char *buf, unsigned int count)
+int serial_write(unsigned int port, char *buf, unsigned int count)
 {
   errno_r = 0;
 
@@ -197,7 +205,7 @@ int serial_write(unsigned port, char *buf, unsigned int count)
 
 /* Return TRUE if receive data is available */
 
-int serial_rxready(unsigned port)
+int serial_rxready(unsigned int port)
 {
   errno_r = 0;
 
@@ -215,7 +223,7 @@ int serial_rxready(unsigned port)
 
 /* Read buffer from the serial port */
 
-int serial_read(unsigned port, char *buf, unsigned int count)
+int serial_read(unsigned int port, char *buf, unsigned int count)
 {
   errno_r = 0;
 
