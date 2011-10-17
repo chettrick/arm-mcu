@@ -4,7 +4,6 @@
 
 	.text
 	.code 32 
-
 	.align 	0
 
 	.extern	main 		/*  Usual C startup.			*/
@@ -78,7 +77,6 @@ _mainCRTStartup:
 	ldr	sp, =__stack_end_undefined__
 	msr	cpsr_c, #INIT_SYSTEM_MODE
 	ldr	sp, =__stack_end__
-
 	ldr	sl, =__stack_beg__
 
 	mov 	a2, #0		/* Fill value 				*/
