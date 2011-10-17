@@ -42,7 +42,7 @@ char *inet_ntop(int af, const void *src, char *dst, int size)
 int inet_pton(int af, const char *src, void *dst)
 {
   uint8_t *bytes = dst;
-  unsigned a, b, c, d;
+  unsigned int a, b, c, d;
 
   switch (af)
   {
