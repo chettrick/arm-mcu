@@ -24,12 +24,12 @@ static const unsigned long int UARTS[MAX_SERIAL_PORTS] =
   (unsigned long int) AT91C_BASE_US1
 };
 
-#define US_CR	(*(volatile unsigned long *)(UARTS[port] + 0x00))
-#define US_MR	(*(volatile unsigned long *)(UARTS[port] + 0x04))
-#define US_CSR	(*(volatile unsigned long *)(UARTS[port] + 0x14))
-#define US_RHR	(*(volatile unsigned long *)(UARTS[port] + 0x18))
-#define US_THR	(*(volatile unsigned long *)(UARTS[port] + 0x1C))
-#define US_BRGR	(*(volatile unsigned long *)(UARTS[port] + 0x20))
+#define US_CR	(*(volatile unsigned long int *)(UARTS[port] + 0x00))
+#define US_MR	(*(volatile unsigned long int *)(UARTS[port] + 0x04))
+#define US_CSR	(*(volatile unsigned long int *)(UARTS[port] + 0x14))
+#define US_RHR	(*(volatile unsigned long int *)(UARTS[port] + 0x18))
+#define US_THR	(*(volatile unsigned long int *)(UARTS[port] + 0x1C))
+#define US_BRGR	(*(volatile unsigned long int *)(UARTS[port] + 0x20))
 
 /* Initialize serial console */
 
