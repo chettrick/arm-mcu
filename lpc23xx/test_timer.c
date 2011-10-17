@@ -45,7 +45,7 @@ int main(void)
 
   VICIntSelect &= ~(1 << INT_TIMER1);		// Timer 1 uses IRQ
   VICVectPriority5 = 0;
-  VICVectAddr5 = (unsigned long) Timer1ISR;	// Timer 1 ISR address
+  VICVectAddr5 = (unsigned long int) Timer1ISR;	// Timer 1 ISR address
   VICIntEnable = 1 << INT_TIMER1;		// Enable timer 1 interrupt
 
   ENABLE_INTERRUPTS(IRQ);
