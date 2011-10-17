@@ -17,9 +17,6 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
-serial_init(CONSOLE_PORT, NULL);
-for (;;) serial_write(0, "This is a test\r\n", 16);
-
   serial_stdio(CONSOLE_PORT);
 
   puts("\033[H\033[2JSTM32 Console I/O Test (" __DATE__ " " __TIME__ ")\n");
