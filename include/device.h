@@ -45,7 +45,7 @@ typedef struct
   int flags;
   int mode;
 } device_t;
-
+
 // Device registration functions
 
 int device_register_char(char *name,
