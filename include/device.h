@@ -41,7 +41,9 @@ typedef struct
   device_write_ready_t write_ready;
   device_read_ready_t read_ready;
   device_seek_t seek;
+  int open;
   int flags;
+  int mode;
 } device_t;
 
 // Device registration functions
@@ -50,8 +52,8 @@ int device_register_char(char *name,
                          device_init_t init, device_write_t write, device_read_t read,
                          device_write_ready_t write_ready, device_read_ready_t read_ready);
 
-int device_register_char_fd(char *name, int fd,
-                            device_init_t init, device_write_t write, device_read_t read,
+int device_register_char_fd(int fd, unsigned int subdevice,
+                            device_write_t write, device_read_t read,
                             device_write_ready_t write_ready, device_read_ready_t read_ready);
 
 int device_register_block(char *name,
