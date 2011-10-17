@@ -41,20 +41,20 @@
 
 #ifndef CONSOLE_PORT
 #ifdef OLIMEX_STM32_P103
-#define CONSOLE_PORT		2
+#define CONSOLE_PORT		"com2:115200,n,8,1"
 #endif
 
 #ifdef OLIMEX_STM32_P107
-#define CONSOLE_PORT		3
+#define CONSOLE_PORT		"com3:115200,n,8,1"
 #endif
 
 #ifdef STM32_VALUE_LINE_DISCOVERY
-#define CONSOLE_PORT		1
+#define CONSOLE_PORT		"com1:115200,n,8,1"
 #endif
 #endif
 
 #ifdef W5200E01_M3
-#define CONSOLE_PORT		1
+#define CONSOLE_PORT		"com1:115200,n,8,1"
 #endif
 
 #ifdef INTEGER_STDIO
