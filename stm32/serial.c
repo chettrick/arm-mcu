@@ -11,6 +11,7 @@ static const char revision[] = "$Id$";
 #include <cpu.h>
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define MAX_SERIAL_PORTS	3
@@ -24,24 +25,43 @@ static USART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
 
 /* Initialize serial console */
 
-int serial_init(unsigned port, unsigned long int baudrate)
+int serial_init(char *name, unsigned int *subdevice)
 {
+  unsigned int port;
+  unsigned int baudrate;
   USART_InitTypeDef USART_config;
   GPIO_InitTypeDef GPIO_config;
 
   errno_r = 0;
 
-  if ((port < 1) || (port > MAX_SERIAL_PORTS))
+// Map serial port device name to port number
+
+  if (!strncasecmp(name, "com1:", 5))
+    port = 0;
+  else if (!strncasecmp(name, "com2:", 5))
+    port = 1;
+  else if (!strncasecmp(name, "com3:", 5))
+    port = 2;
+  else
   {
     errno_r = ENODEV;
     return -1;
   }
 
+// Pass up port number, if requested
+
+  if (subdevice != NULL)
+    *subdevice = port;
+
+// Extract baud rate from device name
+
+  baudrate = atoi(name+5);
+
 // Turn on USART
 
   switch (port)
   {
-    case 1 :
+    case 0 :
 #ifdef OLIMEX_STM32_P107
 // Turn on peripheral clocks
 
@@ -87,7 +107,7 @@ int serial_init(unsigned port, unsigned long int baudrate)
 #endif
       break;
  
-    case 2 :
+    case 1 :
 #ifdef OLIMEX_STM32_P107
 // Turn on peripheral clocks
 
@@ -133,7 +153,7 @@ int serial_init(unsigned port, unsigned long int baudrate)
 #endif
       break;
  
-    case 3 :
+    case 2 :
 #ifdef OLIMEX_STM32_P107
 // Turn on peripheral clocks
 
@@ -189,64 +209,45 @@ int serial_init(unsigned port, unsigned long int baudrate)
   USART_StructInit(&USART_config);
   USART_config.USART_BaudRate = baudrate;
   USART_config.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-  USART_Init(UARTS[port-1], &USART_config);
+  USART_Init(UARTS[port], &USART_config);
 
 // Enable USART
 
-  USART_Cmd(UARTS[port-1], ENABLE);
+  USART_Cmd(UARTS[port], ENABLE);
 
   return 0;
 }
 
 /* Register serial port for standard I/O */
 
-int serial_stdio(unsigned port, unsigned long int baudrate)
+int serial_stdio(char *name)
 {
-  int status;
+  unsigned int subdevice;
 
   errno_r = 0;
 
-  if ((port < 1) || (port > MAX_SERIAL_PORTS))
-  {
-    errno_r = ENODEV;
+  if (serial_init(name, &subdevice))
     return -1;
-  }
 
-  status = serial_init(port, baudrate);
-  if (status) return status;
+  if (device_register_char_fd(0, subdevice, NULL, serial_read, NULL, serial_rxready))
+    return -1;
 
-  device_register_char_fd(NULL, 0, port, (void *) baudrate, (device_init_t) serial_init, NULL, serial_read, NULL, serial_rxready);
-  device_register_char_fd(NULL, 1, port, (void *) baudrate, (device_init_t) serial_init, serial_write, NULL, serial_txready, NULL);
-  device_register_char_fd(NULL, 2, port, (void *) baudrate, (device_init_t) serial_init, serial_write, NULL, serial_txready, NULL);
+  if (device_register_char_fd(1, subdevice, serial_write, NULL, serial_txready, NULL))
+    return -1;
+
+  if (device_register_char_fd(2, subdevice, serial_write, NULL, serial_txready, NULL))
+    return -1;
 
   return 0;
 }
 
 /* Register a serial port device */
 
-int serial_register(unsigned port, unsigned long int baudrate)
+int serial_register(char *name)
 {
-  int status;
-  char name[DEVICE_NAME_SIZE];
-
   errno_r = 0;
 
-  if ((port < 1) || (port > MAX_SERIAL_PORTS))
-  {
-    errno_r = ENODEV;
-    return -1;
-  }
-
-  status = serial_init(port, baudrate);
-  if (status) return status;
-
-  memset(name, 0, sizeof(name));
-  siprintf(name, "com%d", port);
-
-  device_register_char(name, port, (void *) baudrate,
-   (device_init_t) serial_init, serial_write, serial_read, serial_txready, serial_rxready);
-
-  return 0;
+  return device_register_char(name, serial_init, serial_write, serial_read, serial_txready, serial_rxready);
 }
 
 /* Return TRUE if transmitter is ready to accept data */
@@ -255,13 +256,13 @@ int serial_txready(unsigned port)
 {
   errno_r = 0;
 
-  if ((port < 1) || (port > MAX_SERIAL_PORTS))
+  if (port >= MAX_SERIAL_PORTS)
   {
     errno_r = ENODEV;
     return -1;
   }
 
-  if (UARTS[port-1]->SR & USART_FLAG_TXE)
+  if (UARTS[port]->SR & USART_FLAG_TXE)
     return 1;
   else
     return 0;
@@ -273,16 +274,19 @@ int serial_write(unsigned port, char *buf, unsigned int count)
 {
   errno_r = 0;
 
-  if ((port < 1) || (port > MAX_SERIAL_PORTS))
+  if (port >= MAX_SERIAL_PORTS)
   {
     errno_r = ENODEV;
     return -1;
   }
 
-  if (serial_txready(port))
+if (count) count = 1;
+  while (count)
   {
-    UARTS[port-1]->DR = *buf++;
-    return 1;
+    while (!serial_txready(port));
+
+    UARTS[port]->DR = *buf++;
+    count--;
   }
 
   return 0;
@@ -294,13 +298,13 @@ int serial_rxready(unsigned port)
 {
   errno_r = 0;
 
-  if ((port < 1) || (port > MAX_SERIAL_PORTS))
+  if (port >= MAX_SERIAL_PORTS)
   {
     errno_r = ENODEV;
     return -1;
   }
 
-  if (UARTS[port-1]->SR & USART_FLAG_RXNE)
+  if (UARTS[port]->SR & USART_FLAG_RXNE)
     return 1;
   else
     return 0;
@@ -312,7 +316,7 @@ int serial_read(unsigned port, char *buf, unsigned int count)
 {
   errno_r = 0;
 
-  if ((port < 1) || (port > MAX_SERIAL_PORTS))
+  if (port >= MAX_SERIAL_PORTS)
   {
     errno_r = ENODEV;
     return -1;
@@ -320,7 +324,7 @@ int serial_read(unsigned port, char *buf, unsigned int count)
 
   if (serial_rxready(port))
   {
-    *buf++ = UARTS[port-1]->DR;
+    *buf++ = UARTS[port]->DR;
 
     return 1;
   }
