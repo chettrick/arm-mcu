@@ -19,7 +19,7 @@ __attribute__ ((__interrupt__)) void Timer1ISR(void)
 int main(void)
 {
   cpu_init(DEFAULT_CPU_FREQ);
-  serial_stdio(CONSOLE_PORT, 115200);
+  serial_stdio(CONSOLE_PORT);
 
   puts("\033[H\033[2JLPC23xx Timer Interrupt Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
