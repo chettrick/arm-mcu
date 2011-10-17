@@ -29,10 +29,10 @@ static const char revision[] = "$Id$";
 // This is the device table
 
 static device_t device_table[MAX_DEVICES];
-
+
 /* Register a character device driver to the next available file descriptor */
 
-int device_register_char(char *name, unsigned subdevice, void *settings,
+int device_register_char(char *name,
                          device_init_t init, device_write_t write, device_read_t read,
                          device_write_ready_t write_ready, device_read_ready_t read_ready)
 {
@@ -40,20 +40,34 @@ int device_register_char(char *name, unsigned subdevice, void *settings,
 
   errno_r = 0;
 
-  if (name) if (device_lookup(name) >= 0)
+  // Check for invalid device name
+
+  if (name == NULL)
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+
+  if (strlen(name) > DEVICE_NAME_SIZE-1)
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+
+  // Check for duplicate device name
+
+  if (device_lookup(name) >= 0)
   {
     errno_r = EEXIST;
     return -1;
   }
-  
+
   for (fd = 3; fd < MAX_DEVICES; fd++)
     if (device_table[fd].type == DEVICE_TYPE_UNUSED)
     {
       memset(&device_table[fd], 0, sizeof(device_t));
-      if (name) strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
+      strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
       device_table[fd].type = DEVICE_TYPE_CHAR;
-      device_table[fd].subdevice = subdevice;
-      device_table[fd].settings = settings;
       device_table[fd].init = init;
       device_table[fd].write = write;
       device_table[fd].read = read;
@@ -66,14 +80,24 @@ int device_register_char(char *name, unsigned subdevice, void *settings,
   errno_r = ENOMEM;
   return -1;
 }
-
+
 /* Register a character device driver to a specific file descripter */
 
-int device_register_char_fd(char *name, int fd, unsigned subdevice, void *settings,
-                            device_init_t init, device_write_t write, device_read_t read,
+int device_register_char_fd(int fd, unsigned int subdevice,
+                            device_write_t write, device_read_t read,
                             device_write_ready_t write_ready, device_read_ready_t read_ready)
 {
   errno_r = 0;
+
+  // Check invalid file descriptor
+
+  if ((fd < 0) || (fd >= MAX_DEVICES))
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+
+  // Check for file descriptor in use
 
   if (device_table[fd].type != DEVICE_TYPE_UNUSED)
   {
@@ -81,48 +105,56 @@ int device_register_char_fd(char *name, int fd, unsigned subdevice, void *settin
     return -1;
   }
 
-  if (name) if (device_lookup(name) >= 0)
-  {
-    errno_r = EEXIST;
-    return -1;
-  }
+  memset(&device_table[fd], 0, sizeof(device_t));
+  device_table[fd].type = DEVICE_TYPE_CHAR;
+  device_table[fd].subdevice = subdevice;
+  device_table[fd].write = write;
+  device_table[fd].read = read;
+  device_table[fd].write_ready = write_ready;
+  device_table[fd].read_ready = read_ready;
+  device_table[fd].open = TRUE;
 
-  if (fd >= MAX_DEVICES)
+  return 0;
+}
+
+/* Register a block device driver to the next available file descriptor */
+
+int device_register_block(char *name,
+                          device_init_t init, device_write_t write, device_read_t read,
+                          device_seek_t seek)
+{
+  unsigned int subdevice;
+  int fd;
+
+  errno_r = 0;
+
+  // Check for invalid device name
+
+  if (name == NULL)
   {
     errno_r = EINVAL;
     return -1;
   }
 
-  memset(&device_table[fd], 0, sizeof(device_t));
-  if (name) strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
-  device_table[fd].type = DEVICE_TYPE_CHAR;
-  device_table[fd].subdevice = subdevice;
-  device_table[fd].settings = settings;
-  device_table[fd].init = init;
-  device_table[fd].write = write;
-  device_table[fd].read = read;
-  device_table[fd].write_ready = write_ready;
-  device_table[fd].read_ready = read_ready;
+  if (strlen(name) > DEVICE_NAME_SIZE-1)
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
 
-  return fd;
-}
-
-/* Register a block device driver to the next available file descriptor */
-
-int device_register_block(char *name, unsigned subdevice, void *settings,
-                          device_init_t init, device_write_t write, device_read_t read,
-                          device_seek_t seek)
-{
-  int fd;
-
-  errno_r = 0;
+  // Check for duplicate device name
 
   if (device_lookup(name) >= 0)
   {
     errno_r = EEXIST;
     return -1;
   }
-  
+
+  // Initialize the device and retrieve its subdevice number
+
+  if (init(name, &subdevice))
+    return -1;
+
   for (fd = 3; fd < MAX_DEVICES; fd++)
     if (device_table[fd].type == DEVICE_TYPE_UNUSED)
     {
@@ -130,7 +162,6 @@ int device_register_block(char *name, unsigned subdevice, void *settings,
       if (name) strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
       device_table[fd].type = DEVICE_TYPE_BLOCK;
       device_table[fd].subdevice = subdevice;
-      device_table[fd].settings = settings;
       device_table[fd].init = init;
       device_table[fd].write = write;
       device_table[fd].read = read;
@@ -142,12 +173,20 @@ int device_register_block(char *name, unsigned subdevice, void *settings,
   errno_r = ENOMEM;
   return -1;
 }
-
+
 /* Unregister a device driver */
 
 int device_unregister(fd)
 {
   errno_r = 0;
+
+  // Validate the file descriptor
+
+  if ((fd < 0) || (fd >= MAX_DEVICES))
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
 
   if (device_table[fd].type == DEVICE_TYPE_UNUSED)
   {
@@ -155,56 +194,109 @@ int device_unregister(fd)
     return -1;
   }
 
-  if (fd >= MAX_DEVICES)
+  // We are not allowed to unregister an open device
+
+  if (device_table[fd].open)
   {
-    errno_r = EINVAL;
+    errno_r = EIO;
     return -1;
   }
 
   memset(&device_table[fd], 0, sizeof(device_t));
   return 0;
 }
-
+
 /* Lookup a device */
 
 int device_lookup(char *name)
+{
+  int len;
+  int fd;
+
+  errno_r = 0;
+
+  // Check for invalid device name
+
+  if (name == NULL)
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+
+  if (strlen(name) > DEVICE_NAME_SIZE-1)
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+
+  // Only compare before colon character
+
+  len = strcspn(name, ":");
+
+  for (fd = 0; fd < MAX_DEVICES; fd++)
+    if (!strncasecmp(device_table[fd].name, name, len))
+      return fd;
+
+  // No matching device was found
+
+  errno_r = ENODEV;
+  return -1;
+}
+
+/* Open a device */
+
+int device_open(char *name, int flags, int mode)
 {
   int fd;
 
   errno_r = 0;
 
-  for (fd = 0; fd < MAX_DEVICES; fd++)
-    if (!strcasecmp(device_table[fd].name, name))
-      return fd;
+  // Check for invalid device name
 
-  errno_r = ENODEV;
-  return -1;
-}
+  if (name == NULL)
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
 
-/* Open a device */
+  if (strlen(name) > DEVICE_NAME_SIZE-1)
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
 
-int device_open(char *name, int flags, int mode)
-{
-  int fd, status;
-
-  errno_r = 0;
+  // Look up the device
 
   fd = device_lookup(name);
   if (fd < 0) return fd;
 
+  // Save open flag
+
+  device_table[fd].open = TRUE;
+
+  // Save the flags
+
   device_table[fd].flags = flags;
 
-  status = device_table[fd].init(device_table[fd].subdevice, device_table[fd].settings);
-  if (status < 0) return status;
+  // Save the mode
+
+  device_table[fd].mode = mode;
+
+  // Initialize the device
+
+  if (device_table[fd].init(name, NULL))
+    return -1;
 
   return fd;
 }
-
+
 /* Close a device */
 
 int device_close(int fd)
 {
   errno_r = 0;
+
+  // Validate the file descriptor
 
   if ((fd < 0) || (fd >= MAX_DEVICES))
   {
@@ -218,13 +310,30 @@ int device_close(int fd)
     return -1;
   }
 
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
+    return -1;
+  }
+
+  // We are not allowed to close a device created with device_register_char_fd()
+
+  if (device_table[fd].name[0] == 0)
+  {
+    errno_r = EIO;
+    return -1;
+  }
+
+  device_table[fd].open = FALSE;
   device_table[fd].flags = 0;
+  device_table[fd].mode = 0;
+
   return 0;
 }
-
+
 /* Initialize a device */
 
-int device_init(int fd, void *settings)
+int device_init(int fd)
 {
   errno_r = 0;
 
@@ -246,11 +355,9 @@ int device_init(int fd, void *settings)
     return -1;
   }
 
-  device_table[fd].settings = settings;
-
-  return device_table[fd].init(device_table[fd].subdevice, settings);
+  return device_table[fd].init(device_table[fd].name, NULL);
 }
-
+
 /* Return TRUE if the device has received data available */
 
 int device_ready_read(int fd)
@@ -269,6 +376,12 @@ int device_ready_read(int fd)
     return -1;
   }
 
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
+    return -1;
+  }
+
   if (device_table[fd].read_ready == NULL)
   {
     errno_r = EIO;
@@ -277,7 +390,7 @@ int device_ready_read(int fd)
 
   return device_table[fd].read_ready(device_table[fd].subdevice);
 }
-
+
 /* Return TRUE if the device is ready to accept transmit data */
 
 int device_ready_write(int fd)
@@ -296,6 +409,12 @@ int device_ready_write(int fd)
     return -1;
   }
 
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
+    return -1;
+  }
+
   if (device_table[fd].write_ready == NULL)
   {
     errno_r = EIO;
@@ -304,7 +423,7 @@ int device_ready_write(int fd)
 
   return device_table[fd].write_ready(device_table[fd].subdevice);
 }
-
+
 /* Read uncooked input from a device (whatever is available) */
 
 int device_read_raw(int fd, char *s, unsigned int count)
@@ -323,6 +442,12 @@ int device_read_raw(int fd, char *s, unsigned int count)
     return -1;
   }
 
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
+    return -1;
+  }
+
   if (device_table[fd].read == NULL)
   {
     errno_r = EIO;
@@ -332,7 +457,7 @@ int device_read_raw(int fd, char *s, unsigned int count)
   memset(s, 0, count);
   return device_table[fd].read(device_table[fd].subdevice, s, count);
 }
-
+
 /* Read cooked input from a device */
 
 int device_read_cooked(int fd, char *s, unsigned int count)
@@ -355,6 +480,12 @@ int device_read_cooked(int fd, char *s, unsigned int count)
   if (d->type == DEVICE_TYPE_UNUSED)
   {
     errno_r = ENODEV;
+    return -1;
+  }
+
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
     return -1;
   }
 
@@ -422,7 +553,7 @@ int device_read_cooked(int fd, char *s, unsigned int count)
 
   return strlen(s);
 }
-
+
 /* Read input from a device */
 
 int device_read(int fd, char *s, unsigned int count)
@@ -435,12 +566,30 @@ int device_read(int fd, char *s, unsigned int count)
     return -1;
   }
 
+  if (device_table[fd].type == DEVICE_TYPE_UNUSED)
+  {
+    errno_r = ENODEV;
+    return -1;
+  }
+
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
+    return -1;
+  }
+
+  if (device_table[fd].read == NULL)
+  {
+    errno_r = EIO;
+    return -1;
+  }
+
   if ((device_table[fd].type != DEVICE_TYPE_CHAR) || (device_table[fd].flags & O_BINARY))
     return device_read_raw(fd, s, count);
   else
     return device_read_cooked(fd, s, count);
 }
-
+
 /* Read a single unbuffered, unechoed character from a device */
 
 int device_getc(int fd)
@@ -459,6 +608,12 @@ int device_getc(int fd)
   if (device_table[fd].type == DEVICE_TYPE_UNUSED)
   {
     errno_r = ENODEV;
+    return -1;
+  }
+
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
     return -1;
   }
 
@@ -482,7 +637,7 @@ int device_getc(int fd)
 
   return c;
 }
-
+
 /* Write uncooked output to a device */
 
 int device_write_raw(int fd, char *s, unsigned int count)
@@ -503,6 +658,12 @@ int device_write_raw(int fd, char *s, unsigned int count)
   if (device_table[fd].type == DEVICE_TYPE_UNUSED)
   {
     errno_r = ENODEV;
+    return -1;
+  }
+
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
     return -1;
   }
 
@@ -536,7 +697,7 @@ int device_write_raw(int fd, char *s, unsigned int count)
 
   return count;
 }
-
+
 /* Write cooked (CR before LF) output to a device */
 
 int device_write_cooked(int fd, char *s, unsigned int count)
@@ -558,6 +719,12 @@ int device_write_cooked(int fd, char *s, unsigned int count)
   if (device_table[fd].type == DEVICE_TYPE_UNUSED)
   {
     errno_r = ENODEV;
+    return -1;
+  }
+
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
     return -1;
   }
 
@@ -599,7 +766,7 @@ int device_write_cooked(int fd, char *s, unsigned int count)
 
   return count;
 }
-
+
 /* Write to a device */
 
 int device_write(int fd, char *s, unsigned int count)
@@ -614,12 +781,30 @@ int device_write(int fd, char *s, unsigned int count)
     return -1;
   }
 
+  if (device_table[fd].type == DEVICE_TYPE_UNUSED)
+  {
+    errno_r = ENODEV;
+    return -1;
+  }
+
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
+    return -1;
+  }
+
+  if (device_table[fd].write == NULL)
+  {
+    errno_r = EIO;
+    return -1;
+  }
+
   if ((device_table[fd].type != DEVICE_TYPE_CHAR) || (device_table[fd].flags & O_BINARY))
     return device_write_raw(fd, s, count);
   else
     return device_write_cooked(fd, s, count);
 }
-  
+  
 /* Write a single character to a device */
 
 int device_putc(int fd, char c)
@@ -647,6 +832,12 @@ int device_isatty(int fd)
     return -1;
   }
 
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
+    return -1;
+  }
+
   return (device_table[fd].type == DEVICE_TYPE_CHAR);
 }
 
@@ -667,6 +858,12 @@ int device_stat(int fd, struct stat *st)
   if (device_table[fd].type == DEVICE_TYPE_UNUSED)
   {
     errno_r = ENODEV;
+    return -1;
+  }
+
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
     return -1;
   }
 
@@ -697,7 +894,7 @@ int device_stat(int fd, struct stat *st)
 
   return 0;
 }
-
+
 /* Seek to position in file */
 
 off_t device_seek(int fd, off_t pos, int whence)
@@ -721,6 +918,18 @@ off_t device_seek(int fd, off_t pos, int whence)
   if (device_table[fd].type == DEVICE_TYPE_CHAR)
   {
     errno_r = EINVAL;
+    return -1;
+  }
+
+  if (!device_table[fd].open)
+  {
+    errno_r = EIO;
+    return -1;
+  }
+
+  if (device_table[fd].seek == NULL)
+  {
+    errno_r = EIO;
     return -1;
   }
 
