@@ -111,7 +111,7 @@ int __attribute__ ((weak)) isatty(int fd)
 {
   return device_isatty(fd);
 }
-
+
 void __attribute__ ((weak)) _exit(int status)
 {
   for (;;);
