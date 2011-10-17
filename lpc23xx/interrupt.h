@@ -48,16 +48,16 @@
 
 // Read CPSR
 
-static inline unsigned GetCPSR(void)
+static inline unsigned int GetCPSR(void)
 {
-  unsigned retval;
+  unsigned int retval;
   asm volatile (" mrs %0, cpsr" : "=r" (retval) : );
   return retval;
 }
 
 // Write CPSR
 
-static inline void PutCPSR(unsigned x)
+static inline void PutCPSR(unsigned int x)
 {
   asm volatile (" msr cpsr, %0" : : "r" (x) );
 }
