@@ -8,6 +8,7 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 int main(void)
@@ -21,7 +22,7 @@ int main(void)
   usb_serial_stdio();
   getch();
 #else
-  serial_stdio(CONSOLE_PORT, 115200);
+  serial_stdio(CONSOLE_PORT);
 #endif
 
   puts("\033[H\033[2JSTR91x Floating Point Arithmetic Test (" __DATE__ " " __TIME__ ")\n");
@@ -33,4 +34,5 @@ int main(void)
   z = x + y;
 
   printf("x is %f, y is %f, x+y is %f, z is %d\n", x, y, x+y, z);
+  exit(0);
 }

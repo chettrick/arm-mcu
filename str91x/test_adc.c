@@ -49,7 +49,7 @@ int main(void)
   usb_serial_stdio();
   getch();
 #else
-  serial_stdio(CONSOLE_PORT, 115200);
+  serial_stdio(CONSOLE_PORT);
 #endif
 
   puts("\033[H\033[2JSTR91x A/D Converter Test (" __DATE__ " " __TIME__ ")\n");
