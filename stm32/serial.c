@@ -229,14 +229,17 @@ int serial_stdio(char *name)
   if (serial_init(name, &subdevice))
     return -1;
 
-  if (device_register_char_fd(0, subdevice, NULL, serial_read, NULL, serial_rxready))
-    return -1;
+  // Nuke existing stdin, stdout, stderr
 
-  if (device_register_char_fd(1, subdevice, serial_write, NULL, serial_txready, NULL))
-    return -1;
+  device_unregister(0);
+  device_unregister(1);
+  device_unregister(2);
 
-  if (device_register_char_fd(2, subdevice, serial_write, NULL, serial_txready, NULL))
-    return -1;
+  // Register new stdin, stdout, stderr
+
+  device_register_char_fd(0, subdevice, NULL, serial_read, NULL, serial_rxready);
+  device_register_char_fd(1, subdevice, serial_write, NULL, serial_txready, NULL);
+  device_register_char_fd(2, subdevice, serial_write, NULL, serial_txready, NULL);
 
   return 0;
 }
@@ -280,13 +283,10 @@ int serial_write(unsigned port, char *buf, unsigned int count)
     return -1;
   }
 
-if (count) count = 1;
-  while (count)
+  if (serial_txready(port))
   {
-    while (!serial_txready(port));
-
     UARTS[port]->DR = *buf++;
-    count--;
+    return 1;
   }
 
   return 0;
