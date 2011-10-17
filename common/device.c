@@ -169,7 +169,7 @@ int device_register_block(char *name,
 
 /* Unregister a device driver */
 
-int device_unregister(fd)
+int device_unregister(int fd)
 {
   errno_r = 0;
 
@@ -184,14 +184,6 @@ int device_unregister(fd)
   if (device_table[fd].type == DEVICE_TYPE_UNUSED)
   {
     errno_r = ENODEV;
-    return -1;
-  }
-
-  // We are not allowed to unregister an open device
-
-  if (device_table[fd].open)
-  {
-    errno_r = EIO;
     return -1;
   }
 
