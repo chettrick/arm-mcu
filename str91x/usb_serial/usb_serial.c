@@ -3,6 +3,9 @@
 // $Id$
 
 #include <cpu.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <91x_lib.h>
 #include <usb_lib.h>
@@ -10,7 +13,6 @@
 #include <usb_pwr.h>
 #include <usb_serial.h>
 
-#include <stdio.h>
 
 extern void USB_Istr(void);
 
@@ -68,7 +70,7 @@ static int ringbuffer_dequeue(ringbuffer_t *src, char *dst, int count)
 
 // Initialize USB subsystem
 
-int usb_serial_init(unsigned subdevice, void *settings)
+int usb_serial_init(char *name, unsigned int *subdevice)
 {
   GPIO_InitTypeDef config_gpio;
 
@@ -123,25 +125,35 @@ int usb_serial_init(unsigned subdevice, void *settings)
 
 // Register USB serial port device for standard I/O
 
-int usb_serial_stdio(void)
+int usb_serial_stdio(char *name)
 {
-  usb_serial_init(0, NULL);
+  unsigned int subdevice;
 
-  device_register_char_fd(NULL, 0, 0, NULL, NULL, NULL, usb_serial_read, NULL, usb_serial_rxready);
-  device_register_char_fd(NULL, 1, 0, NULL, NULL, usb_serial_write, NULL, usb_serial_txready, NULL);
-  device_register_char_fd(NULL, 2, 0, NULL, NULL, usb_serial_write, NULL, usb_serial_txready, NULL);
+  errno_r = 0;
+
+  if (serial_init(name, &subdevice))
+    return -1;
+
+  // Nuke existing stdin, stdout, stderr
+
+  device_unregister(0);
+  device_unregister(1);
+  device_unregister(2);
+
+  // Register new stdin, stdout, stderr
+
+  device_register_char_fd(0, subdevice, NULL, usb_serial_read, NULL, usb_serial_rxready);
+  device_register_char_fd(1, subdevice, usb_serial_write, NULL, usb_serial_txready, NULL);
+  device_register_char_fd(2, subdevice, usb_serial_write, NULL, usb_serial_txready, NULL);
 
   return 0;
 }
 
 // Register USB serial port device
 
-int usb_serial_register(void)
+int usb_serial_register(char *name)
 {
-  device_register_char("ucom0", 0, NULL, usb_serial_init, usb_serial_write,
-    usb_serial_read, usb_serial_txready, usb_serial_rxready);
-
-  return 0;
+  return device_register_char(name, usb_serial_init, usb_serial_write, usb_serial_read, usb_serial_txready, usb_serial_rxready);
 }
 
 // Return TRUE if USB system is ready to accept another transmit message

@@ -7,15 +7,15 @@
 
 // Initialize USB subsystem
 
-int usb_serial_init(unsigned subdevice, void *settings);
+int usb_serial_init(char *name, unsigned int *subdevice);
 
 // Register USB serial port driver
 
-int usb_serial_register(void);
+int usb_serial_register(char *name);
 
 // Use USB serial port for standard I/O
 
-int usb_serial_stdio(void);
+int usb_serial_stdio(char *name);
 
 // Send data to USB host
 
