@@ -25,7 +25,7 @@ static LPC_UART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
   (LPC_UART_TypeDef *) LPC_UART1,
 };
 
-/* Initialize serial console */
+/* Initialize serial port */
 
 int serial_init(char *name, unsigned int *subdevice)
 {
@@ -117,8 +117,6 @@ int serial_stdio(char *name)
 {
   unsigned int subdevice;
 
-  errno_r = 0;
-
   if (serial_init(name, &subdevice))
     return -1;
 
@@ -141,14 +139,12 @@ int serial_stdio(char *name)
 
 int serial_register(char *name)
 {
-  errno_r = 0;
-
   return device_register_char(name, serial_init, serial_write, serial_read, serial_txready, serial_rxready);
 }
 
 /* Return TRUE if transmitter is ready to accept data */
 
-int serial_txready(unsigned port)
+int serial_txready(unsigned int port)
 {
   errno_r = 0;
 
@@ -166,7 +162,7 @@ int serial_txready(unsigned port)
 
 /* Send a buffer to the serial port */
 
-int serial_write(unsigned port, char *buf, unsigned int count)
+int serial_write(unsigned int port, char *buf, unsigned int count)
 {
   errno_r = 0;
 
@@ -187,7 +183,7 @@ int serial_write(unsigned port, char *buf, unsigned int count)
 
 /* Return TRUE if receive data is available */
 
-int serial_rxready(unsigned port)
+int serial_rxready(unsigned int port)
 {
   errno_r = 0;
 
@@ -205,7 +201,7 @@ int serial_rxready(unsigned port)
 
 /* Read buffer from the serial port */
 
-int serial_read(unsigned port, char *buf, unsigned int count)
+int serial_read(unsigned int port, char *buf, unsigned int count)
 {
   errno_r = 0;
 

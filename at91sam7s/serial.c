@@ -31,7 +31,7 @@ static const unsigned long int UARTS[MAX_SERIAL_PORTS] =
 #define US_THR	(*(volatile unsigned long int *)(UARTS[port] + 0x1C))
 #define US_BRGR	(*(volatile unsigned long int *)(UARTS[port] + 0x20))
 
-/* Initialize serial console */
+/* Initialize serial port */
 
 int serial_init(char *name, unsigned int *subdevice)
 {
@@ -97,8 +97,6 @@ int serial_stdio(char *name)
 {
   unsigned int subdevice;
 
-  errno_r = 0;
-
   if (serial_init(name, &subdevice))
     return -1;
 
@@ -121,8 +119,6 @@ int serial_stdio(char *name)
 
 int serial_register(char *name)
 {
-  errno_r = 0;
-
   return device_register_char(name, serial_init, serial_write, serial_read, serial_txready, serial_rxready);
 }
 

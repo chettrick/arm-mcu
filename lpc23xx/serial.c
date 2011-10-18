@@ -9,10 +9,10 @@
 static const char revision[] = "$Id$";
 
 #include <cpu.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 
 #define MAX_SERIAL_PORTS	4
 
@@ -135,8 +135,6 @@ int serial_stdio(char *name)
 {
   unsigned int subdevice;
 
-  errno_r = 0;
-
   if (serial_init(name, &subdevice))
     return -1;
 
@@ -159,8 +157,6 @@ int serial_stdio(char *name)
 
 int serial_register(char *name)
 {
-  errno_r = 0;
-
   return device_register_char(name, serial_init, serial_write, serial_read, serial_txready, serial_rxready);
 }
 
@@ -170,7 +166,7 @@ int serial_txready(unsigned int port)
 {
   errno_r = 0;
 
-  if (port+1 > MAX_SERIAL_PORTS)
+  if (port >= MAX_SERIAL_PORTS)
   {
     errno_r = ENODEV;
     return -1;
@@ -188,7 +184,7 @@ int serial_write(unsigned int port, char *buf, unsigned int count)
 {
   errno_r = 0;
 
-  if (port+1 > MAX_SERIAL_PORTS)
+  if (port >= MAX_SERIAL_PORTS)
   {
     errno_r = ENODEV;
     return -1;
@@ -209,7 +205,7 @@ int serial_rxready(unsigned int port)
 {
   errno_r = 0;
 
-  if (port+1 > MAX_SERIAL_PORTS)
+  if (port >= MAX_SERIAL_PORTS)
   {
     errno_r = ENODEV;
     return -1;
@@ -227,7 +223,7 @@ int serial_read(unsigned int port, char *buf, unsigned int count)
 {
   errno_r = 0;
 
-  if (port+1 > MAX_SERIAL_PORTS)
+  if (port >= MAX_SERIAL_PORTS)
   {
     errno_r = ENODEV;
     return -1;
