@@ -8,7 +8,7 @@ static const char revision[] = "$Id$";
 
 int main(void)
 {
-  unsigned long i;
+  unsigned long int i;
 
   cpu_init(DEFAULT_CPU_FREQ);
 

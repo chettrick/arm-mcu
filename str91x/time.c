@@ -46,7 +46,7 @@ static const char revision[] = "$Id$";
  * SUCH DAMAGE. 
  */
 
-static int is_leap(unsigned y)
+static int is_leap(unsigned int y)
 {
 	y += 1900;
 	return (y % 4) == 0 && ((y % 100) != 0 || (y % 400) == 0);
@@ -54,11 +54,11 @@ static int is_leap(unsigned y)
 
 static time_t rep_timegm(struct tm *tm)
 {
-	static const unsigned ndays[2][12] ={
+	static const unsigned int ndays[2][12] ={
 		{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
 		{31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
 	time_t res = 0;
-	unsigned i;
+	unsigned int i;
 
 	if (tm->tm_mon > 12 ||
 	    tm->tm_mon < 0 ||
