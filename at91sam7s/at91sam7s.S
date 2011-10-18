@@ -32,7 +32,7 @@
 	/*  defaults are defined in the link script.  The reserved	*/
 	/* exception should be overridden by the download program 	*/
 
-	b	start
+	b	_start
 	b	undefined_instruction_exception
 	b	software_interrupt_exception
 	b	prefetch_abort_exception
