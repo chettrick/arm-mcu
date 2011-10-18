@@ -32,7 +32,7 @@
 	/*  defaults are defined in the link script.  The reserved	*/
 	/* exception should be overridden by the download program 	*/
 
-	b	start
+	b	_start
 	b	undefined_instruction_exception
 	b	software_interrupt_exception
 	b	prefetch_abort_exception
@@ -41,29 +41,10 @@
 	ldr	pc,[pc,#-0x120]	    	/* Vector via VIC		*/
 	b	fast_interrupt_exception
 
-//=============================================================================
-
-// Use endless_loop for all exceptions and interrupts, unless another
-// handler is provided elsewhere.
-
-	.macro	IRQ handler
-	.weak	\handler
-	.set	\handler, endless_loop
-	.endm
-
-	IRQ	undefined_instruction_exception
-	IRQ	software_interrupt_exception
-	IRQ	prefetch_abort_exception
-	IRQ	data_abort_exception
-	IRQ	fast_interrupt_exception
-
 /********************* start ********************************************/
 /*  start (AKA _start, _mainCRTStartup) -- Gains control on reset and	*/
 /* set up environment before running the operating C program. 		*/
-start: 
 _start:
-_mainCRTStartup:
-
 	/*  Start by setting up a stack					*/
 	msr	cpsr_c, #INIT_FIQ_MODE
 	ldr	sp, =__stack_end_fiq__
@@ -147,3 +128,19 @@ endless_loop:
 .word	__data_beg_src__
 .LC5:
 .word	__data_end__
+
+//=============================================================================
+
+// Use endless_loop for all exceptions and interrupts, unless another
+// handler is provided elsewhere.
+
+	.macro	IRQ handler
+	.weak	\handler
+	.set	\handler, endless_loop
+	.endm
+
+	IRQ	undefined_instruction_exception
+	IRQ	software_interrupt_exception
+	IRQ	prefetch_abort_exception
+	IRQ	data_abort_exception
+	IRQ	fast_interrupt_exception
