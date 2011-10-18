@@ -2,15 +2,11 @@
 
 // $Id$
 
-	.extern	main 		/*  Usual C startup.			*/
-
- /* .text is used instead of .section .text so it works with
-arm-aout too. */ 
-
-	.text 
+	.text
 	.code 32 
-
 	.align 	0
+
+	.extern	main 		/*  Usual C startup.			*/
 
 	/*  Defined in link script so startup knows where everything 	*/
 	/* is.								*/
@@ -33,12 +29,24 @@ arm-aout too. */
 	.set INIT_UNDEFINED_MODE,	0x1B
 	.set INIT_SYSTEM_MODE,		0x1F
 
+	/**** Exception/Interrupt table ****/
+
+	/*  defaults are defined in the link script.  The reserved	*/
+	/* exception should be overridden by the download program 	*/
+
+	b	_start
+	b	Undefined_Handler
+	b	SWI_Handler
+	b	Prefetch_Handler
+	b	Abort_Handler
+	nop
+	ldr	pc,[pc,#-0xFF0]	    	/* Vector via VIC		*/
+	b	FIQ_Handler
+
 /********************* start ********************************************/
 /*  start (AKA _start, _mainCRTStartup) -- Gains control on reset and	*/
 /* set up environment before running the operating C program. 		*/
-start: 
-_start:
-_mainCRTStartup:
+_start: 
 
 /* Configure SRAM size, based on what the linker tells us */
 
@@ -162,31 +170,10 @@ bbsrtable:
 	.byte 0, 0, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4
 	.byte 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
 
-	/**** Exception/Interrupt table ****/
-
-	/*  defaults are defined in the link script.  The reserved	*/
-	/* exception should be overridden by the download program 	*/
-
-.section .startup,"ax" 
-	.code 32 
-	.align 0
-
-	b	start
-	b	Undefined_Handler
-	b	SWI_Handler
-	b	Prefetch_Handler
-	b	Abort_Handler
-	nop
-	ldr	pc,[pc,#-0xFF0]	    	/* Vector via VIC		*/
-	b	FIQ_Handler
-
 //=============================================================================
 
 // Use endless_loop for all exceptions and interrupts, unless another
 // handler is provided elsewhere.
-
-	.text
-	.code 32
 
 	.macro	IRQ handler
 	.weak	\handler
