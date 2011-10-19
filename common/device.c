@@ -33,11 +33,12 @@ static device_t device_table[MAX_DEVICES];
 /* Register a character device driver to the next available file descriptor */
 
 int device_register_char(char *name,
-                         device_init_t init,
-                         device_write_t write,
-                         device_read_t read,
-                         device_write_ready_t write_ready,
-                         device_read_ready_t read_ready)
+                         device_open_fn_t open,
+                         device_close_fn_t close,
+                         device_write_fn_t write,
+                         device_read_fn_t read,
+                         device_write_ready_fn_t write_ready,
+                         device_read_ready_fn_t read_ready)
 {
   int fd;
 
@@ -71,7 +72,8 @@ int device_register_char(char *name,
       memset(&device_table[fd], 0, sizeof(device_t));
       strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
       device_table[fd].type = DEVICE_TYPE_CHAR;
-      device_table[fd].init = init;
+      device_table[fd].open = open;
+      device_table[fd].close = close;
       device_table[fd].write = write;
       device_table[fd].read = read;
       device_table[fd].write_ready = write_ready;
@@ -88,10 +90,10 @@ int device_register_char(char *name,
 
 int device_register_char_fd(int fd,
                             unsigned int subdevice,
-                            device_write_t write,
-                            device_read_t read,
-                            device_write_ready_t write_ready,
-                            device_read_ready_t read_ready)
+                            device_write_fn_t write,
+                            device_read_fn_t read,
+                            device_write_ready_fn_t write_ready,
+                            device_read_ready_fn_t read_ready)
 {
   errno_r = 0;
 
@@ -118,7 +120,7 @@ int device_register_char_fd(int fd,
   device_table[fd].read = read;
   device_table[fd].write_ready = write_ready;
   device_table[fd].read_ready = read_ready;
-  device_table[fd].open = TRUE;
+  device_table[fd].isopen = TRUE;
 
   return 0;
 }
@@ -126,10 +128,11 @@ int device_register_char_fd(int fd,
 /* Register a block device driver to the next available file descriptor */
 
 int device_register_block(char *name,
-                          device_init_t init,
-                          device_write_t write,
-                          device_read_t read,
-                          device_seek_t seek)
+                          device_open_fn_t open,
+                          device_close_fn_t close,
+                          device_write_fn_t write,
+                          device_read_fn_t read,
+                          device_seek_fn_t seek)
 {
   int fd;
 
@@ -163,7 +166,8 @@ int device_register_block(char *name,
       memset(&device_table[fd], 0, sizeof(device_t));
       strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
       device_table[fd].type = DEVICE_TYPE_BLOCK;
-      device_table[fd].init = init;
+      device_table[fd].open = open;
+      device_table[fd].close = close;
       device_table[fd].write = write;
       device_table[fd].read = read;
       device_table[fd].seek = seek;
@@ -265,7 +269,7 @@ int device_open(char *name, int flags, int mode)
 
   // Save open flag
 
-  device_table[fd].open = TRUE;
+  device_table[fd].isopen = TRUE;
 
   // Save the flags
 
@@ -277,7 +281,7 @@ int device_open(char *name, int flags, int mode)
 
   // Initialize the device
 
-  if (device_table[fd].init(name, &device_table[fd].subdevice))
+  if (device_table[fd].open(name, &device_table[fd].subdevice))
     return -1;
 
   return fd;
@@ -303,7 +307,7 @@ int device_close(int fd)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;
@@ -318,38 +322,11 @@ int device_close(int fd)
   }
 
   device_table[fd].subdevice = 0;
-  device_table[fd].open = FALSE;
+  device_table[fd].isopen = FALSE;
   device_table[fd].flags = 0;
   device_table[fd].mode = 0;
 
   return 0;
-}
-
-/* Initialize a device */
-
-int device_init(int fd)
-{
-  errno_r = 0;
-
-  if ((fd < 0) || (fd >= MAX_DEVICES))
-  {
-    errno_r = EINVAL;
-    return -1;
-  }
-
-  if (device_table[fd].type == DEVICE_TYPE_UNUSED)
-  {
-    errno_r = ENODEV;
-    return -1;
-  }
-
-  if (device_table[fd].init == NULL)
-  {
-    errno_r = EIO;
-    return -1;
-  }
-
-  return device_table[fd].init(device_table[fd].name, NULL);
 }
 
 /* Return TRUE if the device has received data available */
@@ -370,7 +347,7 @@ int device_ready_read(int fd)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;
@@ -403,7 +380,7 @@ int device_ready_write(int fd)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;
@@ -436,7 +413,7 @@ int device_read_raw(int fd, char *s, unsigned int count)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;
@@ -477,7 +454,7 @@ int device_read_cooked(int fd, char *s, unsigned int count)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;
@@ -566,7 +543,7 @@ int device_read(int fd, char *s, unsigned int count)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;
@@ -606,7 +583,7 @@ int device_getc(int fd)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;
@@ -656,7 +633,7 @@ int device_write_raw(int fd, char *s, unsigned int count)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;
@@ -716,7 +693,7 @@ int device_write_cooked(int fd, char *s, unsigned int count)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;
@@ -781,7 +758,7 @@ int device_write(int fd, char *s, unsigned int count)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;
@@ -827,7 +804,7 @@ int device_isatty(int fd)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;
@@ -856,7 +833,7 @@ int device_stat(int fd, struct stat *st)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;
@@ -916,7 +893,7 @@ off_t device_seek(int fd, off_t pos, int whence)
     return -1;
   }
 
-  if (!device_table[fd].open)
+  if (!device_table[fd].isopen)
   {
     errno_r = EIO;
     return -1;

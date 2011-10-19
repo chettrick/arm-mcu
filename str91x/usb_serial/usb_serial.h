@@ -7,7 +7,7 @@
 
 // Initialize USB subsystem
 
-int usb_serial_init(char *name, unsigned int *subdevice);
+int usb_serial_open(char *name, unsigned int *subdevice);
 
 // Register USB serial port driver
 

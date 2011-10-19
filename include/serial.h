@@ -8,7 +8,7 @@
 
 /* Initialize serial port */
 
-int serial_init(char *name, unsigned int *subdevice);
+int serial_open(char *name, unsigned int *subdevice);
 
 /* Register serial port for standard I/O */
 

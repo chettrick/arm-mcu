@@ -45,7 +45,7 @@ static const unsigned long int UARTS[MAX_SERIAL_PORTS] =
 
 /* Initialize serial console */
 
-int serial_init(char *name, unsigned int *subdevice)
+int serial_open(char *name, unsigned int *subdevice)
 {
   unsigned int port;
   unsigned int baudrate;
@@ -135,7 +135,7 @@ int serial_stdio(char *name)
 {
   unsigned int subdevice;
 
-  if (serial_init(name, &subdevice))
+  if (serial_open(name, &subdevice))
     return -1;
 
   // Nuke existing stdin, stdout, stderr
@@ -157,7 +157,7 @@ int serial_stdio(char *name)
 
 int serial_register(char *name)
 {
-  return device_register_char(name, serial_init, serial_write, serial_read, serial_txready, serial_rxready);
+  return device_register_char(name, serial_open, NULL, serial_write, serial_read, serial_txready, serial_rxready);
 }
 
 /* Return TRUE if transmitter is ready to accept data */

@@ -70,7 +70,7 @@ static int ringbuffer_dequeue(ringbuffer_t *src, char *dst, int count)
 
 // Initialize USB subsystem
 
-int usb_serial_init(char *name, unsigned int *subdevice)
+int usb_serial_open(char *name, unsigned int *subdevice)
 {
   GPIO_InitTypeDef config_gpio;
 
@@ -131,7 +131,7 @@ int usb_serial_stdio(char *name)
 
   errno_r = 0;
 
-  if (serial_init(name, &subdevice))
+  if (usb_serial_open(name, &subdevice))
     return -1;
 
   // Nuke existing stdin, stdout, stderr
@@ -153,7 +153,7 @@ int usb_serial_stdio(char *name)
 
 int usb_serial_register(char *name)
 {
-  return device_register_char(name, usb_serial_init, usb_serial_write, usb_serial_read, usb_serial_txready, usb_serial_rxready);
+  return device_register_char(name, usb_serial_open, NULL, usb_serial_write, usb_serial_read, usb_serial_txready, usb_serial_rxready);
 }
 
 // Return TRUE if USB system is ready to accept another transmit message
