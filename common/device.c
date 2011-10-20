@@ -40,6 +40,7 @@ int device_register_char(char *name,
                          device_write_ready_fn_t write_ready,
                          device_read_ready_fn_t read_ready)
 {
+  int namelen;
   int fd;
 
   errno_r = 0;
@@ -47,12 +48,6 @@ int device_register_char(char *name,
   // Check for invalid device name
 
   if (name == NULL)
-  {
-    errno_r = EINVAL;
-    return -1;
-  }
-
-  if (strlen(name) > DEVICE_NAME_SIZE-1)
   {
     errno_r = EINVAL;
     return -1;
@@ -66,11 +61,23 @@ int device_register_char(char *name,
     return -1;
   }
 
+  // Only store device name up to colon
+
+  namelen = strcspn(name, ":");
+
+  if (namelen > DEVICE_NAME_SIZE-1)
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+
+  // Search device table for an empty slot
+
   for (fd = 3; fd < MAX_DEVICES; fd++)
     if (device_table[fd].type == DEVICE_TYPE_UNUSED)
     {
       memset(&device_table[fd], 0, sizeof(device_t));
-      strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
+      strlcpy(device_table[fd].name, name, namelen);
       device_table[fd].type = DEVICE_TYPE_CHAR;
       device_table[fd].open = open;
       device_table[fd].close = close;
@@ -134,6 +141,7 @@ int device_register_block(char *name,
                           device_read_fn_t read,
                           device_seek_fn_t seek)
 {
+  int namelen;
   int fd;
 
   errno_r = 0;
@@ -160,11 +168,23 @@ int device_register_block(char *name,
     return -1;
   }
 
+  // Only store device name up to colon
+
+  namelen = strcspn(name, ":");
+
+  if (namelen > DEVICE_NAME_SIZE-1)
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+
+  // Search device table for an empty slot
+
   for (fd = 3; fd < MAX_DEVICES; fd++)
     if (device_table[fd].type == DEVICE_TYPE_UNUSED)
     {
       memset(&device_table[fd], 0, sizeof(device_t));
-      strlcpy(device_table[fd].name, name, sizeof(device_table[fd].name) - 1);
+      strlcpy(device_table[fd].name, name, namelen);
       device_table[fd].type = DEVICE_TYPE_BLOCK;
       device_table[fd].open = open;
       device_table[fd].close = close;
@@ -207,7 +227,7 @@ int device_unregister(int fd)
 
 int device_lookup(char *name)
 {
-  int len;
+  int namelen;
   int fd;
 
   errno_r = 0;
@@ -228,10 +248,10 @@ int device_lookup(char *name)
 
   // Only compare before colon character
 
-  len = strcspn(name, ":");
+  namelen = strcspn(name, ":");
 
   for (fd = 0; fd < MAX_DEVICES; fd++)
-    if (!strncasecmp(device_table[fd].name, name, len))
+    if (!strncasecmp(device_table[fd].name, name, namelen))
       return fd;
 
   // No matching device was found

@@ -10,7 +10,7 @@
 #include <sys/stat.h>
 
 #define MAX_DEVICES		16
-#define DEVICE_NAME_SIZE	64
+#define DEVICE_NAME_SIZE	8
 
 // Device names are of form <DEVICE>:<PARAMETER1><,PARAMETER2>...<,PARAMETERn>
 
