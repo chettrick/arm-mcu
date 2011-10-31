@@ -8,7 +8,7 @@ TEXTBASE	?= 0x00000000
 
 CMSIS		= $(MCUDIR)/CMSIS
 
-CFLAGS		+= -DEFM32 -I$(CMSIS)/include
+CFLAGS		+= -DEFM32 -DEFM32G890F128 -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o gpiopins.o leds.o serial.o

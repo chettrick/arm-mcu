@@ -7,7 +7,7 @@ MCUFAMILY	= efm32
 BOARDNAME	?= EFM32_G8XX_STK
 
 ifeq ($(BOARDNAME), EFM32_G8XX_STK)
-MCU		= EFM32G890F128
+MCU		= efm32g890f128
 endif
 
 default: lib$(MCU).a

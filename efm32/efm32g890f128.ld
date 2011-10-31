@@ -61,4 +61,4 @@ SECTIONS
 
 /*  Libraries to link against. */
 
-INPUT( -lEFM32G890F128 )
+INPUT( -lefm32g890f128 )
