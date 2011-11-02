@@ -19,12 +19,12 @@ STM32FLASH	?= stm32flash
 STM32FLASH_PORT	?= /dev/ttyS0
 
 ifeq ($(shell uname), Linux)
-STLINKEXE	?= stlink-download
 STLINKDEV	?= /dev/stlink
+STLINKDOWNLOAD	?= stlink-download
 endif
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-STLINKEXE	?= ST-LINK_CLI.exe
+STLINKCLI	?= ST-LINK_CLI.exe
 endif
 
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
@@ -45,12 +45,12 @@ lib: lib$(MCU).a
 
 ifeq ($(shell uname), Linux)
 .bin.flashstlink:
-	$(STLINKEXE) $(STLINKDEV) -v erase=all flash:w:$<
+	$(STLINKDOWNLOAD) $(STLINKDEV) -v erase=all flash:w:$<
 endif
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 .bin.flashstlink:
-	$(STLINKEXE) -c SWD -ME -P $< 0x08000000 -Rst
+	$(STLINKCLI) -c SWD -ME -P $< 0x08000000 -Rst
 endif
 
 # Define a suffix rule for programming the flash with serial boot loader and stm32flash
