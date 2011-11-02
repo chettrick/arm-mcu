@@ -5,7 +5,7 @@
 HOSTCC		?= gcc
 CFLAGS		?= -Wall
 
-PROGRAM		= stlink
+PROGRAM		= stlink-download
 RULES		= 10-stlink.rules
 
 DESTDIR		?= /usr/local/bin
@@ -13,7 +13,7 @@ UDEVRULES	?= /etc/udev/rules.d
 
 default: $(PROGRAM)
 
-stlink: stlink-download.c
+stlink-download: stlink-download.c
 	$(HOSTCC) $(CFLAGS) -o $@ $<
 
 install: $(PROGRAM)

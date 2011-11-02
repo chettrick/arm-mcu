@@ -19,7 +19,7 @@ STM32FLASH	?= stm32flash
 STM32FLASH_PORT	?= /dev/ttyS0
 
 ifeq ($(shell uname), Linux)
-STLINKEXE	?= stlink
+STLINKEXE	?= stlink-download
 STLINKDEV	?= /dev/stlink
 endif
 
