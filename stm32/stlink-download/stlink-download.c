@@ -1,7 +1,4 @@
 /* STLink download/debug interface for Linux. */
-
-// $Id$
-
 /*
   This program interacts with the STMicro USB STLink programming/debug
   interface for STMicro microcontrollers.  The STLink is found on STM8
@@ -64,6 +61,7 @@ Usage notes:
    modprobe -r usb-storage && modprobe usb-storage quirks=483:3744:l
  or adding the equivalent to /etc/modprobe.conf or /etc/modprobe.d/local.conf
     options usb-storage quirks=483:3744:l
+ This is kernel version dependent and difficult to automatically install.
  */
 
 #define __USE_GNU
@@ -236,7 +234,7 @@ enum STLink_JTAG_Cmds {
 	STLinkDebugGetStatus=0x01,
 	STLinkDebugForceDebug=0x02,
 	STLinkDebugResetSys=0x03,
-	/* Read/write ARM regs, see struct ARMcoreRegs for ordering and index. */
+	/* Read or write ARM regs, see struct ARMcoreRegs for ordering and index. */
 	STLinkDebugReadAllRegs=0x04,
 	STLinkDebugReadOneReg=0x05,
 	STLinkDebugWriteReg=0x06,
@@ -546,7 +544,7 @@ int stl_do_scsi_op(struct stlink *stl, int sg_xfer_dir)
 	/* Report SCSI results.  Really, note useful variable if we need
 	 * to write better reporting code. */
 	if (stl->verbose) {
-		if (stl->verbose > 1)
+		if (stl->verbose > 3)
 			fprintf(stderr, " SCSI command status %4.4x, took %d ms.\n",
 					io_hdr.status, io_hdr.duration);
 		if (io_hdr.resid || io_hdr.sb_len_wr)
@@ -727,7 +725,7 @@ static const uint8_t loader_code[] = {
  };
 
 /* The flash write program.
- * The STLinak apparently cannot directly generate the memory operations
+ * The STLink apparently cannot directly generate the memory operations
  * required to write the flash.  So we download and run a small program that
  * writes the flash for us.
  *
@@ -788,8 +786,8 @@ static int stl_loader(struct stlink *sl, stm32_addr_t flash_addr,
 	uint32_t prog_base = stm_devids[0].sram_base;
 	uint32_t *params;
 
-	memcpy(sl->q_buf, db_loader_code_working, sizeof(db_loader_code_working));
-	offset = sizeof(db_loader_code_working);
+	memcpy(sl->q_buf, db_loader_code, sizeof(db_loader_code));
+	offset = sizeof(db_loader_code);
 	params = (uint32_t *)(sl->q_buf+offset);
 
 	/* Write params[-4] to change the FLASH_REGS_ADDR base.
@@ -898,15 +896,18 @@ static int stl_flash_erase_page(struct stlink *sl, stm32_addr_t addr_page)
 		sl_wr32(sl, FLASH_CR, FLASH_CR_PER);
 		sl_wr32(sl, FLASH_CR, FLASH_CR_STRT | FLASH_CR_PER);
 	}
-	/* Monitor the busy bit to check for completion. */
+	/* Monitor the busy bit to check for completion.  This typically takes
+	 * only two iterations. */
 	do {
 		status = sl_rd32(sl, FLASH_SR);
 		i++;
-	} while (status & FLASH_SR_BSY);
-	if ( ! (status & FLASH_SR_EOP))
+	} while ((status & FLASH_SR_BSY) && i < 1000);
+	if ( ! (status & FLASH_SR_EOP)) {
 		fprintf(stderr, "STLink erase flash page failed, status %8.8x "
 				"Flash_CR %8.8x (%d checks).\n",
 				status, sl_rd32(sl, FLASH_SR), i);
+		return 1;
+	}
 	if (sl->verbose)
 		fprintf(stderr, "STLink erase flash page %8.8x: %d status checks to "
 				"complete %8.8x.\n", addr_page, i, status);
@@ -917,7 +918,7 @@ static int stl_flash_erase_page(struct stlink *sl, stm32_addr_t addr_page)
  * This handles alignment and block size internally.
  */
 #define READ_BLK_SIZE 1024
-int stl_read(struct stlink* sl, stm32_addr_t addr, char *buf, ssize_t size)
+int stl_read(struct stlink* sl, stm32_addr_t addr, void *buf, ssize_t size)
 {
 	size_t offset = 0;
 
@@ -961,6 +962,12 @@ static int stl_flash_fwrite(struct stlink *sl, const char* path,
 	if (size < 0) {
 		fprintf(stderr, " Failed to read '%s': %s\n", path, strerror(errno));
 		return -1;
+	}
+	if (size > max_size) {
+		fprintf(stderr, " Program is LARGER THAN FLASH and may not fit."
+				"  Trying anyway.\n"
+				"  Program at %s is %#8.8x bytes, flash is %#8.8x bytes.\n",
+				path, (int)size, max_size);
 	}
 
 	ret = stl_flash_write(sl, addr, buf, size);
@@ -1058,6 +1065,7 @@ static int stl_fread(struct stlink* sl, const char* path,
  * to mass storage mode.
  * The only known unexpected mode is DFU mode, which requires a reset
  * and re-plug process to exit.
+ * This has many status messages sinces it's ugly, bogus and flakey.
  */
 int stl_kick_mode(struct stlink *sl)
 {
@@ -1069,6 +1077,14 @@ int stl_kick_mode(struct stlink *sl)
 		stlink_mode == STLinkDevMode_Mass)
 		return 0;
 
+	if (sl->verbose) {
+		sl->core_state = stl_get_status(sl);
+		printf("ARM status is 0x%4.4x: %s.\n", sl->core_state,
+			   sl->core_state==STLINK_CORE_RUNNING ? "running" :
+			   (sl->core_state==STLINK_CORE_HALTED ? "halted" : "unknown"));
+	}
+
+
 	/* Otherwise assume that we are in DFU mode and attempt to exit back
 	 * to mass storage mode.  This is super painful and slow. */
 	fprintf(stderr, "\nAttempting to switch the STLink to a known mode...\n");
@@ -1079,10 +1095,24 @@ int stl_kick_mode(struct stlink *sl)
 	 * Give the kernel time to handle the fresh plug event.
 	 */
 	fprintf(stderr, "Waiting to reopen the STLink device...\n");
-	for (i = 0; i < 7; i++) {
+	for (i = 0; i < 10; i++) {
 		sl->fd = open(sl->dev_path, O_RDWR);
 		if (sl->fd >= 0) {
-			return 0;
+			/* Give the STLink a few rounds to start working. */
+			stl_enter_SWD_mode(sl);
+			sl->core_state = stl_get_status(sl);
+			if (sl->verbose)
+				printf(" ARM status is 0x%4.4x: %s.\n", sl->core_state,
+					   sl->core_state==STLINK_CORE_RUNNING ? "running" :
+					   (sl->core_state==STLINK_CORE_HALTED ? "halted" : "unknown"));
+			if (sl->core_state==STLINK_CORE_RUNNING ||
+				sl->core_state==STLINK_CORE_HALTED)
+					return 0;
+			close(sl->fd);
+			sl->fd = -1;
+		} else {
+			if (sl->verbose)
+				printf(" Reopen failed.\n");
 		}
 		sleep(1);
 	}
@@ -1119,22 +1149,32 @@ static void stm_info(struct stlink* sl)
 
 static void stm_discovery_blink(struct stlink* sl)
 {
-	uint32_t PortCh_iocfg;
+	uint32_t PortC_hi_iocfg, APB1ENR_orig, APB2ENR_orig;
+	uint32_t APBnENR_orig[2];
 	int i;
 
-	PortCh_iocfg = sl_rd32(sl, GPIOC_CRH);
-	if (sl->verbose)
-		fprintf(stderr, "GPIOC_CRH = 0x%08x", PortCh_iocfg);
+	PortC_hi_iocfg = sl_rd32(sl, GPIOC_CRH);
+	/* Read APB2ENR and APB1ENR at 0x40021018-1F */
+	stl_read(sl, 0x40021018, APBnENR_orig, sizeof APBnENR_orig);
 
-	/* Set PC8 and PC9 to outputs. */
-	sl_wr32(sl, GPIOC_CRH, (PortCh_iocfg & ~0xff) | 0x11);
+	APB2ENR_orig = APBnENR_orig[0];  /* 0x40021018 */
+	APB1ENR_orig = APBnENR_orig[1];  /* 0x4002101C (yes, 1 is higher) */
+
+	if (sl->verbose)
+		fprintf(stderr, "GPIOC_CRH = 0x%08x", PortC_hi_iocfg);
+
+	/* Make certain PC8/PC9 are GPIO outputs -- any speed will do. */
+	if ((PortC_hi_iocfg & 0xCC) != 0x00)
+		sl_wr32(sl, GPIOC_CRH, (PortC_hi_iocfg & ~0xff) | 0x11);
 	for (i = 0; i < 10; i++) {
 		sl_wr32(sl, GPIOC_ODR, LED_GREEN);
 		usleep(100* 1000);
 		sl_wr32(sl, GPIOC_ODR, LED_BLUE);
 		usleep(100* 1000);
 	}
-	sl_wr32(sl, GPIOC_CRH, PortCh_iocfg);  /* Restore original pin settings. */
+	/* Conditionally restore original GPIO settings. */
+	if ((PortC_hi_iocfg & 0xCC) != 0x00)
+		sl_wr32(sl, GPIOC_CRH, PortC_hi_iocfg);
 	return;
 }
 
@@ -1148,6 +1188,8 @@ static void stm_show_timer(struct stlink* sl, unsigned int timer_num)
 {
 	uint32_t *result = (void*)sl->q_buf;
 	uint32_t timer_addr;
+	char active_map[4] = " H L";
+
 	if (timer_num > (sizeof timer_addr_map / sizeof timer_addr_map[0])) {
 		printf("Invalid timer number.\n");
 		return;
@@ -1163,12 +1205,76 @@ static void stm_show_timer(struct stlink* sl, unsigned int timer_num)
 	printf("Timer %d at %8.8x: %8.8x %8.8x %8.8x %8.8x.\n"
 		   "%8.8x %8.8x %8.8x %8.8x.\n"
 		   "%8.8x Count: %d Prescale: x%d Top: %d.\n"
-		   "CH1: %d Ch2: %d CH3: %d CH4: %d.\n",
+		   "CH1: %d %c Ch2: %d %c CH3: %d %c CH4: %d %c.\n",
 		   timer_num, timer_addr, result[0], result[1], result[2], result[3],
 		   result[4], result[5], result[6], result[7],
 		   result[8], result[9], result[10]+1, result[11],
-		   result[13], result[14], result[15], result[16]);
+		   result[13], active_map[(result[8] >> 0) & 3],
+		   result[14], active_map[(result[8] >> 4) & 3],
+		   result[15], active_map[(result[8] >> 8) & 3],
+		   result[16], active_map[(result[8] >> 12) & 3]);
 }		
+
+uint32_t CAN_addr_map[] = {0, 0x40006400, 0x40006800};
+
+static void stm_show_CAN(struct stlink* sl, unsigned int can_num)
+{
+	uint32_t *result = (void*)sl->q_buf;
+	uint32_t mode_map, scale_map, fifo_map, active_map;
+	int i;
+
+	/* This should never happen, but... */
+	if (can_num > (sizeof CAN_addr_map / sizeof CAN_addr_map[0])) {
+		printf("Invalid CAN controller number.\n");
+		return;
+	}
+	stl_rd32_cmd(sl, CAN_addr_map[can_num], 32);
+	printf("CAN %d at %8.8x: MCR %8.8x MSR %8.8x\n"
+		   " Tx/Rx0/Rx1 %8.8x %8.8x %8.8x\n"
+		   " IntrEnb %8.8x Errors %8.8x BitTiming %8.8x\n",
+		   can_num, CAN_addr_map[can_num],
+		   result[0], result[1], result[2], result[3],
+		   result[4], result[5], result[6], result[7]);
+	/* Show FIFO contents. */
+	stl_rd32_cmd(sl, CAN_addr_map[can_num] + 0x180, 80);
+	printf(" CAN FIFOs\n"
+		   "  Tx0: %8.8x %8.8x %8.8x %8.8x\n"
+		   "  Tx1: %8.8x %8.8x %8.8x %8.8x\n"
+		   "  Tx2: %8.8x %8.8x %8.8x %8.8x\n"
+		   "  Rx0: %8.8x %8.8x %8.8x %8.8x\n"
+		   "  Rx1: %8.8x %8.8x %8.8x %8.8x\n",
+		   result[0], result[1], result[2], result[3],
+		   result[4], result[5], result[6], result[7],
+		   result[8], result[9], result[10], result[11],
+		   result[12], result[13], result[14], result[15],
+		   result[16], result[17], result[18], result[19]);
+
+	/* Show filter, Mode/scale/dest/on %8.8x %8.8x %8.8x.\n */
+	stl_rd32_cmd(sl, 0x40006600, 32);
+	printf(" Rx filter   FMR %8.8x\n"
+		   "  Mode/scale/dest/on %8.8x %8.8x %8.8x %8.8x.\n",
+		   result[0], result[1], result[3], result[5], result[7]);
+	mode_map = result[1];
+	scale_map = result[3];
+	fifo_map = result[5];
+	active_map = result[7];
+	stl_rd32_cmd(sl, 0x40006640, 32);
+	for (i = 0; i < 28; i++)
+		if (active_map & (1<<i)) {
+			printf("  Filter %d FIFO %c ", i, fifo_map & (1<<i) ? '1' : '0');
+			if (scale_map & (1<<i))
+				printf("%8.8x %8.8x\n",
+					   result[i*2], result[i*2 + 1]);
+			else
+				printf("%4.4x %4.4x (%3.3x %3.3x) %4.4x %4.4x (%3.3x %3.3x)\n",
+					   result[i*2] & 0xffff, result[i*2] >> 16,
+					   (result[i*2] >> 5) & 0x7ff, (result[i*2] >> 21) & 0x7ff,
+					   result[i*2 + 1] & 0xffff, result[i*2 + 1] >> 16,
+					   (result[i*2+1]>>5) & 0x7ff, (result[i*2+1]>>21) & 0x7ff);
+		}
+
+	return;
+}
 
 
 int main(int argc, char *argv[])
@@ -1217,6 +1323,13 @@ int main(int argc, char *argv[])
 
 	stl_get_version(sl);
 	sl->ver = *(struct STLinkVersion *)sl->q_buf;
+	if (sl->ver.ST_VendorID == 0 && sl->ver.ST_ProductID == 0) {
+		fprintf(stderr, "The device %s is reporting an ID of 0/0.\n"
+				"  Either the STLink is not plugged in or it is still "
+				"being initialized.\n",
+				dev_name);
+		return EXIT_FAILURE;
+	}
 	if (sl->ver.ST_VendorID != USB_ST_VID  ||
 		sl->ver.ST_ProductID != USB_STLINK_PID) {
 		fprintf(stderr, "The device %s is not a STLink\n"
@@ -1270,6 +1383,18 @@ int main(int argc, char *argv[])
 			} else
 				fprintf(stderr, "Unknown register write specification '%s'.\n",
 						cmd);
+		} else if (strncmp("program=", cmd, 8) == 0) {
+			char *path = cmd + 8;
+			uint32_t flash_base = stm_devids[0].flash_base;
+			uint32_t flash_size = stm_devids[0].flash_size;
+			/* Write the user flash area. */
+			fprintf(stderr, " Writing program from %s into STM32 memory at "
+					"0x%8.8x.\n", path, flash_base);
+			stl_enter_debug(sl);
+			stl_reset(sl);
+			stl_flash_erase_page(sl, 0xa11);
+			stl_flash_erase_page(sl, 0xa11);
+			stl_flash_fwrite(sl, path, flash_base, flash_size);
 		} else if (strncmp("read", cmd, 4) == 0) {
 			/* Read memory location */
 			int memaddr = strtoul(cmd+4, 0, 0); /* Super sleazy */
@@ -1344,6 +1469,12 @@ int main(int argc, char *argv[])
 			stl_step(sl);
 		} else if (strcmp("sleep", cmd) == 0) {
 			sleep(5);
+		} else if (strcmp("erase", cmd) == 0) {
+			/* The user usually wants to do an erase-all.  Make it simple. */
+			stl_enter_debug(sl);
+			stl_reset(sl);
+			if (stl_flash_erase_page(sl, 0xa11) != 0)
+				stl_flash_erase_page(sl, 0xa11);
 		} else if (strncmp("erase=", cmd, 6) == 0) {
 			/* Erase a flash page at location */
 			int memaddr = strcmp(cmd+6, "all") == 0 ? 0xa11
@@ -1364,6 +1495,11 @@ int main(int argc, char *argv[])
 			/* Read a timer's state. */
 			int timer_num = strtoul(cmd+5, 0, 0); /* Super sleazy */
 			stm_show_timer(sl, timer_num);
+		}
+		else if (strcmp("CAN1", cmd) == 0 || strcmp("CAN2", cmd) == 0) {
+			/* Show the CAN controller state. */
+			int can_num = cmd[3] - '0';
+			stm_show_CAN(sl, can_num);
 		}
 		else {
 			fprintf(stderr, "Unrecognized command '%s'.\n", cmd);

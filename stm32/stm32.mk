@@ -45,7 +45,7 @@ lib: lib$(MCU).a
 
 ifeq ($(shell uname), Linux)
 .bin.flashstlink:
-	$(STLINKDOWNLOAD) $(STLINKDEV) -v erase=all flash:w:$<
+	$(STLINKDOWNLOAD) $(STLINKDEV) program=$< reset run
 endif
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
