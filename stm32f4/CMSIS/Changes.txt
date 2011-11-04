@@ -15,4 +15,8 @@ $Id$
 
 6. Copied Libraries/STM32F4xx_StdPeriph_Driver/src/*.c to CMSIS/source.
 
-7. Ran dos2unix CMSIS/include/* CMSIS/source/*.
+7. Copied Project/STM32F4xx_StdPeriph_Templates/stm32f4xx_conf.h CMSIS/include.
+
+8. Copied Project/STM32F4xx_StdPeriph_Templates/stm32f4xx_it.h CMSIS/include.
+
+9. Ran dos2unix CMSIS/include/* CMSIS/source/*.
