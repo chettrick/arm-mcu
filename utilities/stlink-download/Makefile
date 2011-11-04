@@ -6,10 +6,10 @@ HOSTCC		?= gcc
 CFLAGS		?= -Wall
 
 PROGRAM		= stlink-download
-RULES		= ../udev/10-stlink.rules
-
 DESTDIR		?= /usr/local/bin
-UDEVRULES	?= /etc/udev/rules.d
+
+UDEVRULES	= 10-stlink.rules
+UDEVRULESDIR	?= /etc/udev/rules.d
 
 default: $(PROGRAM)
 
@@ -17,12 +17,12 @@ stlink-download: stlink-download.c
 	$(HOSTCC) $(CFLAGS) -o $@ $<
 
 install: $(PROGRAM)
-	install -csm 0555 $(PROGRAM)	$(DESTDIR)
-	install -cm 0444 $(RULES)	$(UDEVRULES)
+	install -csm 0555 $(PROGRAM)		$(DESTDIR)
+	install -cm 0444 ../udev/$(UDEVRULES)	$(UDEVRULESDIR)
 
 uninstall:
 	rm $(DESTDIR)/$(PROGRAM)
-	rm $(UDEVRULES)/$(RULES)
+	rm $(UDEVRULESDIR)/$(UDEVRULES)
 
 clean:
 	-rm $(PROGRAM)
