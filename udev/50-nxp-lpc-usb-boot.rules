@@ -1,9 +1,0 @@
-# udev rules for NXP LPC USB boot loader
-
-# $Id$
-
-# LPC17xx USB boot loader, ANxxxx
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="c251", ATTRS{idProduct}=="1303", RUN+="/usr/local/libexec/50-nxp-lpc-usb-boot.helper LPC17xx"
-
-# LPC23xx USB boot loader, AN10759
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="c251", ATTRS{idProduct}=="130C", RUN+="/usr/local/libexec/50-nxp-lpc-usb-boot.helper LPC23xx"
