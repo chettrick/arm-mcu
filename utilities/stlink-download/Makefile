@@ -6,7 +6,7 @@ HOSTCC		?= gcc
 CFLAGS		?= -Wall
 
 PROGRAM		= stlink-download
-RULES		= 10-stlink.rules
+RULES		= ../udev/10-stlink.rules
 
 DESTDIR		?= /usr/local/bin
 UDEVRULES	?= /etc/udev/rules.d
