@@ -8,7 +8,7 @@ CFLAGS		?= -Wall
 PROGRAM		= stlink-download
 INSTALLDIR	?= /usr/local/bin
 
-UDEVRULES	= 10-stlink.rules
+UDEVRULES	= 50-stlink.rules
 UDEVRULESDIR	?= /etc/udev/rules.d
 
 default: $(PROGRAM)
