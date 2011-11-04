@@ -1,0 +1,18 @@
+Changes made to CMSIS library files from stm32f4_dsp_stdperiph_lib.zip
+----------------------------------------------------------------------
+
+$Id$
+
+1. Downloaded stm32f4_dsp_stdperiph_lib.zip, version 1.0.0 from www.st.com.
+
+2. Copied Include/*.h to CMSIS/include.
+
+3. Copied Libraries/CMSIS/Device/ST/STM32F4xx/Include/*.h to CMSIS/include.
+
+4. Copied Libraries/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c do CMSIS/source.
+
+5. Copied Libraries/STM32F4xx_StdPeriph_Driver/inc/*.h to CMSIS/include.
+
+6. Copied Libraries/STM32F4xx_StdPeriph_Driver/src/*.c to CMSIS/source.
+
+7. Ran dos2unix CMSIS/include/* CMSIS/source/*.
