@@ -17,8 +17,6 @@ $Id$
 
 7. Copied Project/STM32F10x_StdPeriph_Template/stm32f10x_conf.h CMSIS/include
 
-8. Copied Project/STM32F10x_StdPeriph_Template/stm32f10x_it.h CMSIS/include
+8. Ran dos2unix CMSIS/include/* CMSIS/source/*
 
-9. Ran dos2unix CMSIS/include/* CMSIS/source/*
-
-10. Changed assert_failed() to assert() in CMSIS/include/stm32f10x_conf.h
+9. Changed assert_failed() to assert() in CMSIS/include/stm32f10x_conf.h
