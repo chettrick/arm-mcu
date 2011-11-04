@@ -9,6 +9,9 @@ STLINKFLASH	= stlink-flash
 
 INSTALLDIR	= /usr/local/bin
 
+UDEVRULES	= 10-stlink.rules
+UDEVRULESDIR	?= /etc/udev/rules.d
+
 default: $(STLINKGDB)
 
 $(STLINKSRC):
@@ -23,10 +26,12 @@ $(STLINKGDB): $(STLINKSRC)
 install:
 	install -csm 0555 $(STLINKGDB)			$(INSTALLDIR)
 	install -csm 0555 $(STLINKFLASH)		$(INSTALLDIR)
+	install -cm 0444 ../udev/$(UDEVRULES)		$(UDEVRULESDIR)
 
 uninstall:
 	-rm $(INSTALLDIR)/$(STLINKGDB)
 	-rm $(INSTALLDIR)/$(STLINKFLASH)
+	-rm $(UDEVRULESDIR)/$(UDEVRULES)
 
 clean:
 	-rm $(STLINKGDB)
