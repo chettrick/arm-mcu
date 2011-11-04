@@ -17,6 +17,6 @@ $Id$
 
 7. Copied Project/STM32F4xx_StdPeriph_Templates/stm32f4xx_conf.h CMSIS/include.
 
-8. Copied Project/STM32F4xx_StdPeriph_Templates/stm32f4xx_it.h CMSIS/include.
+8. Changed assert_faile() to assert() in CMSIS/include/stm32f4xx_conf.h.
 
 9. Ran dos2unix CMSIS/include/* CMSIS/source/*.
