@@ -4,8 +4,10 @@
 
 static const char revision[] = "$Id$";
 
+#include <device.h>
 #include <errno.h>
 #include <inet.h>
+#include <socket.h>
 #include <spi.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -222,6 +224,7 @@ int wiznet_initialize(const uint32_t spiportnum,
 {
   int status = 0;
   int s;
+  char socketname[16];
 
 // Validate parameters
 
@@ -308,6 +311,16 @@ int wiznet_initialize(const uint32_t spiportnum,
       return status;
 
     if ((status = W5200_write_register(W5200_Sn_RX_WR(s), 0x0000)))
+      return status;
+
+// Register a device driver for the socket
+
+    memset(socketname, 0, sizeof(socketname));
+    snprintf(socketname, sizeof(socketname), "socket%d:", s);
+
+    if ((status = device_register_char(socketname, socket_open, socket_close,
+                                       socket_write,  socket_read,
+                                       socket_write_ready, socket_read_ready)))
       return status;
   }
 
@@ -729,4 +742,76 @@ int wiznet_udp_send_to(const uint32_t socket,
     return status;
 
   return status;
+}
+
+int socket_open(char *name, unsigned int *subdevice)
+{
+  char namebuf[DEVICE_NAME_SIZE];
+  char *devname;
+  char *protocol;
+  char *localport;
+  char *remotehost;
+  char *remoteport;
+  int fd;
+
+  // Copy device name to temporary buffer
+
+  memset(namebuf, 0, sizeof(namebuf));
+  strlcpy(namebuf, name, sizeof(namebuf));
+
+  // Split device name into its components
+
+  devname = strtok(name, ":");
+  protocol = strtok(NULL, ",");
+  localport = strtok(NULL, ",");
+  remotehost = strtok(NULL, ",");
+  remoteport = strtok(NULL, ",");
+
+  fd = device_lookup(devname);
+  if (fd < 0) return fd;
+
+  return 0;
+}
+
+int socket_close(unsigned int subdevice)
+{
+  return 0;
+}
+
+int socket_write(unsigned int subdevice, char *buf, unsigned int count)
+{
+  return 0;
+}
+
+int socket_read(unsigned int subdevice, char *buf, unsigned int count)
+{
+  return 0;
+}
+
+int socket_write_ready(unsigned int subdevice)
+{
+  int status;
+  uint32_t count;
+
+  status = wiznet_get_transmit_free(subdevice, &count);
+  if (status) return status;
+
+  if (count)
+    return TRUE;
+  else
+    return FALSE;
+}
+
+int socket_read_ready(unsigned int subdevice)
+{
+  int status;
+  uint32_t count;
+
+  status = wiznet_get_receive_ready(subdevice, &count);
+  if (status) return status;
+
+  if (count)
+    return TRUE;
+  else
+    return FALSE;
 }
