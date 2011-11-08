@@ -4,13 +4,11 @@
 
 static const char revision[] = "$Id$";
 
+#include <cpu.h>
 #include <errno.h>
-#include <spi.h>
 #include <stdlib.h>
 #include <wiznet.h>
 #include <W5100.h>
-
-#define errno_r (*(__errno()))
 
 static uint32_t spiport;
 
@@ -45,7 +43,8 @@ void wiznet_tick(void)
     delaycounter--;
 }
 
-int wiznet_initialize(const uint32_t spiportnum)
+int wiznet_initialize(const uint32_t spiportnum,
+                      const uint32_t numsockets)
 {
   int status = 0;
 
