@@ -4,18 +4,15 @@
 
 static const char revision[] = "$Id$";
 
-#include <device.h>
+#include <cpu.h>
 #include <errno.h>
 #include <inet.h>
 #include <socket.h>
-#include <spi.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <wiznet.h>
 #include <W5200.h>
-
-#define errno_r (*(__errno()))
 
 static uint32_t spiport = 0;
 static uint32_t numsockets = 0;
