@@ -84,7 +84,7 @@ static const char version_msg[] =
 "STLink programmer/debugging utility $Id$  Copyright Donald Becker";
 
 static const char usage_msg[] =
-	"\nUsage: %s /dev/sg0 <command> ...\n\n"
+	"\nUsage: %s /dev/stlink-v1 <command> ...\n\n"
 	"Commands are:\n"
 	"  info version blink\n"
 	"  debug reg<regnum> wreg<regnum>=<value> regs reset run step status\n"

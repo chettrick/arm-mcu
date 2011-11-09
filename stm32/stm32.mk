@@ -19,8 +19,8 @@ STM32FLASH	?= stm32flash
 STM32FLASH_PORT	?= /dev/ttyS0
 
 ifeq ($(shell uname), Linux)
-STLINKDEV	?= /dev/stlink
-STLINKDOWNLOAD	?= stlink-download
+STLINKDEV	?= /dev/stlink-v1
+STLINKFLASH	?= stlink-v1-flash
 endif
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
@@ -45,7 +45,7 @@ lib: lib$(MCU).a
 
 ifeq ($(shell uname), Linux)
 .bin.flashstlink:
-	$(STLINKDOWNLOAD) $(STLINKDEV) program=$< reset run
+	$(STLINKFLASH) $(STLINKDEV) program=$< reset run
 endif
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)

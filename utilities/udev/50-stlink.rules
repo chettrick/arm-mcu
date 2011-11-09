@@ -16,23 +16,21 @@
 
 ACTION!="add|change", GOTO="stlink_rules_end"
 
-SUBSYSTEMS=="usb", \
-  ATTR{idVendor}=="0483", ATTR{idProduct}=="3744", \
-  NAME="stlinkusb%n", \
-  MODE="0660", GROUP:="wheel", \
-  ENV{UDISKS_PRESENTATION_HIDE}="1", \
-  ENV{UDISKS_PRESENTATION_NOPOLICY}="1", \
-  ENV{DM_UDEV_DISABLE_DISK_RULES_FLAG}="1", \
-  OPTIONS="last_rule"
+# ST-Link V1 (e.g. STM32 Value Line Discovery)
 
 KERNEL=="sg[0-9]*", \
   ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3744", \
-  NAME+="stlink-sg%n", SYMLINK+="stlink", \
+  NAME+="sg%n", SYMLINK+="stlink-v1", \
   MODE="0660", GROUP:="wheel", \
   ENV{UDISKS_PRESENTATION_HIDE}="1", \
   ENV{UDISKS_PRESENTATION_NOPOLICY}="1", \
-  ENV{DM_UDEV_DISABLE_DISK_RULES_FLAG}="1" \
-  OPTIONS="last_rule"
+  ENV{DM_UDEV_DISABLE_DISK_RULES_FLAG}="1"
+
+# ST-Link V2 (e.g. STM32L Discovery or STM32F4 Discovery)
+
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", \
+  SYMLINK+="stlink-v2" \
+  MODE:="0666", GROUP:="wheel"
 
 LABEL="stlink_rules_end"
 
