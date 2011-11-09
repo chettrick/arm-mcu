@@ -2,7 +2,7 @@
 
 # $Id$
 
-STLINKURL	= git://github.com/whitequark/stlink.git
+STLINKURL	= git://github.com/texane/stlink.git
 STLINKSRC	= stlink
 STLINKGDB	= stlink-gdbserver
 STLINKFLASH	= stlink-flash
@@ -15,8 +15,8 @@ default: $(STLINKGDB)
 
 $(STLINKSRC):
 	git clone $(STLINKURL) $(STLINKSRC)
-	awk '/\+\+\+/ { printf("cp $(STLINKSRC)/%s $(STLINKSRC)/%s.original\n", $$2, $$2); }' <gdbserver.patch | sh
-	cd $(STLINKSRC) ; patch -p0 <../gdbserver.patch
+	-awk '/\+\+\+/ { printf("cp %s %s.original\n", $$2, $$2); }' <gdbserver.patch | sh
+	-patch -p0 <gdbserver.patch
 
 # Compile stlink-gdbserver
 
