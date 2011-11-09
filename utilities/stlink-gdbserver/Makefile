@@ -9,15 +9,13 @@ STLINKFLASH	= stlink-flash
 
 INSTALLDIR	= /usr/local/bin
 
-UDEVRULES	= 50-stlink.rules
-UDEVRULESDIR	?= /etc/udev/rules.d
-
 default: $(STLINKGDB)
 
 # Download stlink-gdbserver source distribution
 
 $(STLINKSRC):
 	git clone $(STLINKURL) $(STLINKSRC)
+	awk '/\+\+\+/ { printf("cp $(STLINKSRC)/%s $(STLINKSRC)/%s.original\n", $$2, $$2); }' <gdbserver.patch | sh
 	cd $(STLINKSRC) ; patch -p0 <../gdbserver.patch
 
 # Compile stlink-gdbserver
@@ -32,14 +30,12 @@ $(STLINKGDB): $(STLINKSRC)
 install:
 	install -csm 0555 $(STLINKGDB)			$(INSTALLDIR)
 	install -csm 0555 $(STLINKFLASH)		$(INSTALLDIR)
-	install -cm 0444 ../udev/$(UDEVRULES)		$(UDEVRULESDIR)
 
 # Uninstall stlink-gdbserver
 
 uninstall:
 	-rm $(INSTALLDIR)/$(STLINKGDB)
 	-rm $(INSTALLDIR)/$(STLINKFLASH)
-	-rm $(UDEVRULESDIR)/$(UDEVRULES)
 
 # Clean out working files
 
