@@ -1,40 +1,35 @@
---- gdbserver/gdb-server.c.original	2011-11-09 12:35:40.839233491 +0100
-+++ gdbserver/gdb-server.c	2011-11-09 12:59:56.747442318 +0100
-@@ -84,27 +84,24 @@
+--- stlink/gdbserver/gdb-server.c.original	2011-11-09 15:34:13.088729817 +0100
++++ stlink/gdbserver/gdb-server.c	2011-11-09 15:35:31.471521803 +0100
+@@ -86,17 +86,17 @@
+         int port = 0;
  
- 	stlink_t *sl = NULL;
- 
--	const char * HelpStr =	"Usage:\n"
--								"\t st-util port [/dev/sgX]\n"
--								"\t st-util [port]\n"
--								"\t st-util --help\n";
-+	const char * HelpStr =	"Usage: stlink-gdbserver [/dev/stlink-v1 | /dev/stlink-v2 | --help]\n";
- 
- 	switch(argc) {
--
--		case 3 : {
--			//sl = stlink_quirk_open(argv[2], 0);
--			// FIXME - hardcoded to usb....
--			sl = stlink_open_usb(10);
--			if(sl == NULL) return 1;
--			break;
--		}
--
- 		case 2 : {
- 			if (strcmp(argv[1], "--help") == 0) {
- 				fprintf(stdout, HelpStr, NULL);
- 				return 1;
- 			}
-+                        else if (!strcmp(argv[1], "/dev/stlink-v2")) {
-+				sl = stlink_open_usb(1);
-+				if(sl == NULL) return 1;
-+			}
-+			else {
-+				sl = stlink_quirk_open(argv[1], 0);
-+				if (sl == NULL) return 1;
-+			}
- 		}
-+		break;
- 
- #if CONFIG_USE_LIBSG
- 		case 1 : { // Search ST-LINK (from /dev/sg0 to /dev/sg99)
+ 	const char * HelpStr =  "\nUsage:\n"
+-                                 "\tst-util [Arguments]\n"
++                                 "\tstlink-gdbserver [Arguments]\n"
+                                  "\tArguments (no more than 2):\n"
+                                   "\t\t<Port>: Port. Default: 4242.\n"
+                                   "\t\t{usb|sgauto|/dev/sgX}: Transport, "
+                                    "where X = {0, 1, 2, ...}. Default: USB.\n"
+                                  "\tExamples:\n"
+-                                  "\t\tst-util 1234\n"
+-                                  "\t\tst-util sgauto\n"
+-                                  "\t\tst-util 1234 usb\n"
+-                                  "\t\tst-util /dev/sgX 1234\n"
+-                                  "\t\tst-util 1234 /dev/sgX\n";
++                                  "\t\tstlink-gdbserver 1234\n"
++                                  "\t\tstlink-gdbserver sgauto\n"
++                                  "\t\tstlink-gdbserver 1234 usb\n"
++                                  "\t\tstlink-gdbserver /dev/sgX 1234\n"
++                                  "\t\tstlink-gdbserver 1234 /dev/sgX\n";
+         
+         
+         // Parsing the arguments of command line ...
+@@ -127,7 +127,7 @@
+             
+             // usb
+             if (!strcmp(argv[a], "usb")) {
+-                sl = stlink_open_usb(10);
++                sl = stlink_open_usb(0);
+                 if(sl == NULL) return 1;
+                 continue;
+             }
