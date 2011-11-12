@@ -1,0 +1,41 @@
+# OpenOCD configuration for STM32F100 Cortex-M3 ARM MCU
+
+# $Id$
+
+# TCP server configuration
+
+gdb_port 3333
+telnet_port 4444
+tcl_port 6666
+
+# Interface configuration
+
+interface ft2232
+ft2232_device_desc "Amontec JTAGkey A"
+ft2232_layout jtagkey
+ft2232_vid_pid 0x0403 0xcff8
+#ft2232_device_desc "Olimex OpenOCD JTAG TINY A"
+#ft2232_layout olimex-jtag
+#ft2232_vid_pid 0x15BA 0x0004
+
+# Reset configuration
+
+reset_config trst_and_srst
+
+# JTAG configuration
+
+jtag_khz 1000
+jtag_nsrst_delay 100
+jtag_ntrst_delay 100
+
+# Target configuration
+
+jtag newtap STM32F100 cpu -irlen 4 -ircapture 0x1 -expected-id 0x3ba00477
+jtag newtap STM32F100 bs  -irlen 5 -ircapture 0x1 -expected-id 0x06420041
+
+target create STM32F100.cpu cortex_m3 -endian little -chain-position STM32F100.cpu
+STM32F100.cpu configure -work-area-phys 0x20000000 -work-area-size 0x5000 -work-area-backup 0
+
+# Flash configuration
+
+flash bank 0 stm32f1x 0 0 0 0 STM32F100.cpu
