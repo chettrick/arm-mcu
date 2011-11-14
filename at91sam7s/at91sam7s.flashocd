@@ -11,7 +11,7 @@
 
 set FILE [lindex $argv 0]
 set TEXTBASE [lindex $argv 1]
-set address [format 0x%08X [expr 0x00100000 + $TEXTBASE]]
+set ADDRESS [format 0x%08X [expr 0x00100000 + $TEXTBASE]]
 set prompt "> "
 set timeout 10
 
@@ -30,7 +30,7 @@ expect $prompt
 send "flash protect 0 0 last off\n"
 expect $prompt
 
-send "flash write_image erase $FILE $address bin\n"
+send "flash write_image erase $FILE $ADDRESS bin\n"
 expect -timeout 300 $prompt
 
 send "flash protect 0 0 last on\n"
