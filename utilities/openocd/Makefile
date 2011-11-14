@@ -18,9 +18,8 @@ OPENOCD_TARBALL	= $(OPENOCD_SRC).tar.gz
 OPENOCD_DIST	= $(TEMP)/$(OPENOCD_TARBALL)
 OPENOCD_SERVER	= http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VER)
 OPENOCD_URL	= $(OPENOCD_SERVER)/$(OPENOCD_TARBALL)
-OPENOCD_RPM	= $(OPENOCD_NAME)-$(OPENOCD-VER).rpm
-OPENOCD_DEST	:= $(shell pwd)/fakeroot/openocd-$(OPENOCD_VER)
-OPENOCD_RELEASE	:= $(OPENOCD_NAME)-$(OPENOCD_VER)-$(shell uname -s)-$(shell uname -m).tgz
+OPENOCD_DEST	= /usr/local/openocd-$(OPENOCD_VER)
+OPENOCD_RELEASE	:= $(shell pwd)/$(OPENOCD_NAME)-$(OPENOCD_VER)-$(shell uname -s)-$(shell uname -m).tgz
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 LIBFTDI_DIR	:= $(shell pwd)/libftdi
@@ -61,15 +60,26 @@ source.done: $(OPENOCD_DIST)
 # Compile OpenOCD
 
 compile.done: source.done
-	cd $(OPENOCD_SRC) ; ./configure --prefix=$(OPENOCD_DEST) --enable-ft2232-libftdi --enable-jlink --enable-rlink --enable-ulink --enable-vsllink --enable-arm-jtag-ew --enable-buspirate CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)"
+	cd $(OPENOCD_SRC) ; ./configure --prefix=$(OPENOCD_DEST) --htmldir=$(OPENOCD_DEST)/share/doc --enable-ft2232-libftdi --enable-jlink --enable-rlink --enable-ulink --enable-vsllink --enable-arm-jtag-ew --enable-buspirate CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)"
 	$(MAKE) -C $(OPENOCD_SRC)
 	$(MAKE) -C $(OPENOCD_SRC) html
-	$(MAKE) -C $(OPENOCD_SRC) install
-	mkdir -p $(OPENOCD_DEST)/share/doc
-	cp $(OPENOCD_SRC)/doc/openocd.html/* $(OPENOCD_DEST)/share/doc
-	chmod -R ugo-w $(OPENOCD_DEST)
-	cd fakeroot ; tar czf ../$(OPENOCD_RELEASE) * --owner=root --group=root
-	chmod -R ugo+w $(OPENOCD_DEST)
+	touch $@
+
+# Install OpenOCD
+
+install.done: compile.done
+	rm -rf fakeroot
+	$(MAKE) -C $(OPENOCD_SRC) install install-html DESTDIR=`pwd`/fakeroot
+	mv fakeroot/usr/local/openocd-$(OPENOCD_VER)/share/doc/openocd.html/*.html fakeroot/usr/local/openocd-$(OPENOCD_VER)/share/doc
+	rmdir fakeroot/usr/local/openocd-$(OPENOCD_VER)/share/doc/openocd.html
+	rm -rf fakeroot/usr/local/openocd-$(OPENOCD_VER)/share/info
+	rm -rf fakeroot/usr/local/openocd-$(OPENOCD_VER)/share/man
+	touch $@
+
+release.done: install.done
+	chmod -R ugo-w fakeroot
+	cd fakeroot/usr/local ; tar czf $(OPENOCD_RELEASE) * --owner=root --group=root
+	chmod -R ugo+w fakeroot
 	touch $@
 
 # Clean out working files
@@ -79,6 +89,8 @@ clean:
 	-rm -rf fakeroot
 	-rm $(OPENOCD_RELEASE)
 	-rm compile.done
+	-rm install.done
+	-rm release.done
 
 reallyclean: clean
 	-rm -rf $(LIBFTDI_SRC)
