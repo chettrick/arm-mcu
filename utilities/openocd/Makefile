@@ -63,13 +63,13 @@ source.done: $(OPENOCD_DIST)
 compile.done: source.done
 	cd $(OPENOCD_SRC) ; ./configure --prefix=$(OPENOCD_DEST) --enable-ft2232-libftdi --enable-jlink --enable-rlink --enable-ulink --enable-vsllink --enable-arm-jtag-ew --enable-buspirate CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)"
 	$(MAKE) -C $(OPENOCD_SRC)
-	$(MAKE) -C $(OPENOCD_SRC) docs
+	$(MAKE) -C $(OPENOCD_SRC) html
 	$(MAKE) -C $(OPENOCD_SRC) install
-	mkdir -p $(OPENOCD_DEST)/share/doc/html
-	install -cm 0444 $(OPENOCD_SRC)/doc/openocd.pdf $(OPENOCD_DEST)/share/doc
-	install -cm 0444 $(OPENOCD_SRC)/doc/openocd.html/* $(OPENOCD_DEST)/share/doc/html
+	mkdir -p $(OPENOCD_DEST)/share/doc
+	install -cm 0444 $(OPENOCD_SRC)/doc/openocd.html/* $(OPENOCD_DEST)/share/doc
 	chmod -R ugo-w $(OPENOCD_DEST)
 	cd fakeroot ; tar czf ../$(OPENOCD_RELEASE) * --owner=root --group=root
+	chmod -R ugo+w $(OPENOCD_DEST)
 	touch $@
 
 # Clean out working files
