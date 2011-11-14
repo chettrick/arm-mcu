@@ -18,10 +18,9 @@ JLINKSCRIPT	= jlinkscript.tmp
 JLINKMCU	= $(MCU)
 JLINKADDR	= 0x00000000
 
-OPENOCDPGM	?= openocd
+OPENOCD		?= openocd
 OPENOCDINT	?= olimex-jtag-tiny
 OPENOCDCFG	?= $(MCUDIR)/$(MCU).openocd
-OPENOCD		= $(OPENOCDPGM) -f interface/$(OPENOCDINT).cfg -f $(OPENOCDCFG)
 
 OPENOCDDEBUG	?= $(MCUDIR)/$(MCU).debugocd
 OPENOCDFLASH	?= $(MCUDIR)/$(MCU).flashocd
@@ -110,7 +109,7 @@ default_catch:
 # Start and stop OpenOCD
 
 startocd:
-	$(OPENOCD) >openocd.log 2>&1 &
+	$(OPENOCD) -f interface/$(OPENOCDINT).cfg -f $(OPENOCDCFG) >openocd.log 2>&1 &
 
 stopocd:
 	killall openocd
