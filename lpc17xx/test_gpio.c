@@ -35,6 +35,6 @@ int main(void)
   gpiopin_configure(GPIOPIN61, GPIOPIN_OUTPUT);
 
   for (i = 0;; i++)
-    GPIOPIN61OUT = i >> 22;
+    GPIOPIN61OUT = i >> 20;
 #endif
 }
