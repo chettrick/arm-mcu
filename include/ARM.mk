@@ -112,7 +112,7 @@ startocd:
 	$(OPENOCD) -f interface/$(OPENOCDINT).cfg -f $(OPENOCDCFG) >openocd.log 2>&1 &
 
 stopocd:
-	killall openocd
+	killall $(OPENOCD)
 
 # Update from source code repository
 
