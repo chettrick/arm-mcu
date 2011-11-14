@@ -6,22 +6,14 @@
 
 # Script arguments:
 
-#   OpenOCD program file
-#   OpenOCD configuration file
 #   Binary flash image file
 #   Text base address
 
-set OPENOCDPGM [lindex $argv 0]
-set OPENOCDCFG [lindex $argv 1]
-set FILE [lindex $argv 2]
-set TEXTBASE [lindex $argv 3]
+set FILE [lindex $argv 0]
+set TEXTBASE [lindex $argv 1]
 set address [format 0x%08X [expr 0x00100000 + $TEXTBASE]]
 set prompt "> "
 set timeout 10
-
-spawn "$OPENOCDPGM" -f "$OPENOCDCFG"
-expect -re "^.*Barf Nader.*$"
-flush stdout
 
 spawn /usr/bin/telnet localhost 4444
 expect $prompt
