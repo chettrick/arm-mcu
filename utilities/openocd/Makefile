@@ -66,7 +66,7 @@ compile.done: source.done
 	$(MAKE) -C $(OPENOCD_SRC) html
 	$(MAKE) -C $(OPENOCD_SRC) install
 	mkdir -p $(OPENOCD_DEST)/share/doc
-	install -cm 0444 $(OPENOCD_SRC)/doc/openocd.html/* $(OPENOCD_DEST)/share/doc
+	cp $(OPENOCD_SRC)/doc/openocd.html/* $(OPENOCD_DEST)/share/doc
 	chmod -R ugo-w $(OPENOCD_DEST)
 	cd fakeroot ; tar czf ../$(OPENOCD_RELEASE) * --owner=root --group=root
 	chmod -R ugo+w $(OPENOCD_DEST)
