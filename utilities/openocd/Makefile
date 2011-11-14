@@ -73,9 +73,12 @@ install: compile.done
 
 clean:
 	$(MAKE) -C $(OPENOCD_SRC) clean
+	-rm -rf $(OPENOCD_DEST)
 	-rm compile.done
 
 reallyclean: clean
+	-rm -rf $(LIBFTDI_SRC)
+	-rm -rf $(LIBFTDI_DEST)
 	-rm -rf $(OPENOCD_SRC)
 	-rm source.done
 
