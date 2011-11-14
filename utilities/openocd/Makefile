@@ -19,7 +19,7 @@ OPENOCD_DIST	= $(TEMP)/$(OPENOCD_TARBALL)
 OPENOCD_SERVER	= http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VER)
 OPENOCD_URL	= $(OPENOCD_SERVER)/$(OPENOCD_TARBALL)
 OPENOCD_DEST	= /usr/local/openocd-$(OPENOCD_VER)
-OPENOCD_RELEASE	:= $(shell pwd)/$(OPENOCD_NAME)-$(OPENOCD_VER)-$(shell uname -s)-$(shell uname -m).tgz
+OPENOCD_RELEASE	:= $(shell pwd)/$(OPENOCD_NAME)-$(OPENOCD_VER)-$(shell uname -o)-$(shell uname -m).tgz
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 LIBFTDI_DIR	:= $(shell pwd)/libftdi
@@ -78,7 +78,7 @@ install.done: compile.done
 
 release.done: install.done
 	chmod -R ugo-w fakeroot
-	cd fakeroot/usr/local ; tar czf $(OPENOCD_RELEASE) * --owner=root --group=root
+	cd fakeroot/usr/local ; tar czf $(OPENOCD_RELEASE) * --owner=0 --group=0
 	chmod -R ugo+w fakeroot
 	touch $@
 
