@@ -19,7 +19,8 @@ OPENOCD_DIST	= $(TEMP)/$(OPENOCD_TARBALL)
 OPENOCD_SERVER	= http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VER)
 OPENOCD_URL	= $(OPENOCD_SERVER)/$(OPENOCD_TARBALL)
 OPENOCD_RPM	= $(OPENOCD_NAME)-$(OPENOCD-VER).rpm
-OPENOCD_DEST	:= $(shell pwd)/openocd
+OPENOCD_DEST	:= $(shell pwd)/fakeroot/openocd-$(OPENOCD_VER)
+OPENOCD_RELEASE	:= $(OPENOCD_NAME)-$(OPENOCD_VER)-$(shell uname -s)-$(shell uname -m).tgz
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 LIBFTDI_DIR	:= $(shell pwd)/libftdi
@@ -62,18 +63,21 @@ source.done: $(OPENOCD_DIST)
 compile.done: source.done
 	cd $(OPENOCD_SRC) ; ./configure --prefix=$(OPENOCD_DEST) --enable-ft2232-libftdi --enable-jlink --enable-rlink --enable-ulink --enable-vsllink --enable-arm-jtag-ew --enable-buspirate CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)"
 	$(MAKE) -C $(OPENOCD_SRC)
-	touch $@
-
-# Install OpenOCD
-
-install: compile.done
+	$(MAKE) -C $(OPENOCD_SRC) docs
 	$(MAKE) -C $(OPENOCD_SRC) install
+	mkdir -p $(OPENOCD_DEST)/share/doc/html
+	install -cm 0444 $(OPENOCD_SRC)/doc/openocd.pdf $(OPENOCD_DEST)/share/doc
+	install -cm 0444 $(OPENOCD_SRC)/doc/openocd.html/* $(OPENOCD_DEST)/share/doc/html
+	chmod -R ugo-w $(OPENOCD_DEST)
+	cd fakeroot ; tar czf ../$(OPENOCD_RELEASE) * --owner=root --group=root
+	touch $@
 
 # Clean out working files
 
 clean:
-	$(MAKE) -C $(OPENOCD_SRC) clean
-	-rm -rf $(OPENOCD_DEST)
+	-$(MAKE) -C $(OPENOCD_SRC) clean
+	-rm -rf fakeroot
+	-rm $(OPENOCD_RELEASE)
 	-rm compile.done
 
 reallyclean: clean
@@ -83,4 +87,4 @@ reallyclean: clean
 	-rm source.done
 
 distclean: reallyclean
-	rm $(OPENOCD_DIST)
+	-rm $(OPENOCD_DIST)
