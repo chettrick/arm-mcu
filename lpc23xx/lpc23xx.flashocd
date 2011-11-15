@@ -12,7 +12,7 @@
 set FILE [lindex $argv 0]
 set TEXTBASE [lindex $argv 1]
 set ADDRESS [format 0x%08X [expr 0x00000000 + $TEXTBASE]]
-set prompt "> "
+set prompt "> $"
 set timeout 10
 
 spawn /usr/bin/telnet localhost 4444
@@ -31,9 +31,6 @@ send "flash probe 0\n"
 expect $prompt
 
 send "flash erase_sector 0 0 last\n"
-expect $prompt
-
-send "flash erase_check 0\n"
 expect $prompt
 
 send "reset run\n"
