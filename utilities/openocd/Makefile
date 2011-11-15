@@ -42,11 +42,31 @@ compile.done: source.done
 install:
 	$(MAKE) -C $(OPENOCD_SRC) install install-pdf install-html
 
+# Create OpenOCD RPM package
+
+fakeroot: compile.done
+	$(MAKE) -C $(OPENOCD_SRC) install DESTDIR=`pwd`/fakeroot
+	find fakeroot -name dir -exec rm {} ";"
+	find fakeroot -type f -exec chmod ugo-w {} ";"
+
+specfile: fakeroot specfile.template
+	sed s/@@VERSION@@/$(OPENOCD_VER)/g <specfile.template >specfile
+	find fakeroot/usr/local/openocd-$(OPENOCD_VER) -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
+	find fakeroot -type f | cut -c 9- >>specfile
+	find fakeroot -type l | cut -c 9- >>specfile
+
+rpm: specfile 
+	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
+	cp rpmbuild/RPMS/*/*.rpm .
+
 # Clean out working files
 
 clean:
 	-$(MAKE) -C $(OPENOCD_SRC) clean
 	-rm compile.done
+	-rm *.rpm
+	-rm specfile
+	-rm -rf fakeroot rpmbuild
 
 reallyclean: clean
 	-rm -rf $(OPENOCD_SRC)

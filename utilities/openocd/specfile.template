@@ -1,0 +1,18 @@
+# Specfile for OpenOCD RPM Package
+
+# $Id$
+
+Summary: OpenOCD Open On-Chip Debugger
+Name: openocd
+Version: @@VERSION@@
+Release: 1
+Group: Utilities
+License: GPLv2
+Packager: Philip Munts <phil@munts.net>
+Source: http://sourceforge.net/projects/openocd
+
+%description
+OpenOCD Open On-Chip Debugger
+
+%files
+%defattr(-,root,root)
