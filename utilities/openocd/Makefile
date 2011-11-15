@@ -12,7 +12,6 @@ OPENOCD_TARBALL	= $(OPENOCD_SRC).tar.gz
 OPENOCD_DIST	= $(TEMP)/$(OPENOCD_TARBALL)
 OPENOCD_SERVER	= http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VER)
 OPENOCD_URL	= $(OPENOCD_SERVER)/$(OPENOCD_TARBALL)
-OPENOCD_RELEASE	:= $(shell pwd)/$(OPENOCD_NAME)-$(OPENOCD_VER)-$(shell uname -o)-$(shell uname -m).tgz
 
 default: compile.done
 
@@ -47,7 +46,6 @@ install:
 
 clean:
 	-$(MAKE) -C $(OPENOCD_SRC) clean
-	-rm $(OPENOCD_RELEASE)
 	-rm compile.done
 
 reallyclean: clean
