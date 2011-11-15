@@ -45,11 +45,30 @@ install: $(LPC21ISP_PROG)
 uninstall:
 	-rm $(INSTALLDIR)/$(LPC21ISP_PROG)
 
+# Install lpc21isp to fakeroot
+
+fakeroot: $(LPC21ISP_PROG)
+	mkdir -p fakeroot/$(INSTALLDIR)
+	install -csm 0555 $(LPC21ISP_PROG) fakeroot/$(INSTALLDIR)
+
+# Create RPM spec file
+
+specfile: fakeroot specfile.template
+	sed s#@@VERSION@@#$(LPC21ISP_VER)#g <specfile.template >specfile
+
+rpm: specfile
+	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
+	cp rpmbuild/RPMS/*/*.rpm .
+
 # Clean out working files
 
 clean:
 	-rm -rf $(LPC21ISP_PROG)
 	-rm -rf $(LPC21ISP_DIR)
+	-rm -rf fakeroot
+	-rm -rf rpmbuild
+	-rm *.rpm
+	-rm specfile
 
 reallyclean: clean
 
