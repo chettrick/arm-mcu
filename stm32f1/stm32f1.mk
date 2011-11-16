@@ -53,7 +53,7 @@ endif
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 .bin.flashstlink:
-	$(STLINKCLI) -c SWD -ME -P $< 0x08000000 -Rst
+	$(STLINKCLI) -c SWD -ME -P $< $(FLASHWRITEADDR) -Rst
 endif
 
 # Define a suffix rule for programming the flash with serial boot loader and stm32flash
