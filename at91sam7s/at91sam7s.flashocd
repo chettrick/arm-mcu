@@ -5,13 +5,14 @@
 # $Id$
 
 # Script arguments:
-
 #   Binary flash image file
+#   Flash write address
 #   Text base address
 
 set FILE [lindex $argv 0]
-set TEXTBASE [lindex $argv 1]
-set ADDRESS [format 0x%08X [expr 0x00100000 + $TEXTBASE]]
+set FLASHADDR [lindex $argv 1]
+set TEXTBASE [lindex $argv 2]
+set ADDRESS [format 0x%08X [expr $FLASHADDR + $TEXTBASE]]
 set prompt "> $"
 set timeout 10
 
