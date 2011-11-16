@@ -14,7 +14,7 @@ default: $(STLINKGDB)
 # Download stlink-gdbserver source distribution
 
 $(STLINKSRC):
-	git clone $(STLINKURL) $(STLINKSRC)
+	git clone --depth 1 $(STLINKURL) $(STLINKSRC)
 	-awk '/\+\+\+/ { printf("cp %s %s.original\n", $$2, $$2); }' <gdbserver.patch | sh
 	-patch -p0 <gdbserver.patch
 
