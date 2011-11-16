@@ -1,0 +1,17 @@
+--- stlink/flash/main.c.original	2011-11-16 15:04:09.288904740 +0100
++++ stlink/flash/main.c	2011-11-16 15:04:23.475863379 +0100
+@@ -89,12 +89,12 @@
+ 
+   if (o.devname != NULL) /* stlinkv1 */
+   {
+-    sl = stlink_v1_open(100);
++    sl = stlink_v1_open(0);
+     if (sl == NULL) goto on_error;
+   }
+   else /* stlinkv2 */
+   {
+-    sl = stlink_open_usb(100);
++    sl = stlink_open_usb(0);
+     if (sl == NULL) goto on_error;
+   }
+ 
