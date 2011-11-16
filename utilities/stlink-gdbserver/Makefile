@@ -15,8 +15,8 @@ default: $(STLINKGDB)
 
 $(STLINKSRC):
 	git clone --depth 1 $(STLINKURL) $(STLINKSRC)
-	-awk '/\+\+\+/ { printf("cp %s %s.original\n", $$2, $$2); }' <gdbserver.patch | sh
-	-patch -p0 <gdbserver.patch
+	-awk '/\+\+\+/ { printf("cp %s %s.original\n", $$2, $$2); }' *.patch | sh
+	-for P in *.patch ; do patch -p0 <$$P ; done
 
 # Compile stlink-gdbserver
 
