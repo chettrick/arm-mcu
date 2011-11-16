@@ -13,10 +13,11 @@ OBJCOPY		= $(CROSS_COMPILE)objcopy
 OBJDUMP		= $(CROSS_COMPILE)objdump
 GDB		= $(CROSS_COMPILE)gdb
 
+FLASHWRITEADDR	= 0x00000000
+
 JLINKEXE	?= JLinkExe
 JLINKSCRIPT	= jlinkscript.tmp
 JLINKMCU	= $(MCU)
-JLINKADDR	= 0x00000000
 
 OPENOCD		?= openocd
 OPENOCDINT	?= olimex-jtag-tiny
@@ -93,7 +94,7 @@ default_catch:
 .bin.flashjlink:
 	@echo "exec device=$(JLINKMCU)"			>$(JLINKSCRIPT)
 	@echo "h"					>>$(JLINKSCRIPT)
-	@echo "loadbin $<, 0x`dc -e '16o 16i $(subst 0x,,$(JLINKADDR)) $(subst 0x,,$(TEXTBASE)) + p'`"	>>$(JLINKSCRIPT)
+	@echo "loadbin $<, 0x`dc -e '16o 16i $(subst 0x,,$(FLASHWRITEADDR)) $(subst 0x,,$(TEXTBASE)) + p'`"	>>$(JLINKSCRIPT)
 	@echo "r"					>>$(JLINKSCRIPT)
 	@echo "g"					>>$(JLINKSCRIPT)
 	@echo "exit"					>>$(JLINKSCRIPT)
@@ -104,7 +105,7 @@ default_catch:
 
 .bin.flashocd:
 	$(MAKE) startocd
-	$(OPENOCDFLASH) $< $(TEXTBASE)
+	$(OPENOCDFLASH) $< $(FLASHWRITEADDR) $(TEXTBASE)
 
 # Start and stop OpenOCD
 
