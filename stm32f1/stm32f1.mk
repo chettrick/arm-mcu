@@ -15,11 +15,8 @@ LIBOBJS		= cpu.o gpiopins.o leds.o serial.o spi.o
 
 FLASHWRITEADDR	= 0x08000000
 
-OPENOCDDEBUG	= stm32f.debugocd
-OPENOCDFLASH	= stm32f.flashocd
-
-STM32FLASH	?= stm32flash
-STM32FLASH_PORT	?= /dev/ttyS0
+OPENOCDDEBUG	= stm32f1.debugocd
+OPENOCDFLASH	= stm32f1.flashocd
 
 ifeq ($(shell uname), Linux)
 STLINKDEV	?= /dev/stlink-v1
@@ -29,6 +26,9 @@ endif
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 STLINKCLI	?= ST-LINK_CLI.exe
 endif
+
+STM32FLASH	?= stm32flash
+STM32FLASH_PORT	?= /dev/ttyS0
 
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
 
