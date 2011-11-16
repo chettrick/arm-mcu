@@ -13,8 +13,9 @@ LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
 LIBOBJS		= cpu.o leds.o serial.o
 
+FLASHWRITEADDR	= 0x00100000
+
 JLINKMCU	= at91sam7s512
-JLINKADDR	= 0x00100000
 
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
 
