@@ -13,7 +13,10 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o gpiopins.o leds.o serial.o spi.o
 
-JLINKADDR	= 0x08000000
+FLASHWRITEADDR	= 0x08000000
+
+OPENOCDDEBUG	= stm32f.debugocd
+OPENOCDFLASH	= stm32f.flashocd
 
 STM32FLASH	?= stm32flash
 STM32FLASH_PORT	?= /dev/ttyS0
