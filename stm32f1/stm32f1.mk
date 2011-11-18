@@ -15,8 +15,8 @@ LIBOBJS		= cpu.o gpiopins.o leds.o serial.o spi.o
 
 FLASHWRITEADDR	= 0x08000000
 
-OPENOCDDEBUG	= stm32f1.debugocd
-OPENOCDFLASH	= stm32f1.flashocd
+OPENOCDDEBUG	= $(MCUDIR)/stm32f1.debugocd
+OPENOCDFLASH	= $(MCUDIR)/stm32f1.flashocd
 
 ifeq ($(shell uname), Linux)
 STLINKDEV	?= /dev/stlink-v1
