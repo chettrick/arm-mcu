@@ -31,6 +31,7 @@
 #ifdef STM32F4_DISCOVERY
 #define CONSOLE_PORT		"com1:115200,n,8,1"
 #endif
+#endif
 
 #ifdef INTEGER_STDIO
 #define printf(...)		iprintf(__VA_ARGS__)
