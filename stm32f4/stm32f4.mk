@@ -1,4 +1,4 @@
-# STM32 family make definitions
+# STM32F4 family make definitions
 
 # $Id: stm32.mk 3236 2011-11-03 11:31:27Z svn $
 
