@@ -32,6 +32,7 @@ __stack_end_supervisor__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__
 __stack_end_irq__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__;
 __stack_end_fiq__ = __ram_start__ + __ram_size__ - 4;
 
+__heap_start__ = __bss_end__; /* Heap is between bss and stack */
 
 SECTIONS {
  . = 0;					/*  Start at address 0.		*/

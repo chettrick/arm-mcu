@@ -12,7 +12,8 @@ __rom_start__	= ORIGIN(flash);
 __rom_size__	= LENGTH(flash);
 __ram_start__	= ORIGIN(ram);
 __ram_size__	= LENGTH(ram);
-__stack_end__	= __ram_start__ + __ram_size__;
+__stack_end__	= __ram_start__ + __ram_size__;	/* Top of RAM */
+__heap_start__	= __bss_end__;			/* Between bss and stack */
 
 SECTIONS
 {

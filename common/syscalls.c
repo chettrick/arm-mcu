@@ -13,7 +13,7 @@ static const char revision[] = "$Id$";
 #include <string.h>
 #include <sys/stat.h>
 
-extern char end[];
+extern char *__heap_start__;	// Initialized by linker
 static char *heap_ptr;
 
 // Calling this function from cpu_init() tricks the linker into using these
@@ -31,7 +31,7 @@ char *_sbrk_r(struct _reent *reent, size_t incr)
 
 /* Initialize if first time through. */
 
-  if (!heap_ptr) heap_ptr = end;
+  if (!heap_ptr) heap_ptr = __heap_start__;
 
   base = heap_ptr;      /*  Point to end of heap.                       */
   heap_ptr += incr;     /*  Increase heap.                              */
