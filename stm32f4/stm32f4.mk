@@ -11,7 +11,7 @@ CMSIS		= $(MCUDIR)/CMSIS
 CFLAGS		+= -DSTM32F4XX -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
-LIBOBJS		= cpu.o gpiopins.o leds.o
+LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
 FLASHWRITEADDR	= 0x08000000
 
