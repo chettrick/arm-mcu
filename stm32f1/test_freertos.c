@@ -1,4 +1,4 @@
-/* Simple FreeRTOS test program for the STM32 ARM MCU */
+/* Simple FreeRTOS test program for the STM32F1 ARM MCU */
 
 // $Id$
 
@@ -69,7 +69,7 @@ int main(void)
 
 // Display version information
 
-  puts("\033[H\033[2JSTM32 FreeRTOS Test (" __DATE__ " " __TIME__ ")\n");
+  puts("\033[H\033[2JSTM32F1 FreeRTOS Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s  FreeRTOS:%s\n\n", CPUFREQ, __VERSION__,
     tskKERNEL_VERSION_NUMBER);

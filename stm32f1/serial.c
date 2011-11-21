@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*                                                                            */
-/*      Simple serial port I/O routines for the STM32 Cortex-M3 ARM MCU       */
+/*     Simple serial port I/O routines for the STM32F1 Cortex-M3 ARM MCU      */
 /*                                                                            */
 /******************************************************************************/
 

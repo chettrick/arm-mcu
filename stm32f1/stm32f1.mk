@@ -1,4 +1,4 @@
-# STM32 family make definitions
+# STM32F1 family make definitions
 
 # $Id$
 

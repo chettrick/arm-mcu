@@ -1,4 +1,4 @@
-/* Simple SPI master routines for STM32 */
+/* Simple SPI master routines for STM32F1 */
 
 // $Id$
 
@@ -21,7 +21,7 @@ static SPI_TypeDef * const SPI_PORTS[MAX_SPI_PORTS] =
 #define SPIx			(SPI_PORTS[port-1])
 
 // Map SPI port number to GPIO pin for NSS.  We manipulate NSS via GPIO bit
-// banding, because the STM32 SPI controller doesn't automatically assert
+// banding, because the STM32F1 SPI controller doesn't automatically assert
 // and deassert NSS.
 
 static uint32_t * const SPI_NSS_PIN[MAX_SPI_PORTS] =
