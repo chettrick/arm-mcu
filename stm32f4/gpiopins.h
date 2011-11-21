@@ -12,8 +12,8 @@
 // two 8-bit GPIO ports, the GPIO pins would be numbered GPIO0 to GPIO15.
 
 // Each GPIO pin has two macro defined for it: GPIOnIN and GPIOnOUT.  These
-// map to Cortex-M3 bitband registers for the particular GPIO pin.  Sadly,
-// some Cortex-M3 devices (such as the EFM32 and STM32) do not have a single
+// map to Cortex-M4 bitband registers for the particular GPIO pin.  Sadly,
+// some Cortex-M4 devices (such as the STM32F4) do not have a single
 // GPIO register that can be both written to and read from, thus preventing
 // us from just defining a macro "GPIOn" for each GPIO pin.
 
