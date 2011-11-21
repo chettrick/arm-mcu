@@ -22,7 +22,7 @@
 		.extern		__stack_end__
 		.extern		main
 
-// Exception vector table--Common to all Cortex-M3
+// Exception vector table--Common to all Cortex-M4
 
 _start: 	.word		__stack_end__
 		.word		Reset_Handler
