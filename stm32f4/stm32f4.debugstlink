@@ -1,0 +1,18 @@
+# GDB startup script for debugging a program in flash ROM
+
+# $Id$
+
+# Start the GDB server
+
+make startstlink
+
+# Connect to the GDB server
+
+target remote localhost:3333
+
+info mem
+
+# Break at beginning of main()
+
+break main
+continue

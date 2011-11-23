@@ -1,0 +1,21 @@
+# GDB startup script for debugging a program in flash ROM
+
+# $Id$
+
+# Start the GDB server
+
+make startjlink
+
+# Connect to the GDB server
+
+target remote localhost:3333
+
+monitor reset
+monitor waithalt 10000
+
+info mem
+
+# Break at beginning of main()
+
+break main
+continue
