@@ -16,20 +16,26 @@ GDB		= $(CROSS_COMPILE)gdb
 FLASHWRITEADDR	= 0x00000000
 
 JLINKEXE	?= JLinkExe
-JLINKSCRIPT	= jlinkscript.tmp
+JLINKFLASHCMDS	= jlinkflash.tmp
 JLINKMCU	= $(MCU)
 
-OPENOCD		?= openocd
-OPENOCDINT	?= olimex-jtag-tiny
-OPENOCDCFG	?= $(MCUDIR)/$(MCU).openocd
+JLINKGDB	?= JLinkGDBServer
+JLINKGDBIF	?= -if JTAG
+JLINKGDBOPTS	?= -port 3333
 
+OPENOCD		?= openocd
+OPENOCDCFG	?= $(MCUDIR)/$(MCU).openocd
 OPENOCDDEBUG	?= $(MCUDIR)/$(MCU).debugocd
 OPENOCDFLASH	?= $(MCUDIR)/$(MCU).flashocd
+OPENOCDIF	?= olimex-jtag-tiny
+
+STLINKGDB	?= stlink-gdbserver
+STLINKGDBIF	?=
+STLINKGDBOPTS	?= -p 3333
 
 MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
 STARTUP		?= $(MCUDIR)/$(MCU).o
 LINKERSCRIPT	?= $(MCUDIR)/$(MCU).ld
-DEBUGSCRIPT	?= $(OPENOCDDEBUG)
 
 CPUFLAGS	?=
 CONFIGFLAGS	?=
@@ -52,7 +58,7 @@ default_catch:
 
 # These targets are not files
 
-.PHONY: default_catch update clean startocd stopocd
+.PHONY: default_catch update clean startjlink stopjlink startocd stopocd startstlink stopstlink
 
 # These are the target suffixes
 
@@ -78,7 +84,8 @@ default_catch:
 	$(OBJCOPY) -S -O binary --gap-fill=0 $< $@
 
 .elf.debug:
-	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(DEBUGSCRIPT) $<
+	test -n "$(GDBSCRIPT)"
+	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(GDBSCRIPT) $<
 
 .elf.hex:
 	$(OBJCOPY) -S -O ihex --gap-fill=0 $< $@
@@ -92,14 +99,15 @@ default_catch:
 # Define a suffix rule for programming the flash with J-Link Commander
 
 .bin.flashjlink:
-	@echo "exec device=$(JLINKMCU)"			>$(JLINKSCRIPT)
-	@echo "h"					>>$(JLINKSCRIPT)
-	@echo "loadbin $<, 0x`dc -e '16o 16i $(subst 0x,,$(FLASHWRITEADDR)) $(subst 0x,,$(TEXTBASE)) + p'`"	>>$(JLINKSCRIPT)
-	@echo "r"					>>$(JLINKSCRIPT)
-	@echo "g"					>>$(JLINKSCRIPT)
-	@echo "exit"					>>$(JLINKSCRIPT)
-	-$(JLINKEXE) $(JLINKSCRIPT)
-	@rm $(JLINKSCRIPT)
+	@echo "exec device=$(JLINKMCU)"			>$(JLINKFLASHCMDS)
+	@echo "h"					>>$(JLINKFLASHCMDS)
+	@echo "loadbin $<, 0x`dc -e '16o 16i $(subst 0x,,$(FLASHWRITEADDR)) $(subst 0x,,$(TEXTBASE)) + p'`"	>>$(JLINKFLASHCMDS)
+	@echo "r"					>>$(JLINKFLASHCMDS)
+	@echo "g"					>>$(JLINKFLASHCMDS)
+	@echo "exit"					>>$(JLINKFLASHCMDS)
+	-$(JLINKEXE) $(JLINKFLASHCMDS)
+	@rm $(JLINKFLASHCMDS)
+	@rm Default.ini
 
 # Define a suffix rule for programming the flash with OpenOCD
 
@@ -107,13 +115,29 @@ default_catch:
 	$(MAKE) startocd
 	$(OPENOCDFLASH) $< $(FLASHWRITEADDR) $(TEXTBASE)
 
+# Start and stop J-Link GDB server
+
+startjlink:
+	$(JLINKGDB) $(JLINKGDBIF) $(JLINKGDBOPTS) >debug.log 2>&1 &
+
+stopjlink:
+	killall $(JLINKGDB)
+
 # Start and stop OpenOCD
 
 startocd:
-	$(OPENOCD) -f interface/$(OPENOCDINT).cfg -f $(OPENOCDCFG) >openocd.log 2>&1 &
+	$(OPENOCD) -f interface/$(OPENOCDIF).cfg -f $(OPENOCDCFG) >debug.log 2>&1 &
 
 stopocd:
 	killall $(OPENOCD)
+
+# Start and stop ST-Link GDB server
+
+startstlink:
+	$(STLINKGDB) $(STLINKGDBIF) $(STLINKGDBOPTS) >debug.log 2>&1 &
+
+stopstlink:
+	killall $(STLINKGDB)
 
 # Update from source code repository
 
