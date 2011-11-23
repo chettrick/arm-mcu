@@ -1,10 +1,10 @@
-# GDB startup script for debugging program in STR91x flash ROM
+# GDB startup script for debugging a program in flash ROM
 
 # $Id$
 
-# Start OpenOCD server
+# Start the OpenOCD server
 
-shell make startocd
+make startocd
 
 # Connect to the OpenOCD server
 
@@ -12,8 +12,11 @@ target remote localhost:3333
 
 # Reset target & gain control
 
-monitor reset halt
+monitor soft_reset_halt
 monitor wait_halt
+
+# Display memory regions
+
 info mem
 
 # Bump up JTAG speed

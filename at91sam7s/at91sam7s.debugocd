@@ -1,10 +1,10 @@
-# GDB startup script for debugging program in AT91SAM7S flash ROM
+# GDB startup script for debugging a program in flash ROM
 
 # $Id$
 
 # Start the OpenOCD server
 
-shell make startocd
+make startocd
 
 # Connect to the OpenOCD server
 
@@ -15,6 +15,9 @@ target remote localhost:3333
 monitor gdb_breakpoint_override hard
 monitor soft_reset_halt
 monitor wait_halt
+
+# Display memory regions
+
 info mem
 
 # Break at beginning of main()
