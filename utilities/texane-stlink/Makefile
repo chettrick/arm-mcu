@@ -1,4 +1,4 @@
-# Makefile for building GDB server for STM32 ST-Link
+# Makefile for building GDB server and flash utility for STM32 ST-Link
 
 # $Id$
 
@@ -15,8 +15,6 @@ default: $(STLINKGDB)
 
 $(STLINKSRC):
 	git clone --depth 1 $(STLINKURL) $(STLINKSRC)
-	-awk '/\+\+\+/ { printf("cp %s %s.original\n", $$2, $$2); }' *.patch | sh
-	-for P in *.patch ; do patch -p0 <$$P ; done
 
 # Compile stlink-gdbserver
 
