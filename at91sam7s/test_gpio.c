@@ -15,23 +15,60 @@ int main(void)
 #ifdef OLIMEX_SAM7_P256
 #define LED1PIN		18
 #define LED2PIN		17
+#define LED1MASK	(1 << LED1PIN)
+#define LED2MASK	(1 << LED2PIN)
+#define BUTTON1PIN	19
+#define BUTTON2PIN	20
+#define BUTTON1MASK	(1 << BUTTON1PIN)
+#define BUTTON2MASK	(1 << BUTTON2PIN)
+#define BUTTON1PRESSED	(!(*AT91C_PIOA_PDSR & BUTTON1MASK))
+#define BUTTON2PRESSED	(!(*AT91C_PIOA_PDSR & BUTTON2MASK))
 
   *AT91C_PMC_PCER	= 0x00000004;	// Enable Port A peripheral clock
-  *AT91C_PIOA_PER	= 1 << LED1PIN;	// LED1 pin is GPIO
-  *AT91C_PIOA_PPUDR	= 1 << LED1PIN;	// LED1 pin does not need internal pullup
-  *AT91C_PIOA_OER	= 1 << LED1PIN;	// LED1 pin is output
-  *AT91C_PIOA_OWER	= 1 << LED1PIN;	// LED1 pin is synchronous output
-  *AT91C_PIOA_MDER	= 1 << LED1PIN;	// LED1 pin is open drain output
+  *AT91C_PIOA_PER	= LED1MASK;	// LED1 pin is GPIO
+  *AT91C_PIOA_PPUDR	= LED1MASK;	// LED1 pin does not need internal pullup
+  *AT91C_PIOA_OER	= LED1MASK;	// LED1 pin is output
+  *AT91C_PIOA_OWER	= LED1MASK;	// LED1 pin is synchronous output
+  *AT91C_PIOA_MDER	= LED1MASK;	// LED1 pin is open drain output
 
-  *AT91C_PIOA_PER	= 1 << LED2PIN;	// LED2 pin is GPIO
-  *AT91C_PIOA_PPUDR	= 1 << LED2PIN;	// LED2 pin does not need internal pullup
-  *AT91C_PIOA_OER	= 1 << LED2PIN;	// LED2 pin is output
-  *AT91C_PIOA_OWER	= 1 << LED2PIN;	// LED2 pin is synchronous output
-  *AT91C_PIOA_MDER	= 1 << LED2PIN;	// LED2 pin is open drain output
+  *AT91C_PIOA_PER	= LED2MASK;	// LED2 pin is GPIO
+  *AT91C_PIOA_PPUDR	= LED2MASK;	// LED2 pin does not need internal pullup
+  *AT91C_PIOA_OER	= LED2MASK;	// LED2 pin is output
+  *AT91C_PIOA_OWER	= LED2MASK;	// LED2 pin is synchronous output
+  *AT91C_PIOA_MDER	= LED2MASK;	// LED2 pin is open drain output
+
+  *AT91C_PIOA_PER	= BUTTON1MASK;	// BUTTON1 pin is GPIO
+  *AT91C_PIOA_PPUDR	= BUTTON1MASK;	// BUTTON1 pin does not need internal pullup
+  *AT91C_PIOA_ODR	= BUTTON1MASK;	// BUTTON1 pin is input
+  *AT91C_PIOA_IFER	= BUTTON1MASK;	// BUTTON1 pin is filtered
+
+  *AT91C_PIOA_PER	= BUTTON2MASK;	// BUTTON2 pin is GPIO
+  *AT91C_PIOA_PPUDR	= BUTTON2MASK;	// BUTTON2 pin does not need internal pullup
+  *AT91C_PIOA_ODR	= BUTTON2MASK;	// BUTTON2 pin is input
+  *AT91C_PIOA_IFER	= BUTTON2MASK;	// BUTTON2 pin is filtered
 
   for (i = 0;; i++)
   {
-    *AT91C_PIOA_ODSR = i >> 2;		// Update LED's
+    // Flash LED's faster if user button 1 is pressed
+
+    if (BUTTON1PRESSED)
+    {
+      *AT91C_PIOA_ODSR = i >> 1;	// Flash LED's faster
+    }
+
+    // Turn off LED's if user button 2 is pressed
+
+    else if (BUTTON2PRESSED)
+    {
+      *AT91C_PIOA_ODSR = 0xFFFFFFFF;	// Turn off LED's
+    }
+
+    // Flash LED's at the normal rate
+
+    else
+    {
+      *AT91C_PIOA_ODSR = i >> 2;	// Flash LED's slower
+    }
   }
 #endif
 }
