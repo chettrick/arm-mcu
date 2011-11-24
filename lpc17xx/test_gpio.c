@@ -32,9 +32,24 @@ int main(void)
 // Flash BlueBoard LPC1768-H test LED
 
 #ifdef BLUEBOARD_LPC1768_H
-  gpiopin_configure(GPIOPIN61, GPIOPIN_OUTPUT);
+  gpiopin_configure(GPIOPIN61, GPIOPIN_OUTPUT);	// Test LED D8
+  gpiopin_configure(GPIOPIN74, GPIOPIN_INPUT);	// Push button SW2
 
   for (i = 0;; i++)
-    GPIOPIN61OUT = i >> 20;
+  {
+    // Flash faster if button is pressed
+
+    if (!GPIOPIN74IN)
+    {
+      GPIOPIN61OUT = i >> 18;
+    }
+
+    // Flash LED at normal rate
+
+    else
+    {
+      GPIOPIN61OUT = i >> 20;
+    }
+  }
 #endif
 }
