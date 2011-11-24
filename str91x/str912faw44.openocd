@@ -35,3 +35,13 @@ flash bank 0 str9x 0x00000000 0x00080000 0 0 STR912FAW44.cpu
 
 arm7_9 dcc_downloads enable
 arm7_9 fast_memory_access enable
+
+# GDB event handlers
+
+STR912FAW44.cpu configure -event gdb-attach {
+  soft_reset_halt
+}
+
+STR912FAW44.cpu configure -event gdb-detach {
+  resume
+}
