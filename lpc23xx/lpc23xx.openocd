@@ -33,3 +33,13 @@ flash bank 0 lpc2000 0x0 0x40000 0 0 LPC23xx.cpu lpc2000_v2 14746 calc_checksum
 
 arm7_9 dcc_downloads enable
 arm7_9 fast_memory_access enable
+
+# GDB event handlers
+
+LPC23xx.cpu configure -event gdb-attach {
+  reset halt
+}
+
+LPC23xx.cpu configure -event gdb-detach {
+  resume
+}
