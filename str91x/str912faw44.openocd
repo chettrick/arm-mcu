@@ -39,7 +39,7 @@ arm7_9 fast_memory_access enable
 # GDB event handlers
 
 STR912FAW44.cpu configure -event gdb-attach {
-  soft_reset_halt
+  reset halt
 }
 
 STR912FAW44.cpu configure -event gdb-detach {
