@@ -37,6 +37,10 @@ int gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
 
 // Configure the pin
 
-  GPIO_PinModeSet(port, pin, gpioModePushPull, direction);
+  if (direction)
+    GPIO_PinModeSet(port, pin, gpioModePushPull, FALSE);
+  else
+    GPIO_PinModeSet(port, pin, gpioModeInput, FALSE);
+
   return 0;
 }
