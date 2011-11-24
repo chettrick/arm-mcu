@@ -46,5 +46,4 @@ AT91SAM7S.cpu configure -event gdb-attach {
 
 AT91SAM7S.cpu configure -event gdb-detach {
   resume
-  shutdown
 }
