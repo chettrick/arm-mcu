@@ -2,18 +2,9 @@
 
 # $Id$
 
-# Start the OpenOCD server
-
-make startocd
-
-# Connect to the OpenOCD server
+# Connect to the GDB server
 
 target remote localhost:3333
-
-# Reset target & gain control
-
-monitor soft_reset_halt
-monitor wait_halt
 
 # Display memory regions
 
