@@ -32,7 +32,6 @@ flash bank 0 lpc2000 0x0 0x80000 0 0 LPC17xx.cpu lpc1700 14746 calc_checksum
 # GDB event handlers
 
 LPC17xx.cpu configure -event gdb-attach {
-#  soft_reset_halt
   reset halt
 }
 
