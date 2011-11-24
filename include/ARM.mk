@@ -18,7 +18,7 @@ FLASHWRITEADDR	= 0x00000000
 JLINKEXE	?= JLinkExe
 JLINKFLASHCMDS	= jlinkflash.tmp
 JLINKMCU	= $(MCU)
-
+JLINKDEBUG	?= $(MCUDIR)/$(MCU).debugjlink
 JLINKGDB	?= JLinkGDBServer
 JLINKGDBIF	?= -if JTAG
 JLINKGDBOPTS	?= -port 3333
@@ -30,6 +30,7 @@ OPENOCDFLASH	?= $(MCUDIR)/$(MCU).flashocd
 OPENOCDIF	?= olimex-jtag-tiny
 
 STLINKGDB	?= stlink-gdbserver
+STLINKDEBUG	?= $(MCUDIR)/$(MCU).debugstlink
 STLINKGDBIF	?=
 STLINKGDBOPTS	?= -p 3333
 
@@ -62,7 +63,7 @@ default_catch:
 
 # These are the target suffixes
 
-.SUFFIXES: .asm .c .bin .debug .elf .flashjlink .flashocd .hex .o .s .S
+.SUFFIXES: .asm .c .bin .debugjlink .debugocd .debugstlink .elf .flashjlink .flashocd .hex .o .s .S
 
 # Don't delete intermediate files
 
@@ -83,9 +84,20 @@ default_catch:
 .elf.bin:
 	$(OBJCOPY) -S -O binary --gap-fill=0 $< $@
 
-.elf.debug:
-	test -n "$(GDBSCRIPT)"
-	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(GDBSCRIPT) $<
+.elf.debugjlink:
+	$(MAKE) startjlink
+	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(JLINKDEBUG) $<
+	$(MAKE) stopjlink
+
+.elf.debugocd:
+	$(MAKE) startocd
+	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(OPENOCDDEBUG) $<
+	$(MAKE) stopocd
+
+.elf.debugstlink:
+	$(MAKE) startstlink
+	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(STLINKDEBUG) $<
+	$(MAKE) stopstlink
 
 .elf.hex:
 	$(OBJCOPY) -S -O ihex --gap-fill=0 $< $@
@@ -119,6 +131,7 @@ default_catch:
 
 startjlink:
 	$(JLINKGDB) $(JLINKGDBIF) $(JLINKGDBOPTS) >debug.log 2>&1 &
+	sleep 2
 
 stopjlink:
 	killall $(JLINKGDB)
