@@ -36,5 +36,15 @@ arm7_9 fast_memory_access enable
 
 # Special GDB configuration
 
-gdb_memory_map disable
 gdb_breakpoint_override hard
+
+# GDB event handlers
+
+AT91SAM7S.cpu configure -event gdb-attach {
+  soft_reset_halt
+}
+
+AT91SAM7S.cpu configure -event gdb-detach {
+  resume
+  shutdown
+}
