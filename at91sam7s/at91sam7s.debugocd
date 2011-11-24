@@ -2,11 +2,11 @@
 
 # $Id$
 
-# Start the OpenOCD server
+# Start the GDB server
 
 make startocd
 
-# Connect to the OpenOCD server
+# Connect to the GDB server
 
 target remote localhost:3333
 
