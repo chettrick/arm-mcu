@@ -33,3 +33,8 @@ flash bank 0 at91sam7 0 0 0 0 AT91SAM7S.cpu
 
 arm7_9 dcc_downloads enable
 arm7_9 fast_memory_access enable
+
+# Special GDB configuration
+
+gdb_memory_map disable
+gdb_breakpoint_override hard
