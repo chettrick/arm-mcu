@@ -6,10 +6,6 @@
 
 target remote localhost:3333
 
-# Reset target & gain control
-
-monitor soft_reset_halt
-
 # Display memory regions
 
 info mem
