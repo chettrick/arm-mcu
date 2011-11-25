@@ -7,12 +7,14 @@ static const char revision[] = "$Id$";
 #include <cpu.h>
 #include <stdio.h>
 
+#define SYSTICKRATE	100
+
 volatile int TimerCounter = 0;
 volatile int TimerFlag = FALSE;
 
 void SysTick_Handler(void)
 {
-  if (++TimerCounter == 10)
+  if (++TimerCounter == SYSTICKRATE)
   {
     TimerCounter = 0;
     TimerFlag = TRUE;
@@ -34,9 +36,9 @@ int main(void)
   LEDS_initialize();
   LEDS_set(LED2|LED4|LED6|LED8);
 
-// Initialize System Tick with 100ms time interval
+// Initialize System Tick
 
-  SysTick_Config(SystemCoreClock / 10);
+  SysTick_Config(SystemCoreClock / SYSTICKRATE);
 
 // Display "Tick..." every second
 
