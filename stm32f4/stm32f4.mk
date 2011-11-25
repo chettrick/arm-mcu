@@ -13,6 +13,10 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
+JLINKGDBIF	= -if SWD
+
+STLINKDEBUG	= stm32f4.debugstlink
+
 FLASHWRITEADDR	= 0x08000000
 
 ifeq ($(shell uname), Linux)
