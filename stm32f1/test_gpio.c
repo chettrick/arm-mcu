@@ -13,11 +13,23 @@ int main(void)
   cpu_init(DEFAULT_CPU_FREQ);
 
 #ifdef OLIMEX_STM32_P103
+  gpiopin_configure(GPIOPIN0, GPIOPIN_INPUT);
   gpiopin_configure(GPIOPIN44, GPIOPIN_OUTPUT);
-
+  
   for (i = 0;; i++)
   {
-    GPIOPIN44OUT = i >> 20;
+    // Flash LED faster if WAKE-UP button is pressed
+
+    if (GPIOPIN0IN)
+    {
+      GPIOPIN44OUT = i >> 18;
+    }
+
+    // Flash LED normal rate
+    else
+    {
+      GPIOPIN44OUT = i >> 19;
+    }
   }
 #endif
 
