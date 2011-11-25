@@ -20,16 +20,16 @@ jtag_ntrst_delay 200
 
 # Target configuration
 
-jtag newtap STR912FAW44 flash -irlen 8 -ircapture 0x1 -irmask 0x1 -expected-id 0x04570041
-jtag newtap STR912FAW44 cpu   -irlen 4 -ircapture 0x1 -irmask 0xF -expected-id 0x25966041
-jtag newtap STR912FAW44 bs    -irlen 5 -ircapture 0x1 -irmask 0x1 -expected-id 0x2457f041
+jtag newtap STR91x flash -irlen 8 -ircapture 0x1 -irmask 0x1 -expected-id 0x04570041
+jtag newtap STR91x cpu   -irlen 4 -ircapture 0x1 -irmask 0xF -expected-id 0x25966041
+jtag newtap STR91x bs    -irlen 5 -ircapture 0x1 -irmask 0x1 -expected-id 0x2457f041
 
-target create STR912FAW44.cpu arm966e -endian little -chain-position STR912FAW44.cpu -variant arm966e
-STR912FAW44.cpu configure -work-area-virt 0 -work-area-phys 0x50000000 -work-area-size 16384 -work-area-backup 0
+target create STR91x.cpu arm966e -endian little -chain-position STR91x.cpu -variant arm966e
+STR91x.cpu configure -work-area-virt 0 -work-area-phys 0x50000000 -work-area-size 16384 -work-area-backup 0
 
 # Flash configuration
 
-flash bank 0 str9x 0x00000000 0x00080000 0 0 STR912FAW44.cpu
+flash bank 0 str9x 0x00000000 0x00080000 0 0 STR91x.cpu
 
 # Special ARM debug configuration
 
@@ -38,10 +38,10 @@ arm7_9 fast_memory_access enable
 
 # GDB event handlers
 
-STR912FAW44.cpu configure -event gdb-attach {
+STR91x.cpu configure -event gdb-attach {
   reset halt
 }
 
-STR912FAW44.cpu configure -event gdb-detach {
+STR91x.cpu configure -event gdb-detach {
   resume
 }
