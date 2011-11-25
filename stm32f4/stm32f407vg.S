@@ -1,6 +1,6 @@
 /* Startup for STM32F407 Cortex-M4 ARM MCU */
 
-// $Id: stm32f107rb.S 3315 2011-11-16 15:08:01Z svn $
+// $Id$
 
 		.syntax 	unified
 		.thumb
