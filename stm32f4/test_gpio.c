@@ -13,6 +13,7 @@ int main(void)
   cpu_init(DEFAULT_CPU_FREQ);
 
 #ifdef STM32F4_DISCOVERY
+  gpiopin_configure(GPIOPIN0, GPIOPIN_INPUT);
   gpiopin_configure(GPIOPIN60, GPIOPIN_OUTPUT);
   gpiopin_configure(GPIOPIN61, GPIOPIN_OUTPUT);
   gpiopin_configure(GPIOPIN62, GPIOPIN_OUTPUT);
@@ -20,10 +21,25 @@ int main(void)
 
   for (i = 0;; i++)
   {
-    GPIOPIN60OUT = i >> 19;
-    GPIOPIN61OUT = i >> 20;
-    GPIOPIN62OUT = i >> 21;
-    GPIOPIN63OUT = i >> 22;
+    // Speed up flashing if user button is pressed
+
+    if (GPIOPIN0IN)
+    {
+      GPIOPIN60OUT = i >> 18;
+      GPIOPIN61OUT = i >> 19;
+      GPIOPIN62OUT = i >> 20;
+      GPIOPIN63OUT = i >> 21;
+    }
+
+    // Flash LED's at normal speed
+
+    else
+    {
+      GPIOPIN60OUT = i >> 19;
+      GPIOPIN61OUT = i >> 20;
+      GPIOPIN62OUT = i >> 21;
+      GPIOPIN63OUT = i >> 22;
+    }
   }
 #endif
 }
