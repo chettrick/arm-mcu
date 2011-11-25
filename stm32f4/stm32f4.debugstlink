@@ -2,13 +2,11 @@
 
 # $Id$
 
-# Start the GDB server
-
-make startstlink
-
 # Connect to the GDB server
 
 target remote localhost:3333
+
+# Display memory regions
 
 info mem
 
