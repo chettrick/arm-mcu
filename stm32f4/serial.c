@@ -70,33 +70,181 @@ int serial_open(char *name, unsigned int *subdevice)
 
   switch (port)
   {
-    case 0 :
+    case 0 : // USART1
 
 // Turn on peripheral clocks
 
       RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
 
-// Configure TX pin
+// Configure TX pin on PA9
 
       GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_USART1);
 
+      GPIO_StructInit(&GPIO_config);
       GPIO_config.GPIO_Pin = GPIO_Pin_9;
       GPIO_config.GPIO_Mode = GPIO_Mode_AF;
       GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
       GPIO_config.GPIO_OType = GPIO_OType_PP;
       GPIO_Init(GPIOA, &GPIO_config);
 
-// Configure RX pin
+// Configure RX pin PA10
 
       GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_USART1);
 
+      GPIO_StructInit(&GPIO_config);
       GPIO_config.GPIO_Pin = GPIO_Pin_10;
       GPIO_config.GPIO_Mode = GPIO_Mode_AF;
       GPIO_config.GPIO_PuPd = GPIO_PuPd_UP;
       GPIO_Init(GPIOA, &GPIO_config);
       break;
- 
+
+    case 1 : // USART2
+
+// Turn on peripheral clocks
+
+      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+
+// Configure TX pin on PA2
+
+      GPIO_PinAFConfig(GPIOA, GPIO_PinSource2, GPIO_AF_USART2);
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_2;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_OType = GPIO_OType_PP;
+      GPIO_Init(GPIOA, &GPIO_config);
+
+// Configure RX pin on PA3
+
+      GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_USART2);
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_3;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF;
+      GPIO_config.GPIO_PuPd = GPIO_PuPd_UP;
+      GPIO_Init(GPIOA, &GPIO_config);
+      break;
+
+    case 2 : // USART3
+
+// Turn on peripheral clocks
+
+      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+
+// Configure TX pin on PB10
+
+      GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_USART3);
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_10;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_OType = GPIO_OType_PP;
+      GPIO_Init(GPIOB, &GPIO_config);
+
+// Configure RX pin on PB11
+
+      GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_USART3);
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_11;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF;
+      GPIO_config.GPIO_PuPd = GPIO_PuPd_UP;
+      GPIO_Init(GPIOB, &GPIO_config);
+      break;
+
+    case 3 : // UART4
+
+// Turn on peripheral clocks
+
+      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, ENABLE);
+
+// Configure TX pin on PA0
+
+      GPIO_PinAFConfig(GPIOA, GPIO_PinSource0, GPIO_AF_UART4);
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_0;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_OType = GPIO_OType_PP;
+      GPIO_Init(GPIOA, &GPIO_config);
+
+// Configure RX pin on PA1
+
+      GPIO_PinAFConfig(GPIOA, GPIO_PinSource1, GPIO_AF_UART4);
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_1;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF;
+      GPIO_config.GPIO_PuPd = GPIO_PuPd_UP;
+      GPIO_Init(GPIOA, &GPIO_config);
+      break;
+
+    case 4 : // UART5
+
+// Turn on peripheral clocks
+
+      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE);
+
+// Configure TX pin on PC12
+
+      GPIO_PinAFConfig(GPIOC, GPIO_PinSource12, GPIO_AF_UART5);
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_12;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_OType = GPIO_OType_PP;
+      GPIO_Init(GPIOC, &GPIO_config);
+
+// Configure RX pin on PD2
+
+      GPIO_PinAFConfig(GPIOD, GPIO_PinSource2, GPIO_AF_UART5);
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_2;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF;
+      GPIO_config.GPIO_PuPd = GPIO_PuPd_UP;
+      GPIO_Init(GPIOD, &GPIO_config);
+      break;
+
+    case 5 : //  USART6
+
+// Turn on peripheral clocks
+
+      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART6, ENABLE);
+
+// Configure TX pin on PC6
+
+      GPIO_PinAFConfig(GPIOC, GPIO_PinSource6, GPIO_AF_USART6);
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_6;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF;
+      GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
+      GPIO_config.GPIO_OType = GPIO_OType_PP;
+      GPIO_Init(GPIOC, &GPIO_config);
+
+// Configure RX pin on PC7
+
+      GPIO_PinAFConfig(GPIOC, GPIO_PinSource7, GPIO_AF_USART6);
+
+      GPIO_StructInit(&GPIO_config);
+      GPIO_config.GPIO_Pin = GPIO_Pin_7;
+      GPIO_config.GPIO_Mode = GPIO_Mode_AF;
+      GPIO_config.GPIO_PuPd = GPIO_PuPd_UP;
+      GPIO_Init(GPIOC, &GPIO_config);
+      break;
+
     default :
       errno_r = ENODEV;
       return -1;
