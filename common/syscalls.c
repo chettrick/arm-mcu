@@ -13,7 +13,7 @@ static const char revision[] = "$Id$";
 #include <string.h>
 #include <sys/stat.h>
 
-extern char *__heap_start__;	// Initialized by linker
+extern char __heap_start__[];	// Initialized by linker
 static char *heap_ptr;
 
 // Calling this function from cpu_init() tricks the linker into using these
