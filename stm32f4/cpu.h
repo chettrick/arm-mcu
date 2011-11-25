@@ -29,7 +29,7 @@
 
 #ifndef CONSOLE_PORT
 #ifdef STM32F4_DISCOVERY
-#define CONSOLE_PORT		"com1:115200,n,8,1"
+#define CONSOLE_PORT		"com2:115200,n,8,1"
 #endif
 #endif
 
