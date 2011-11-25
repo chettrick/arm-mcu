@@ -12,7 +12,7 @@ volatile int TimerFlag = FALSE;
 
 void SysTick_Handler(void)
 {
-  if (++TimerCounter == 10)
+  if (++TimerCounter == 20)
   {
     TimerCounter = 0;
     TimerFlag = TRUE;
@@ -34,9 +34,9 @@ int main(void)
   LEDS_initialize();
   LEDS_set(LED2|LED4|LED6|LED8);
 
-// Initialize System Tick with 100ms time interval
+// Initialize System Tick with 50ms time interval
 
-  SysTick_Config(SystemCoreClock / 10);
+  SysTick_Config(SystemCoreClock / 20);
 
 // Display "Tick..." every second
 
