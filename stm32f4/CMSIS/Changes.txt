@@ -9,7 +9,8 @@ $Id$
 
 3. Copied Libraries/CMSIS/Device/ST/STM32F4xx/Include/*.h to CMSIS/include.
 
-4. Copied Libraries/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c do CMSIS/source.
+4. Copied Libraries/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c
+   to CMSIS/source.
 
 5. Copied Libraries/STM32F4xx_StdPeriph_Driver/inc/*.h to CMSIS/include.
 
@@ -20,3 +21,7 @@ $Id$
 8. Changed assert_faile() to assert() in CMSIS/include/stm32f4xx_conf.h.
 
 9. Ran dos2unix CMSIS/include/* CMSIS/source/*.
+
+10. Changed HSE_VALUE in stm32f4xx.h to 8 MHz for the STM32F4-Discovery board.
+
+11. Change PLL_M in system_stm32f4xx.c from 25 (for 25 MHz) to HSE_VALUE/1000000.
