@@ -208,7 +208,6 @@ int serial_open(char *name, unsigned int *subdevice)
 
   USART_StructInit(&USART_config);
   USART_config.USART_BaudRate = baudrate;
-  USART_config.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_Init(UARTS[port], &USART_config);
 
 // Enable USART
