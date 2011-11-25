@@ -1,5 +1,9 @@
 # Processor dependent make definitions
 
-# $Id: stm32f100rb.mk 2981 2011-08-31 07:26:55Z svn $
+# $Id$
+
+ifeq ($(BOARDNAME), STM32F4_DISCOVERY)
+CFLAGS		+= -DHSE_VALUE=8000000
+endif
 
 include stm32f4.mk
