@@ -25,12 +25,12 @@ JLINKGDBOPTS	?= -port 3333
 
 OPENOCD		?= openocd
 OPENOCDCFG	?= $(MCUDIR)/$(MCU).openocd
-OPENOCDDEBUG	?= $(MCUDIR)/$(MCU).debugocd
+OPENOCDDEBUG	?= $(ARMSRC)/common/main.gdb
 OPENOCDFLASH	?= $(MCUDIR)/$(MCU).flashocd
 OPENOCDIF	?= olimex-jtag-tiny
 
 STLINKGDB	?= stlink-gdbserver
-STLINKDEBUG	?= $(MCUDIR)/$(MCU).debugstlink
+STLINKDEBUG	?= $(ARMSRC)/common.main.gdb
 STLINKGDBIF	?=
 STLINKGDBOPTS	?= -p 3333
 

@@ -15,7 +15,6 @@ LIBOBJS		= cpu.o gpiopins.o leds.o serial.o spi.o
 
 FLASHWRITEADDR	= 0x08000000
 
-OPENOCDDEBUG	= $(MCUDIR)/stm32f1.debugocd
 OPENOCDFLASH	= $(MCUDIR)/stm32f1.flashocd
 
 ifeq ($(shell uname), Linux)
