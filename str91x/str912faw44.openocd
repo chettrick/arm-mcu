@@ -40,6 +40,8 @@ arm7_9 fast_memory_access enable
 
 STR91x.cpu configure -event gdb-attach {
   reset halt
+
+  jtag_khz 3000
 }
 
 STR91x.cpu configure -event gdb-detach {
