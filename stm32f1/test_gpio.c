@@ -45,13 +45,25 @@ int main(void)
 #endif
 
 #ifdef STM32_VALUE_LINE_DISCOVERY
+  gpiopin_configure(GPIOPIN0, GPIOPIN_INPUT);
   gpiopin_configure(GPIOPIN40, GPIOPIN_OUTPUT);
   gpiopin_configure(GPIOPIN41, GPIOPIN_OUTPUT);
 
   for (i = 0;; i++)
   {
-    GPIOPIN40OUT = i >> 19;
-    GPIOPIN41OUT = i >> 20;
+    // Flash faster if the user button is pressed
+    if (GPIOPIN0IN)
+    {
+      GPIOPIN40OUT = i >> 17;
+      GPIOPIN41OUT = i >> 18;
+    }
+
+    // Flash normal rate
+    else
+    {
+      GPIOPIN40OUT = i >> 18;
+      GPIOPIN41OUT = i >> 19;
+    }
   }
 #endif
 
