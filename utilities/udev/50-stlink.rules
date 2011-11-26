@@ -18,10 +18,13 @@ ACTION!="add|change", GOTO="stlink_rules_end"
 
 # ST-Link V1 (e.g. STM32 Value Line Discovery)
 
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3744", \
+  MODE:="0666", GROUP:="wheel"
+
 KERNEL=="sg[0-9]*", \
   ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3744", \
   NAME+="sg%n", SYMLINK+="stlink-v1", \
-  MODE="0660", GROUP:="wheel", \
+  MODE="0666", GROUP:="wheel", \
   ENV{UDISKS_PRESENTATION_HIDE}="1", \
   ENV{UDISKS_PRESENTATION_NOPOLICY}="1", \
   ENV{DM_UDEV_DISABLE_DISK_RULES_FLAG}="1"
@@ -37,4 +40,7 @@ LABEL="stlink_rules_end"
 # Remove any device nodes or links we have created
 
 ACTION=="remove", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3744", \
-  RUN+="/bin/sh -c '/bin/rm /dev/stlink*'"
+  RUN+="/bin/sh -c '/bin/rm /dev/stlink-v1'"
+
+ACTION=="remove", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", \
+  RUN+="/bin/sh -c '/bin/rm /dev/stlink-v2'"
