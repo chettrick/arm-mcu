@@ -30,7 +30,7 @@ OPENOCDFLASH	?= $(MCUDIR)/$(MCU).flashocd
 OPENOCDIF	?= olimex-jtag-tiny
 
 STLINKGDB	?= stlink-gdbserver
-STLINKDEBUG	?= $(ARMSRC)/common.main.gdb
+STLINKDEBUG	?= $(ARMSRC)/common/main.gdb
 STLINKGDBIF	?=
 STLINKGDBOPTS	?= -p 3333
 
