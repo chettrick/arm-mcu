@@ -15,7 +15,14 @@ LIBOBJS		= cpu.o gpiopins.o leds.o serial.o spi.o
 
 FLASHWRITEADDR	= 0x08000000
 
+# All STM32F1 parts can use the same flash script
+
 OPENOCDFLASH	= $(MCUDIR)/stm32f1.flashocd
+
+# STM32 Value Line Discovery board has built-in ST-Link/V1
+
+ifeq ($(BOARDNAME), STM32_VALUE_LINE_DISCOVERY)
+STLINKGDBIF	= --stlinkv1 --device=/dev/stlink-v1
 
 ifeq ($(shell uname), Linux)
 STLINKDEV	?= /dev/stlink-v1
@@ -24,6 +31,7 @@ endif
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 STLINKCLI	?= ST-LINK_CLI.exe
+endif
 endif
 
 STM32FLASH	?= stm32flash
