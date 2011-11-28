@@ -239,4 +239,4 @@ distclean: reallyclean
 
 # Include MCU dependent makefile
 
-include $(MCUDIR)/$(MCU).mk
+include $(MCUDIR)/$(MCUFAMILY).mk
