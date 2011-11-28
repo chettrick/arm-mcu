@@ -15,13 +15,15 @@ GDB		= $(CROSS_COMPILE)gdb
 
 FLASHWRITEADDR	= 0x00000000
 
+GDBSERVERPORT	= 3333
+
 JLINKEXE	?= JLinkExe
 JLINKFLASHCMDS	= jlinkflash.tmp
 JLINKMCU	= $(MCU)
 JLINKDEBUG	?= $(MCUDIR)/$(MCU).debugjlink
 JLINKGDB	?= JLinkGDBServer
 JLINKGDBIF	?= -if JTAG
-JLINKGDBOPTS	?= -port 3333
+JLINKGDBOPTS	?= -port $(GDBSERVERPORT)
 
 OPENOCD		?= openocd
 OPENOCDCFG	?= $(MCUDIR)/$(MCU).openocd
@@ -32,7 +34,7 @@ OPENOCDIF	?= olimex-jtag-tiny
 STLINKGDB	?= stlink-gdbserver
 STLINKDEBUG	?= $(ARMSRC)/common/main.gdb
 STLINKGDBIF	?=
-STLINKGDBOPTS	?= -p 3333
+STLINKGDBOPTS	?= -p $(GDBSERVERPORT)
 
 MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
 STARTUP		?= $(MCUDIR)/$(MCU).o
@@ -131,7 +133,7 @@ default_catch:
 
 startjlink:
 	$(JLINKGDB) $(JLINKGDBIF) $(JLINKGDBOPTS) >debug.log 2>&1 &
-	sleep 2
+	tcpwait localhost $(GDBSERVERPORT) 10
 
 stopjlink:
 	killall $(JLINKGDB)
