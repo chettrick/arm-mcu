@@ -30,15 +30,13 @@ MCU		= stm32f100rb
 JLINKGDBIF	= -if SWD
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-STLINKCLIIF	= -c SWD
+STLINKIF	= -c SWD
 endif
 
 ifeq ($(shell uname), Linux)
-STLINKDEV	?= /dev/stlink-v1
-STLINKFLASH	?= stlink-v1-flash
+STLINKIF	= /dev/stlink-v1
+STLINKGDBIF	= --stlinkv1 --device=$(STLINKIF)
 endif
-
-STLINKGDBIF	= --stlinkv1 --device=/dev/stlink-v1
 endif
 
 ifeq ($(BOARDNAME), W5200E01_M3)
