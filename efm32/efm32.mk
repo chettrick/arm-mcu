@@ -8,7 +8,7 @@ TEXTBASE	?= 0x00000000
 
 CMSIS		= $(MCUDIR)/CMSIS
 
-CFLAGS		+= -DEFM32 -I$(CMSIS)/include
+CFLAGS		+= -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 # Board specific macro definitions
