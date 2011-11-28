@@ -12,26 +12,33 @@ CMSIS		= $(MCUDIR)/CMSIS
 CFLAGS		+= -DLPC17XX -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
-LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
-
-JLINKMCU	= lpc1768
-
 LPC21ISP	?= lpc21isp
 LPC21ISPDEV	?= /dev/ttyS0
 LPC21ISPBAUD	?= 115200
 LPC21ISPCLOCK	?= 14746
 LPC21ISPFLAGS	?= -control
 
+# Board specific macro definitions
+
+ifeq ($(BOARDNAME), MBED_LPC1768)
 MBED		?= /media/MBED
+endif
+
+ifeq ($(BOARDNAME), BLUEBOARD_LPC1768_H)
+JLINKMCU	= lpc1768
 USBBOOT		?= /media/LPC17xx
+endif
+
+# Phony targets
 
 .PHONY:		default lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
-
 .SUFFIXES:	.flashisp .flashmbed .flashusb
 
 default: lib
 
 # Build processor dependent support library
+
+LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
