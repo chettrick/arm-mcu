@@ -25,7 +25,7 @@ include $(MCU).mk
 
 .PHONY:		default lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
 
-default: lib$(MCU).a
+default: lib
 
 # Build processor dependent support library
 
