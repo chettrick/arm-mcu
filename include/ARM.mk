@@ -136,7 +136,11 @@ startjlink:
 	tcpwait localhost $(GDBSERVERPORT) 10
 
 stopjlink:
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+	killall `basename $(JLINKGDB) .exe`
+else
 	killall $(JLINKGDB)
+endif
 
 # Start and stop OpenOCD
 
@@ -144,7 +148,11 @@ startocd:
 	$(OPENOCD) -f interface/$(OPENOCDIF).cfg -f $(OPENOCDCFG) >debug.log 2>&1 &
 
 stopocd:
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+	killall `basename $(OPENOCD) .exe`
+else
 	killall $(OPENOCD)
+endif
 
 # Start and stop ST-Link GDB server
 
@@ -152,7 +160,11 @@ startstlink:
 	$(STLINKGDB) $(STLINKGDBIF) $(STLINKGDBOPTS) >debug.log 2>&1 &
 
 stopstlink:
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+	killall `basename $(STLINKGDB) .exe`
+else
 	killall $(STLINKGDB)
+endif
 
 # Update from source code repository
 
