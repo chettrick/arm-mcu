@@ -40,13 +40,15 @@ OPENOCDFLASH	?= $(MCUDIR)/$(MCU).flashocd
 OPENOCDIF	?= olimex-jtag-tiny
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-STLINKCLI	?= ST-LINK_CLI.exe
-STLINKCLIIF	?= -c JTAG
+STLINKFLASH	?= ST-LINK_CLI.exe
+STLINKIF	?= -c JTAG
 endif
+ifeq ($(shell uname), Linux)
 STLINKFLASH	?= stlink-flash
+STLINKIF	?=
+endif
 STLINKDEBUG	?= $(ARMSRC)/common/main.gdb
 STLINKGDB	?= stlink-gdbserver
-STLINKGDBIF	?=
 STLINKGDBOPTS	?= -p $(GDBSERVERPORT)
 
 STM32FLASH	?= stm32flash
@@ -164,9 +166,9 @@ default_catch:
 
 .bin.flashstlink:
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-	$(STLINKCLI) $(STLINKCLIIF) -ME -P $< $(FLASHWRITEADDR) -Rst
+	$(STLINKFLASH) $(STLINKIF) -ME -P $< $(FLASHWRITEADDR) -Rst
 else
-	$(STLINKFLASH) write $< $(FLASHWRITEADDR)
+	$(STLINKFLASH) write $(STLINKIF) $< $(FLASHWRITEADDR)
 endif
 
 # Define a suffix rule for installing via the NXP USB boot loader
