@@ -4,6 +4,7 @@
 
 CPU		= cortex-m4
 CPUFLAGS	= -mthumb
+FLASHWRITEADDR	= 0x08000000
 TEXTBASE	?= 0x00000000
 
 CMSIS		= $(MCUDIR)/CMSIS
@@ -11,29 +12,20 @@ CMSIS		= $(MCUDIR)/CMSIS
 CFLAGS		+= -DSTM32F4XX -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
-LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
+# Board specific macro definitions
 
+ifeq ($(BOARDNAME), STM32F4_DISCOVERY)
+MCU             = stm32f407vg
 JLINKGDBIF	= -if SWD
-
-FLASHWRITEADDR	= 0x08000000
-
-ifeq ($(shell uname), Linux)
-STLINKFLASH	?= stlink-flash
-STLINKGDB	?= stlink-gdbserver
 endif
 
-ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-STLINKCLI	?= ST-LINK_CLI.exe
-endif
-
-STM32FLASH	?= stm32flash
-STM32FLASH_PORT	?= /dev/ttyS0
+# Phony targets
 
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
 
-.SUFFIXES:	.flashstlink .stm32flash
-
 # Build processor dependent support library
+
+LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
@@ -42,23 +34,6 @@ lib$(MCU).a: $(LIBOBJS)
 	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
-
-# Define a suffix rule for programming the flash with stlink
-
-ifeq ($(shell uname), Linux)
-.bin.flashstlink:
-	$(STLINKFLASH) write $< $(FLASHWRITEADDR)
-endif
-
-ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-.bin.flashstlink:
-	$(STLINKCLI) -c SWD -ME -P $< $(FLASHWRITEADDR) -Rst
-endif
-
-# Define a suffix rule for programming the flash with serial boot loader and stm32flash
-
-.bin.stm32flash:
-	$(STM32FLASH) -w $< -v -g 0x0 $(STM32FLASH_PORT)
 
 # Clean out working files
 
