@@ -17,27 +17,32 @@ OPENOCDFLASH	= $(MCUDIR)/stm32f1.flashocd
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), OLIMEX_STM32_P103)
-MCU             = stm32f103rb
+MCU		= stm32f103rb
 endif
 
 ifeq ($(BOARDNAME), OLIMEX_STM32_P107)
-MCU             = stm32f107rb
+MCU		= stm32f107rb
 endif
 
 ifeq ($(BOARDNAME), STM32_VALUE_LINE_DISCOVERY)
-MCU             = stm32f100rb
+MCU		= stm32f100rb
 
-# STM32 Value Line Discovery board has built-in ST-Link/V1
-STLINKGDBIF	= --stlinkv1 --device=/dev/stlink-v1
+JLINKGDBIF	= -if SWD
+
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+STLINKCLIIF	= -c SWD
+endif
 
 ifeq ($(shell uname), Linux)
 STLINKDEV	?= /dev/stlink-v1
 STLINKFLASH	?= stlink-v1-flash
 endif
+
+STLINKGDBIF	= --stlinkv1 --device=/dev/stlink-v1
 endif
 
 ifeq ($(BOARDNAME), W5200E01_M3)
-MCU             = stm32f103c8
+MCU		= stm32f103c8
 endif
 
 # Include MCU specific make file
