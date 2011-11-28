@@ -41,10 +41,11 @@ OPENOCDIF	?= olimex-jtag-tiny
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 STLINKCLI	?= ST-LINK_CLI.exe
-endif
 STLINKCLIIF	?= -c JTAG
-STLINKGDB	?= stlink-gdbserver
+endif
+STLINKFLASH	?= stlink-flash
 STLINKDEBUG	?= $(ARMSRC)/common/main.gdb
+STLINKGDB	?= stlink-gdbserver
 STLINKGDBIF	?=
 STLINKGDBOPTS	?= -p $(GDBSERVERPORT)
 
@@ -165,7 +166,7 @@ default_catch:
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 	$(STLINKCLI) $(STLINKCLIIF) -ME -P $< $(FLASHWRITEADDR) -Rst
 else
-	$(STLINKFLASH) $(STLINKDEV) program=$< reset run
+	$(STLINKFLASH) write $< $(FLASHWRITEADDR)
 endif
 
 # Define a suffix rule for installing via the NXP USB boot loader
