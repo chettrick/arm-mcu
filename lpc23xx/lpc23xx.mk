@@ -4,14 +4,11 @@
 
 CPU		= arm7tdmi
 CPUFLAGS	=
+MCU		= $(MCUFAMILY)
 TEXTBASE	?= 0x00000000
 
 CFLAGS		+= 
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
-
-LIBOBJS		= cpu.o leds.o serial.o
-
-JLINKMCU	= lpc2378
 
 LPC21ISP	?= lpc21isp
 LPC21ISPDEV	?= /dev/ttyS0
@@ -19,14 +16,26 @@ LPC21ISPBAUD	?= 115200
 LPC21ISPCLOCK	?= 14746
 LPC21ISPFLAGS	?= -control
 
-MBED		?= /media/MBED
-USBBOOT		?= /media/LPC23xx
+# Board specific macro definitions
 
-.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
+ifeq ($(BOARDNAME), MBED_LPC2368)
+MBED		?= /media/MBED
+endif
+
+ifeq ($(BOARDNAME), OLIMEX_LPC_P2378)
+JLINKMCU	= lpc2378
+USBBOOT		?= /media/LPC23xx
+endif
+
+.PHONY:		default lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
 
 .SUFFIXES:	.flashisp .flashmbed .flashusb
 
+default: lib
+
 # Build processor dependent support library
+
+LIBOBJS		= cpu.o leds.o serial.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
