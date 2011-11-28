@@ -20,7 +20,7 @@ MCU		= stm32f407vg
 JLINKGDBIF	= -if SWD
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-STLINKCLIIF	= -c SWD
+STLINKIF	= -c SWD
 endif
 endif
 
