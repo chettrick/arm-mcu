@@ -25,16 +25,33 @@ JLINKGDB	?= JLinkGDBServer
 JLINKGDBIF	?= -if JTAG
 JLINKGDBOPTS	?= -port $(GDBSERVERPORT)
 
+LPC21ISP	?= lpc21isp
+LPC21ISPDEV	?= /dev/ttyS0
+LPC21ISPBAUD	?= 115200
+LPC21ISPCLOCK	?= 14746
+LPC21ISPFLAGS	?= -control
+
+MBED		?= /media/MBED
+
 OPENOCD		?= openocd
 OPENOCDCFG	?= $(MCUDIR)/$(MCU).openocd
 OPENOCDDEBUG	?= $(ARMSRC)/common/main.gdb
 OPENOCDFLASH	?= $(MCUDIR)/$(MCU).flashocd
 OPENOCDIF	?= olimex-jtag-tiny
 
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+STLINKCLI	?= ST-LINK_CLI.exe
+endif
+STLINKCLIIF	?= -c JTAG
 STLINKGDB	?= stlink-gdbserver
 STLINKDEBUG	?= $(ARMSRC)/common/main.gdb
 STLINKGDBIF	?=
 STLINKGDBOPTS	?= -p $(GDBSERVERPORT)
+
+STM32FLASH	?= stm32flash
+STM32FLASH_PORT	?= /dev/ttyS0
+
+USBBOOT		?= /media/LPC17xx
 
 MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
 STARTUP		?= $(MCUDIR)/$(MCU).o
@@ -65,7 +82,7 @@ default_catch:
 
 # These are the target suffixes
 
-.SUFFIXES: .asm .c .bin .debugjlink .debugocd .debugstlink .elf .flashjlink .flashocd .hex .o .s .S
+.SUFFIXES: .asm .c .bin .debugjlink .debugocd .debugstlink .elf .flashisp .flashjlink .flashmbed .flashocd .flashstlink .hex .o .s .S .stm32flash
 
 # Don't delete intermediate files
 
@@ -110,6 +127,11 @@ default_catch:
 .S.o:
 	$(CC) $(CFLAGS) -c -o $@ -c $<
 
+# Define a suffix rule for programming the flash with lpc21isp
+
+.hex.flashisp:
+	$(LPC21ISP) $(LPC21ISPFLAGS) $< $(LPC21ISPDEV) $(LPC21ISPBAUD) $(LPC21ISPCLOCK)
+
 # Define a suffix rule for programming the flash with J-Link Commander
 
 .bin.flashjlink:
@@ -123,11 +145,41 @@ default_catch:
 	@rm $(JLINKFLASHCMDS)
 	@rm Default.ini
 
+# Define a suffix rule for installing to an mbed board
+
+.bin.flashmbed:
+	test -d $(MBED) -a -w $(MBED)
+	cp $< $(MBED)
+	sync
+	@echo -e "\nPress RESET on the target board to start $<\n"
+
 # Define a suffix rule for programming the flash with OpenOCD
 
 .bin.flashocd:
 	$(MAKE) startocd
 	$(OPENOCDFLASH) $< $(FLASHWRITEADDR) $(TEXTBASE)
+
+# Define a suffix rule for programming the flash with stlink
+
+.bin.flashstlink:
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+	$(STLINKCLI) $(STLINKCLIIF) -ME -P $< $(FLASHWRITEADDR) -Rst
+else
+	$(STLINKFLASH) $(STLINKDEV) program=$< reset run
+endif
+
+# Define a suffix rule for installing via the NXP USB boot loader
+
+.bin.flashusb:
+	test -d $(USBBOOT) -a -w $(USBBOOT)
+	cp $< $(USBBOOT)/firmware.bin
+	sync
+	@echo -e "\nPress RESET on the target board to start $<\n"
+
+# Define a suffix rule for programming the flash with STM32 serial boot loader and stm32flash
+
+.bin.stm32flash:
+	$(STM32FLASH) -w $< -v -g 0x0 $(STM32FLASH_PORT)
 
 # Start and stop J-Link GDB server
 
