@@ -15,8 +15,13 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), STM32F4_DISCOVERY)
-MCU             = stm32f407vg
+MCU		= stm32f407vg
+
 JLINKGDBIF	= -if SWD
+
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+STLINKCLIIF	= -c SWD
+endif
 endif
 
 # Phony targets
