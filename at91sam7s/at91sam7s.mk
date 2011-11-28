@@ -4,6 +4,7 @@
 
 CPU		= arm7tdmi
 CPUFLAGS	=
+FLASHWRITEADDR	= 0x00100000
 TEXTBASE	?= 0x00000000
 
 AT91LIB		= $(MCUDIR)/at91lib
@@ -11,16 +12,11 @@ AT91LIB		= $(MCUDIR)/at91lib
 CFLAGS		+= -I$(AT91LIB)
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
-LIBOBJS		= cpu.o leds.o serial.o
-
-FLASHWRITEADDR	= 0x00100000
-
-JLINKMCU	= at91sam7s512
-
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), OLIMEX_SAM7_P256)
 MCU		= at91sam7s
+JLINKMCU	= at91sam7s512
 endif
 
 .PHONY:		default lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
@@ -28,6 +24,8 @@ endif
 default: lib$(MCU).a
 
 # Build processor dependent support library
+
+LIBOBJS		= cpu.o leds.o serial.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
