@@ -6,10 +6,4 @@ ARMSRC		= ..
 MCUFAMILY	= stm32f4
 BOARDNAME	?= STM32F4_DISCOVERY
 
-ifeq ($(BOARDNAME), STM32F4_DISCOVERY)
-MCU             = stm32f407vg
-endif
-
-default: lib$(MCU).a
-
 include $(ARMSRC)/include/ARM.mk
