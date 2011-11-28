@@ -18,7 +18,7 @@ int main(void)
   
   for (i = 0;; i++)
   {
-    // Flash LED faster if WAKE-UP button is pressed
+    // Flash faster if WAKE-UP button is pressed
 
     if (GPIOPIN0IN)
     {
@@ -34,13 +34,36 @@ int main(void)
 #endif
 
 #ifdef OLIMEX_STM32_P107
+  gpiopin_configure(GPIOPIN0, GPIOPIN_INPUT);
   gpiopin_configure(GPIOPIN38, GPIOPIN_OUTPUT);
   gpiopin_configure(GPIOPIN39, GPIOPIN_OUTPUT);
+  gpiopin_configure(GPIOPIN45, GPIOPIN_INPUT);
 
   for (i = 0;; i++)
   {
-    GPIOPIN38OUT = i >> 20;
-    GPIOPIN39OUT = i >> 21;
+    // Flash flaster if WAKE-UP button is pressed
+
+    if (GPIOPIN0IN)
+    {
+      GPIOPIN38OUT = i >> 18;
+      GPIOPIN39OUT = i >> 19;
+    }
+
+    // Turn off LED's if TAMPER button is pressed
+
+    if (!GPIOPIN45IN)
+    {
+      GPIOPIN38OUT = 0;
+      GPIOPIN39OUT = 0;
+    }
+
+    // Flash normal rate
+
+    else
+    {
+      GPIOPIN38OUT = i >> 19;
+      GPIOPIN39OUT = i >> 20;
+    }
   }
 #endif
 
