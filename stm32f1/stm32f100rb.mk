@@ -2,6 +2,4 @@
 
 # $Id$
 
-include stm32f1.mk
-
 CFLAGS += -DSTM32F10X_LD_VL
