@@ -27,8 +27,9 @@ JLINKMCU	= lpc2378
 USBBOOT		?= /media/LPC23xx
 endif
 
-.PHONY:		default lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
+# Phony targets
 
+.PHONY:		default lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
 .SUFFIXES:	.flashisp .flashmbed .flashusb
 
 default: lib
