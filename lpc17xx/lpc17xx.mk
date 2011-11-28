@@ -4,6 +4,7 @@
 
 CPU		= cortex-m3
 CPUFLAGS	= -mthumb
+MCU		= lpc17xx
 TEXTBASE	?= 0x00000000
 
 CMSIS		= $(MCUDIR)/CMSIS
@@ -24,9 +25,11 @@ LPC21ISPFLAGS	?= -control
 MBED		?= /media/MBED
 USBBOOT		?= /media/LPC17xx
 
-.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
+.PHONY:		default lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
 
 .SUFFIXES:	.flashisp .flashmbed .flashusb
+
+default: lib
 
 # Build processor dependent support library
 
