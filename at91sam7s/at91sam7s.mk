@@ -19,6 +19,8 @@ MCU		= at91sam7s
 JLINKMCU	= at91sam7s512
 endif
 
+# Phony targets
+
 .PHONY:		default lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
 
 default: lib$(MCU).a
