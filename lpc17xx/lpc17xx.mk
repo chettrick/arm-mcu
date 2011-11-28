@@ -4,7 +4,7 @@
 
 CPU		= cortex-m3
 CPUFLAGS	= -mthumb
-MCU		= lpc17xx
+MCU		= $(MCUFAMILY)
 TEXTBASE	?= 0x00000000
 
 CMSIS		= $(MCUDIR)/CMSIS
