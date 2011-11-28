@@ -51,7 +51,7 @@ int main(void)
 
     // Turn off LED's if TAMPER button is pressed
 
-    if (!GPIOPIN45IN)
+    else if (!GPIOPIN45IN)
     {
       GPIOPIN38OUT = 0;
       GPIOPIN39OUT = 0;
