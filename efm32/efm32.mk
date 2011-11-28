@@ -11,8 +11,6 @@ CMSIS		= $(MCUDIR)/CMSIS
 CFLAGS		+= -DEFM32 -I$(CMSIS)/include
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
-LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
-
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), EFM32_G8XX_STK)
@@ -30,6 +28,8 @@ include $(MCU).mk
 default: lib$(MCU).a
 
 # Build processor dependent support library
+
+LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
