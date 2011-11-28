@@ -17,7 +17,15 @@ FLASHWRITEADDR	= 0x00100000
 
 JLINKMCU	= at91sam7s512
 
-.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
+# Board specific macro definitions
+
+ifeq ($(BOARDNAME), OLIMEX_SAM7_P256)
+MCU		= at91sam7s
+endif
+
+.PHONY:		default lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
+
+default: lib$(MCU).a
 
 # Build processor dependent support library
 
