@@ -146,6 +146,7 @@ endif
 
 startocd:
 	$(OPENOCD) -f interface/$(OPENOCDIF).cfg -f $(OPENOCDCFG) >debug.log 2>&1 &
+	tcpwait localhost $(GDBSERVERPORT) 10
 
 stopocd:
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
@@ -158,6 +159,7 @@ endif
 
 startstlink:
 	$(STLINKGDB) $(STLINKGDBIF) $(STLINKGDBOPTS) >debug.log 2>&1 &
+	tcpwait localhost $(GDBSERVERPORT) 10
 
 stopstlink:
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
