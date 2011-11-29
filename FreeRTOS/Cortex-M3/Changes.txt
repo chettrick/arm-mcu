@@ -54,3 +54,11 @@ $Id$
     in recent binutils versions.
 
 22. Upgraded to FreeRTOS 7.0.2.
+
+23. Removed obsolete INCLUDE_vTaskCleanUpResources from FreeRTOSConfig.h.
+
+24. Added new (7.0.2) INCLUDE_xTaskGetIdleTaskHandle to FreeRTOSConfig.h.
+
+25. Added new (7.0.2) INCLUDE_xTimerGetTimerDaemonTaskHandle to FreeRTOSConfig.h.
+
+26. Added new (7.0.2) INCLUDE_pcTaskGetTaskName to FreeRTOSConfig.h.
