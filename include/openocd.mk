@@ -33,8 +33,4 @@ startocd:
 # Stop OpenOCD
 
 stopocd:
-ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-	killall `basename $(OPENOCD) .exe`
-else
-	killall $(OPENOCD)
-endif
+	skill `basename $(OPENOCD) .exe`

@@ -42,8 +42,4 @@ startjlink:
 # Stop J-Link GDB server
 
 stopjlink:
-ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-	killall `basename $(JLINKGDB) .exe`
-else
-	killall $(JLINKGDB)
-endif
+	skill `basename $(JLINKGDB) .exe`

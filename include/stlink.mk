@@ -55,8 +55,4 @@ startstlink:
 # Stop ST-Link GDB server
 
 stopstlink:
-ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-	killall `basename $(STLINKGDB) .exe`
-else
-	killall $(STLINKGDB)
-endif
+	skill `basename $(STLINKGDB) .exe`
