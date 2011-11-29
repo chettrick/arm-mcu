@@ -16,7 +16,6 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 ifeq ($(BOARDNAME), STM32F4_DISCOVERY)
 MCU		= stm32f407vg
-
 JLINKGDBIF	= -if SWD
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
