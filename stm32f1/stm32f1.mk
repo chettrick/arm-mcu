@@ -31,6 +31,8 @@ JLINKGDBIF	= -if SWD
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 STLINKIF	= -c SWD
 endif
+
+STLINKGDBIF	= $(STLINKV1GDBIF)
 endif
 
 ifeq ($(BOARDNAME), W5200E01_M3)
