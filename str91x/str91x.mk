@@ -20,9 +20,7 @@ endif
 
 # Phony targets
 
-.PHONY:		default lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
-
-default: lib
+.PHONY:		lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
 
 # Build processor dependent support library
 
