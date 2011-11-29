@@ -24,8 +24,6 @@ xSemaphoreHandle console_lock;
 
 void putsTaskFunction(void *parameters)
 {
-  char *message = parameters;
-
   portTickType waketime = xTaskGetTickCount();
 
   for (;;)
@@ -33,7 +31,7 @@ void putsTaskFunction(void *parameters)
     vTaskDelayUntil(&waketime, (MESSAGE_PERIOD/2 + (lrand48() % (MESSAGE_PERIOD/2)))/portTICK_RATE_MS);
 
     xSemaphoreTake(console_lock, portMAX_DELAY);
-    puts(message);
+    printf("This is %s\n", pcTaskGetTaskName(NULL));
     xSemaphoreGive(console_lock);
   }
 }
@@ -86,14 +84,14 @@ int main(void)
 
 // Create a couple of tasks
 
-  if (xTaskCreate(putsTaskFunction, (signed char *) "task1", 256, "This is Task 1", 1, &task1) != pdPASS)
+  if (xTaskCreate(putsTaskFunction, (signed char *) "task1", 512, NULL, 1, &task1) != pdPASS)
   {
     puts("ERROR: xTaskCreate() for task1 failed!");
     fflush(stdout);
     assert(FALSE);
   }
 
-  if (xTaskCreate(putsTaskFunction, (signed char *) "task2", 256, "This is Task 2", 1, &task2) != pdPASS)
+  if (xTaskCreate(putsTaskFunction, (signed char *) "task2", 512, NULL, 1, &task2) != pdPASS)
   {
     puts("ERROR: xTaskCreate() for task2 failed!");
     fflush(stdout);
