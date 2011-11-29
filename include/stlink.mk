@@ -51,7 +51,6 @@ endif
 
 startstlink:
 	$(STLINKGDB) $(STLINKGDBIF) $(STLINKGDBOPTS) >debug.log 2>&1 &
-	tcpwait localhost $(GDBSERVERPORT) 10
 
 # Stop ST-Link GDB server
 
