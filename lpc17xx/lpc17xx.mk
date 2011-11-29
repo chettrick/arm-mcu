@@ -16,6 +16,7 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 ifeq ($(BOARDNAME), BLUEBOARD_LPC1768_H)
 JLINKMCU	= lpc1768
+JLINKGDBIF	= -if SWD
 endif
 
 # Phony targets
