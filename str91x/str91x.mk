@@ -12,11 +12,21 @@ USBSERIAL	= $(MCUDIR)/usb_serial
 CFLAGS		+= -I$(FWLIB) -I$(USBSERIAL)
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
-LIBOBJS		= cpu.o leds.o serial.o time.o
+# Board specific macro definitions
 
-.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
+ifeq ($(BOARDNAME), STMICRO_STR910_EVAL)
+MCU		= str912faw44
+endif
+
+# Phony targets
+
+.PHONY:		default lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
+
+default: lib
 
 # Build processor dependent support library
+
+LIBOBJS		= cpu.o leds.o serial.o time.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
