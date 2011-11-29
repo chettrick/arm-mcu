@@ -26,16 +26,10 @@ endif
 
 ifeq ($(BOARDNAME), STM32_VALUE_LINE_DISCOVERY)
 MCU		= stm32f100rb
-
 JLINKGDBIF	= -if SWD
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 STLINKIF	= -c SWD
-endif
-
-ifeq ($(shell uname), Linux)
-STLINKIF	= /dev/stlink-v1
-STLINKGDBIF	= --stlinkv1 --device=$(STLINKIF)
 endif
 endif
 
