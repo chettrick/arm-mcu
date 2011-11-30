@@ -32,11 +32,14 @@ ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 STLINKIF	= -c SWD
 endif
 
+ifeq ($(shell uname), Linux)
 STLINKGDBIF	= $(STLINKV1GDBIF)
+endif
 endif
 
 ifeq ($(BOARDNAME), W5200E01_M3)
 MCU		= stm32f103c8
+JLINKGDBIF	= -if SWD
 endif
 
 # Include MCU specific make file
