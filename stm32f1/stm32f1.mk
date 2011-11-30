@@ -33,6 +33,7 @@ STLINKIF	= -c SWD
 endif
 
 ifeq ($(shell uname), Linux)
+STLINKIF	= $(STLINKV1IF)
 STLINKGDBIF	= $(STLINKV1GDBIF)
 endif
 endif

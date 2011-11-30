@@ -35,7 +35,7 @@ STLINKGDBOPTS	?= -p $(GDBSERVERPORT)
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 	$(STLINKCLI) $(STLINKIF) -ME -P $< $(FLASHWRITEADDR) -Rst
 else
-	$(STLINKV2FLASH) write $< $(FLASHWRITEADDR)
+	$(STLINKV2FLASH) write $(STLINKIF) $< $(FLASHWRITEADDR)
 endif
 
 # Program flash with legacy ST-Link/V1
