@@ -12,6 +12,6 @@ MBEDDIR		?= /media/MBED
 
 .bin.flashmbed:
 	test -d $(MBEDDIR) -a -w $(MBEDDIR)
-	cp $< $(MBEDDIR)
+	cp $< $(MBEDDIR)/firmware.bin
 	sync
 	@echo -e "\nPress RESET on the target board to start $<\n"
