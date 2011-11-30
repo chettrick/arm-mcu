@@ -14,21 +14,19 @@ OPENOCDIF	?= olimex-jtag-tiny
 # Debug with OpenOCD
 
 .elf.debugocd:
-	$(MAKE) startocd
 	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(OPENOCDDEBUG) $<
-	$(MAKE) stopocd
 
 # Program flash with OpenOCD
 
 .bin.flashocd:
 	$(MAKE) startocd
 	$(OPENOCDFLASH) $< $(FLASHWRITEADDR) $(TEXTBASE)
+	$(MAKE) stopocd
 
 # Start OpenOCD
 
 startocd:
 	$(OPENOCD) -f interface/$(OPENOCDIF).cfg -f $(OPENOCDCFG) >debug.log 2>&1 &
-	tcpwait localhost $(GDBSERVERPORT) 10
 
 # Stop OpenOCD
 
