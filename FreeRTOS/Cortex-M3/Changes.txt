@@ -62,3 +62,5 @@ $Id$
 25. Added new (7.0.2) INCLUDE_xTimerGetTimerDaemonTaskHandle to FreeRTOSConfig.h.
 
 26. Added new (7.0.2) INCLUDE_pcTaskGetTaskName to FreeRTOSConfig.h.
+
+27. Changed 7.0.1 to 7.0.2 in FreeRTOSConfig.h and task.h.
