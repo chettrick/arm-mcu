@@ -15,6 +15,7 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 ifeq ($(BOARDNAME), EFM32_G8XX_STK)
 MCU		= efm32g890f128
+JLINKGDBIF	= -if SWD
 endif
 
 # Include MCU specific make file
