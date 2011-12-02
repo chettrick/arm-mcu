@@ -25,4 +25,4 @@ CFLAGS		+= -I$(CMSIS)/Include -I$(CMSIS)/DeviceSupport/ST/STM32F10x
 stm32f1libs:
 	$(MAKE) $(STM32F1TEMPLATE)/system_stm32f10x.o
 	for F in $(STM32F1LIB)/src/*.c ; do $(MAKE) $${F%.c}.o ; done
-	find $(PERIPHLIBDIR) -type f -name '*.o' -exec $(AR) crs lib$(MCU).a {} ";"
+	$(FIND) $(PERIPHLIBDIR) -type f -name '*.o' -exec $(AR) crs lib$(MCU).a {} ";"

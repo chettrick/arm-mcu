@@ -27,4 +27,4 @@ efm32libs:
 ifeq ($(WITH_DSPLIB), yes)
 	for F in $(CMSIS)/../DSP_Lib/Source/Cortex-M4-M3/*/*.c ; do $(MAKE) $${F%.c}.o ; done
 endif
-	find $(EFM32LIBDIR) -type f -name '*.o' -exec $(AR) crs lib$(MCU).a {} ";"
+	$(FIND) $(EFM32LIBDIR) -type f -name '*.o' -exec $(AR) crs lib$(MCU).a {} ";"

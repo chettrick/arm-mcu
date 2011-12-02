@@ -15,6 +15,8 @@ OBJCOPY		= $(CROSS_COMPILE)objcopy
 OBJDUMP		= $(CROSS_COMPILE)objdump
 GDB		= $(CROSS_COMPILE)gdb
 
+FIND		?= find
+
 # Framework general definitions
 
 MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
@@ -132,7 +134,7 @@ endif
 
 clean:
 	cd $(MCUDIR) && $(MAKE) clean_$(MCU)
-	find * -name '*.o' -exec rm {} ";"
+	$(FIND) * -name '*.o' -exec rm {} ";"
 	rm -f *.a *.asm *.bin *.elf *.hex *.log *.map *.stackdump *.tmp Default.ini
 	$(MAKE) common_clean
 ifeq ($(WITH_FREERTOS), yes)
