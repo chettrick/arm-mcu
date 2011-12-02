@@ -9,7 +9,7 @@ TEXTBASE	?= 0x00000000
 
 CMSIS		= $(MCUDIR)/CMSIS
 
-CFLAGS		+= -DSTM32F10X -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
+CFLAGS		+= -DSTM32F10X
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 OPENOCDFLASH	= $(MCUDIR)/stm32f1.flashocd
@@ -45,7 +45,9 @@ endif
 
 # Include MCU specific make file
 
-include $(MCU).mk
+include $(MCUDIR)/$(MCU).mk
+
+include $(MCUDIR)/libs/stm32f1libs.mk
 
 # Phony targets
 
@@ -57,8 +59,7 @@ LIBOBJS		= cpu.o gpiopins.o leds.o serial.o spi.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-	for F in $(CMSIS)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
+	$(MAKE) stm32f1libs
 	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
