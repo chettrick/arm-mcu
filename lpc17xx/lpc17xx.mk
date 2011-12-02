@@ -7,9 +7,7 @@ CPUFLAGS	= -mthumb
 MCU		= $(MCUFAMILY)
 TEXTBASE	?= 0x00000000
 
-CMSIS		= $(MCUDIR)/CMSIS
-
-CFLAGS		+= -DLPC17XX -I$(CMSIS)/include
+CFLAGS		+= -DLPC17XX
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 # Board specific macro definitions
@@ -25,12 +23,13 @@ endif
 
 # Build processor dependent support library
 
+include $(MCUDIR)/libs/lpc17xxlibs.mk
+
 LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-	for F in $(CMSIS)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
+	$(MAKE) lpc17xxlibs
 	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
