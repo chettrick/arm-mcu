@@ -13,6 +13,7 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), STM32F4_DISCOVERY)
+CFLAGS		+= -DHSE_VALUE=8000000
 MCU		= stm32f407vg
 JLINKGDBIF	= -if SWD
 
