@@ -20,7 +20,7 @@ endif
 
 # Include MCU specific make file
 
-include $(MCU).mk
+include $(MCUDIR)/$(MCU).mk
 
 # Phony targets
 
