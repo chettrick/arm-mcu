@@ -1,0 +1,4 @@
+--cpu Cortex-M3 ".\flash\startup_lpc17xx.o" ".\flash\core_cm3.o" ".\flash\system_lpc17xx.o" ".\flash\lpc17xx_clkpwr.o" ".\flash\lpc17xx_pinsel.o" ".\flash\lpc17xx_uart.o" ".\flash\uart_polling_test.o" --library_type=microlib --strict --scatter ".\Flash\uart_polling.sct" 
+--autoat --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+ --list ".\Flash\uart_polling.map" -o ".\Flash\uart_polling.axf"

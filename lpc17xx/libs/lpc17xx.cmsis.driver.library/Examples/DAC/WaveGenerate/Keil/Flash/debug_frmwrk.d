@@ -1,0 +1,12 @@
+.\Flash\debug_frmwrk.o: ..\..\..\..\Drivers\source\debug_frmwrk.c
+.\Flash\debug_frmwrk.o: ..\..\..\..\Drivers\include\debug_frmwrk.h
+.\Flash\debug_frmwrk.o: ..\..\..\..\Drivers\include\lpc17xx_uart.h
+.\Flash\debug_frmwrk.o: ..\..\..\..\Core\CM3\DeviceSupport\NXP\LPC17xx\LPC17xx.h
+.\Flash\debug_frmwrk.o: ..\..\..\..\Core\CM3\CoreSupport\core_cm3.h
+.\Flash\debug_frmwrk.o: C:\Keil\ARM\RV31\INC\stdint.h
+.\Flash\debug_frmwrk.o: ..\..\..\..\Core\CM3\CoreSupport\core_cmInstr.h
+.\Flash\debug_frmwrk.o: ..\..\..\..\Core\CM3\CoreSupport\core_cmFunc.h
+.\Flash\debug_frmwrk.o: ..\..\..\..\Core\CM3\DeviceSupport\NXP\LPC17xx\system_LPC17xx.h
+.\Flash\debug_frmwrk.o: ..\..\..\..\Drivers\include\lpc_types.h
+.\Flash\debug_frmwrk.o: ..\..\..\..\Drivers\include\lpc17xx_pinsel.h
+.\Flash\debug_frmwrk.o: ..\..\WaveGenerate\lpc17xx_libcfg.h

@@ -1,0 +1,14 @@
+.\Flash\dac_wave_generate.o: ..\dac_wave_generate.c
+.\Flash\dac_wave_generate.o: ..\..\..\..\Drivers\include\lpc17xx_dac.h
+.\Flash\dac_wave_generate.o: ..\..\..\..\Core\CM3\DeviceSupport\NXP\LPC17xx\LPC17xx.h
+.\Flash\dac_wave_generate.o: ..\..\..\..\Core\CM3\CoreSupport\core_cm3.h
+.\Flash\dac_wave_generate.o: C:\Keil\ARM\RV31\INC\stdint.h
+.\Flash\dac_wave_generate.o: ..\..\..\..\Core\CM3\CoreSupport\core_cmInstr.h
+.\Flash\dac_wave_generate.o: ..\..\..\..\Core\CM3\CoreSupport\core_cmFunc.h
+.\Flash\dac_wave_generate.o: ..\..\..\..\Core\CM3\DeviceSupport\NXP\LPC17xx\system_LPC17xx.h
+.\Flash\dac_wave_generate.o: ..\..\..\..\Drivers\include\lpc_types.h
+.\Flash\dac_wave_generate.o: ..\lpc17xx_libcfg.h
+.\Flash\dac_wave_generate.o: ..\..\..\..\Drivers\include\lpc17xx_pinsel.h
+.\Flash\dac_wave_generate.o: ..\..\..\..\Drivers\include\lpc17xx_gpdma.h
+.\Flash\dac_wave_generate.o: ..\..\..\..\Drivers\include\debug_frmwrk.h
+.\Flash\dac_wave_generate.o: ..\..\..\..\Drivers\include\lpc17xx_uart.h
