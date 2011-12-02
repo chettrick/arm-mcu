@@ -6,9 +6,7 @@ CPU		= cortex-m3
 CPUFLAGS	= -mthumb
 TEXTBASE	?= 0x00000000
 
-CMSIS		= $(MCUDIR)/CMSIS
-
-CFLAGS		+= -DEFM32 -I$(CMSIS)/include
+CFLAGS		+= -DEFM32
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 # Board specific macro definitions
@@ -28,12 +26,13 @@ include $(MCUDIR)/$(MCU).mk
 
 # Build processor dependent support library
 
+include libs/efm32libs.mk
+
 LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-	for F in $(CMSIS)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
+	$(MAKE) efm32libs
 	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
