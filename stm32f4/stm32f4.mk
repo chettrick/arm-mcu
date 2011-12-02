@@ -7,9 +7,7 @@ CPUFLAGS	= -mthumb
 FLASHWRITEADDR	= 0x08000000
 TEXTBASE	?= 0x00000000
 
-CMSIS		= $(MCUDIR)/CMSIS
-
-CFLAGS		+= -DSTM32F4XX -DUSE_STDPERIPH_DRIVER -I$(CMSIS)/include
+CFLAGS		+= -DSTM32F4XX
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
 # Board specific macro definitions
@@ -23,6 +21,8 @@ STLINKIF	= -c SWD
 endif
 endif
 
+include $(MCUDIR)/libs/stm32f4libs.mk
+
 # Phony targets
 
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
@@ -33,8 +33,7 @@ LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-	for F in $(CMSIS)/source/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(CMSIS)/source/*.o
+	$(MAKE) stm32f4libs
 	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
