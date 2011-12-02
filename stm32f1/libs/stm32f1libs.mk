@@ -4,12 +4,7 @@
 
 LIBSDIR		= $(ARMSRC)/stm32f1/libs
 
-# libs/STM32F10x_StdPeriph_Lib_V3.5.0/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/stm32f10x.h
-# libs/STM32F10x_StdPeriph_Lib_V3.5.0/Libraries/CMSIS/CM3/CoreSupport/core_cm3.h
-# libs/STM32F10x_StdPeriph_Lib_V3.5.0/Project/STM32F10x_StdPeriph_Template/stm32f10x_conf.h
-# libs/STM32F10x_StdPeriph_Lib_V3.5.0/Project/STM32F10x_StdPeriph_Template/system_stm32f10x.c
-
-# Definitions for the STM32F4 Standard Peripheral Library
+# Definitions for the STM32F1 Standard Peripheral Library
 
 PERIPHLIBVER	= V3.5.0
 PERIPHLIBNAME	= STM32F10x_StdPeriph_Lib
