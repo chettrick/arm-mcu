@@ -10,7 +10,6 @@ PERIPHLIBVER	= V1.0.0
 PERIPHLIBNAME	= STM32F4xx_DSP_StdPeriph_Lib
 PERIPHLIBDIR	= $(LIBSDIR)/$(PERIPHLIBNAME)_$(PERIPHLIBVER)
 CMSIS		= $(PERIPHLIBDIR)/Libraries/CMSIS
-CMSISTEMPLATE	= $(CMSIS)/Templates
 STM32F4LIB	= $(PERIPHLIBDIR)/Libraries/STM32F4xx_StdPeriph_Driver
 STM32F4TEMPLATE	= $(PERIPHLIBDIR)/Project/STM32F4xx_StdPeriph_Templates
 
@@ -19,7 +18,7 @@ CFLAGS		+= -I$(CMSIS)/Include -I$(CMSIS)/Device/ST/STM32F4xx/Include
 CFLAGS		+= -I$(STM32F4TEMPLATE)
 
 stm32f4libs:
-	$(MAKE) $(CMSISTEMPLATE)/system_stm32f4xx.o
-	$(AR) crs lib$(MCU).a $(CMSISTEMPLATE)/system_stm32f4xx.o
+	$(MAKE) $(STM32F4TEMPLATE)/system_stm32f4xx.o
+	$(AR) crs lib$(MCU).a $(STM32F4TEMPLATE)/system_stm32f4xx.o
 	for F in $(STM32F4LIB)/src/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(STM32F4LIB)/src/*.o
