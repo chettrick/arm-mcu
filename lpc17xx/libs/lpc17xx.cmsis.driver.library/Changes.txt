@@ -1,0 +1,16 @@
+Changes to NXP LPC17xx CMSIS Library
+------------------------------------
+
+$Id$
+
+1. Imported NXP LPC17xx CMSIS Library version LPC1700CMSIS_29July2011.
+
+2. Changed #include "lpc17xx.h" to #include "LPC17xx.h" in lpc17xx_clkpwr.h
+
+3. Changed #include "lpc17xx.h" to #include "LPC17xx.h" in lpc17xx_pinsel.h
+
+4. Undefine macros for TRUE and FALSE in lpc_types.h before the Bool typedef.
+
+5. Changed float to uint32_t in lpc17xx_systick.c.
+
+6. Defined CHECK_PARAM() as assert() in lpc17xx_libcfg_default.h.

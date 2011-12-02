@@ -58,7 +58,7 @@
 void SYSTICK_InternalInit(uint32_t time)
 {
 	uint32_t cclk;
-	float maxtime;
+	uint32_t maxtime;
 
 	cclk = SystemCoreClock;
 	/* With internal CPU clock frequency for LPC17xx is 'SystemCoreClock'
@@ -91,7 +91,7 @@ void SYSTICK_InternalInit(uint32_t time)
  **********************************************************************/
 void SYSTICK_ExternalInit(uint32_t freq, uint32_t time)
 {
-	float maxtime;
+	uint32_t maxtime;
 
 	/* With external clock frequency for LPC17xx is 'freq'
 	 * And limit 24 bit for RELOAD value
