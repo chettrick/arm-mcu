@@ -22,13 +22,13 @@ STLINKIF	= -c SWD
 endif
 endif
 
-include $(MCUDIR)/libs/stm32f4libs.mk
-
 # Phony targets
 
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
 
 # Build processor dependent support library
+
+include $(MCUDIR)/libs/stm32f4libs.mk
 
 LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
