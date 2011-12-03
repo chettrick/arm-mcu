@@ -72,10 +72,6 @@ int serial_open(char *name, unsigned int *subdevice)
 
       GPIO_PinModeSet(gpioPortD, 13, gpioModePushPull, 1);
       GPIO_PinOutClear(gpioPortD, 13);
-
-// Route UART pins to PE0 and PE1
-
-      UARTS[port]->ROUTE = USART_ROUTE_RXPEN|USART_ROUTE_TXPEN|USART_ROUTE_LOCATION_LOC1;
 #endif
       break;
 
@@ -95,6 +91,18 @@ int serial_open(char *name, unsigned int *subdevice)
   usartInit.stopbits = usartStopbits1;
 
   USART_InitAsync(UARTS[port], &usartInit);
+
+// Route UART pins
+
+  switch (port)
+  {
+    case 0 :
+
+// Route UART pins to PE0 and PE1
+
+      UARTS[port]->ROUTE = USART_ROUTE_RXPEN|USART_ROUTE_TXPEN|USART_ROUTE_LOCATION_LOC1;
+      break;
+  }
 
   return 0;
 }
