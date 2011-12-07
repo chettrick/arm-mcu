@@ -37,7 +37,11 @@ char *_sbrk_r(struct _reent *reent, size_t bytes)
 
 /* Initialize free space pointer if first time through. */
 
-  if (!freespace) freespace = __heap_start__;
+  if (!freespace)
+  {
+    freespace = __heap_start__;
+    memset(__heap_start__, 0, __heap_end__ - __heap_start__);
+  }
 
 /* Check for enough free space available */
 
