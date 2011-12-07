@@ -13,8 +13,10 @@ static const char revision[] = "$Id$";
 #include <string.h>
 #include <sys/stat.h>
 
-extern char __heap_start__[];	// Initialized by linker
-static char *heap_ptr;
+extern char __heap_start__[];	// Beginning of heap, address set by linker
+extern char __heap_end__[];	// End of heap, address set by linker
+
+static char *freespace;		// Pointer to free space (unclaimed heap area)
 
 // Calling this function from cpu_init() tricks the linker into using these
 // syscall functions instead of those in libc.a.
@@ -23,23 +25,36 @@ void __use_custom_syscalls(void)
 {
 }
 
-// Rudimentary heap manager
+// Rudimentary heap area manager.  The dynamic memory allocator in newlib
+// (malloc() and friends) calls this function to claim some or all of the
+// free space allocated for heap by the linker.  The heap area is bounded
+// by __heap_start__ and __heap_end__ which are set by the linker.  Note that
+// the memory allocator will never release memory it has claimed.
 
-char *_sbrk_r(struct _reent *reent, size_t incr)
+char *_sbrk_r(struct _reent *reent, size_t bytes)
 {
   char  *base;
 
-/* Initialize if first time through. */
+/* Initialize free space pointer if first time through. */
 
-  if (!heap_ptr) heap_ptr = __heap_start__;
+  if (!freespace) freespace = __heap_start__;
 
-  base = heap_ptr;      /*  Point to end of heap.                       */
-  heap_ptr += incr;     /*  Increase heap.                              */
+/* Check for enough free space available */
+
+  if (freespace + bytes > __heap_end__)
+  {
+    reent->_errno = ENOMEM;
+    return NULL;
+  }
+
+  base = freespace;	// Get address of free space
+
+  freespace += bytes;	// Claim heap area memory / Advance free space pointer
 
   reent->_errno = 0;
-  return base;          /*  Return pointer to start of new heap area.   */
+  return base;		// Return pointer to claimed heap area
 }
-
+
 // Basic I/O services
 
 int _open_r(struct _reent *reent, char *path, int flags, int mode)
@@ -53,7 +68,7 @@ int _close_r(struct _reent *reent, int fd)
   reent->_errno = 0;
   return device_close(fd);
 }
-
+
 long _read_r(struct _reent *reent, int fd, void *dst, size_t size)
 {
   reent->_errno = 0;
@@ -111,7 +126,7 @@ int __attribute__ ((weak)) isatty(int fd)
 {
   return device_isatty(fd);
 }
-
+
 void __attribute__ ((weak)) _exit(int status)
 {
   for (;;);
