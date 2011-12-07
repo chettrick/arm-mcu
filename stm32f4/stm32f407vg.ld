@@ -16,8 +16,17 @@ __ram_size__	= LENGTH(ram);
 __ccm_start__	= ORIGIN(ccm);
 __ccm_size__	= LENGTH(ccm);
 
-__heap_start__	= __ccm_start__;
+/* Stack is at the top of CCM/TCM RAM */
+
+__stack_size__	= __ccm_size__ / 2;
 __stack_end__	= __ccm_start__ + __ccm_size__;
+__stack_start__	= __stack_end__ - __stack_size__;
+
+/* Heap is at the bottom of CCM/TCM RAM */
+
+__heap_size__	= __ccm_size__ - __stack_size__;
+__heap_start__	= __ccm_start__;
+__heap_end__	= __stack_start__;
 
 SECTIONS
 {
