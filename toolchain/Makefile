@@ -7,7 +7,7 @@ INSTBASE	= $(shell pwd)/$(PKGNAME)
 TEMP		= /tmp
 TARGETNAME	= arm-elf
 
-BINUTILVER	= 2.21.1
+BINUTILVER	= 2.22
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
@@ -21,7 +21,7 @@ GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
 GCCSRC		= gcc-$(GCCVER)
 GCCBLD		= build/gcc-$(GCCVER)
 
-NEWLIBVER	= 1.19.0
+NEWLIBVER	= 1.20.0
 NEWLIBSERVER	= http://mirrors.kernel.org/sources.redhat.com/newlib
 NEWLIBDIST	= $(TEMP)/newlib-$(NEWLIBVER).tar.gz
 NEWLIBURL	= $(NEWLIBSERVER)/`basename $(NEWLIBDIST)`
@@ -70,7 +70,6 @@ source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIB
 	tar xjf $(BINUTILDIST)
 	tar xjf $(GCCDIST)
 	tar xzf $(NEWLIBDIST)
-	cd $(NEWLIBSRC) ; patch -p0 <../newlib.patch
 	tar xjf $(GDBDIST)
 	ln -s "../$(NEWLIBSRC)/newlib" $(GCCSRC)/newlib
 	ln -s "../$(NEWLIBSRC)/libgloss" $(GCCSRC)/libgloss
