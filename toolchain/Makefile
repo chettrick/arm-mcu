@@ -32,7 +32,7 @@ LIBMPDFURL	= $(NEWLIBSERVER)/libm.pdf
 LIBCPDF		= $(TEMP)/libc.pdf
 LIBMPDF		= $(TEMP)/libm.pdf
 
-GDBVER		= 7.3.1
+GDBVER		= 7.4
 GDBSERVER	= http://ftp.gnu.org/gnu/gdb
 GDBDIST		= $(TEMP)/gdb-$(GDBVER).tar.bz2
 GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
