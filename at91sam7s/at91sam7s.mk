@@ -17,6 +17,7 @@ LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 ifeq ($(BOARDNAME), OLIMEX_SAM7_P256)
 MCU		= at91sam7s
 JLINKMCU	= at91sam7s512
+PG4UWPRJ	= at91sam7s256.eprj
 endif
 
 # Phony targets
