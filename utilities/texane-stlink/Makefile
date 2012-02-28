@@ -2,7 +2,7 @@
 
 # $Id$
 
-STLINKURL	= git://github.com/texane/stlink.git
+STLINKURL	= http://github.com/texane/stlink.git
 STLINKSRC	= stlink
 STLINKGDB	= stlink-gdbserver
 STLINKFLASH	= stlink-flash
@@ -21,7 +21,7 @@ $(STLINKSRC):
 $(STLINKGDB): $(STLINKSRC)
 	$(MAKE) -C $(STLINKSRC)
 	cp $(STLINKSRC)/gdbserver/st-util		$(STLINKGDB)
-	cp $(STLINKSRC)/flash/flash			$(STLINKFLASH)
+	cp $(STLINKSRC)/flash/st-flash			$(STLINKFLASH)
 
 # Install stlink-gdbserver
 
