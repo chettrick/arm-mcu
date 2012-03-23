@@ -3,7 +3,7 @@
 # $Id$
 
 Summary: GCC toolchain for bare-machine ARM Microcontrollers
-Name: armtools
+Name: @@PKGNAME@@
 Version: @@VERSION@@
 Release: @@RELEASE@@
 Group: Utilities
@@ -15,7 +15,7 @@ Source: %{name}-%{version}.tar.gz
 GCC toolchain for bare-machine ARM microcontrollers
 
 %post
-chmod -R ugo-w /usr/local/arm-tools
+chmod -R ugo-w /usr/local/@@PKGNAME@@
 
 %files
 %defattr(-,root,root,555)

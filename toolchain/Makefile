@@ -2,10 +2,11 @@
 
 # $Id$
 
-PKGNAME		= arm-tools
+ABI		= elf
+TARGETNAME	= arm-$(ABI)
+PKGNAME		= $(TARGETNAME)-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 TEMP		= /tmp
-TARGETNAME	= arm-elf
 
 BINUTILVER	= 2.22
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
@@ -196,13 +197,13 @@ endif
 
 fakeroot: readme.done
 	mkdir -p fakeroot/usr/local
-	cp -R -p arm-tools fakeroot/usr/local
+	cp -R -p $(PKGNAME) fakeroot/usr/local
 
 specfile: specfile.template fakeroot
-	sed s/@@VERSION@@/$(VERSION)/g <specfile.template | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
-	find fakeroot/usr/local/arm-tools -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
-	find fakeroot/usr/local/arm-tools -type f | cut -c 9- >>specfile
-	find fakeroot/usr/local/arm-tools -type l | cut -c 9- >>specfile
+	sed s/@@PKGNAME@@/$(PKGNAME)/g <specfile.template | sed s/@@VERSION@@/$(VERSION)/g | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
+	find fakeroot/usr/local/$(PKGNAME) -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
+	find fakeroot/usr/local/$(PKGNAME) -type f | cut -c 9- >>specfile
+	find fakeroot/usr/local/$(PKGNAME) -type l | cut -c 9- >>specfile
 
 rpm: specfile
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
