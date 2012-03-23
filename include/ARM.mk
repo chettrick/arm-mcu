@@ -4,8 +4,9 @@
 
 # Toolchain definitions
 
-ARMTOOLS	?= /usr/local/arm-tools
-CROSS_COMPILE	?= $(ARMTOOLS)/bin/arm-elf-
+ABI		?= eabi
+ARMTOOLS	?= /usr/local/arm-$(ABI)-tools
+CROSS_COMPILE	?= $(ARMTOOLS)/bin/arm-$(ABI)-
 
 CC		= $(CROSS_COMPILE)gcc
 LD		= $(CROSS_COMPILE)ld
