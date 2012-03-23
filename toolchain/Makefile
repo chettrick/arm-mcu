@@ -2,7 +2,7 @@
 
 # $Id$
 
-ABI		= elf
+ABI		= eabi
 TARGETNAME	= arm-$(ABI)
 PKGNAME		= $(TARGETNAME)-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
