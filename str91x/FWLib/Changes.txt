@@ -24,3 +24,5 @@ $Id$
 
 9. Added (void) tmp; to ADC_ClearFlag() in 91x_adc.c to avoid compiler
    warning from GCC 4.6.
+
+10. Undefine TRUE and FALSE in 91x_type.h before defining the bool type.

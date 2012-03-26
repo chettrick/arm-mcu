@@ -34,6 +34,14 @@
   typedef volatile signed short    vs16;
   typedef volatile signed char     vs8;
 
+#ifdef TRUE
+#undef TRUE
+#endif
+
+#ifdef FALSE
+#undef FALSE
+#endif
+
 typedef enum { FALSE = 0, TRUE  = !FALSE } bool;
 
 typedef enum { RESET = 0, SET   = !RESET } FlagStatus, ITStatus;
