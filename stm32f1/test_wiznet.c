@@ -101,7 +101,7 @@ int main(void)
 
   puts("\033[H\033[2JSTM32F1 WizNet Network Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
-  printf("\nCPU Freq:%ld Hz  Compiler:%s\n\n", CPUFREQ, __VERSION__);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s %s\n\n", CPUFREQ, __VERSION__, __ABI__);
 
 // Initialize System Tick with 10 ms time interval
 
