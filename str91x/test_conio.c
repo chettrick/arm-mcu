@@ -72,7 +72,7 @@ int main(void)
     cgets(buf, sizeof(buf));
     if (strlen(buf)) if (buf[strlen(buf)-1] == '\n') buf[strlen(buf)-1] = 0;
     if (!strcasecmp(buf, "next")) break;
-    printf("[cgets] You entered %lu bytes, '%s'\n\n", strlen(buf), buf);
+    printf("[cgets] You entered %u bytes, '%s'\n\n", (unsigned) strlen(buf), buf);
   }
 
 // Test putchar()
@@ -94,7 +94,7 @@ int main(void)
     fgets(buf, sizeof(buf), stdin);
     if (strlen(buf)) if (buf[strlen(buf)-1] == '\n') buf[strlen(buf)-1] = 0;
     if (!strcasecmp(buf, "next")) break;
-    printf("[fgets] You entered %lu bytes, '%s'\n\n", strlen(buf), buf);
+    printf("[fgets] You entered %u bytes, '%s'\n\n", (unsigned) strlen(buf), buf);
   }
 
   putchar('\n');
