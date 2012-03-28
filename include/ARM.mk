@@ -55,7 +55,7 @@ default_catch:
 
 # These are the target suffixes
 
-.SUFFIXES: .asm .c .bin .elf .hex .o .s .S
+.SUFFIXES: .asm .c .bin .dmp .elf .hex .o .s .S
 
 # Don't delete intermediate files
 
@@ -78,6 +78,9 @@ default_catch:
 
 .elf.hex:
 	$(OBJCOPY) -S -O ihex --gap-fill=0 $< $@
+
+.bin.dmp:
+	hexdump -C $< > $@
 
 .s.o:
 	$(CC) $(CFLAGS) -c -o $@ -c $<
@@ -136,7 +139,7 @@ endif
 clean:
 	cd $(MCUDIR) && $(MAKE) clean_$(MCU)
 	$(FIND) * -name '*.o' -exec rm {} ";"
-	rm -f *.a *.asm *.bin *.elf *.hex *.log *.map *.stackdump *.tmp Default.ini
+	rm -f *.a *.asm *.bin *.dmp *.elf *.hex *.log *.map *.stackdump *.tmp Default.ini
 	$(MAKE) common_clean
 ifeq ($(WITH_FREERTOS), yes)
 	$(MAKE) freertos_clean
