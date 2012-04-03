@@ -2,8 +2,7 @@
 
 # $Id$
 
-CPU		= cortex-m3
-CPUFLAGS	= -mthumb
+CPUFLAGS	+= -mcpu=cortex-m3 -mthumb
 TEXTBASE	?= 0x00000000
 
 CFLAGS		+= -DEFM32
