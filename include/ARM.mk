@@ -27,14 +27,14 @@ FLASHWRITEADDR	?= 0x00000000
 
 # Compiler and linker flags
 
-CPUFLAGS	?=
+CPUFLAGS	+= -D$(MCU) -D$(BOARDNAME)
 CONFIGFLAGS	?=
 DEBUGFLAGS	?= -g
 OPTFLAGS	?= -O0
 IOFLAGS		?= -DINTEGER_STDIO
-CFLAGS		+= -Wall -mcpu=$(CPU) $(CPUFLAGS) -D$(MCU) -D$(BOARDNAME) -ffunction-sections
+CFLAGS		+= -Wall -ffunction-sections
 CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDIR)
-CFLAGS		+= $(CONFIGFLAGS) $(DEBUGFLAGS) $(OPTFLAGS) $(IOFLAGS) $(DEBUG) $(EXTRAFLAGS)
+CFLAGS		+= $(CPUFLAGS) $(OPTFLAGS) $(CONFIGFLAGS) $(IOFLAGS) $(DEBUGFLAGS) $(EXTRAFLAGS)
 LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDIR) -l$(MCU) -Wl,-Map=$*.map,--cref,--entry=_start,--gc-sections $(EXTRAOBJS)
 
 # GDB definitions
