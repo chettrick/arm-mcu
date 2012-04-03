@@ -2,8 +2,7 @@
 
 # $Id$
 
-CPU		= arm7tdmi
-CPUFLAGS	=
+CPUFLAGS	+= -mcpu=arm7tdmi -marm
 FLASHWRITEADDR	= 0x00100000
 TEXTBASE	?= 0x00000000
 
