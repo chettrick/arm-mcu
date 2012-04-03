@@ -2,8 +2,7 @@
 
 # $Id$
 
-CPU		= arm9
-CPUFLAGS	=
+CPUFLAGS	+= -mcpu=arm9 -marm
 TEXTBASE	?= 0x00000000
 
 FWLIB		= $(MCUDIR)/FWLib
