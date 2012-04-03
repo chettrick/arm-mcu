@@ -2,8 +2,7 @@
 
 # $Id$
 
-CPU		= arm7tdmi
-CPUFLAGS	=
+CPUFLAGS	+= -mcpu=arm7tdmi -marm
 MCU		= $(MCUFAMILY)
 TEXTBASE	?= 0x00000000
 
