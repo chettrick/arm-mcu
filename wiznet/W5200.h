@@ -2,6 +2,13 @@
 
 // $Id$
 
+#ifndef _W5200_H
+#define _W5200_H
+
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 #include <stdint.h>
 
 #define W5200_MAX_SOCKETS	8
@@ -133,3 +140,6 @@ int W5200_write_transmit_ram(const uint32_t socket,
                              const uint16_t rampointer,
                              uint8_t *buf,
                              const size_t count);
+
+_END_STD_C
+#endif

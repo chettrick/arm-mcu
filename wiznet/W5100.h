@@ -2,6 +2,13 @@
 
 // $Id$
 
+#ifndef _W5100_H
+#define _W5100_H
+
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 #include <stdint.h>
 
 #define MAX_SOCKETS		4
@@ -66,3 +73,6 @@
 int W5100_write_register(const uint16_t address, const uint8_t data);
 
 int W5100_read_register(const uint16_t address, uint8_t *data);
+
+_END_STD_C
+#endif

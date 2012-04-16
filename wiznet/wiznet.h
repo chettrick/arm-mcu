@@ -2,6 +2,13 @@
 
 // $Id$
 
+#ifndef _WIZNET_H
+#define _WIZNET_H
+
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -62,3 +69,6 @@ int wiznet_bootp(ipv4address_t address,
                  ipv4address_t subnet,
                  ipv4address_t gateway,
                  ipv4address_t nameserver);
+
+_END_STD_C
+#endif
