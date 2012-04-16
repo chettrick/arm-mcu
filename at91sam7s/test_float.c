@@ -22,7 +22,7 @@ int main(void)
 
   puts("\033[H\033[2JAT91SAM7S Floating Point Arithmetic Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
-  printf("\nCPU Freq:%ld Hz  Compiler:%s %s\n\n", CPUFREQ, __VERSION__, __ABI__);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", CPUFREQ, __COMPILER__, __VERSION__, __ABI__);
 
   x = 1.0;
   y = 2.0;

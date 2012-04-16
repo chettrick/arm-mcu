@@ -17,6 +17,18 @@
 #define FALSE			0
 #endif
 
+// Define compiler string
+
+#ifdef __GNUC__
+#ifdef __cplusplus
+#define __COMPILER__		"g++"
+#else
+#define __COMPILER__		"gcc"
+#endif
+#else
+#define __COMPILER__		"unknown"
+#endif
+
 // Define ABI string
 
 #ifdef __ARM_EABI__

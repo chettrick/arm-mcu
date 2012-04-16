@@ -9,6 +9,8 @@ static const char revision[] = "$Id$";
 
 volatile int TimerFlag = FALSE;
 
+_BEGIN_STD_C
+
 __attribute__ ((__interrupt__)) void TIM1_IRQHandler(void)
 {
   static int ticks = 0;
@@ -23,6 +25,8 @@ __attribute__ ((__interrupt__)) void TIM1_IRQHandler(void)
   TIM1->CNTR = 0x0000;		// Reset counter
   VIC0->VAR = 0;		// Signal end of interrupt
 }
+
+_END_STD_C
 
 int main(void)
 {
@@ -39,7 +43,7 @@ int main(void)
 
   puts("\033[H\033[2JSTR91FAW44 Timer Interrupt Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
-  printf("\nCPU Freq:%ld Hz  Compiler:%s %s\n\n", CPUFREQ, __VERSION__, __ABI__);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", CPUFREQ, __COMPILER__, __VERSION__, __ABI__);
 
 /* Configure LED(s) */
 

@@ -69,7 +69,7 @@ int main(void)
 
   puts("\033[H\033[2JSTM32F4 FreeRTOS Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
-  printf("\nCPU Freq:%ld Hz  Compiler:%s %s  FreeRTOS:%s\n\n", CPUFREQ, __VERSION__, __ABI__,
+  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s  FreeRTOS:%s\n\n", CPUFREQ, __COMPILER__, __VERSION__, __ABI__,
     tskKERNEL_VERSION_NUMBER);
 
 // Create mutex to arbitrate console output

@@ -12,6 +12,8 @@ static const char revision[] = "$Id$";
 volatile int TimerCounter = 0;
 volatile int TimerFlag = FALSE;
 
+_BEGIN_STD_C
+
 void SysTick_Handler(void)
 {
   if (++TimerCounter == SYSTICKRATE)
@@ -21,6 +23,8 @@ void SysTick_Handler(void)
   }
 }
 
+_END_STD_C
+
 int main(void)
 {
   cpu_init(DEFAULT_CPU_FREQ);
@@ -29,7 +33,7 @@ int main(void)
 
   puts("\033[H\033[2JSTM32F1 System Tick Interrupt Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
-  printf("\nCPU Freq:%ld Hz  Compiler:%s %s\n\n", CPUFREQ, __VERSION__, __ABI__);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", CPUFREQ, __COMPILER__, __VERSION__, __ABI__);
 
 // Configure LED(s)
 

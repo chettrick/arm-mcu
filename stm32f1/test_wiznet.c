@@ -64,6 +64,8 @@ static const char revision[] = "$Id$";
 
 const macaddress_t macaddress	= { 0x02, 0x00, 0x00, 0x00, 0x00, 0x01 };
 
+_BEGIN_STD_C
+
 static volatile uint32_t delaycounter = 0;
 
 void SysTick_Handler(void)
@@ -73,6 +75,8 @@ void SysTick_Handler(void)
 
   wiznet_tick();	// Call WizNet driver tick routine
 }
+
+_END_STD_C
 
 void delay(uint32_t milliseconds)
 {
@@ -101,7 +105,7 @@ int main(void)
 
   puts("\033[H\033[2JSTM32F1 WizNet Network Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
-  printf("\nCPU Freq:%ld Hz  Compiler:%s %s\n\n", CPUFREQ, __VERSION__, __ABI__);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", CPUFREQ, __COMPILER__, __VERSION__, __ABI__);
 
 // Initialize System Tick with 10 ms time interval
 
