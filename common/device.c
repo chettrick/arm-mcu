@@ -510,9 +510,9 @@ int device_read_cooked(int fd, char *s, unsigned int count)
       case '\r' :
       case '\n' :
         if (fd > 0)
-          device_write_raw(fd, "\r\n", 2);
+          device_write_raw(fd, (char *) "\r\n", 2);
         else
-          device_write_raw(1, "\r\n", 2);
+          device_write_raw(1, (char *) "\r\n", 2);
 
         *p = '\n';
 
@@ -525,9 +525,9 @@ int device_read_cooked(int fd, char *s, unsigned int count)
           *p-- = 0;
 
           if (fd > 0)
-            device_write_raw(fd, "\b \b", 3);
+            device_write_raw(fd, (char *) "\b \b", 3);
           else
-            device_write_raw(1, "\b \b", 3);
+            device_write_raw(1, (char *) "\b \b", 3);
         }
         break;
 
@@ -747,7 +747,7 @@ int device_write_cooked(int fd, char *s, unsigned int count)
       i += len;
       s += len;
 
-      len = device_write_raw(fd, "\r\n", 2);	// Write CR/LF
+      len = device_write_raw(fd, (char *) "\r\n", 2);	// Write CR/LF
       if (len < 0) return len;
 
       i++;
