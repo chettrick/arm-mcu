@@ -23,7 +23,6 @@ FIND		?= find
 MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
 STARTUP		?= $(MCUDIR)/$(MCU).o
 LINKERSCRIPT	?= $(MCUDIR)/$(MCU).ld
-FLASHWRITEADDR	?= 0x00000000
 
 # Compiler and linker flags
 

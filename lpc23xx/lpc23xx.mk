@@ -2,8 +2,10 @@
 
 # $Id$
 
-CPUFLAGS	+= -mcpu=arm7tdmi -marm
 MCU		= $(MCUFAMILY)
+
+CPUFLAGS	+= -mcpu=arm7tdmi -marm
+FLASHWRITEADDR	?= 0x00000000
 TEXTBASE	?= 0x00000000
 
 CFLAGS		+= 

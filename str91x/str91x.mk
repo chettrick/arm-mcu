@@ -3,6 +3,7 @@
 # $Id$
 
 CPUFLAGS	+= -mcpu=arm9 -marm
+FLASHWRITEADDR	?= 0x00000000
 TEXTBASE	?= 0x00000000
 
 FWLIB		= $(MCUDIR)/FWLib

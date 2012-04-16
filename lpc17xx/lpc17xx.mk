@@ -2,8 +2,10 @@
 
 # $Id$
 
-CPUFLAGS	+= -mcpu=cortex-m3 -mthumb
 MCU		= $(MCUFAMILY)
+
+CPUFLAGS	+= -mcpu=cortex-m3 -mthumb
+FLASHWRITEADDR	?= 0x00000000
 TEXTBASE	?= 0x00000000
 
 CFLAGS		+= -DLPC17XX

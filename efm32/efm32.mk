@@ -3,6 +3,7 @@
 # $Id$
 
 CPUFLAGS	+= -mcpu=cortex-m3 -mthumb
+FLASHWRITEADDR	?= 0x00000000
 TEXTBASE	?= 0x00000000
 
 CFLAGS		+= -DEFM32
