@@ -9,6 +9,7 @@ ARMTOOLS	?= /usr/local/arm-$(ABI)-tools
 CROSS_COMPILE	?= $(ARMTOOLS)/bin/arm-$(ABI)-
 
 CC		= $(CROSS_COMPILE)gcc
+CXX		= $(CROSS_COMPILE)g++
 LD		= $(CROSS_COMPILE)ld
 AR		= $(CROSS_COMPILE)ar
 STRIP		= $(CROSS_COMPILE)strip
@@ -35,6 +36,7 @@ EXTRAFLAGS	?=
 CFLAGS		+= -Wall -ffunction-sections
 CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDIR)
 CFLAGS		+= $(CPUFLAGS) $(OPTFLAGS) $(CONFIGFLAGS) $(IOFLAGS) $(DEBUGFLAGS) $(EXTRAFLAGS)
+CXXFLAGS	+= -fpermissive
 LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDIR) -l$(MCU) -Wl,-Map=$*.map,--cref,--entry=_start,--gc-sections $(EXTRAOBJS)
 
 # GDB definitions
@@ -55,7 +57,7 @@ default_catch:
 
 # These are the target suffixes
 
-.SUFFIXES: .asm .c .bin .dmp .elf .hex .o .s .S
+.SUFFIXES: .asm .c .cpp .bin .dmp .elf .hex .o .s .S
 
 # Don't delete intermediate files
 
@@ -65,6 +67,9 @@ default_catch:
 
 .c.o:
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(CFLAGS) -c -o $@ $<
 
 .o.elf:
 	cd $(MCUDIR) && $(MAKE) $(MCU).o lib$(MCU).a

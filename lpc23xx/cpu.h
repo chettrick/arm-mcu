@@ -2,6 +2,13 @@
 
 // $Id$
 
+#ifndef _CPU_H
+#define _CPU_H
+
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 #include <arm.h>
 #include <device.h>
 #include <interrupt.h>
@@ -24,3 +31,6 @@
 
 extern void cpu_init(unsigned long int frequency);
 extern unsigned long int CPUFREQ;
+
+_END_STD_C
+#endif

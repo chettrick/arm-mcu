@@ -2,6 +2,13 @@
 
 // $Id$
 
+#ifndef _GPIOPINS_H
+#define _GPIOPINS_H
+
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 // These services provide a simple and efficient mechanism for software to
 // control individual GPIO pins in an asynchronous fashion, where each GPIO pin
 // is independent of any other.  This API is NOT suitable for situations where
@@ -584,3 +591,6 @@ int gpiopin_configure(unsigned int pin, gpiopin_direction_t direction);
 #define GPIOPIN111	111
 #define GPIOPIN111IN	(*((unsigned long int *) 0x4224013C))
 #define GPIOPIN111OUT	(*((unsigned long int *) 0x422401BC))
+
+_END_STD_C
+#endif

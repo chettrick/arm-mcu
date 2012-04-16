@@ -5,6 +5,10 @@
 #ifndef LPC23xx_INTERRUPT__H
 #define LPC23xx_INTERRUPT__H
 
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 // Interrupt sources
 
 #define INT_WDT		0	// Watchdog timer
@@ -70,4 +74,5 @@ static inline void PutCPSR(unsigned int x)
 #define DISABLE_INTERRUPTS(mask)	PutCPSR(GetCPSR() | mask)
 #define ENABLE_INTERRUPTS(mask)		PutCPSR(GetCPSR() & ~mask)
 
+_END_STD_C
 #endif // LPC23xx_INTERRUPT__H

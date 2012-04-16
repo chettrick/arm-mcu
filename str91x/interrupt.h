@@ -5,6 +5,10 @@
 #ifndef STR912FA_INTERRUPT_H
 #define STR912FA_INTERRUPT_H
 
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 // Read CPSR
 
 static inline unsigned int GetCPSR(void)
@@ -29,4 +33,5 @@ static inline void PutCPSR(unsigned int x)
 #define DISABLE_INTERRUPTS(mask)	PutCPSR(GetCPSR() | mask)
 #define ENABLE_INTERRUPTS(mask)		PutCPSR(GetCPSR() & ~mask)
 
+_END_STD_C
 #endif // STR912FA_INTERRUPT_H
