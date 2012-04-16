@@ -10,11 +10,10 @@
 #define _DEVICE_H
 
 #include <_ansi.h>
-
-_BEGIN_STD_C
-
 #include <unistd.h>
 #include <sys/stat.h>
+
+_BEGIN_STD_C
 
 #define MAX_DEVICES		16
 #define DEVICE_NAME_SIZE	8

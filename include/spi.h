@@ -6,10 +6,9 @@
 #define _SPI_H
 
 #include <_ansi.h>
+#include <stdint.h>
 
 _BEGIN_STD_C
-
-#include <stdint.h>
 
 #define SPI_BIGENDIAN		1
 #define SPI_LITTLEENDIAN	0

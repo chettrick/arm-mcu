@@ -7,8 +7,6 @@
 
 #include <_ansi.h>
 
-_BEGIN_STD_C
-
 #define errno_r			(*(__errno()))
 
 #ifndef TRUE
@@ -41,6 +39,8 @@ _BEGIN_STD_C
 #endif
 
 // Trick linker into using our syscall functions
+
+_BEGIN_STD_C
 
 extern void __use_custom_syscalls(void);
 
