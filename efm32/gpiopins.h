@@ -5,7 +5,7 @@
 #ifndef _GPIOPINS_H
 #define _GPIOPINS_H
 
-_BEGIN_STD_C
+#include <_ansi.h>
 
 // These services provide a simple and efficient mechanism for software to
 // control individual GPIO pins in an asynchronous fashion, where each GPIO pin
@@ -21,6 +21,8 @@ _BEGIN_STD_C
 // some Cortex-M3 devices (such as the EFM32 and STM32) do not have a single
 // GPIO register that can be both written to and read from, thus preventing
 // us from just defining a macro "GPIOn" for each GPIO pin.
+
+_BEGIN_STD_C
 
 typedef enum
 {

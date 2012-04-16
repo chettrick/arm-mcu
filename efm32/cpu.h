@@ -6,9 +6,6 @@
 #define _CPU_H
 
 #include <_ansi.h>
-
-_BEGIN_STD_C
-
 #include <arm.h>
 #include <device.h>
 #include <gpiopins.h>
@@ -53,6 +50,8 @@ _BEGIN_STD_C
 #ifndef CONSOLE_PORT
 #define CONSOLE_PORT		"com1:115200,n,8,1"
 #endif
+
+_BEGIN_STD_C
 
 extern void cpu_init(unsigned long int frequency);
 

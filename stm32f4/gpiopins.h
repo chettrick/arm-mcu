@@ -7,8 +7,6 @@
 
 #include <_ansi.h>
 
-_BEGIN_STD_C
-
 // These services provide a simple and efficient mechanism for software to
 // control individual GPIO pins in an asynchronous fashion, where each GPIO pin
 // is independent of any other.  This API is NOT suitable for situations where
@@ -23,6 +21,8 @@ _BEGIN_STD_C
 // some Cortex-M4 devices (such as the STM32F4) do not have a single
 // GPIO register that can be both written to and read from, thus preventing
 // us from just defining a macro "GPIOn" for each GPIO pin.
+
+_BEGIN_STD_C
 
 typedef enum
 {
