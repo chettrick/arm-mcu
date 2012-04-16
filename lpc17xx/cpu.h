@@ -6,7 +6,6 @@
 #define _CPU_H
 
 #include <_ansi.h>
-
 #include <arm.h>
 #include <device.h>
 #include <gpiopins.h>
