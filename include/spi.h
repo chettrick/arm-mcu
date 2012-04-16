@@ -2,6 +2,13 @@
 
 // $Id$
 
+#ifndef _SPI_H
+#define _SPI_H
+
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 #include <stdint.h>
 
 #define SPI_BIGENDIAN		1
@@ -21,3 +28,6 @@ int spimaster_transfer(uint32_t port,
                        uint32_t txcount,
                        uint8_t *rxbuf,
                        uint32_t rxcount);
+
+_END_STD_C
+#endif

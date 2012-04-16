@@ -8,6 +8,13 @@
 
 // $Id$
 
+#ifndef _SOCKET_H
+#define _SOCKET_H
+
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 extern int socket_open(char *name, unsigned int *subdevice);
 
 extern int socket_close(unsigned int subdevice);
@@ -19,3 +26,6 @@ extern int socket_read(unsigned int subdevice, char *buf, unsigned int count);
 extern int socket_write_ready(unsigned int subdevice);
 
 extern int socket_read_ready(unsigned int subdevice);
+
+_END_STD_C
+#endif

@@ -2,6 +2,13 @@
 
 // $Id$
 
+#ifndef _INET_H
+#define _INET_H
+
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 #include <sys/param.h>
 
 // Network protocol macros
@@ -31,3 +38,6 @@
 char *inet_ntop(int af, const void *src, char *dst, int size);
 
 int inet_pton(int af, const char *src, void *dst);
+
+_END_STD_C
+#endif

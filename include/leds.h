@@ -2,6 +2,13 @@
 
 // $Id$
 
+#ifndef _LEDS_H
+#define _LEDS_H
+
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 // LED masks (not all are implemented)
 
 #define LED1	0x01
@@ -26,3 +33,6 @@ unsigned long int LEDS_get(void);
 // A 0 bit in the mask indicates the LED should be turned off.
 
 void LEDS_set(unsigned long int mask);
+
+_END_STD_C
+#endif

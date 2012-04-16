@@ -6,6 +6,13 @@
 
 // $Id$
 
+#ifndef _DEVICE_H
+#define _DEVICE_H
+
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 #include <unistd.h>
 #include <sys/stat.h>
 
@@ -116,3 +123,6 @@ int device_stat(int fd, struct stat *st);
 #define putch(c)	(device_putc(fileno(stdout), c))
 #define cgets(s, count)	(device_read(fileno(stdin), s, count))
 #define cputs(s)	(device_write(fileno(stdout), s, strlen(s)))
+
+_END_STD_C
+#endif

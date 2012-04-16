@@ -6,6 +6,13 @@
 
 // $Id$
 
+#ifndef _SERIAL_H
+#define _SERIAL_H
+
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 /* Initialize serial port */
 
 int serial_open(char *name, unsigned int *subdevice);
@@ -33,3 +40,6 @@ int serial_rxready(unsigned int port);
 /* Read data from the serial port */
 
 int serial_read(unsigned int port, char *buf, unsigned int count);
+
+_END_STD_C
+#endif

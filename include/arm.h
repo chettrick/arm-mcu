@@ -5,6 +5,10 @@
 #ifndef _ARM_H
 #define _ARM_H
 
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 #define errno_r			(*(__errno()))
 
 #ifndef TRUE
@@ -39,4 +43,6 @@
 // Trick linker into using our syscall functions
 
 extern void __use_custom_syscalls(void);
+
+_END_STD_C
 #endif
