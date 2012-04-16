@@ -76,13 +76,13 @@ int _close_r(struct _reent *reent, int fd)
 long _read_r(struct _reent *reent, int fd, void *dst, size_t size)
 {
   reent->_errno = 0;
-  return device_read(fd, dst, size);
+  return device_read(fd, (char *) dst, size);
 }
 
 long _write_r(struct _reent *reent, int fd, void *src, size_t size)
 {
   reent->_errno = 0;
-  return device_write(fd, src, size);
+  return device_write(fd, (char *) src, size);
 }
 
 // File system support services

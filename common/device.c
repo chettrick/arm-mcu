@@ -635,7 +635,7 @@ int device_getc(int fd)
 int device_write_raw(int fd, char *s, unsigned int count)
 {
   int len;
-  int i;
+  unsigned int i;
 
   errno_r = 0;
 
@@ -694,7 +694,7 @@ int device_write_raw(int fd, char *s, unsigned int count)
 int device_write_cooked(int fd, char *s, unsigned int count)
 {
   int len;
-  int i;
+  unsigned int i;
   char *p;
 
   errno_r = 0;
@@ -729,7 +729,7 @@ int device_write_cooked(int fd, char *s, unsigned int count)
 
   for (i = 0; i < count;)
   {
-    p = memchr(s, '\n', count - i);
+    p = (char *) memchr((void *) s, '\n', count - i);
 
     if (p == NULL)
     {

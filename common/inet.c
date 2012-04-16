@@ -11,7 +11,7 @@
 
 char *inet_ntop(int af, const void *src, char *dst, int size)
 {
-  const uint8_t *bytes = src;
+  const uint8_t *bytes = (uint8_t *) src;
 
   if ((src == NULL) || (dst == NULL))
   {
@@ -42,7 +42,7 @@ char *inet_ntop(int af, const void *src, char *dst, int size)
 
 int inet_pton(int af, const char *src, void *dst)
 {
-  uint8_t *bytes = dst;
+  uint8_t *bytes = (uint8_t *) dst;
   unsigned int a, b, c, d;
 
   switch (af)
