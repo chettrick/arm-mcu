@@ -6,9 +6,6 @@
 #define _W5100_H
 
 #include <_ansi.h>
-
-_BEGIN_STD_C
-
 #include <stdint.h>
 
 #define MAX_SOCKETS		4
@@ -69,6 +66,8 @@ _BEGIN_STD_C
 #define W5100_IMR_PPPOE_CLOSE	0x20
 
 // W5100 specific driver functions
+
+_BEGIN_STD_C
 
 int W5100_write_register(const uint16_t address, const uint8_t data);
 

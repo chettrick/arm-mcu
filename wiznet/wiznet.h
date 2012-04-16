@@ -6,9 +6,6 @@
 #define _WIZNET_H
 
 #include <_ansi.h>
-
-_BEGIN_STD_C
-
 #include <stddef.h>
 #include <stdint.h>
 
@@ -19,6 +16,8 @@ _BEGIN_STD_C
 #ifndef FALSE
 #define FALSE   0
 #endif
+
+_BEGIN_STD_C
 
 typedef uint8_t macaddress_t[6];		// Ethernet MAC address
 

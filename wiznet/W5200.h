@@ -6,9 +6,6 @@
 #define _W5200_H
 
 #include <_ansi.h>
-
-_BEGIN_STD_C
-
 #include <stdint.h>
 
 #define W5200_MAX_SOCKETS	8
@@ -124,6 +121,8 @@ _BEGIN_STD_C
 #define W5200_RAMSIZE_CONFIG_EIGHTH	0x02
 
 // W5200 specific driver functions
+
+_BEGIN_STD_C
 
 int W5200_write_register(const uint16_t address,
                          const uint8_t data);
