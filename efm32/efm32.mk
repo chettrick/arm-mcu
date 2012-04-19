@@ -26,7 +26,7 @@ include $(MCUDIR)/$(MCU).mk
 
 # Build processor dependent support library
 
-include libs/efm32libs.mk
+include $(MCUDIR)/libs/efm32libs.mk
 
 LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
