@@ -2,7 +2,7 @@
 
 # $Id$
 
-ARMSRC		= ..
+ARMSRC		?= ..
 MCUFAMILY	= efm32
 BOARDNAME	?= EFM32_G8XX_STK
 

@@ -2,7 +2,7 @@
 
 # $Id$
 
-ARMSRC		= ..
+ARMSRC		?= ..
 MCUFAMILY	= at91sam7s
 BOARDNAME	?= OLIMEX_SAM7_P256
 
