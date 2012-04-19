@@ -25,9 +25,11 @@ MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
 STARTUP		?= $(MCUDIR)/$(MCU).o
 LINKERSCRIPT	?= $(MCUDIR)/$(MCU).ld
 
+MCUFAMILYNAME	:= $(shell echo $(MCUFAMILY) | tr '[a-z]' '[A-Z]')
+
 # Compiler and linker flags
 
-CPUFLAGS	+= -D$(MCU) -D$(BOARDNAME)
+CPUFLAGS	+= -D$(MCU) -D$(BOARDNAME) -DMCUFAMILYNAME='"$(MCUFAMILYNAME)"'
 CONFIGFLAGS	?=
 DEBUGFLAGS	?= -g
 OPTFLAGS	?= -O0
@@ -142,9 +144,11 @@ endif
 # Clean out working files
 
 clean:
-	cd $(MCUDIR) && $(MAKE) clean_$(MCU)
 	$(FIND) * -name '*.o' -exec rm {} ";"
 	rm -f *.a *.asm *.bin *.dmp *.elf *.hex *.log *.map *.stackdump *.tmp Default.ini
+	cd $(MCUDIR) && $(MAKE) clean_$(MCU)
+	cd $(MCUDIR) && $(FIND) * -name '*.o' -exec rm {} ";"
+	cd $(MCUDIR) && rm -f *.a *.asm *.bin *.dmp *.elf *.hex *.log *.map *.stackdump *.tmp Default.ini
 	$(MAKE) common_clean
 ifeq ($(WITH_FREERTOS), yes)
 	$(MAKE) freertos_clean
