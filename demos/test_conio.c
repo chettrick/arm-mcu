@@ -1,4 +1,4 @@
-/* Simple serial console I/O test program for the STM32F1 ARM MCU */
+/* Simple serial console I/O test program */
 
 // $Id$
 
@@ -19,7 +19,7 @@ int main(void)
 
   serial_stdio(CONSOLE_PORT);
 
-  puts("\033[H\033[2JSTM32F1 Console I/O Test (" __DATE__ " " __TIME__ ")\n");
+  printf("\033[H\033[2J%s Serial Console I/O Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", CPUFREQ, __COMPILER__, __VERSION__, __ABI__);
 
