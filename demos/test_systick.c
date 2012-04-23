@@ -9,10 +9,10 @@ static const char revision[] = "$Id$";
 
 #define SYSTICKRATE	100
 
+_BEGIN_STD_C
+
 volatile int TimerCounter = 0;
 volatile int TimerFlag = FALSE;
-
-_BEGIN_STD_C
 
 void SysTick_Handler(void)
 {
