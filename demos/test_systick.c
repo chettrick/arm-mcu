@@ -31,7 +31,7 @@ int main(void)
 
   serial_stdio(CONSOLE_PORT);
 
-  puts("\033[H\033[2JLPC1768 System Tick Interrupt Test (" __DATE__ " " __TIME__ ")\n");
+  printf("\033[H\033[2J%s System Tick Interrupt Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", CPUFREQ, __COMPILER__, __VERSION__, __ABI__);
 
@@ -51,6 +51,7 @@ int main(void)
     if (TimerFlag)
     {
       TimerFlag = FALSE;
+
       puts("Tick...");
       fflush(stdout);
 
