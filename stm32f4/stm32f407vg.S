@@ -305,4 +305,11 @@ Default_Handler: bx		lr
 		IRQ		HASH_RNG_IRQHandler
 		IRQ		FPU_IRQHandler
 
+// libstdc++ needs this
+
+		.bss
+__dso_handle:	.word
+		.global		__dso_handle
+		.weak		__dso_handle
+
 		.end
