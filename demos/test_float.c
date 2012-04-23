@@ -1,4 +1,4 @@
-/* Simple floating point arithmetic test program for the EFM32 ARM MCU */
+/* Simple floating point arithmetic test program MCU */
 
 // $Id$
 
@@ -11,8 +11,16 @@ static const char revision[] = "$Id$";
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef CORTEX_M3
 #ifndef __ARM_EABI__
 #error arm-elf-gcc does not support Cortex-M3 floating point correctly! Use an EABI toolchain.
+#endif
+#endif
+
+#ifdef CORTEX_M4
+#ifndef __ARM_EABI__
+#error arm-elf-gcc does not support Cortex-M4 floating point correctly! Use an EABI toolchain.
+#endif
 #endif
 
 int main(void)
@@ -24,7 +32,7 @@ int main(void)
 
   serial_stdio(CONSOLE_PORT);
 
-  puts("\033[H\033[2JEFM32 Floating Point Arithmetic Test (" __DATE__ " " __TIME__ ")\n");
+  printf("\033[H\033[2J%s Floating Point Arithmetic Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", CPUFREQ, __COMPILER__, __VERSION__, __ABI__);
 

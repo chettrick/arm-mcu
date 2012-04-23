@@ -2,7 +2,7 @@
 
 # $Id: stm32.mk 3236 2011-11-03 11:31:27Z svn $
 
-CPUFLAGS	+= -mcpu=cortex-m4 -mthumb
+CPUFLAGS	+= -mcpu=cortex-m4 -mthumb -DCORTEX_M4
 FLASHWRITEADDR	?= 0x08000000
 TEXTBASE	?= 0x00000000
 
