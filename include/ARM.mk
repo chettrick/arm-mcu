@@ -38,8 +38,12 @@ EXTRAFLAGS	?=
 CFLAGS		+= -Wall -ffunction-sections
 CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDIR)
 CFLAGS		+= $(CPUFLAGS) $(OPTFLAGS) $(CONFIGFLAGS) $(IOFLAGS) $(DEBUGFLAGS) $(EXTRAFLAGS)
-CXXFLAGS	+= -fpermissive -fno-exceptions -fno-rtti
-LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDIR) -l$(MCU) -Wl,-Map=$*.map,--cref,--entry=_start,--gc-sections $(EXTRAOBJS)
+CXXFLAGS	+= -fpermissive -fno-exceptions -fno-rtti -fno-use-cxa-atexit
+LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDIR) -l$(MCU)
+ifeq ($(WITH_LIBSTDCPP), yes)
+LDFLAGS		+= -lstdc++
+endif
+LDFLAGS		+= -Wl,-Map=$*.map,--cref,--entry=_start,--gc-sections $(EXTRAOBJS)
 
 # GDB definitions
 
