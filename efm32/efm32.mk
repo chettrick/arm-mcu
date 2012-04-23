@@ -2,7 +2,7 @@
 
 # $Id$
 
-CPUFLAGS	+= -mcpu=cortex-m3 -mthumb
+CPUFLAGS	+= -mcpu=cortex-m3 -mthumb -DCORTEX_M3
 FLASHWRITEADDR	?= 0x00000000
 TEXTBASE	?= 0x00000000
 
