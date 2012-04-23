@@ -1,4 +1,4 @@
-/* Simple FreeRTOS test program for the EFM32 ARM MCU */
+/* Simple FreeRTOS test program */
 
 // $Id$
 
