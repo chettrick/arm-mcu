@@ -13,20 +13,14 @@ __rom_start__	= ORIGIN(flash);
 __rom_size__	= LENGTH(flash);
 __ram_start__	= ORIGIN(ram);
 __ram_size__	= LENGTH(ram);
+__ram_end__     = __ram_start__ + __ram_size__;
+__stack_end__   = __ram_end__;          /* Top of RAM */
+__stack_size__  = 16K;
+__stack_start__ = __stack_end__ - __stack_size__;
+__heap_start__  = __bss_end__;          /* Between bss and stack */
+__heap_end__    = __stack_start__;
 __ccm_start__	= ORIGIN(ccm);
 __ccm_size__	= LENGTH(ccm);
-
-/* Stack is at the top of CCM/TCM RAM */
-
-__stack_size__	= __ccm_size__ / 2;
-__stack_end__	= __ccm_start__ + __ccm_size__;
-__stack_start__	= __stack_end__ - __stack_size__;
-
-/* Heap is at the bottom of CCM/TCM RAM */
-
-__heap_size__	= __ccm_size__ - __stack_size__;
-__heap_start__	= __ccm_start__;
-__heap_end__	= __stack_start__;
 
 SECTIONS
 {
