@@ -73,7 +73,6 @@ source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIB
 	tar xzf $(NEWLIBDIST)
 	tar xjf $(GDBDIST)
 	ln -s "../$(NEWLIBSRC)/newlib" $(GCCSRC)/newlib
-	ln -s "../$(NEWLIBSRC)/libgloss" $(GCCSRC)/libgloss
 	touch $@
 
 ################################################################################
@@ -108,7 +107,7 @@ gcc.done: binutils.done
 	test -f /usr/include/mpfr.h
 	rm -rf $(GCCBLD)
 	mkdir -p $(GCCBLD)
-	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-languages=c,c++ --disable-libssp --disable-libgomp --disable-nls --disable-shared --with-newlib --with-float=soft --disable-werror $(GCCEXTRACONFIG)
+	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared --with-float=soft --disable-werror --enable-languages=c,c++ --disable-libssp --disable-libgomp --with-newlib --disable-libgloss --disable-newlib-supplied-syscalls $(GCCEXTRACONFIG)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) $(MAKEJOBS) -C $(GCCBLD)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCBLD) install
 	touch gcc.done
@@ -120,15 +119,7 @@ gcc.done: binutils.done
 $(NEWLIBDIST):
 	wget -nv -P $(TEMP) $(NEWLIBURL)
 
-# Compile newlib
-
-newlib.done: gcc.done
-	rm -rf $(NEWLIBBLD)
-	mkdir -p $(NEWLIBBLD)
-	export PATH=$$PATH':'$(INSTBASE)/bin && cd $(NEWLIBBLD) && ../../$(NEWLIBSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-newlib-supplied-syscalls --disable-nls --disable-shared --with-float=soft
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) $(MAKEJOBS) -C $(NEWLIBBLD)
-	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(NEWLIBBLD) install
-	touch newlib.done
+# Note: newlib is built by gcc
 
 # Download newlib docs
 
@@ -168,7 +159,7 @@ gdb.done: $(GDBDIST)
 
 # Create README.txt
 
-readme.done: binutils.done gcc.done newlib.done newlibdocs.done gdb.done
+readme.done: binutils.done gcc.done newlibdocs.done gdb.done
 	echo "GNU ARM microcontroller toolchain"	>$(INSTBASE)/README.txt
 	echo " "					>>$(INSTBASE)/README.txt
 	echo "Built on `date` from:"			>>$(INSTBASE)/README.txt
