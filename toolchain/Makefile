@@ -2,7 +2,7 @@
 
 # $Id$
 
-ABI		= elf
+ABI		= eabi
 TARGETNAME	= arm-$(ABI)
 PKGNAME		= $(TARGETNAME)-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
@@ -70,9 +70,10 @@ download: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPD
 source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPDF)
 	tar xjf $(BINUTILDIST)
 	tar xjf $(GCCDIST)
+	patch -b -p0 <multilibs.patch
 	tar xzf $(NEWLIBDIST)
-	tar xjf $(GDBDIST)
 	ln -s "../$(NEWLIBSRC)/newlib" $(GCCSRC)/newlib
+	tar xjf $(GDBDIST)
 	touch $@
 
 ################################################################################
