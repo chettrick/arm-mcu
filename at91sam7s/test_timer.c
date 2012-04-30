@@ -7,6 +7,8 @@ static const char revision[] = "$Id$";
 #include <cpu.h>
 #include <stdio.h>
 
+_BEGIN_STD_C
+
 #include "aic.h"
 #include "pit.h"
 
@@ -23,6 +25,8 @@ __attribute__ ((__interrupt__)) void TimerISR(void)
 
   *AT91C_AIC_EOICR = *AT91C_PITC_PIVR;	// Acknowledge interrupt
 }
+
+_END_STD_C
 
 int main(void)
 {
