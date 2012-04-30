@@ -46,6 +46,11 @@ SECTIONS {
 	*(.glue_7)
 	*(.glue_7t)
 	*(.eh_frame)
+	. = ALIGN(4);
+	__ctors_start__ = .;
+	KEEP(*(.init_array));		/* C++ constructors */
+	KEEP(*(.ctors));		/* C++ constructors */
+	__ctors_end__ = .;
  	} >flash
 
 /* C++ exception unwinding stuff--needed by Code Sourcery toolchain */
