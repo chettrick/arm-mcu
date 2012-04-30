@@ -11,18 +11,6 @@ static const char revision[] = "$Id$";
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef CORTEX_M3
-#ifndef __ARM_EABI__
-#error arm-elf-gcc does not support Cortex-M3 floating point correctly! Use an EABI toolchain.
-#endif
-#endif
-
-#ifdef CORTEX_M4
-#ifndef __ARM_EABI__
-#error arm-elf-gcc does not support Cortex-M4 floating point correctly! Use an EABI toolchain.
-#endif
-#endif
-
 int main(void)
 {
   float x, y;
