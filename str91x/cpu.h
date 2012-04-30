@@ -12,10 +12,6 @@
 #include <leds.h>
 #include <serial.h>
 
-#include <usb_serial/usb_serial.h>
-#include <91x_lib.h>
-#include <91x_it.h>
-
 #ifndef DEFAULT_CPU_FREQ
 #define DEFAULT_CPU_FREQ	48000000
 #endif
@@ -25,6 +21,10 @@
 #endif
 
 _BEGIN_STD_C
+
+#include <usb_serial/usb_serial.h>
+#include <91x_lib.h>
+#include <91x_it.h>
 
 extern void cpu_init(unsigned long int frequency);
 
