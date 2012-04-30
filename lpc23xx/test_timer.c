@@ -7,6 +7,8 @@ static const char revision[] = "$Id$";
 #include <cpu.h>
 #include <stdio.h>
 
+_BEGIN_STD_C
+
 volatile int TimerFlag = FALSE;
 
 __attribute__ ((__interrupt__)) void Timer1ISR(void)
@@ -15,6 +17,8 @@ __attribute__ ((__interrupt__)) void Timer1ISR(void)
   T1IR = 0x01;
   VICVectAddr = 0;
 }
+
+_END_STD_C
 
 int main(void)
 {
