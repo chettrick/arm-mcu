@@ -17,7 +17,9 @@
 	.extern __data_beg__
 	.extern __data_end__
 	.extern __data_beg_src__
-
+	.extern	__ctors_start__
+	.extern	__ctors_end__
+ 
 	.global	_start 
 
 	.set INIT_FIQ_MODE,		0x11
@@ -102,6 +104,23 @@ _start:
 
 .end_set_loop: 
 
+// Call C++ constructors.  The compiler and linker together populate the .ctors
+// code section with the addresses of the constructor functions.
+
+call_ctors:     ldr             r0, CTORS_BEG
+                ldr             r1, CTORS_END
+                subs            r1, r1, r0              // Length of ctors section
+                beq             ctors_done              // Skip if no constructors
+
+ctors_loop:     push            {r0,r1}                 // Save registers
+		mov		r14, #ctors_pop		// Load return address
+		ldr             pc, [r0]                // Load next constructor address
+ctors_pop:      pop             {r0,r1}                 // Restore registers
+		add		r0, r0, #4		// Advance pointer
+                subs            r1, r1, #4              // Decrement counter
+                bgt             ctors_loop              // Repeat until done
+ctors_done:
+
 	/*  Set up arguments to main and call.				*/
 
 	mov		r0, #0		/*  no arguments  */ 
@@ -128,6 +147,9 @@ endless_loop:
 .word	__data_beg_src__
 .LC5:
 .word	__data_end__
+
+CTORS_BEG:      .word           __ctors_start__
+CTORS_END:      .word           __ctors_end__
 
 //=============================================================================
 
