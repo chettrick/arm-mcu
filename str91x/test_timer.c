@@ -7,9 +7,9 @@ static const char revision[] = "$Id$";
 #include <cpu.h>
 #include <stdio.h>
 
-volatile int TimerFlag = FALSE;
-
 _BEGIN_STD_C
+
+volatile int TimerFlag = FALSE;
 
 __attribute__ ((__interrupt__)) void TIM1_IRQHandler(void)
 {
