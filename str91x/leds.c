@@ -2,6 +2,8 @@
 
 // $Id$
 
+static const char revision[] = "$Id$";
+
 #include <cpu.h>
 
 #define MAX_LEDS	4
