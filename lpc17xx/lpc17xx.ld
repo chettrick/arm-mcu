@@ -24,7 +24,7 @@ SECTIONS
   . = 0;
 
   .text : {
-  *(.text)				/* Program code */
+  *(.text*)				/* Program code */
   KEEP(*(.rodata*))			/* Read only data */
   *(.glue_7)
   *(.glue_7t)
