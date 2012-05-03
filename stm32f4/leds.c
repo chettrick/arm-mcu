@@ -2,6 +2,8 @@
 
 // $Id: leds.c 2988 2011-09-06 08:28:59Z svn $
 
+static const char revision[] = "$Id: cpu.c 3016 2011-09-19 10:44:24Z svn $";
+
 #include <cpu.h>
 
 // Initialize the LED's (to the off state)

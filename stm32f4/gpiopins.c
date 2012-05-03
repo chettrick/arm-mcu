@@ -2,6 +2,8 @@
 
 // $Id: gpiopins.c 3111 2011-10-06 13:27:38Z svn $
 
+static const char revision[] = "$Id: cpu.c 3016 2011-09-19 10:44:24Z svn $";
+
 #include <cpu.h>
 #include <errno.h>
 
