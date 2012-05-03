@@ -40,9 +40,8 @@ SECTIONS {
  startup : { *(.startup)} >flash	/*  Place startup first.	*/
 
  prog : {				/*  Program (.text) sections 	*/
- 	*(.text)			/* are next, then constant data.*/
-	*(.rodata)
-	*(.rodata*)
+ 	*(.text*)			/* are next, then constant data.*/
+	KEEP(*(.rodata*))
 	*(.glue_7)
 	*(.glue_7t)
 	*(.eh_frame)
@@ -51,9 +50,9 @@ SECTIONS {
 	KEEP(*(.init_array));		/* C++ constructors */
 	KEEP(*(.ctors));		/* C++ constructors */
 	__ctors_end__ = .;
- 	} >flash
+	} >flash
 
-/* C++ exception unwinding stuff--needed by Code Sourcery toolchain */
+/* C++ exception unwinding stuff--needed by some toolchains */
 
 .ARM.extab : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >flash
 
