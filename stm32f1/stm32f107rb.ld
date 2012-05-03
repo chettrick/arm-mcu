@@ -24,15 +24,14 @@ SECTIONS
   . = 0;
 
   .text : {
-  *(.text)				/* Program code */
-  *(.rodata)				/* Read only data */
-  *(.rodata*)
+  *(.text*)				/* Program code */
+  KEEP(*(.rodata*))			/* Read only data */
   *(.glue_7)
   *(.glue_7t)
   *(.eh_frame)
   } >flash
 
-/* C++ exception unwinding stuff--needed by Code Sourcery toolchain */
+/* C++ exception unwinding stuff--needed by some toolchains */
 
   .ARM.extab : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >flash
 
