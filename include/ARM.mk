@@ -4,7 +4,7 @@
 
 # Toolchain definitions
 
-ABI		?= elf
+ABI		?= eabi
 ARMTOOLS	?= /usr/local/arm-$(ABI)-tools
 CROSS_COMPILE	?= $(ARMTOOLS)/bin/arm-$(ABI)-
 
