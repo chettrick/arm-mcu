@@ -16,7 +16,7 @@ static const char revision[] = "$Id$";
 
 #define MAX_SERIAL_PORTS	3
 
-static UART_TypeDef *UARTS[MAX_SERIAL_PORTS] =
+static UART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
 {
   (UART_TypeDef *) UART0_BASE,
   (UART_TypeDef *) UART1_BASE,
