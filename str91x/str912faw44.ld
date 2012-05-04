@@ -54,25 +54,22 @@ SECTIONS {
     __data_beg_src__ = .;		/* Used by startup.	*/
   } >flash
 
-
 /*  Initialized data, located in ram but a copy is placed	*/
 /* in flash so it can be used to init the ram on startup.	*/
 
-  data : {
+  data : ALIGN(16) {
     __data_beg__ = .;			/* Used by startup.	*/
     *(.data)
-    . = ALIGN(16);
     __data_end__ = .;			/* Used by startup.	*/
   } >ram AT>flash
 
 /*  Unitialized data, located in ram, no copy in flash needed	*/
 /* since startup will zero associated area in RAM.		*/
 
-  bss : {
+  bss (NOLOAD) : ALIGN(16) {
     __bss_beg__ = .;			/* Used by startup.	*/
     *(.bss)
     *(COMMON)
-    . = ALIGN(16);
     __bss_end__ = .;			/* Used by startup.	*/
   } >ram
 
