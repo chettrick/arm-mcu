@@ -34,7 +34,23 @@ SECTIONS
   KEEP(*(.init_array));			/* C++ constructors */
   KEEP(*(.ctors));			/* C++ constructors */
   __ctors_end__ = .;
+  . = ALIGN(16);
+  __text_end__ = .;
   } >flash
+
+
+  .data : ALIGN(16) {
+  __data_beg__ = .;			/* Used in crt0.S */
+  *(.data)				/* Initialized data */
+  __data_end__ = .;			/* Used in crt0.S */
+  } >ram AT > flash 
+
+  .bss (NOLOAD) : ALIGN(16) {
+  __bss_beg__ = .;			/* Used in crt0.S */
+  *(.bss)				/* Uninitialized data */
+  *(COMMON)				/* Common data */
+  __bss_end__ = .;			/* Used in crt0.S */
+  } >ram
 
 /* C++ exception unwinding stuff--needed by some toolchains */
 
@@ -43,29 +59,6 @@ SECTIONS
   __exidx_start = .;
   .ARM.exidx : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >flash
   __exidx_end = .;
-
-  . = ALIGN(4);
-  __text_end__ = .;
-
-  .data : {
-  . = ALIGN(4);
-  __data_beg__ = .;			/* Used in crt0.S */
-  *(.data)				/* Initialized data */
-  . = ALIGN(4);
-  __data_end__ = .;			/* Used in crt0.S */
-  } >ram AT > flash 
-
-  .bss : {
-  . = ALIGN(4);
-  __bss_beg__ = .;			/* Used in crt0.S */
-  *(.bss)				/* Uninitialized data */
-  *(COMMON)				/* Common data */
-  . = ALIGN(4);
-  __bss_end__ = .;			/* Used in crt0.S */
-  } >ram
-
-  . = ALIGN(4);
-  end = .;
 }  
 
 /*  Libraries to link against. */
