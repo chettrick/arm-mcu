@@ -13,12 +13,12 @@ __rom_start__	= ORIGIN(flash);
 __rom_size__	= LENGTH(flash);
 __ram_start__	= ORIGIN(ram);
 __ram_size__	= LENGTH(ram);
-__ram_end__     = __ram_start__ + __ram_size__;
-__stack_end__   = __ram_end__;          /* Top of RAM */
-__stack_size__  = 16K;
-__stack_start__ = __stack_end__ - __stack_size__;
-__heap_start__  = __bss_end__;          /* Between bss and stack */
-__heap_end__    = __stack_start__;
+__ram_end__	= __ram_start__ + __ram_size__;
+__stack_end__	= __ram_end__;		/* Top of RAM */
+__stack_size__	= 16K;
+__stack_start__	= __stack_end__ - __stack_size__;
+__heap_start__	= __bss_end__;		/* Between bss and stack */
+__heap_end__	= __stack_start__;
 __ccm_start__	= ORIGIN(ccm);
 __ccm_size__	= LENGTH(ccm);
 
@@ -47,7 +47,7 @@ SECTIONS
   __data_end__ = .;			/* Used in crt0.S */
   } >ram AT > flash 
 
-  .bss : ALIGN(16) {
+  .bss (NOLOAD) : ALIGN(16) {
   __bss_beg__ = .;			/* Used in crt0.S */
   *(.bss)				/* Uninitialized data */
   *(COMMON)				/* Common data */
