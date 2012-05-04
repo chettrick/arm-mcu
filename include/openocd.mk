@@ -14,7 +14,9 @@ OPENOCDIF	?= olimex-jtag-tiny
 # Debug with OpenOCD
 
 .elf.debugocd:
+	$(MAKE) startocd
 	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(OPENOCDDEBUG) $<
+	$(MAKE) stopocd
 
 # Program flash with OpenOCD
 
