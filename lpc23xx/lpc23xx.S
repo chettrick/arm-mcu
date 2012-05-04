@@ -166,3 +166,12 @@ CTORS_END:      .word           __ctors_end__
 	IRQ	prefetch_abort_exception
 	IRQ	data_abort_exception
 	IRQ	fast_interrupt_exception
+
+// libstdc++ needs this
+
+		.bss
+__dso_handle:	.word
+		.global		__dso_handle
+		.weak		__dso_handle
+
+		.end

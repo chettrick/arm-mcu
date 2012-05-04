@@ -241,3 +241,12 @@ bbsrtable:
 	IRQ	USBWU_IRQHandler
 	IRQ	PFQBC_IRQHandler
 	IRQ	DefaultVector_Handler
+
+// libstdc++ needs this
+
+		.bss
+__dso_handle:	.word
+		.global		__dso_handle
+		.weak		__dso_handle
+
+		.end
