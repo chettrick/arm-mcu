@@ -70,7 +70,7 @@ download: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPD
 source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPDF)
 	tar xjf $(BINUTILDIST)
 	tar xjf $(GCCDIST)
-	patch -b -p0 <multilibs.$(ABI).patch
+	if [ -f multilibs.$(ABI).patch ]; then patch -b -p0 <multilibs.$(ABI).patch ; fi
 	tar xzf $(NEWLIBDIST)
 	ln -s "../$(NEWLIBSRC)/newlib" $(GCCSRC)/newlib
 	tar xjf $(GDBDIST)
