@@ -32,7 +32,7 @@ int main(void)
 {
   cpu_init(DEFAULT_CPU_FREQ);
 
-  serial_stdio(CONSOLE_PORT);
+  serial_stdio((char *) CONSOLE_PORT);
 
 /* Display startup banner */
 
