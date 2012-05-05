@@ -20,6 +20,8 @@
 		.extern		__bss_beg__
 		.extern		__bss_end__
 		.extern		__stack_end__
+		.extern		__ctors_start__
+		.extern		__ctors_end__
 		.extern		main
 
 // Exception vector table--Common to all Cortex-M3
@@ -127,13 +129,28 @@ copy_data_loop: ldrb		r4, [r2], #1		// Read byte from flash
 zero_bss: 	ldr 		r1, BSS_BEG
 		ldr 		r3, BSS_END
 		subs 		r3, r3, r1		// Length of uninitialized data
-		beq		call_main		// Skip if none
+		beq		call_ctors		// Skip if none
 
 		mov 		r2, #0
 
 zero_bss_loop: 	strb		r2, [r1], #1		// Store zero
 		subs		r3, r3, #1		// Decrement counter
 		bgt		zero_bss_loop		// Repeat until done
+
+// Call C++ constructors.  The compiler and linker together populate the .ctors
+// code section with the addresses of the constructor functions.
+
+call_ctors:	ldr		r0, CTORS_BEG
+		ldr		r1, CTORS_END
+		subs		r1, r1, r0		// Length of ctors section
+		beq		call_main		// Skip if no constructors
+
+ctors_loop:	ldr		r2, [r0], #4		// Load next constructor address
+		push		{r0,r1}			// Save registers
+		blx		r2			// Call constructor
+		pop		{r0,r1}			// Restore registers
+		subs		r1, r1, #4		// Decrement counter
+		bgt		ctors_loop		// Repeat until done
 
 // Call main()
 
@@ -154,6 +171,8 @@ DATA_BEG:	.word		__data_beg__
 DATA_END:	.word		__data_end__
 BSS_BEG:	.word		__bss_beg__ 
 BSS_END:	.word		__bss_end__
+CTORS_BEG:	.word		__ctors_start__
+CTORS_END:	.word		__ctors_end__
 
 //=============================================================================
 
@@ -241,5 +260,12 @@ Default_Handler: bx		lr
 		IRQ		DMA2_Channel2_IRQHandler
 		IRQ		DMA2_Channel3_IRQHandler
 		IRQ		DMA2_Channel4_5_IRQHandler
+
+// libstdc++ needs this
+
+		.bss
+__dso_handle:	.word
+		.global		__dso_handle
+		.weak		__dso_handle
 
 		.end
