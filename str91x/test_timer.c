@@ -38,7 +38,7 @@ int main(void)
   usb_serial_stdio(NULL);
   getch();
 #else
-  serial_stdio(CONSOLE_PORT);
+  serial_stdio((char *) CONSOLE_PORT);
 #endif
 
   puts("\033[H\033[2JSTR91FAW44 Timer Interrupt Test (" __DATE__ " " __TIME__ ")\n");
