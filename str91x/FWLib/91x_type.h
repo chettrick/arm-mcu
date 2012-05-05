@@ -42,7 +42,7 @@
 #undef FALSE
 #endif
 
-typedef enum { FALSE = 0, TRUE  = !FALSE } bool;
+typedef enum { FALSE = 0, TRUE  = !FALSE } boolean;
 
 typedef enum { RESET = 0, SET   = !RESET } FlagStatus, ITStatus;
 

@@ -52,7 +52,7 @@ RESULT PowerOff(void);
 
 /* External variables --------------------------------------------------------*/
 extern vu32 bDeviceState; /* USB device status */
-extern volatile bool fSuspendEnabled;  /* true when suspend is possible */
+extern volatile boolean fSuspendEnabled;  /* true when suspend is possible */
 
 #endif  /*__USB_PWR_H*/
 

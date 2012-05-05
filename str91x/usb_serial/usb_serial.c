@@ -18,7 +18,7 @@ extern void USB_Istr(void);
 
 #define RINGBUFFER_SIZE 256
 
-static volatile bool txready = TRUE;
+static volatile boolean txready = TRUE;
 
 // Define a ring buffer data structure
 

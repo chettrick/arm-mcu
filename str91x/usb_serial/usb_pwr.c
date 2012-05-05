@@ -28,7 +28,7 @@ extern void Leave_LowPowerMode(void);
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 vu32 bDeviceState = UNCONNECTED; /* USB device status */
-volatile bool fSuspendEnabled = TRUE;  /* true when suspend is possible */
+volatile boolean fSuspendEnabled = TRUE;  /* true when suspend is possible */
 
 struct
 {

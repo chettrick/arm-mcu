@@ -303,7 +303,7 @@ ErrorStatus CAN_SetTxMsgObj(u32 msgobj, u32 idType, FunctionalState RemoteEN)
 *                         - SUCCESS: Interface to treat the message
 *                         - ERROR: No interface to treat the message
 *******************************************************************************/
-ErrorStatus CAN_SetRxMsgObj(u32 msgobj, u32 idType, u32 idLow, u32 idHigh, bool singleOrFifoLast)
+ErrorStatus CAN_SetRxMsgObj(u32 msgobj, u32 idType, u32 idLow, u32 idHigh, boolean singleOrFifoLast)
 {
   u32 msg_if=0;
 
@@ -522,7 +522,7 @@ ErrorStatus CAN_TransmitRequest( u32 msgobj )
 *                         - SUCCESS: Reception OK
 *                         - ERROR: No message pending
 *******************************************************************************/
-ErrorStatus CAN_ReceiveMessage(u32 msgobj, bool release, canmsg* pCanMsg)
+ErrorStatus CAN_ReceiveMessage(u32 msgobj, boolean release, canmsg* pCanMsg)
 { 
   u32 tempId;
   

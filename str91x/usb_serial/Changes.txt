@@ -24,4 +24,6 @@ $Id$
 
 9.  Added usb_serial.c and usb_serial.h.
 
-10. Rename stmcdc.inf to usb_serial.inf.
+10. Renamed stmcdc.inf to usb_serial.inf.
+
+11. Renamed bool to boolean to prevent clash with C++ type.
