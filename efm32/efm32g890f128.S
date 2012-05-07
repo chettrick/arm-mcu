@@ -24,57 +24,79 @@
 		.extern		__ctors_end__
 		.extern		main
 
+//=============================================================================
+
+// Use Default_handler for all exceptions and interrupts, unless another
+// handler is provided elsewhere.
+
+		.macro		IRQ handler
+		.word		\handler
+		.weak		\handler
+		.set		\handler, Default_Handler
+		.endm
+
+//=============================================================================
+
 // Exception vector table--Common to all Cortex-M3
 
 _start: 	.word		__stack_end__
-		.word		Reset_Handler		// Reset Handler
-		.word		NMI_Handler             // NMI Handler
-		.word		HardFault_Handler       // Hard Fault Handler
-		.word		MemManage_Handler       // MPU Fault Handler
-		.word		BusFault_Handler        // Bus Fault Handler
-		.word		UsageFault_Handler      // Usage Fault Handler
+		.word		Reset_Handler
+		IRQ		NMI_Handler
+		IRQ		HardFault_Handler
+		IRQ		MemManage_Handler
+		IRQ		BusFault_Handler
+		IRQ		UsageFault_Handler
 		.word		0
 		.word		0
 		.word		0
 		.word		0
-		.word		SVC_Handler             // SVCall Handler
-		.word		DebugMon_Handler        // Debug Monitor Handler
+		IRQ		SVC_Handler
+		IRQ		DebugMon_Handler
 		.word		0
-		.word		PendSV_Handler          // PendSV Handler
-		.word		SysTick_Handler         // SysTick Handler
+		IRQ		PendSV_Handler
+		IRQ		SysTick_Handler
 
 // Hardware interrupts specific to the EFM32G890F128
 
-		.word		DMA_IRQHandler
-		.word		GPIO_EVEN_IRQHandler
-		.word		TIMER0_IRQHandler
-		.word		USART0_RX_IRQHandler
-		.word		USART0_TX_IRQHandler
-		.word		ACMP0_IRQHandler
-		.word		ADC0_IRQHandler
-		.word		DAC0_IRQHandler
-		.word		I2C0_IRQHandler
-		.word		GPIO_ODD_IRQHandler
-		.word		TIMER1_IRQHandler
-		.word		TIMER2_IRQHandler
-		.word		USART1_RX_IRQHandler
-		.word		USART1_TX_IRQHandler
-		.word		USART2_RX_IRQHandler
-		.word		USART2_TX_IRQHandler
-		.word		UART0_RX_IRQHandler
-		.word		UART0_TX_IRQHandler
-		.word		LEUART0_IRQHandler
-		.word		LEUART1_IRQHandler
-		.word		LETIMER0_IRQHandler
-		.word		PCNT0_IRQHandler
-		.word		PCNT1_IRQHandler
-		.word		PCNT2_IRQHandler
-		.word		RTC_IRQHandler
-		.word		CMU_IRQHandler
-		.word		VCMP_IRQHandler
-		.word		LCD_IRQHandler
-		.word		MSC_IRQHandler
-		.word		AES_IRQHandler
+		IRQ		DMA_IRQHandler
+		IRQ		GPIO_EVEN_IRQHandler
+		IRQ		TIMER0_IRQHandler
+		IRQ		USART0_RX_IRQHandler
+		IRQ		USART0_TX_IRQHandler
+		IRQ		ACMP0_IRQHandler
+		IRQ		ADC0_IRQHandler
+		IRQ		DAC0_IRQHandler
+		IRQ		I2C0_IRQHandler
+		IRQ		GPIO_ODD_IRQHandler
+		IRQ		TIMER1_IRQHandler
+		IRQ		TIMER2_IRQHandler
+		IRQ		USART1_RX_IRQHandler
+		IRQ		USART1_TX_IRQHandler
+		IRQ		USART2_RX_IRQHandler
+		IRQ		USART2_TX_IRQHandler
+		IRQ		UART0_RX_IRQHandler
+		IRQ		UART0_TX_IRQHandler
+		IRQ		LEUART0_IRQHandler
+		IRQ		LEUART1_IRQHandler
+		IRQ		LETIMER0_IRQHandler
+		IRQ		PCNT0_IRQHandler
+		IRQ		PCNT1_IRQHandler
+		IRQ		PCNT2_IRQHandler
+		IRQ		RTC_IRQHandler
+		IRQ		CMU_IRQHandler
+		IRQ		VCMP_IRQHandler
+		IRQ		LCD_IRQHandler
+		IRQ		MSC_IRQHandler
+		IRQ		AES_IRQHandler
+
+//=============================================================================
+
+// Default exception handler--does nothing but return
+
+		.thumb_func
+Default_Handler: bx		lr
+
+//=============================================================================
 
 // Reset vector: Set up environment to call C main()
 
@@ -134,6 +156,8 @@ call_main:	mov		r0, #0			// argc=0
 
 		b		.
 
+//=============================================================================
+
 // These are filled in by the linker
 	
 TEXT_END:	.word		__text_end__
@@ -145,61 +169,6 @@ CTORS_BEG:	.word		__ctors_start__
 CTORS_END:	.word		__ctors_end__
 
 //=============================================================================
-
-// Default exception handler--does nothing but return
-
-		.thumb_func
-Default_Handler: bx		lr
-
-//=============================================================================
-
-// Use Default_handler for all exceptions and interrupts, unless another
-// handler is provided elsewhere.
-
-		.macro		IRQ handler
-		.weak		\handler
-		.set		\handler, Default_Handler
-		.endm
-
-		IRQ		NMI_Handler
-		IRQ		HardFault_Handler
-		IRQ		MemManage_Handler
-		IRQ		BusFault_Handler
-		IRQ		UsageFault_Handler
-		IRQ		SVC_Handler
-		IRQ		DebugMon_Handler
-		IRQ		PendSV_Handler
-		IRQ		SysTick_Handler
-		IRQ		DMA_IRQHandler
-		IRQ		GPIO_EVEN_IRQHandler
-		IRQ		TIMER0_IRQHandler
-		IRQ		USART0_RX_IRQHandler
-		IRQ		USART0_TX_IRQHandler
-		IRQ		ACMP0_IRQHandler
-		IRQ		ADC0_IRQHandler
-		IRQ		DAC0_IRQHandler
-		IRQ		I2C0_IRQHandler
-		IRQ		GPIO_ODD_IRQHandler
-		IRQ		TIMER1_IRQHandler
-		IRQ		TIMER2_IRQHandler
-		IRQ		USART1_RX_IRQHandler
-		IRQ		USART1_TX_IRQHandler
-		IRQ		USART2_RX_IRQHandler
-		IRQ		USART2_TX_IRQHandler
-		IRQ		UART0_RX_IRQHandler
-		IRQ		UART0_TX_IRQHandler
-		IRQ		LEUART0_IRQHandler
-		IRQ		LEUART1_IRQHandler
-		IRQ		LETIMER0_IRQHandler
-		IRQ		PCNT0_IRQHandler
-		IRQ		PCNT1_IRQHandler
-		IRQ		PCNT2_IRQHandler
-		IRQ		RTC_IRQHandler
-		IRQ		CMU_IRQHandler
-		IRQ		VCMP_IRQHandler
-		IRQ		LCD_IRQHandler
-		IRQ		MSC_IRQHandler
-		IRQ		AES_IRQHandler
 
 // libstdc++ needs this
 
