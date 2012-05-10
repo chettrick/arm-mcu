@@ -19,33 +19,7 @@ static const char revision[] = "$Id$";
 #include <unistd.h>
 #include <wiznet.h>
 
-// WizNet configuration for STM32-P103 board with W5100 UEXT module
-
-#ifdef OLIMEX_STM32_P103
-#define WIZNET_SPIPORT		1
-#define WIZNET_SPICLOCKMODE	0
-#define WIZNET_SPISPEED		9000000
-#define WIZNET_SPIENDIAN	SPI_BIGENDIAN
-#define WIZNET_INT_PIN		GPIOPIN22
-#define WIZNET_INT		GPIOPIN22IN
-#define WIZNET_NRESET_PIN	GPIOPIN23
-#define WIZNET_NRESET		GPIOPIN23OUT
-#endif
-
-// WizNet configuration for STM32-P107 board with W5100 UEXT module
-
-#ifdef OLIMEX_STM32_P107
-#define WIZNET_SPIPORT		1
-#define WIZNET_SPICLOCKMODE	0
-#define WIZNET_SPISPEED		9000000
-#define WIZNET_SPIENDIAN	SPI_BIGENDIAN
-#define WIZNET_INT_PIN		GPIOPIN24
-#define WIZNET_INT		GPIOPIN24IN
-#define WIZNET_NRESET_PIN	GPIOPIN25
-#define WIZNET_NRESET		GPIOPIN25OUT
-#endif
-
-// WizNet configuration for W5200E01-M3 board
+// Hardware configuration for W5200E01-M3 board
 
 #ifdef W5200E01_M3
 #define WIZNET_SPIPORT		1
