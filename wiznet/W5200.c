@@ -433,7 +433,7 @@ int wiznet_get_port(const uint32_t socket,
 }
 
 int wiznet_get_receive_ready(const uint32_t socket,
-                             uint32_t *count)
+                             size_t *count)
 {
   int status = 0;
   uint8_t hibyte, lobyte;
@@ -461,7 +461,7 @@ int wiznet_get_receive_ready(const uint32_t socket,
 }
 
 int wiznet_get_transmit_free(const uint32_t socket,
-                             uint32_t *count)
+                             size_t *count)
 {
   int status = 0;
   uint8_t hibyte, lobyte;
@@ -562,10 +562,10 @@ int wiznet_udp_receive_from(const uint32_t socket,
                             ipv4address_t srcaddr,
                             uint16_t *srcport,
                             uint8_t *buf,
-                            uint32_t *count)
+                            size_t *count)
 {
   int status = 0;
-  uint32_t rxready;
+  size_t rxready;
   uint8_t hibyte, lobyte;
   uint16_t Sn_RX_RD;
   uint16_t word;
@@ -650,7 +650,7 @@ int wiznet_udp_send_to(const uint32_t socket,
                        const uint32_t count)
 {
   int status = 0;
-  uint32_t txfree;
+  size_t txfree;
   uint8_t hibyte, lobyte;
   uint16_t Sn_TX_WR;
 
@@ -788,7 +788,7 @@ int socket_read(unsigned int subdevice, char *buf, unsigned int count)
 int socket_write_ready(unsigned int subdevice)
 {
   int status;
-  uint32_t count;
+  size_t count;
 
   status = wiznet_get_transmit_free(subdevice, &count);
   if (status) return status;
@@ -802,7 +802,7 @@ int socket_write_ready(unsigned int subdevice)
 int socket_read_ready(unsigned int subdevice)
 {
   int status;
-  uint32_t count;
+  size_t count;
 
   status = wiznet_get_receive_ready(subdevice, &count);
   if (status) return status;
