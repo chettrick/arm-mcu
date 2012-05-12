@@ -63,9 +63,7 @@ int main(void)
   int status;
   macaddress_t macaddr;
   ipv4address_t ipaddr, subnet, gateway;
-#ifdef W5200
   uint32_t linkstate = FALSE;
-#endif
   size_t count;
   ipv4address_t senderaddr;
   uint16_t senderport;
@@ -153,7 +151,7 @@ int main(void)
     macaddr[0], macaddr[1], macaddr[2], macaddr[3], macaddr[4], macaddr[5]);
   fflush(stdout);
 
-  if (inet_pton(AF_INET, "10.0.5.100", ipaddr) != 1)
+  if (inet_pton(AF_INET, "10.0.0.100", ipaddr) != 1)
   {
     fprintf(stderr, "ERROR: inet_pton() failed, %s\n", strerror(errno));
     assert(FALSE);
@@ -165,7 +163,7 @@ int main(void)
     assert(FALSE);
   }
 
-  if (inet_pton(AF_INET, "10.0.5.1", gateway) != 1)
+  if (inet_pton(AF_INET, "10.0.0.1", gateway) != 1)
   {
     fprintf(stderr, "ERROR: inet_pton() failed, %s\n", strerror(errno));
     assert(FALSE);
@@ -198,7 +196,6 @@ int main(void)
 
   for (;;)
   {
-#ifdef W5200
     if ((status = wiznet_get_linkstate(&linkstate)))
     {
       fprintf(stderr, "ERROR: wiznet_get_linkstate() returned %d, %s\n", status, strerror(errno));
@@ -207,7 +204,6 @@ int main(void)
 
     printf("\033[8;1HLink state: %s", linkstate ? "YES" : "NO ");
     fflush(stdout);
-#endif
 
     if ((status = wiznet_get_receive_ready(0, &count)))
     {
@@ -215,7 +211,7 @@ int main(void)
       assert(FALSE);
     }
 
-    printf("\033[9;1HReceive bytes available: %-5lu", count);
+    printf("\033[9;1HReceive bytes available: %-5u", (unsigned) count);
     fflush(stdout);
 
     if (count)
@@ -228,13 +224,13 @@ int main(void)
 
       if (status)
       {
-        fprintf(stderr, "ERROR: wiznet_udp_receive_to() returned %d, %s\n", status, strerror(errno));
+        fprintf(stderr, "ERROR: wiznet_udp_receive_from() returned %d, %s\n", status, strerror(errno));
         assert(FALSE);
       }
 
       memset(ipaddrbuf, 0, sizeof(ipaddrbuf));
       inet_ntop(AF_INET, senderaddr, ipaddrbuf, sizeof(ipaddrbuf));
-      printf("\033[10;1HReceived %lu bytes from %s:%-5u\n", count, ipaddrbuf, senderport);
+      printf("\033[10;1HReceived %u bytes from %s:%-5u\n", (unsigned) count, ipaddrbuf, senderport);
 
       for (i = 0; i < count; i++)
         udpdgbuf[i] = count - i;
