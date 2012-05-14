@@ -69,6 +69,7 @@ typedef struct
 // Device registration functions
 
 int device_register_char(char *name,
+                         unsigned int subdevice,
                          device_open_fn_t open,
                          device_close_fn_t close,
                          device_write_fn_t write,

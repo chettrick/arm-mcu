@@ -315,7 +315,7 @@ int wiznet_initialize(const uint32_t spiportnum,
     memset(socketname, 0, sizeof(socketname));
     snprintf(socketname, sizeof(socketname), "socket%d:", s);
 
-    if ((status = device_register_char(socketname, socket_open, socket_close,
+    if ((status = device_register_char(socketname, s, socket_open, socket_close,
                                        socket_write,  socket_read,
                                        socket_write_ready, socket_read_ready)))
       return status;

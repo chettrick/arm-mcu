@@ -153,7 +153,7 @@ int usb_serial_stdio(char *name)
 
 int usb_serial_register(char *name)
 {
-  return device_register_char(name, usb_serial_open, NULL, usb_serial_write, usb_serial_read, usb_serial_txready, usb_serial_rxready);
+  return device_register_char(name, 0, usb_serial_open, NULL, usb_serial_write, usb_serial_read, usb_serial_txready, usb_serial_rxready);
 }
 
 // Return TRUE if USB system is ready to accept another transmit message

@@ -31,6 +31,23 @@ static const unsigned long int UARTS[MAX_SERIAL_PORTS] =
 #define US_THR	(*(volatile unsigned long int *)(UARTS[port] + 0x1C))
 #define US_BRGR	(*(volatile unsigned long int *)(UARTS[port] + 0x20))
 
+/* Map serial port device name to port number */
+
+int serial_name_to_port(char *name)
+{
+  errno_r = 0;
+
+  if (!strncasecmp(name, "com1:", 5))
+    return 0;
+  else if (!strncasecmp(name, "com2:", 5))
+    return 1;
+  else
+  {
+    errno_r = ENODEV;
+    return -1;
+  }
+}
+
 /* Initialize serial port */
 
 int serial_open(char *name, unsigned int *subdevice)
@@ -40,17 +57,10 @@ int serial_open(char *name, unsigned int *subdevice)
 
   errno_r = 0;
 
-// Map serial port device name to port number
+// Look up serial port number
 
-  if (!strncasecmp(name, "com1:", 5))
-    port = 0;
-  else if (!strncasecmp(name, "com2:", 5))
-    port = 1;
-  else
-  {
-    errno_r = ENODEV;
-    return -1;
-  }
+  port = serial_name_to_port(name);
+  if (port < 0) return port;
 
 // Pass up port number, if requested
 
@@ -119,7 +129,16 @@ int serial_stdio(char *name)
 
 int serial_register(char *name)
 {
-  return device_register_char(name, serial_open, NULL, serial_write, serial_read, serial_txready, serial_rxready);
+  unsigned int port;
+
+// Look up serial port number
+
+  port = serial_name_to_port(name);
+  if (port < 0) return port;
+
+// Register the serial port driver
+
+  return device_register_char(name, port, serial_open, NULL, serial_write, serial_read, serial_txready, serial_rxready);
 }
 
 /* Return TRUE if transmitter is ready to accept data */

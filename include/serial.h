@@ -13,6 +13,10 @@
 
 _BEGIN_STD_C
 
+/* Map serial port name to port number (subdevice) */
+
+int serial_name_to_port(char *name);
+
 /* Initialize serial port */
 
 int serial_open(char *name, unsigned int *subdevice);

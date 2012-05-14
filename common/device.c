@@ -33,6 +33,7 @@ static device_t device_table[MAX_DEVICES];
 /* Register a character device driver to the next available file descriptor */
 
 int device_register_char(char *name,
+                         unsigned int subdevice,
                          device_open_fn_t open,
                          device_close_fn_t close,
                          device_write_fn_t write,
@@ -79,6 +80,7 @@ int device_register_char(char *name,
       memset(&device_table[fd], 0, sizeof(device_t));
       strlcpy(device_table[fd].name, name, namelen);
       device_table[fd].type = DEVICE_TYPE_CHAR;
+      device_table[fd].subdevice = subdevice;
       device_table[fd].open = open;
       device_table[fd].close = close;
       device_table[fd].write = write;
