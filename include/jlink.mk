@@ -16,7 +16,9 @@ JLINKGDBOPTS	?= -port $(GDBSERVERPORT)
 # Debug with J-Link
 
 .elf.debugjlink:
+	$(MAKE) startjlink
 	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(JLINKDEBUG) $<
+	$(MAKE) stopjlink
 
 # Flash with J-Link
 
