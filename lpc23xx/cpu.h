@@ -14,17 +14,7 @@
 
 #include <LPC23xx.h>
 
-#ifndef DEFAULT_CPU_FREQ
-#ifdef REVISION_A
-#define DEFAULT_CPU_FREQ	48000000
-#else
-#define DEFAULT_CPU_FREQ	72000000
-#endif
-#endif
-
-#ifndef CONSOLE_PORT
-#define CONSOLE_PORT		"com1:115200,n,8,1"
-#endif
+#define DEFAULT_CPU_FREQ	0
 
 _BEGIN_STD_C
 
