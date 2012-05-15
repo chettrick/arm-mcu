@@ -15,7 +15,7 @@ LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), STMICRO_STR910_EVAL)
-BOARDFLAGS	?= -DDEFAULT_CPU_FREQ=48000000 -DCONSOLE_PORT='"com1:115200,n,8,1"'
+BOARDFLAGS	?= -DCONSOLE_PORT='"com1:115200,n,8,1"'
 MCU		= str912faw44
 endif
 
