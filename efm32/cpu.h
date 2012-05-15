@@ -45,11 +45,6 @@
 #include <efm32_wdog.h>
 
 #define CPUFREQ			SystemCoreClock
-#define DEFAULT_CPU_FREQ	32000000UL
-
-#ifndef CONSOLE_PORT
-#define CONSOLE_PORT		"com1:115200,n,8,1"
-#endif
 
 _BEGIN_STD_C
 
