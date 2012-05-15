@@ -13,7 +13,12 @@ LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
 # Board specific macro definitions
 
+ifeq ($(BOARDNAME), MBED_LPC2368)
+BOARDFLAGS	?= -DCONSOLE_PORT='"com1:115200,n,8,1"'
+endif
+
 ifeq ($(BOARDNAME), OLIMEX_LPC_P2378)
+BOARDFLAGS	?= -DCONSOLE_PORT='"com1:115200,n,8,1"'
 JLINKMCU	= lpc2378
 endif
 
