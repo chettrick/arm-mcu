@@ -30,15 +30,12 @@ MCUFAMILYNAME	:= $(shell echo $(MCUFAMILY) | tr '[a-z]' '[A-Z]')
 # Compiler and linker flags
 
 CPUFLAGS	+= -D$(MCU) -D$(BOARDNAME) -DMCUFAMILYNAME='"$(MCUFAMILYNAME)"'
-BOARDFLAGS	?=
-CONFIGFLAGS	?=
 DEBUGFLAGS	?= -g
 OPTFLAGS	?= -O0
 IOFLAGS		?= -DINTEGER_STDIO
-EXTRAFLAGS	?=
 CFLAGS		+= -Wall -ffunction-sections
 CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDIR)
-CFLAGS		+= $(CPUFLAGS) $(OPTFLAGS) $(BOARDFLAGS) $(CONFIGFLAGS) $(IOFLAGS) $(DEBUGFLAGS) $(EXTRAFLAGS)
+CFLAGS		+= $(OPTFLAGS) $(CPUFLAGS) $(BOARDFLAGS) $(IOFLAGS) $(CONFIGFLAGS) $(DEBUGFLAGS) $(EXTRAFLAGS)
 CXXFLAGS	+= -fpermissive -fno-exceptions -fno-rtti -fno-use-cxa-atexit
 LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDIR) -l$(MCU)
 ifeq ($(WITH_LIBSTDCPP), yes)
