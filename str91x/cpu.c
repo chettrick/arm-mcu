@@ -6,7 +6,7 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 
-unsigned long int CPUFREQ = DEFAULT_CPU_FREQ;
+unsigned long int CPUFREQ;
 
 void cpu_init(unsigned long int frequency)
 {
@@ -35,4 +35,6 @@ void cpu_init(unsigned long int frequency)
   SCU_FMICLKDivisorConfig(SCU_FMICLK_Div1);	// FMICLK = RCLK = 48 MHz
   SCU_HCLKDivisorConfig(SCU_HCLK_Div1);		// HCLK = RCLK = 48 MHz
   SCU_PCLKDivisorConfig(SCU_PCLK_Div1);		// PCLK = RCLK = 48 MHz
+
+  CPUFREQ = 48000000;
 }
