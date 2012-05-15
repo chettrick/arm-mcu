@@ -6,7 +6,7 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 
-unsigned long int CPUFREQ = DEFAULT_CPU_FREQ;
+unsigned long int CPUFREQ;
 
 void cpu_init(unsigned long int frequency)
 {
