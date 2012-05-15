@@ -13,6 +13,8 @@
 
 #include <AT91SAM7S.h>
 
+#define DEFAULT_CPU_FREQ	0
+
 _BEGIN_STD_C
 
 extern void cpu_init(unsigned long int frequency);
