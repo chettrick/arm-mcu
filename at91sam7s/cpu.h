@@ -8,8 +8,8 @@
 #include <_ansi.h>
 #include <arm.h>
 #include <device.h>
-#include <serial.h>
 #include <leds.h>
+#include <serial.h>
 
 #include <AT91SAM7S.h>
 
