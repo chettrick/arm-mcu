@@ -13,14 +13,6 @@
 
 #include <AT91SAM7S.h>
 
-#ifndef DEFAULT_CPU_FREQ
-#define DEFAULT_CPU_FREQ	48000000
-#endif
-
-#ifndef CONSOLE_PORT
-#define CONSOLE_PORT		"com1:115200,n,8,1"
-#endif
-
 _BEGIN_STD_C
 
 extern void cpu_init(unsigned long int frequency);
