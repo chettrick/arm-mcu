@@ -12,6 +12,8 @@
 #include <leds.h>
 #include <serial.h>
 
+#define DEFAULT_CPU_FREQ	0
+
 _BEGIN_STD_C
 
 #include <usb_serial/usb_serial.h>
