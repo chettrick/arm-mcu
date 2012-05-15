@@ -45,6 +45,7 @@
 #include <efm32_wdog.h>
 
 #define CPUFREQ			SystemCoreClock
+#define DEFAULT_CPU_FREQ	0
 
 _BEGIN_STD_C
 
