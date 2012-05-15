@@ -46,4 +46,10 @@ void cpu_init(unsigned long int frequency)
   PLLCON = 3;			// Connect PLL
   PLLFEED = 0xAA;
   PLLFEED = 0x55;
+
+#ifdef REVISION_A
+  CPUFREQ = 48000000;
+#else
+  CPUFREQ = 72000000;
+#endif
 }
