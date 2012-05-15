@@ -6,7 +6,7 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 
-unsigned long int CPUFREQ = DEFAULT_CPU_FREQ;
+unsigned long int CPUFREQ;
 
 void cpu_init(unsigned long int frequency)
 {
@@ -29,4 +29,6 @@ void cpu_init(unsigned long int frequency)
 
   *AT91C_PMC_MCKR	= AT91C_PMC_PRES_CLK_2 | AT91C_PMC_CSS_PLL_CLK;	// Master clock source is PLL
   while (!(*AT91C_PMC_SR & AT91C_PMC_MCKRDY)); 	// Wait for master clock ready
+
+  CPUFREQ = 48000000;
 }
