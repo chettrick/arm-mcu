@@ -12,7 +12,7 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), EFM32_G8XX_STK)
-BOARDFLAGS	?= -DCONSOLE_PORT="com1:115200,n,8,1"
+BOARDFLAGS	?= -DCONSOLE_PORT='"com1:115200,n,8,1"'
 MCU		= efm32g890f128
 JLINKGDBIF	= -if SWD
 endif
