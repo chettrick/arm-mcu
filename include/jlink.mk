@@ -13,6 +13,16 @@ JLINKGDBOPTS	?= -port $(GDBSERVERPORT)
 .PHONY: startjlink stopjlink
 .SUFFIXES: .debugjlink .flashjlink
 
+# Start J-Link GDB server
+
+startjlink:
+	$(JLINKGDB) $(JLINKGDBIF) $(JLINKGDBOPTS) >debug.log 2>&1 &
+
+# Stop J-Link GDB server
+
+stopjlink:
+	skill `basename $(JLINKGDB) .exe`
+
 # Debug with J-Link
 
 .elf.debugjlink:
@@ -32,13 +42,3 @@ JLINKGDBOPTS	?= -port $(GDBSERVERPORT)
 	-$(JLINKEXE) $(JLINKFLASHCMDS)
 	@rm $(JLINKFLASHCMDS)
 	@rm Default.ini
-
-# Start J-Link GDB server
-
-startjlink:
-	$(JLINKGDB) $(JLINKGDBIF) $(JLINKGDBOPTS) >debug.log 2>&1 &
-
-# Stop J-Link GDB server
-
-stopjlink:
-	skill `basename $(JLINKGDB) .exe`
