@@ -29,12 +29,7 @@ MCU		= stm32f100rb
 JLINKGDBIF	= -if SWD
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-STLINKIF	= -c SWD
-endif
-
-ifeq ($(shell uname), Linux)
-STLINKIF	= $(STLINKV1IF)
-STLINKGDBIF	= $(STLINKV1GDBIF)
+STLINKCLIIF	= -c SWD
 endif
 endif
 
