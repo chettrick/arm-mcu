@@ -4,14 +4,16 @@
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 STLINKCLI	?= ST-LINK_CLI.exe
-STLINKIF	?= -c JTAG
+STLINKCLIIF	?= -c JTAG
 endif
 
 ifeq ($(shell uname), Linux)
 STLINKV1FLASH	?= stlink-v1-flash
 STLINKV1IF	?= /dev/stlink-v1
-STLINKV1GDBIF	?= --stlinkv1 --device=$(STLINKV1IF)
+STLINKV2FLASH	?= stlink-flash
+endif
 
+ifeq ($(shell uname), OpenBSD)
 STLINKV2FLASH	?= stlink-flash
 endif
 
@@ -22,7 +24,17 @@ STLINKGDBOPTS	?= -p $(GDBSERVERPORT)
 .PHONY: startstlink stopstlink
 .SUFFIXES: .debugstlink .flashstlink .flashstlinkv1
 
-# Debug with ST-Link GDB server
+# Start ST-Link/V2 GDB server
+
+startstlink:
+	$(STLINKGDB) $(STLINKGDBIF) $(STLINKGDBOPTS) >debug.log 2>&1 &
+
+# Stop ST-Link/V2 GDB server
+
+stopstlink:
+	skill `basename $(STLINKGDB) .exe`
+
+# Debug with ST-Link/V2 GDB server
 
 .elf.debugstlink:
 	$(MAKE) startstlink
@@ -33,26 +45,16 @@ STLINKGDBOPTS	?= -p $(GDBSERVERPORT)
 
 .bin.flashstlink:
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-	$(STLINKCLI) $(STLINKIF) -ME -P $< $(FLASHWRITEADDR) -Rst
+	$(STLINKCLI) $(STLINKCLIIF) -ME -P $< $(FLASHWRITEADDR) -Rst
 else
-	$(STLINKV2FLASH) write $(STLINKIF) $< $(FLASHWRITEADDR)
+	$(STLINKV2FLASH) write $< $(FLASHWRITEADDR)
 endif
 
 # Program flash with legacy ST-Link/V1
 
 .bin.flashstlinkv1:
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-	$(STLINKCLI) $(STLINKIF) -ME -P $< $(FLASHWRITEADDR) -Rst
+	$(STLINKCLI) $(STLINKCLIIF) -ME -P $< $(FLASHWRITEADDR) -Rst
 else
 	$(STLINKV1FLASH) $(STLINKV1IF) program=$< reset run
 endif
-
-# Start ST-Link GDB server
-
-startstlink:
-	$(STLINKGDB) $(STLINKGDBIF) $(STLINKGDBOPTS) >debug.log 2>&1 &
-
-# Stop ST-Link GDB server
-
-stopstlink:
-	skill `basename $(STLINKGDB) .exe`
