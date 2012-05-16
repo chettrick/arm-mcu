@@ -43,7 +43,7 @@ uninstall:
 clean:
 	-rm $(STLINKGDB)
 	-rm $(STLINKFLASH)
-	$(MAKE) -C $(STLINKSRC) clean
+	-$(MAKE) -C $(STLINKSRC) clean
 
 reallyclean: clean
 
