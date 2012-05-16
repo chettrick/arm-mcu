@@ -11,6 +11,16 @@ OPENOCDIF	?= olimex-jtag-tiny
 .PHONY: startocd stopocd
 .SUFFIXES: .debugocd .flashocd
 
+# Start OpenOCD
+
+startocd:
+	$(OPENOCD) -f interface/$(OPENOCDIF).cfg -f $(OPENOCDCFG) >debug.log 2>&1 &
+
+# Stop OpenOCD
+
+stopocd:
+	skill `basename $(OPENOCD) .exe`
+
 # Debug with OpenOCD
 
 .elf.debugocd:
@@ -24,13 +34,3 @@ OPENOCDIF	?= olimex-jtag-tiny
 	$(MAKE) startocd
 	$(OPENOCDFLASH) $< $(FLASHWRITEADDR) $(TEXTBASE)
 	$(MAKE) stopocd
-
-# Start OpenOCD
-
-startocd:
-	$(OPENOCD) -f interface/$(OPENOCDIF).cfg -f $(OPENOCDCFG) >debug.log 2>&1 &
-
-# Stop OpenOCD
-
-stopocd:
-	skill `basename $(OPENOCD) .exe`
