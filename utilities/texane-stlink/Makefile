@@ -15,13 +15,14 @@ default: $(STLINKGDB)
 
 $(STLINKSRC):
 	git clone --depth 1 $(STLINKURL) $(STLINKSRC)
+	cd $(STLINKSRC) && ./autogen.sh && ./configure USB_CFLAGS='-DLIBUSB_CALL="" -I/usr/include/libusb-1.0'
 
 # Compile stlink-gdbserver
 
 $(STLINKGDB): $(STLINKSRC)
 	$(MAKE) -C $(STLINKSRC)
-	cp $(STLINKSRC)/gdbserver/st-util		$(STLINKGDB)
-	cp $(STLINKSRC)/flash/st-flash			$(STLINKFLASH)
+	cp $(STLINKSRC)/st-util				$(STLINKGDB)
+	cp $(STLINKSRC)/st-flash			$(STLINKFLASH)
 
 # Install stlink-gdbserver
 
