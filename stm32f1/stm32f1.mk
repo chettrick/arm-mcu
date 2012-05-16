@@ -31,12 +31,21 @@ JLINKGDBIF	= -if SWD
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 STLINKCLIIF	= -c SWD
 endif
+
+ifeq ($(shell uname), Linux)
+STLINKIF	= $(STLINKV1IF)
+STLINKGDBIF	= $(STLINKV1GDBIF)
+endif
 endif
 
 ifeq ($(BOARDNAME), W5200E01_M3)
 BOARDFLAGS	?= -DCONSOLE_PORT='"com1:115200,n,8,1"'
 MCU		= stm32f103c8
 JLINKGDBIF	= -if SWD
+
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+STLINKCLIIF	= -c SWD
+endif
 endif
 
 # Include MCU specific make file

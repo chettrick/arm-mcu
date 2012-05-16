@@ -10,6 +10,7 @@ endif
 ifeq ($(shell uname), Linux)
 STLINKV1FLASH	?= stlink-v1-flash
 STLINKV1IF	?= /dev/stlink-v1
+STLINKV1GDBIF   ?= --stlinkv1 --device=$(STLINKV1IF)
 STLINKV2FLASH	?= stlink-flash
 endif
 
@@ -47,7 +48,7 @@ stopstlink:
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 	$(STLINKCLI) $(STLINKCLIIF) -ME -P $< $(FLASHWRITEADDR) -Rst
 else
-	$(STLINKV2FLASH) write $< $(FLASHWRITEADDR)
+	$(STLINKV2FLASH) write $(STLINKIF) $< $(FLASHWRITEADDR)
 endif
 
 # Program flash with legacy ST-Link/V1
