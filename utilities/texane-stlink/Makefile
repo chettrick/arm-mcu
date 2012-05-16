@@ -7,7 +7,9 @@ STLINKSRC	= stlink
 STLINKGDB	= stlink-gdbserver
 STLINKFLASH	= stlink-flash
 
-INSTALLDIR	= /usr/local/bin
+LIBUSBCFLAGS	?= -DLIBUSB_CALL='' $(shell pkg-config --cflags libusb-1.0)
+
+INSTALLDIR	?= /usr/local/bin
 
 default: $(STLINKGDB)
 
@@ -15,7 +17,7 @@ default: $(STLINKGDB)
 
 $(STLINKSRC):
 	git clone --depth 1 $(STLINKURL) $(STLINKSRC)
-	cd $(STLINKSRC) && ./autogen.sh && ./configure USB_CFLAGS='-DLIBUSB_CALL="" -I/usr/include/libusb-1.0'
+	cd $(STLINKSRC) && ./autogen.sh && ./configure USB_CFLAGS="$(LIBUSBCFLAGS)"
 
 # Compile stlink-gdbserver
 
