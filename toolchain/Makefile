@@ -7,6 +7,8 @@ TARGETNAME	= arm-$(ABI)
 PKGNAME		= $(TARGETNAME)-tools
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 TEMP		= /tmp
+TAR		= tar
+FIND		= find
 
 BINUTILVER	= 2.22
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
@@ -68,12 +70,12 @@ download: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPD
 # Unpack all source distributions
 
 source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPDF)
-	tar xjf $(BINUTILDIST)
-	tar xjf $(GCCDIST)
+	$(TAR) xjf $(BINUTILDIST)
+	$(TAR) xjf $(GCCDIST)
 	if [ -f multilibs.$(ABI).patch ]; then patch -b -p0 <multilibs.$(ABI).patch ; fi
-	tar xzf $(NEWLIBDIST)
+	$(TAR) xzf $(NEWLIBDIST)
 	ln -s "../$(NEWLIBSRC)/newlib" $(GCCSRC)/newlib
-	tar xjf $(GDBDIST)
+	$(TAR) xjf $(GDBDIST)
 	touch $@
 
 ################################################################################
@@ -88,7 +90,7 @@ $(BINUTILDIST):
 binutils.done: source.done
 	rm -rf $(BINUTILBLD)
 	mkdir -p $(BINUTILBLD)
-	cd $(BINUTILBLD) && ../../$(BINUTILSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared --with-float=soft --disable-werror
+	cd $(BINUTILBLD) && ../../$(BINUTILSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-lto --disable-nls --disable-shared --with-float=soft --disable-werror
 	$(MAKE) $(MAKEJOBS) -C $(BINUTILBLD)
 	$(MAKE) -C $(BINUTILBLD) install
 	touch binutils.done
@@ -103,12 +105,9 @@ $(GCCDIST):
 # Compile gcc
 
 gcc.done: binutils.done
-	test -f /usr/include/gmp.h
-	test -f /usr/include/mpc.h
-	test -f /usr/include/mpfr.h
 	rm -rf $(GCCBLD)
 	mkdir -p $(GCCBLD)
-	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-nls --disable-shared --with-float=soft --disable-werror --enable-languages=c,c++ --disable-libssp --disable-libgomp --with-newlib --disable-libgloss --disable-newlib-supplied-syscalls $(GCCEXTRACONFIG)
+	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-lto --disable-nls --disable-shared --with-float=soft --disable-werror --enable-languages=c,c++ --disable-libssp --disable-libgomp --with-newlib --disable-libgloss --disable-newlib-supplied-syscalls $(GCCEXTRACONFIG)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) $(MAKEJOBS) -C $(GCCBLD)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCBLD) install
 	touch gcc.done
@@ -178,9 +177,9 @@ readme.done: binutils.done gcc.done newlibdocs.done gdb.done
 
 tarball: readme.done
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-	tar czf $(TARBALL) `basename $(INSTBASE)` --mode=ugo-w
+	$(TAR) czf $(TARBALL) `basename $(INSTBASE)` --mode=ugo-w
 else
-	tar czf $(TARBALL) `basename $(INSTBASE)` --owner=root --group=root --mode=ugo-w
+	$(TAR) czf $(TARBALL) `basename $(INSTBASE)` --owner=root --group=root --mode=ugo-w
 endif
 
 ################################################################################
@@ -193,9 +192,9 @@ fakeroot: readme.done
 
 specfile: specfile.template fakeroot
 	sed s/@@PKGNAME@@/$(PKGNAME)/g <specfile.template | sed s/@@VERSION@@/$(VERSION)/g | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
-	find fakeroot/usr/local/$(PKGNAME) -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
-	find fakeroot/usr/local/$(PKGNAME) -type f | cut -c 9- >>specfile
-	find fakeroot/usr/local/$(PKGNAME) -type l | cut -c 9- >>specfile
+	$(FIND) fakeroot/usr/local/$(PKGNAME) -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
+	$(FIND) fakeroot/usr/local/$(PKGNAME) -type f | cut -c 9- >>specfile
+	$(FIND) fakeroot/usr/local/$(PKGNAME) -type l | cut -c 9- >>specfile
 
 rpm: specfile
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
