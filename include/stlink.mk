@@ -33,7 +33,7 @@ startstlink:
 # Stop ST-Link/V2 GDB server
 
 stopstlink:
-	skill `basename $(STLINKGDB) .exe`
+	-skill `basename $(STLINKGDB) .exe`
 
 # Debug with ST-Link/V2 GDB server
 

@@ -21,7 +21,7 @@ startjlink:
 # Stop J-Link GDB server
 
 stopjlink:
-	skill `basename $(JLINKGDB) .exe`
+	-skill `basename $(JLINKGDB) .exe`
 
 # Debug with J-Link
 
