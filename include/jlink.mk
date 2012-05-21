@@ -41,4 +41,4 @@ stopjlink:
 	@echo "exit"					>>$(JLINKFLASHCMDS)
 	-$(JLINKEXE) $(JLINKFLASHCMDS)
 	@rm $(JLINKFLASHCMDS)
-	@rm Default.ini
+	@if [ -f Default.ini ]; then rm Default.ini ; fi
