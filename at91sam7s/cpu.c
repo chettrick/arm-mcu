@@ -12,6 +12,10 @@ void cpu_init(unsigned long int frequency)
 {
   __use_custom_syscalls();
 
+/* Enable user reset on -NRST */
+
+  *AT91C_RSTC_RMR	= 0xA5000001;
+
 /* Configure watchdog timer */
 
   *AT91C_WDTC_WDMR	= AT91C_WDTC_WDDIS;	// Disable watchdog timer for now
@@ -29,10 +33,6 @@ void cpu_init(unsigned long int frequency)
 
   *AT91C_PMC_MCKR	= AT91C_PMC_PRES_CLK_2 | AT91C_PMC_CSS_PLL_CLK;	// Master clock source is PLL
   while (!(*AT91C_PMC_SR & AT91C_PMC_MCKRDY)); 	// Wait for master clock ready
-
-/* Enable user reset on -NRST */
-
-  *AT91C_RSTC_RMR	= 0xA5000001;
 
   CPUFREQ = 48000000;
 }
