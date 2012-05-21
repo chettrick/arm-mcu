@@ -33,7 +33,7 @@ int main(void)
   usb_serial_stdio(NULL);
   getch();
 #else
-  serial_stdio(CONSOLE_PORT);
+  serial_stdio((char *) CONSOLE_PORT);
 #endif
 
   printf("\033[H\033[2J%s System Tick Interrupt Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
