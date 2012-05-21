@@ -41,7 +41,8 @@ SECTIONS {
   code : {
     *(.startup)				/* Startup sections are first.  */
     *(.text*)				/* Program (.text) sections     */
-    KEEP(*(.rodata*))			/* are next, then constant data.*/
+    *(.gnu.linkonce.t.*)
+    KEEP(*(.rodata* .gnu.linkonce.r.*))	/* are next, then constant data.*/
     *(.glue_7)
     *(.glue_7t)
     *(.eh_frame)
@@ -60,6 +61,7 @@ SECTIONS {
   data : ALIGN(16) {
     __data_beg__ = .;			/* Used by startup.	*/
     *(.data)
+    *(.gnu.linkonce.d.*)
     __data_end__ = .;			/* Used by startup.	*/
   } >ram AT>flash
 
@@ -69,6 +71,7 @@ SECTIONS {
   bss (NOLOAD) : ALIGN(16) {
     __bss_beg__ = .;			/* Used by startup.	*/
     *(.bss)
+    *(.gnu.linkonce.b.*)
     *(COMMON)
     __bss_end__ = .;			/* Used by startup.	*/
   } >ram
