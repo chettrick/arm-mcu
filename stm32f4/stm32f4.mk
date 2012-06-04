@@ -21,6 +21,16 @@ STLINKCLIIF	= -c SWD
 endif
 endif
 
+ifeq ($(BOARDNAME), FEZ_CERB40)
+BOARDFLAGS	?= -DHSE_VALUE=12000000 -DCONSOLE_PORT='"com2:115200,n,8,1"'
+MCU		= stm32f405rg
+JLINKGDBIF	= -if SWD
+
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+STLINKCLIIF	= -c SWD
+endif
+endif
+
 # Phony targets
 
 .PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib

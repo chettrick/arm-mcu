@@ -13,11 +13,11 @@ int main(void)
   cpu_init(DEFAULT_CPU_FREQ);
 
 #ifdef STM32F4_DISCOVERY
-  gpiopin_configure(GPIOPIN0, GPIOPIN_INPUT);
-  gpiopin_configure(GPIOPIN60, GPIOPIN_OUTPUT);
-  gpiopin_configure(GPIOPIN61, GPIOPIN_OUTPUT);
-  gpiopin_configure(GPIOPIN62, GPIOPIN_OUTPUT);
-  gpiopin_configure(GPIOPIN63, GPIOPIN_OUTPUT);
+  gpiopin_configure(GPIOPIN0, GPIOPIN_INPUT);		// PA0
+  gpiopin_configure(GPIOPIN60, GPIOPIN_OUTPUT);		// PD12
+  gpiopin_configure(GPIOPIN61, GPIOPIN_OUTPUT);		// PD13
+  gpiopin_configure(GPIOPIN62, GPIOPIN_OUTPUT);		// PD14
+  gpiopin_configure(GPIOPIN63, GPIOPIN_OUTPUT);		// PD15
 
   for (i = 0;; i++)
   {
@@ -40,6 +40,21 @@ int main(void)
       GPIOPIN62OUT = i >> 21;
       GPIOPIN63OUT = i >> 22;
     }
+  }
+#endif
+
+#ifdef FEZ_CERB40
+  gpiopin_configure(GPIOPIN38, GPIOPIN_OUTPUT);		// PC6
+  gpiopin_configure(GPIOPIN39, GPIOPIN_OUTPUT);		// PC7
+  gpiopin_configure(GPIOPIN40, GPIOPIN_OUTPUT);		// PC8
+  gpiopin_configure(GPIOPIN41, GPIOPIN_OUTPUT);		// PC9
+
+  for (i = 0;; i++)
+  {
+    GPIOPIN60OUT = i >> 13;
+    GPIOPIN61OUT = i >> 14;
+    GPIOPIN62OUT = i >> 15;
+    GPIOPIN63OUT = i >> 16;
   }
 #endif
 }
