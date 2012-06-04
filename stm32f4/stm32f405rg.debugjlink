@@ -1,6 +1,6 @@
 # GDB startup script for debugging a program in flash ROM
 
-# $Id: stm32f405rg.debugjlink 3394 2011-11-25 10:40:10Z svn $
+# $Id$
 
 # Connect to the GDB server
 

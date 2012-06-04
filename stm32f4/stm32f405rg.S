@@ -1,6 +1,6 @@
 /* Startup for STM32F405 Cortex-M4 ARM MCU */
 
-// $Id: stm32f40555555555vg.S 3808 2012-05-07 13:31:38Z svn $
+// $Id$
 
 		.syntax 	unified
 		.thumb

@@ -1,6 +1,6 @@
 /* Linker script for STM32F405RG Cortex-M4 ARM MCU */
 
-/* $Id: stm32f405rg.ld 3790 2012-05-04 11:39:39Z svn $ */
+/* $Id$ */
 
 MEMORY
 {
