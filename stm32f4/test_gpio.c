@@ -51,10 +51,10 @@ int main(void)
 
   for (i = 0;; i++)
   {
-    GPIOPIN60OUT = i >> 13;
-    GPIOPIN61OUT = i >> 14;
-    GPIOPIN62OUT = i >> 15;
-    GPIOPIN63OUT = i >> 16;
+    GPIOPIN38OUT = i >> 18;
+    GPIOPIN39OUT = i >> 19;
+    GPIOPIN40OUT = i >> 20;
+    GPIOPIN41OUT = i >> 21;
   }
 #endif
 }
