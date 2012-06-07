@@ -33,7 +33,7 @@ static void SendBit(lego_bit_t bit)
 
   n = 12;
 
-  for (i = 1; i <= 12; i++)
+  for (i = 1; i <= n; i++)
   {
     for (j = 0; j < DELAY38KHZ; j++);
 
@@ -67,7 +67,7 @@ static void SendFrame(uint16_t data)
 
   for (i = 0; i < 16; i++)
   {
-    SendBit(data >> 15);
+    SendBit((data >> 15) & 0x01);
 
     data <<= 1;
   }
