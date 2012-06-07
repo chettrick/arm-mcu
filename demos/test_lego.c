@@ -77,13 +77,32 @@ static void SendFrame(uint16_t data)
   SendBit(BIT_STOP);
 }
 
+#define SYSTICKRATE	50
+
+_BEGIN_STD_C
+
+volatile int TimerCounter = 0;
+volatile uint16_t frame = 0x400;
+
+void SysTick_Handler(void)
+{
+  if (++TimerCounter == SYSTICKRATE)
+  {
+    TimerCounter = 0;
+    SendFrame(frame);
+  }
+}
+
+_END_STD_C
+
 int main(void)
 {
   int i;
   char inbuf[16];
   uint8_t channel;
-  uint8_t nibble2 = 0;
-  uint8_t nibble3 = 0;
+  uint8_t SpeedB;
+  uint8_t SpeedA;
+  uint16_t newframe;
 
   cpu_init(DEFAULT_CPU_FREQ);
 
@@ -98,6 +117,10 @@ int main(void)
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", CPUFREQ, __COMPILER__, __VERSION__, __ABI__);
 
+// Initialize System Tick
+
+  SysTick_Config(SystemCoreClock / SYSTICKRATE);
+
 // Initialize the LED output
 
   gpiopin_configure(LEDPIN, GPIOPIN_OUTPUT);
@@ -109,6 +132,7 @@ int main(void)
   do
   {
     printf("Enter channel number (1 to 4): ");
+    fflush(stdout);
     memset(inbuf, 0, sizeof(inbuf));
     gets(inbuf);
     channel = atoi(inbuf);
@@ -119,14 +143,27 @@ int main(void)
 
   for (;;)
   {
-    if (keypressed())
-    {
-      memset(inbuf, 0, sizeof(inbuf));
-      cgets(inbuf, sizeof(inbuf));
-      sscanf(inbuf, "%hhx,%hhx", &nibble3, &nibble2);
-    }
 
-    SendFrame(0x400 | (channel << 8) | (nibble2 << 4) | nibble3);
-    for (i = 0; i < 2500000; i++);
+// Get motor speeds from operator
+
+    do
+    {
+      printf("Enter motor speeds (0-F 0-F): ");
+      fflush(stdout);
+      memset(inbuf, 0, sizeof(inbuf));
+      gets(inbuf);
+      SpeedA = 0xFF;
+      SpeedB = 0xFF;
+      sscanf(inbuf, "%hhx %hhx", &SpeedA, &SpeedB);
+    }
+    while ((SpeedA > 15) || (SpeedB > 15));
+
+// Assemble new frame
+
+    newframe = 0x400 | (channel << 8) | (SpeedB << 4) | SpeedA;
+
+// Move new frame to staging area
+
+    frame = newframe;
   }
 }
