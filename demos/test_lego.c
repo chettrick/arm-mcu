@@ -8,10 +8,12 @@ static const char revision[] = "$Id: test_gpio.c 3199 2011-10-18 11:28:12Z svn $
 
 #include <cpu.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 
 #ifdef FEZ_CERB40
-#define LEDPIN		GPIOPIN38
-#define LEDOUT		GPIOPIN38OUT
+#define LEDPIN		GPIOPIN32	// PC0
+#define LEDOUT		GPIOPIN32OUT	// PC0
 #define DELAY38KHZ	182
 #endif
 
@@ -77,11 +79,54 @@ static void SendFrame(uint16_t data)
 
 int main(void)
 {
+  int i;
+  char inbuf[16];
+  uint8_t channel;
+  uint8_t nibble2 = 0;
+  uint8_t nibble3 = 0;
+
   cpu_init(DEFAULT_CPU_FREQ);
+
+#ifdef CONSOLE_USB
+  usb_serial_stdio(NULL);
+  getch();
+#else
+  serial_stdio(CONSOLE_PORT);
+#endif
+
+  printf("\033[H\033[2J%s LEGO Power Functions RC Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
+  puts(revision);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", CPUFREQ, __COMPILER__, __VERSION__, __ABI__);
+
+// Initialize the LED output
 
   gpiopin_configure(LEDPIN, GPIOPIN_OUTPUT);
 
   LEDOUT = 0;
 
-  SendFrame(0);
+// Get RC channel number
+
+  do
+  {
+    printf("Enter channel number (1 to 4): ");
+    memset(inbuf, 0, sizeof(inbuf));
+    gets(inbuf);
+    channel = atoi(inbuf);
+  }
+  while ((channel < 1) || (channel > 4));
+
+  channel--;
+
+  for (;;)
+  {
+    if (keypressed())
+    {
+      memset(inbuf, 0, sizeof(inbuf));
+      cgets(inbuf, sizeof(inbuf));
+      sscanf(inbuf, "%hhx,%hhx", &nibble3, &nibble2);
+    }
+
+    SendFrame(0x400 | (channel << 8) | (nibble2 << 4) | nibble3);
+    for (i = 0; i < 2500000; i++);
+  }
 }
