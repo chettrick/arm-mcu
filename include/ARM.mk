@@ -37,7 +37,7 @@ CFLAGS		+= -Wall -ffunction-sections
 CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDIR)
 CFLAGS		+= $(OPTFLAGS) $(CPUFLAGS) $(BOARDFLAGS) $(IOFLAGS) $(CONFIGFLAGS) $(DEBUGFLAGS) $(EXTRAFLAGS)
 CXXFLAGS	+= -fpermissive -fno-exceptions -fno-rtti -fno-use-cxa-atexit
-LDFLAGS		+= -nostartfiles -nostdlib -T$(LINKERSCRIPT) -L$(MCUDIR) -l$(MCU) -lc -lm
+LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDIR) -l$(MCU)
 ifeq ($(WITH_LIBSTDCPP), yes)
 LDFLAGS		+= -lstdc++
 endif
