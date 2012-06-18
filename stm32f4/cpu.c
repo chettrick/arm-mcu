@@ -8,8 +8,6 @@ static const char revision[] = "$Id: cpu.c 3016 2011-09-19 10:44:24Z svn $";
 
 void cpu_init(unsigned long int frequency)
 {
-  __use_custom_syscalls();
-
   SystemInit();
   SystemCoreClockUpdate();
 }

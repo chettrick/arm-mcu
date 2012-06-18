@@ -10,8 +10,6 @@ static const char revision[] = "$Id$";
 
 void cpu_init(unsigned long int frequency)
 {
-  __use_custom_syscalls();
-
   CHIP_Init();			// Fix chip errata
 
   SystemInit();

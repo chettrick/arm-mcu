@@ -49,12 +49,4 @@
 #define sscanf(...)		siscanf(__VA_ARGS__)
 #define fscanf(...)		fiscanf(__VA_ARGS__)
 #endif
-
-// Trick linker into using our syscall functions
-
-_BEGIN_STD_C
-
-extern void __use_custom_syscalls(void);
-
-_END_STD_C
 #endif

@@ -10,7 +10,6 @@ unsigned long int CPUFREQ;
 
 void cpu_init(unsigned long int frequency)
 {
-  __use_custom_syscalls();
 
 /* Enable user reset on -NRST */
 

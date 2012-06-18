@@ -10,7 +10,6 @@ unsigned long int CPUFREQ;
 
 void cpu_init(unsigned long int frequency)
 {
-  __use_custom_syscalls();
 
 /* Initialize MAM--See Errata MAM.1 */
 
