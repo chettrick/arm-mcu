@@ -6,7 +6,7 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 
-unsigned long int CPUFREQ;
+unsigned long int SystemCoreClock;
 
 void cpu_init(unsigned long int frequency)
 {
@@ -33,5 +33,39 @@ void cpu_init(unsigned long int frequency)
   *AT91C_PMC_MCKR	= AT91C_PMC_PRES_CLK_2 | AT91C_PMC_CSS_PLL_CLK;	// Master clock source is PLL
   while (!(*AT91C_PMC_SR & AT91C_PMC_MCKRDY)); 	// Wait for master clock ready
 
-  CPUFREQ = 48000000;
+  SystemCoreClock = 48000000;
 }
+
+// Emulate Cortex-M3 system tick timer
+
+_BEGIN_STD_C
+
+#include "aic.h"
+#include "pit.h"
+
+__attribute__ ((__interrupt__)) void TimerISR(void)
+{
+  SysTick_Handler();
+
+  *AT91C_AIC_EOICR = *AT91C_PITC_PIVR;	// Acknowledge interrupt
+}
+
+unsigned long int SysTick_Config(unsigned long int ticks)
+{
+  unsigned long int rate = SystemCoreClock/ticks;
+
+/* Configure timer to interrupt specified times per second */
+
+  PIT_Init(1000000/rate, SystemCoreClock/1000000);
+  PIT_EnableIT();
+  PIT_Enable();
+
+/* Configure timer interrupt */
+
+  AIC_ConfigureIT(AT91C_ID_SYS, AT91C_AIC_SRCTYPE_INT_HIGH_LEVEL, TimerISR);
+  AIC_EnableIT(AT91C_ID_SYS);
+
+  return 0;
+}
+
+_END_STD_C
