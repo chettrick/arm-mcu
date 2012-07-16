@@ -12,6 +12,7 @@ static const char revision[] = "$Id$";
 #include <errno.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/times.h>
 
 extern char __heap_start__[];	// Beginning of heap, address set by linker
 extern char __heap_end__[];	// End of heap, address set by linker
