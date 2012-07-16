@@ -96,7 +96,7 @@ int serial_open(char *name, unsigned int *subdevice)
 
   US_CR = 0x00000050;
   US_MR = 0x000008C0;
-  US_BRGR = CPUFREQ/16/baudrate;
+  US_BRGR = SystemCoreClock/16/baudrate;
 
   return 0;
 }
