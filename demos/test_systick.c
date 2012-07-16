@@ -1,4 +1,4 @@
-/* Simple timer interrupt test program */
+/* Simple system tick interrupt test program */
 
 // $Id$
 
@@ -38,7 +38,7 @@ int main(void)
 
   printf("\033[H\033[2J%s System Tick Interrupt Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
   puts(revision);
-  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", CPUFREQ, __COMPILER__, __VERSION__, __ABI__);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", SystemCoreClock, __COMPILER__, __VERSION__, __ABI__);
 
 // Configure LED(s)
 
