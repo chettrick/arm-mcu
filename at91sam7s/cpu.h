@@ -23,7 +23,7 @@ extern void cpu_init(unsigned long int frequency);
 // Emulate Cortex-M3 system tick timer
 
 extern unsigned long int SysTick_Config(unsigned long int ticks);
-extern void Systick_Handler(void);
+extern void SysTick_Handler(void);
 
 _END_STD_C
 #endif
