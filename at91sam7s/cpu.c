@@ -43,6 +43,10 @@ _BEGIN_STD_C
 #include "aic.h"
 #include "pit.h"
 
+__attribute__ ((weak)) void SysTick_Handler(void)	// Satisfy linker
+{
+}
+
 __attribute__ ((__interrupt__)) void TimerISR(void)
 {
   SysTick_Handler();
