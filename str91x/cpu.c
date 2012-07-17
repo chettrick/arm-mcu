@@ -6,7 +6,7 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 
-unsigned long int CPUFREQ;
+unsigned long int SystemCoreClock;
 
 void cpu_init(unsigned long int frequency)
 {
@@ -35,5 +35,5 @@ void cpu_init(unsigned long int frequency)
   SCU_HCLKDivisorConfig(SCU_HCLK_Div1);		// HCLK = RCLK = 48 MHz
   SCU_PCLKDivisorConfig(SCU_PCLK_Div1);		// PCLK = RCLK = 48 MHz
 
-  CPUFREQ = 48000000;
+  SystemCoreClock = 48000000;
 }

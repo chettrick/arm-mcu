@@ -22,7 +22,7 @@ _BEGIN_STD_C
 
 extern void cpu_init(unsigned long int frequency);
 
-extern unsigned long int CPUFREQ;
+extern unsigned long int SystemCoreClock;
 
 _END_STD_C
 #endif

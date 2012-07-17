@@ -43,7 +43,7 @@ int main(void)
 
   puts("\033[H\033[2JSTR91FAW44 Timer Interrupt Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
-  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", CPUFREQ, __COMPILER__, __VERSION__, __ABI__);
+  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", SystemCoreClock, __COMPILER__, __VERSION__, __ABI__);
 
 /* Configure LED(s) */
 
@@ -65,7 +65,7 @@ int main(void)
   config_timer.TIM_OC1_Modes = TIM_TIMING;
   config_timer.TIM_Clock_Source = TIM_CLK_APB;
   config_timer.TIM_Prescaler = 0xFF;
-  config_timer.TIM_Pulse_Length_1 = CPUFREQ/256/5;
+  config_timer.TIM_Pulse_Length_1 = SystemCoreClock/256/5;
   TIM_Init(TIM1, &config_timer);
   TIM_CounterCmd(TIM1, TIM_CLEAR);
   TIM_ITConfig(TIM1, TIM_IT_OC1, ENABLE);
