@@ -37,3 +37,55 @@ void cpu_init(unsigned long int frequency)
 
   SystemCoreClock = 48000000;
 }
+
+// Emulate Cortex-M3 system tick timer
+
+_BEGIN_STD_C
+
+__attribute__ ((__interrupt__)) void TIM1_IRQHandler(void)
+{
+  SysTick_Handler();
+
+  TIM1->SR = 0x0000;		// Clear OCF1
+  TIM1->CNTR = 0x0000;		// Reset counter
+  VIC0->VAR = 0;		// Signal end of interrupt
+}
+
+unsigned long int SysTick_Config(unsigned long int ticks)
+{
+  TIM_InitTypeDef config_timer;
+
+/* Configure VIC */
+
+  SCU_AHBPeriphClockConfig(__VIC, ENABLE);	// Enable VIC clock
+  SCU_AHBPeriphReset(__VIC, DISABLE);		// Let VIC out of reset
+
+/* Configure timer 1 to interrupt 10 times a second */
+
+  SCU_APBPeriphClockConfig(__TIM01, ENABLE);	// Turn on timer 1 clock
+  SCU_APBPeriphReset(__TIM01, DISABLE);		// Let timer 1 out of reset
+
+  TIM_StructInit(&config_timer);
+  config_timer.TIM_Mode = TIM_OCM_CHANNEL_1;	// Select OC1 match
+  config_timer.TIM_OC1_Modes = TIM_TIMING;	// Select OC1 timing mode
+  config_timer.TIM_Clock_Source = TIM_CLK_APB;	// Select PCLK as source
+  config_timer.TIM_Prescaler = 99;		// Select PCLK/100
+  config_timer.TIM_Pulse_Length_1 = ticks/100;	// Configure period
+  TIM_Init(TIM1, &config_timer);
+  TIM_CounterCmd(TIM1, TIM_CLEAR);		// Clear the counter
+  TIM_ITConfig(TIM1, TIM_IT_OC1, ENABLE);	// Enable OC1 interrupt
+  TIM_CounterCmd(TIM1, TIM_START);		// Start the counter
+
+/* Configure timer 1 interrupt */
+
+  DISABLE_INTERRUPTS(IRQ);
+
+  VIC_Config(TIM1_ITLine, VIC_IRQ, 0);		// Configure timer 1 interrupt
+  VIC_ITCmd(TIM1_ITLine, ENABLE);		// Enable timer 1 interrupt
+
+  ENABLE_INTERRUPTS(IRQ);
+
+  return 0;
+}
+
+_END_STD_C
