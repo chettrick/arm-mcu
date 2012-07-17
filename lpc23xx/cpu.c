@@ -6,7 +6,7 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 
-unsigned long int CPUFREQ;
+unsigned long int SystemCoreClock;
 
 void cpu_init(unsigned long int frequency)
 {
@@ -15,7 +15,7 @@ void cpu_init(unsigned long int frequency)
 
 #ifdef REVISION_A
   MAMCR = 1;			// MAM functions partially enabled
-  MAMTIM = 3;			// 3 CPU clocks per fetch cycle
+  MAMTIM = 3;			// CPU clocks per fetch cycle
 #else
   MAMCR = 2;			// MAM functions fully enabled
   MAMTIM = 4;			// CPU clocks per fetch cycle
@@ -47,8 +47,50 @@ void cpu_init(unsigned long int frequency)
   PLLFEED = 0x55;
 
 #ifdef REVISION_A
-  CPUFREQ = 48000000;
+  SystemCoreClock = 48000000;
 #else
-  CPUFREQ = 72000000;
+  SystemCoreClock = 72000000;
 #endif
 }
+
+_BEGIN_STD_C
+
+__attribute__ ((__interrupt__)) void Timer0ISR(void)
+{
+  SysTick_Handler();
+
+  T0IR = 0x01;
+  VICVectAddr = 0;
+}
+
+unsigned long int SysTick_Config(unsigned long int ticks)
+{
+
+/* Configure timer 0 */
+
+  PCLKSEL0 &= 0xFFFFFFF3;			// PCLK_TIMER0 is CCLK/4
+
+  T0TCR = 2;					// Reset timer 0
+  T0TCR = 0;					// Release timer 0 reset
+  T0PR = 0;					// Timer 0 precaler trips every PCLK
+  T0CTCR = 0;					// Timer 0 increments every PCLK
+  T0MR0 = ticks/4;				// Match when we reach tick count
+  T0MCR = 3;					// Interrupt and reset on match
+
+/* Configure timer 0 interrupt */
+
+  DISABLE_INTERRUPTS(IRQ);
+
+  VICIntSelect &= ~(1 << INT_TIMER0);		// Timer 0 uses IRQ
+  VICVectPriority4 = 0;
+  VICVectAddr4 = (unsigned long int) Timer0ISR;	// Timer 0 ISR address
+  VICIntEnable = 1 << INT_TIMER0;		// Enable timer 0 interrupt
+
+  ENABLE_INTERRUPTS(IRQ);
+
+  T0TCR = 1;					// Start timer 0
+
+  return 0;
+}
+
+_END_STD_C

@@ -123,7 +123,7 @@ int serial_open(char *name, unsigned int *subdevice)
 
   UxFDR = 0x49;				// Set fractional divider
 
-  b = CPUFREQ/208/baudrate;
+  b = SystemCoreClock/208/baudrate;
 
   UxLCR = 0x03;				// Enable access to IER
   UxIER = 0x00;				// Disable UART interrupts
