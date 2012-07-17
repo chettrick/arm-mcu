@@ -42,6 +42,10 @@ void cpu_init(unsigned long int frequency)
 
 _BEGIN_STD_C
 
+__attribute__ ((weak)) void SysTick_Handler(void)	// Satisfy linker
+{
+}
+
 __attribute__ ((__interrupt__)) void TIM1_IRQHandler(void)
 {
   SysTick_Handler();
