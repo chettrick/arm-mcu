@@ -1,5 +1,5 @@
---- gcc-4.7.0/gcc/config/arm/t-arm-elf.orig	2011-11-02 16:23:48.000000000 +0100
-+++ gcc-4.7.0/gcc/config/arm/t-arm-elf	2012-05-03 09:58:20.807176300 +0200
+--- gcc-4.7.1/gcc/config/arm/t-arm-elf.orig	2011-11-02 16:23:48.000000000 +0100
++++ gcc-4.7.1/gcc/config/arm/t-arm-elf	2012-05-03 09:58:20.807176300 +0200
 @@ -22,70 +22,29 @@
  MULTILIB_EXCEPTIONS  = 
  MULTILIB_MATCHES     =
