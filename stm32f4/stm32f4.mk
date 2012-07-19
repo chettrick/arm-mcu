@@ -9,6 +9,10 @@ TEXTBASE	?= 0x00000000
 CFLAGS		+= -DSTM32F4XX
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
+ifeq ($(WITH_FPU), yes)
+CPUFLAGS	+= -mfloat-abi=hard -mfpu=fpv4-sp-d16
+endif
+
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), STM32F4_DISCOVERY)
