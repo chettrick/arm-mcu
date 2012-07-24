@@ -57,7 +57,7 @@ default_catch:
 
 # These targets are not files
 
-.PHONY: default_catch update clean
+.PHONY: default_catch clean
 
 # These are the target suffixes
 
@@ -96,12 +96,6 @@ default_catch:
 
 .S.o:
 	$(CC) $(CFLAGS) -c -o $@ -c $<
-
-# Update from source code repository
-
-update:
-	svn status --no-ignore
-	svn update
 
 # Support for common library functions
 
@@ -182,3 +176,7 @@ include $(ARMSRC)/include/stm32flash.mk
 # Include MCU dependent makefile
 
 include $(MCUDIR)/$(MCUFAMILY).mk
+
+# Include optional subordinate makefiles
+
+sinclude $(HOME)/src/include/subversion.mk
