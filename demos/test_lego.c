@@ -9,6 +9,7 @@ static const char revision[] = "$Id: test_gpio.c 3199 2011-10-18 11:28:12Z svn $
 #include <cpu.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #ifdef FEZ_CERB40
@@ -97,11 +98,10 @@ _END_STD_C
 
 int main(void)
 {
-  int i;
   char inbuf[16];
-  uint8_t channel;
-  uint8_t SpeedB;
-  uint8_t SpeedA;
+  uint8_t __attribute__ ((aligned (4))) channel;
+  uint8_t __attribute__ ((aligned (4))) SpeedB;
+  uint8_t __attribute__ ((aligned (4))) SpeedA;
   uint16_t newframe;
 
   cpu_init(DEFAULT_CPU_FREQ);
@@ -113,9 +113,11 @@ int main(void)
   serial_stdio(CONSOLE_PORT);
 #endif
 
+#ifdef INTERACTIVE
   printf("\033[H\033[2J%s LEGO Power Functions RC Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", SystemCoreClock, __COMPILER__, __VERSION__, __ABI__);
+#endif
 
 // Initialize System Tick
 
@@ -129,34 +131,49 @@ int main(void)
 
 // Get RC channel number
 
+#ifdef INTERACTIVE
   do
   {
     printf("Enter channel number (1 to 4): ");
     fflush(stdout);
     memset(inbuf, 0, sizeof(inbuf));
     gets(inbuf);
-    channel = atoi(inbuf);
+    channel = atoi(inbuf) - 1;
   }
-  while ((channel < 1) || (channel > 4));
-
-  channel--;
+  while (channel > 3);
+#endif
 
   for (;;)
   {
 
 // Get motor speeds from operator
 
+#ifdef INTERACTIVE
     do
     {
       printf("Enter motor speeds (0-F 0-F): ");
       fflush(stdout);
       memset(inbuf, 0, sizeof(inbuf));
+      fflush(stdin);
       gets(inbuf);
       SpeedA = 0xFF;
       SpeedB = 0xFF;
       sscanf(inbuf, "%hhx %hhx", &SpeedA, &SpeedB);
     }
     while ((SpeedA > 15) || (SpeedB > 15));
+#else
+    do
+    {
+      memset(inbuf, 0, sizeof(inbuf));
+      fflush(stdin);
+      gets(inbuf);
+      channel = 0xFF;
+      SpeedA = 0xFF;
+      SpeedB = 0xFF;
+      sscanf(inbuf, "%hhu %hhu %hhu", &channel, &SpeedA, &SpeedB);
+    }
+    while ((channel > 3) || (SpeedA > 15) || (SpeedB > 15));
+#endif
 
 // Assemble new frame
 
