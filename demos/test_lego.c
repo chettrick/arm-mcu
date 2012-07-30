@@ -12,6 +12,12 @@ static const char revision[] = "$Id: test_gpio.c 3199 2011-10-18 11:28:12Z svn $
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef STM32F4_DISCOVERY
+#define LEDPIN		GPIOPIN63	// PD15
+#define LEDOUT		GPIOPIN63OUT	// PD15
+#define DELAY38KHZ	182
+#endif
+
 #ifdef FEZ_CERB40
 #define LEDPIN		GPIOPIN32	// PC0
 #define LEDOUT		GPIOPIN32OUT	// PC0
@@ -100,15 +106,17 @@ int main(void)
 {
   char inbuf[16];
   uint8_t __attribute__ ((aligned (4))) channel;
-  uint8_t __attribute__ ((aligned (4))) SpeedB;
-  uint8_t __attribute__ ((aligned (4))) SpeedA;
+  int8_t __attribute__ ((aligned (4))) SpeedB;
+  int8_t __attribute__ ((aligned (4))) SpeedA;
   uint16_t newframe;
 
   cpu_init(DEFAULT_CPU_FREQ);
 
 #ifdef CONSOLE_USB
   usb_serial_stdio(NULL);
+#ifdef INTERACTIVE
   getch();
+#endif
 #else
   serial_stdio(CONSOLE_PORT);
 #endif
@@ -138,7 +146,8 @@ int main(void)
     fflush(stdout);
     memset(inbuf, 0, sizeof(inbuf));
     gets(inbuf);
-    channel = atoi(inbuf) - 1;
+    sscanf(inbuf, "%hhu", &channel);
+    channel--;
   }
   while (channel > 3);
 #endif
@@ -151,16 +160,16 @@ int main(void)
 #ifdef INTERACTIVE
     do
     {
-      printf("Enter motor speeds (0-F 0-F): ");
+      printf("Enter motor speeds (-7..7 -7..7): ");
       fflush(stdout);
       memset(inbuf, 0, sizeof(inbuf));
       fflush(stdin);
       gets(inbuf);
       SpeedA = 0xFF;
       SpeedB = 0xFF;
-      sscanf(inbuf, "%hhx %hhx", &SpeedA, &SpeedB);
+      sscanf(inbuf, "%hhd %hhd", &SpeedA, &SpeedB);
     }
-    while ((SpeedA > 15) || (SpeedB > 15));
+    while ((SpeedA < -7) || (SpeedA > 7) || (SpeedB < -7) || (SpeedB > 15));
 #else
     do
     {
@@ -170,10 +179,16 @@ int main(void)
       channel = 0xFF;
       SpeedA = 0xFF;
       SpeedB = 0xFF;
-      sscanf(inbuf, "%hhu %hhu %hhu", &channel, &SpeedA, &SpeedB);
+      sscanf(inbuf, "%hhu %hhd %hhd", &channel, &SpeedA, &SpeedB);
+      channel--;
     }
-    while ((channel > 3) || (SpeedA > 15) || (SpeedB > 15));
+    while ((channel > 3) || (SpeedA < -7) || (SpeedA > 7) || (SpeedB < -7) || (SpeedB > 15));
 #endif
+
+// Remap reverse speeds
+
+  if (SpeedA < 0) SpeedA += 16;
+  if (SpeedB < 0) SpeedB += 16;
 
 // Assemble new frame
 
