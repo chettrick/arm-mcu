@@ -3,8 +3,13 @@
 # $Id$
 
 ABI		= eabi
-TARGETNAME	= arm-$(ABI)
-PKGNAME		= $(TARGETNAME)-tools
+ifeq ($(ABI), elf)
+TARGETNAME	= arm-elf
+PKGNAME		= arm-elf-tools
+else
+TARGETNAME	= arm-none-eabi
+PKGNAME		= arm-tools
+endif
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 TEMP		= /tmp
 TAR		= tar
@@ -90,7 +95,7 @@ $(BINUTILDIST):
 binutils.done: source.done
 	rm -rf $(BINUTILBLD)
 	mkdir -p $(BINUTILBLD)
-	cd $(BINUTILBLD) && ../../$(BINUTILSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-lto --disable-nls --disable-shared --with-float=soft --disable-werror
+	cd $(BINUTILBLD) && ../../$(BINUTILSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-lto --disable-nls --disable-shared --with-float=soft --disable-werror
 	$(MAKE) $(MAKEJOBS) -C $(BINUTILBLD)
 	$(MAKE) -C $(BINUTILBLD) install
 	touch binutils.done
@@ -107,7 +112,7 @@ $(GCCDIST):
 gcc.done: binutils.done
 	rm -rf $(GCCBLD)
 	mkdir -p $(GCCBLD)
-	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-lto --disable-nls --disable-shared --with-float=soft --disable-werror --enable-languages=c,c++ --disable-libssp --disable-libgomp --with-newlib --disable-libgloss --disable-newlib-supplied-syscalls $(GCCEXTRACONFIG)
+	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-lto --disable-nls --disable-shared --with-float=soft --disable-werror --enable-languages=c,c++ --disable-libssp --disable-libgomp --with-newlib --disable-libgloss --disable-newlib-supplied-syscalls $(GCCEXTRACONFIG)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) $(MAKEJOBS) -C $(GCCBLD)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCBLD) install
 	touch gcc.done
