@@ -4,5 +4,6 @@
 
 ARMSRC		?= ..
 MCUFAMILY	?= stm32f4
+BOARDNAME	?= STM32F4_DISCOVERY
 
-include $(ARMSRC)/$(MCUFAMILY)/Makefile
+include $(ARMSRC)/include/ARM.mk
