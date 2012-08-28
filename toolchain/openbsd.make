@@ -9,7 +9,7 @@ BINUTILVER	!= awk '/BINUTILVER.*=/ { print $$3 }'	<Makefile
 GCCVER		!= awk '/GCCVER.*=/     { print $$3 }'	<Makefile
 NEWLIBVER	!= awk '/NEWLIBVER.*=/	{ print $$3 }'	<Makefile
 GDBVER		!= awk '/GDBVER.*=/	{ print $$3 }'	<Makefile
-PACKAGENAME	:= arm-eabi-tools-$(BINUTILVER)_$(GCCVER)_$(NEWLIBVER)_$(GDBVER).tgz
+PACKAGENAME	:= arm-tools-$(BINUTILVER)_$(GCCVER)_$(NEWLIBVER)_$(GDBVER).tgz
 
 default_openbsd: $(PACKAGENAME)
 
@@ -23,7 +23,7 @@ CONTENTS: fakeroot
 	echo "@group wheel"				>>CONTENTS
 	echo "@mode -w"					>>CONTENTS
 	echo "@cwd /usr/local"				>>CONTENTS
-	find fakeroot/usr/local/arm-eabi-tools -type d | awk '{ printf("@dir %s\n", substr($$1, 20)); }' >>CONTENTS
+	find fakeroot/usr/local/arm-tools -type d | awk '{ printf("@dir %s\n", substr($$1, 20)); }' >>CONTENTS
 	find fakeroot -type f | cut -c 20- | sort	>>CONTENTS
 
 COMMENT:
