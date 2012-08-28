@@ -1,8 +1,0 @@
-Changes made to EFM32 CMSIS Library from Energy Micro
------------------------------------------------------
-
-$Id$
-
-1. Imported EFM32 CMSIS Library Version 2.2.2.
-
-2. Defined EFM_ASSERT() as assert() in efm32_assert.h.
