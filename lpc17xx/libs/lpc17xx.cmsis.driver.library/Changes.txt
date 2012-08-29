@@ -14,3 +14,5 @@ $Id$
 5. Changed float to uint32_t in lpc17xx_systick.c.
 
 6. Defined CHECK_PARAM() as assert() in lpc17xx_libcfg_default.h.
+
+7. Removed useless prebuilt libraries in Core/DSP_Lib/Lib.
