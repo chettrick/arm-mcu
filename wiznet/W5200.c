@@ -313,7 +313,7 @@ int wiznet_initialize(const uint32_t spiportnum,
 // Register a device driver for the socket
 
     memset(socketname, 0, sizeof(socketname));
-    snprintf(socketname, sizeof(socketname), "socket%d:", s);
+    sniprintf(socketname, sizeof(socketname), "socket%d:", s);
 
     if ((status = device_register_char(socketname, s, socket_open, socket_close,
                                        socket_write,  socket_read,
