@@ -26,6 +26,25 @@ static USART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
   USART6,
 };
 
+/* Lightweight alternative to newlib atoi() */
+
+static int lightweight_atoi(const char *s)
+{
+  int x = 0;
+
+  while (*s)
+  {
+    char c = *s++;
+
+    if ((c >= '0') && (c <= '9'))
+      x = x*10 + c - '0';
+    else
+      break;
+  }
+
+  return x;
+}
+
 /* Map serial port device name to port number */
 
 int serial_name_to_port(char *name)
@@ -74,7 +93,7 @@ int serial_open(char *name, unsigned int *subdevice)
 
 // Extract baud rate from device name
 
-  baudrate = atoi(name+5);
+  baudrate = lightweight_atoi(name+5);
 
 // Turn on USART
 
