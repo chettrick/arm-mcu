@@ -15,6 +15,7 @@ int main(void)
   char buf[256];
   int x, y;
 
+  cpu_init(DEFAULT_CPU_FREQ);
   conio_init(CONSOLE_PORT);
 
   cprintf("\033[H\033[2J%s Console I/O Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
