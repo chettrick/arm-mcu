@@ -1,4 +1,4 @@
-/* Simple serial console I/O test program */
+/* Simple standard I/O test program */
 
 // $Id$
 
