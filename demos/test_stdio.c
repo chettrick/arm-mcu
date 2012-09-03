@@ -24,7 +24,7 @@ int main(void)
   serial_stdio(CONSOLE_PORT);
 #endif
 
-  printf("\033[H\033[2J%s Serial Console I/O Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
+  printf("\033[H\033[2J%s Standard I/O Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
   puts(revision);
   printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", SystemCoreClock, __COMPILER__, __VERSION__, __ABI__);
 
