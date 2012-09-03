@@ -99,7 +99,7 @@ int main(void)
 
   putchar('\n');
 
-// Test scanf()
+// Test numeric input
 
   for (;;)
   {
@@ -107,11 +107,14 @@ int main(void)
     fflush(stdout);
 
     fflush(stdin);
-    scanf("%d %d", &x, &y);
+    fgets(buf, sizeof(buf), stdin);
+    sscanf(buf, "%d %d", &x, &y);
     printf("You entered %d and %d\n", x, y);
 
     if ((x == 0) && (y == 0)) break;
   }
+
+// Test assert()
 
   assert(FALSE);
 }
