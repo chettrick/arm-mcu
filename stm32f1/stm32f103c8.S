@@ -189,7 +189,8 @@ call_main:	mov		r0, #0			// argc=0
 //=============================================================================
 
 // These are filled in by the linker
-	
+
+		.align		4
 TEXT_END:	.word		__text_end__
 DATA_BEG:	.word		__data_beg__
 DATA_END:	.word		__data_end__
@@ -203,6 +204,7 @@ CTORS_END:	.word		__ctors_end__
 // libstdc++ needs this
 
 		.bss
+		.align		4
 __dso_handle:	.word
 		.global		__dso_handle
 		.weak		__dso_handle
