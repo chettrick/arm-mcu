@@ -86,5 +86,5 @@ int main(void)
   }
 
   cputs("End of program\n");
-  exit(0);
+  for (;;);
 }
