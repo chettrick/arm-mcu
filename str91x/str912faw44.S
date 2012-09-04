@@ -4,7 +4,7 @@
 
 	.text
 	.code 32 
-	.align 	0
+	.align 4
 
 	.extern	main 		/*  Usual C startup.			*/
 
@@ -170,7 +170,7 @@ endless_loop:
 	/* For Thumb, constants must be after the code since only 
 	positive offsets are supported for PC relative addresses. */
 	
-	.align 0
+	.align 4
 .LC1: 
 .word	__bss_beg__ 
 .LC2:   
