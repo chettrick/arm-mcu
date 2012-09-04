@@ -28,3 +28,6 @@ $Id$
 10. Undefine TRUE and FALSE in 91x_type.h before defining the bool type.
 
 11. Rename bool to boolean to prevent clash with C++ bool.
+
+12. Reworked the baud rate divisor calculation in 91x_uart.c to get rid
+    of the 64-bit arithmetic operations.

@@ -93,9 +93,7 @@ void UART_DeInit(UART_TypeDef* UARTx)
 void UART_Init(UART_TypeDef* UARTx, UART_InitTypeDef* UART_InitStruct)
 {
 
-  u64 UART_MainClock = 0;
-  u32 IntegerDivider = 0;
-  u32 FractionalDivider = 0;
+  u32 UART_MainClock = 0;
 
   /* Clear the LCR[6:5] bits */
   UARTx->LCR &= UART_WordLength_Mask;
@@ -126,13 +124,14 @@ void UART_Init(UART_TypeDef* UARTx, UART_InitTypeDef* UART_InitStruct)
   {
     UART_MainClock = UART_MainClock/2;
   }
+
   /* Determine the integer part */
-  IntegerDivider = ((100) * (UART_MainClock) / (16 * (UART_InitStruct->UART_BaudRate)));
-  UARTx->IBRD = IntegerDivider / 100;
+  u32 b = 16*UART_InitStruct->UART_BaudRate;
+  UARTx->IBRD = UART_MainClock/b;
 
   /* Determine the fractional part */
-  FractionalDivider = IntegerDivider - (100 * (UARTx->IBRD));
-  UARTx->FBRD = ((((FractionalDivider * 64) + 50) / 100));
+  u32 m = UART_MainClock % b;
+  UARTx->FBRD = (64*m)/b;
 
   /* Choose the Hardware Flow Control */
   /* Clear the CR[15:14] bits */
