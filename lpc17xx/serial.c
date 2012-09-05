@@ -14,15 +14,14 @@ static const char revision[] = "$Id$";
 #include <stdlib.h>
 #include <string.h>
 
-#include <lpc17xx_pinsel.h>
-#include <lpc17xx_uart.h>
-
-#define MAX_SERIAL_PORTS	2
+#define MAX_SERIAL_PORTS	4
 
 static LPC_UART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
 {
   (LPC_UART_TypeDef *) LPC_UART0,
   (LPC_UART_TypeDef *) LPC_UART1,
+  (LPC_UART_TypeDef *) LPC_UART2,
+  (LPC_UART_TypeDef *) LPC_UART3,
 };
 
 /* Lightweight alternative to newlib atoi() */
@@ -69,9 +68,6 @@ int serial_open(char *name, unsigned int *subdevice)
 {
   unsigned int port;
   unsigned int baudrate;
-  PINSEL_CFG_Type pinconfig;
-  UART_CFG_Type uartconfig;
-  UART_FIFO_CFG_Type fifoconfig;
 
   errno_r = 0;
 
@@ -89,30 +85,36 @@ int serial_open(char *name, unsigned int *subdevice)
 
   baudrate = lightweight_atoi(name+5);
 
-// Configure I/O pins
-
   switch (port)
   {
     case 0 :
-      pinconfig.Funcnum = 1;
-      pinconfig.OpenDrain = 0;
-      pinconfig.Pinmode = 0;
-      pinconfig.Pinnum = 2;
-      pinconfig.Portnum = 0;
-      PINSEL_ConfigPin(&pinconfig);
-      pinconfig.Pinnum = 3;
-      PINSEL_ConfigPin(&pinconfig);
+      LPC_SC->PCONP |= (1 << 3);		// Power on UART 0
+      LPC_SC->PCLKSEL0 &= 0xFFFFFF3F;		// CCLK/4
+      LPC_PINCON->PINSEL0 &= 0xFFFFFF0F;	// Enable UART 0 I/O pins
+      LPC_PINCON->PINSEL0 |= 0x00000050;
       break;
 
     case 1 :
-      pinconfig.Funcnum = 2;
-      pinconfig.OpenDrain = 0;
-      pinconfig.Pinmode = 0;
-      pinconfig.Pinnum = 0;
-      pinconfig.Portnum = 2;
-      PINSEL_ConfigPin(&pinconfig);
-      pinconfig.Pinnum = 1;
-      PINSEL_ConfigPin(&pinconfig);
+      LPC_SC->PCONP |= (1 << 4);		// Power on UART 1
+      LPC_SC->PCLKSEL0 &= 0xFFFFFCFF;		// CCLK/4
+      LPC_PINCON->PINSEL0 &= 0x3FFFFFFF;	// Enable UART 1 I/O pins
+      LPC_PINCON->PINSEL0 |= 0x40000000;
+      LPC_PINCON->PINSEL1 &= 0xFFFFFFFC;
+      LPC_PINCON->PINSEL1 |= 0x00000001;
+      break;
+
+    case 2 :
+      LPC_SC->PCONP |= (1 << 24);		// Power on UART 2
+      LPC_SC->PCLKSEL1 &= 0xFFFCFFFF;		// CCLK/4
+      LPC_PINCON->PINSEL0 &= 0xFF0FFFFF;	// Enable UART 2 I/O pins
+      LPC_PINCON->PINSEL0 |= 0x00500000;
+      break;
+
+    case 3 :
+      LPC_SC->PCONP |= (1 << 25);		// Power on UART 3
+      LPC_SC->PCLKSEL1 &= 0xFFF3FFFF;		// CCLK/4
+      LPC_PINCON->PINSEL0 &= 0xFFFFFFF0;	// Enable UART 3 I/O pins
+      LPC_PINCON->PINSEL0 |= 0x0000000A;
       break;
 
     default :
@@ -122,6 +124,9 @@ int serial_open(char *name, unsigned int *subdevice)
 
 // Configure baud rate
 
+#include <lpc17xx_uart.h>
+
+  UART_CFG_Type uartconfig;
   uartconfig.Baud_rate = baudrate;
   uartconfig.Parity = UART_PARITY_NONE;
   uartconfig.Databits = UART_DATABIT_8;
@@ -130,6 +135,7 @@ int serial_open(char *name, unsigned int *subdevice)
 
 // Configure FIFO
 
+  UART_FIFO_CFG_Type fifoconfig;
   UART_FIFOConfigStructInit(&fifoconfig);
   UART_FIFOConfig(UARTS[port], &fifoconfig);
 
@@ -192,7 +198,7 @@ int serial_txready(unsigned int port)
     return -1;
   }
 
-  if (UARTS[port]->LSR & UART_LSR_THRE)
+  if (UARTS[port]->LSR & 0x20)
     return 1;
   else
     return 0;
@@ -231,7 +237,7 @@ int serial_rxready(unsigned int port)
     return -1;
   }
 
-  if (UARTS[port]->LSR & UART_LSR_RDR)
+  if (UARTS[port]->LSR & 0x01)
     return 1;
   else
     return 0;
