@@ -29,13 +29,13 @@ endif
 
 # Build processor dependent support library
 
-include $(MCUDIR)/libs/lpc17xxlibs.mk
+include $(MCUDIR)/CMSIS/CMSIS.mk
 
 LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-	$(MAKE) lpc17xxlibs
+	$(MAKE) cmsis
 	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
