@@ -68,6 +68,7 @@ int serial_open(char *name, unsigned int *subdevice)
 {
   unsigned int port;
   unsigned int baudrate;
+  unsigned short int divisor;
 
   errno_r = 0;
 
@@ -122,26 +123,19 @@ int serial_open(char *name, unsigned int *subdevice)
       return -1;
   }
 
-// Configure baud rate
+// Configure the serial port
 
-#include <lpc17xx_uart.h>
+  divisor = SystemCoreClock/108/baudrate;	// Calculate baud rate divisor
 
-  UART_CFG_Type uartconfig;
-  uartconfig.Baud_rate = baudrate;
-  uartconfig.Parity = UART_PARITY_NONE;
-  uartconfig.Databits = UART_DATABIT_8;
-  uartconfig.Stopbits = UART_STOPBIT_1;
-  UART_Init(UARTS[port], &uartconfig);
-
-// Configure FIFO
-
-  UART_FIFO_CFG_Type fifoconfig;
-  UART_FIFOConfigStructInit(&fifoconfig);
-  UART_FIFOConfig(UARTS[port], &fifoconfig);
-
-// Enable the UART transmitter
-
-  UART_TxCmd(UARTS[port], ENABLE);
+  UARTS[port]->FDR = 0xD9;			// Set fractional divider=1 9/13
+  UARTS[port]->LCR = 0x83;			// Enable access to DLL and DLM
+  UARTS[port]->DLM = divisor / 256;		// Set baud rate
+  UARTS[port]->DLL = divisor % 256;
+  UARTS[port]->LCR = 0x03;			// Always 8 bits no parity 1 stop
+  UARTS[port]->FCR = 0x07;			// Enable and clear FIFO's
+  UARTS[port]->IER = 0x00;			// Disable UART interrupts
+  UARTS[port]->ACR = 0x00;			// Disable autobaud
+  UARTS[port]->TER = 0x80;			// Enable transmitter
 
   return 0;
 }
