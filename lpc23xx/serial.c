@@ -85,7 +85,7 @@ int serial_open(char *name, unsigned int *subdevice)
 {
   unsigned int port;
   unsigned int baudrate;
-  unsigned short int b;
+  unsigned short int divisor;
 
   errno_r = 0;
 
@@ -135,22 +135,22 @@ int serial_open(char *name, unsigned int *subdevice)
       PINSEL0 |= 0x0000000A;
       break;
 
-    default :				// Unrecognized UART base address
-      errno_r = ENODEV;
-      return -1;			// Do nothing
+    default :
+      errno_r = ENODEV;			// Unrecognized UART base address
+      return -1;			// Return an error
   }
 
-  UxFDR = 0x49;				// Set fractional divider
+// Configure the serial port
 
-  b = SystemCoreClock/208/baudrate;
+  divisor = SystemCoreClock/78/baudrate; // Calculate baud rate divisor
 
-  UxLCR = 0x03;				// Enable access to IER
-  UxIER = 0x00;				// Disable UART interrupts
+  UxFDR = 0x92;				// Set fractional divider=1 2/9
   UxLCR = 0x83;				// Enable access to DLL and DLM
-  UxDLM = b / 256;
-  UxDLL = b % 256;
+  UxDLM = divisor / 256;		// Set baud rate
+  UxDLL = divisor % 256;
   UxLCR = 0x03;				// Always 8 bits no parity 1 stop
   UxFCR = 0x07;				// Enable and clear FIFO's
+  UxIER = 0x00;				// Disable UART interrupts
   UxACR = 0x00;				// Disable autobaud
   if (port == 3) UxICR = 0x00;		// Disable IRDA
   UxTER = 0x80;				// Enable transmitter
