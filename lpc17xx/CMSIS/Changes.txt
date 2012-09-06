@@ -5,3 +5,6 @@ $Id$
 
 1. Imported LPC17xx CMSIS library from CMSISv2p00_LPC17xx.zip, from
    http://http://ics.nxp.com/support/lpcxpresso.
+
+2. Changed 2ULL to 2 in system_LPC17xx.c to get rid of unnecessary
+   64-bit arithmetic.

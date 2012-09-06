@@ -389,7 +389,7 @@
 /* F_cco0 = (2 * M * F_in) / N  */
 #define __M               (((PLL0CFG_Val      ) & 0x7FFF) + 1)
 #define __N               (((PLL0CFG_Val >> 16) & 0x00FF) + 1)
-#define __FCCO(__F_IN)    ((2ULL * __M * __F_IN) / __N) 
+#define __FCCO(__F_IN)    ((2 * __M * __F_IN) / __N) 
 #define __CCLK_DIV        (((CCLKCFG_Val      ) & 0x00FF) + 1)
 
 /* Determine core clock frequency according to settings */
@@ -429,19 +429,19 @@ void SystemCoreClockUpdate (void)            /* Get Core Clock Frequency      */
       case 0:                                /* Int. RC oscillator => PLL0    */
       case 3:                                /* Reserved, default to Int. RC  */
         SystemCoreClock = (IRC_OSC * 
-                          ((2ULL * ((LPC_SC->PLL0STAT & 0x7FFF) + 1)))  /
+                          ((2 * ((LPC_SC->PLL0STAT & 0x7FFF) + 1)))  /
                           (((LPC_SC->PLL0STAT >> 16) & 0xFF) + 1)       /
                           ((LPC_SC->CCLKCFG & 0xFF)+ 1));
         break;
       case 1:                                /* Main oscillator => PLL0       */
         SystemCoreClock = (OSC_CLK * 
-                          ((2ULL * ((LPC_SC->PLL0STAT & 0x7FFF) + 1)))  /
+                          ((2 * ((LPC_SC->PLL0STAT & 0x7FFF) + 1)))  /
                           (((LPC_SC->PLL0STAT >> 16) & 0xFF) + 1)       /
                           ((LPC_SC->CCLKCFG & 0xFF)+ 1));
         break;
       case 2:                                /* RTC oscillator => PLL0        */
         SystemCoreClock = (RTC_CLK * 
-                          ((2ULL * ((LPC_SC->PLL0STAT & 0x7FFF) + 1)))  /
+                          ((2 * ((LPC_SC->PLL0STAT & 0x7FFF) + 1)))  /
                           (((LPC_SC->PLL0STAT >> 16) & 0xFF) + 1)       /
                           ((LPC_SC->CCLKCFG & 0xFF)+ 1));
         break;
