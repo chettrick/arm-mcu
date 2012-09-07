@@ -1,8 +1,0 @@
-Changes to STM32F10x Standard Peripheral Library
-------------------------------------------------
-
-$Id$
-
-1. Imported STM32F10x Standard Peripheral Library V3.5.0.
-
-2. Changed assert_failed() to assert() in stm32f10x_conf.h.
