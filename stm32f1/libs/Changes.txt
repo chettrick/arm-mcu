@@ -6,3 +6,6 @@ $Id$
 1. Imported STM32F10x Standard Peripheral Library V3.5.0.
 
 2. Changed assert_failed() to assert() in stm32f10x_conf.h.
+
+3. Changed "=r" to "=&r" in core_cm3.c to avoid a code
+   generation error when optimizing with -Os or -O3.
