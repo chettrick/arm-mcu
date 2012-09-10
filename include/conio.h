@@ -37,5 +37,15 @@ int csprintf(char *out, const char *format, ...);
 
 int csscanf(const char *str, const char *format, ...);
 
+// Emulate C standard I/O
+
+#define getchar()	getch()
+#define putchar(x)	putch(x)
+#define gets(x)		cgets(x, sizeof(x))
+#define puts(x)		{ cputs(x); putch('\n'); }
+#define printf(...)	cprintf(__VA_ARGS__)
+#define sprintf(...)	csprintf(__VA_ARGS__)
+#define sscanf(...)	csscanf(__VA_ARGS__)
+
 _END_STD_C
 #endif
