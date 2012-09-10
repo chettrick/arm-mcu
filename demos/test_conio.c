@@ -64,11 +64,11 @@ int main(void)
 
   for (;;)
   {
-    printf("[gets] Enter a string: ");
+    printf("Enter a string: ");
     gets(buf);
     if (strlen(buf)) if (buf[strlen(buf)-1] == '\n') buf[strlen(buf)-1] = 0;
     if (!strcasecmp(buf, "next")) break;
-    printf("\n[gets] You entered %u bytes, '%s'\n\n", (unsigned) strlen(buf), buf);
+    printf("\nYou entered %u bytes, '%s'\n\n", (unsigned) strlen(buf), buf);
   }
 
   putchar('\n');
