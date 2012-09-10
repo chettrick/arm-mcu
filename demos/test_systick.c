@@ -7,6 +7,10 @@ static const char revision[] = "$Id$";
 #include <cpu.h>
 #include <stdio.h>
 
+#ifdef CONSOLE_CONIO
+#include <conio.h>
+#endif
+
 #define SYSTICKRATE	100
 
 _BEGIN_STD_C
@@ -29,16 +33,20 @@ int main(void)
 {
   cpu_init(DEFAULT_CPU_FREQ);
 
+#ifdef CONSOLE_CONIO
+  conio_init(CONSOLE_PORT);
+#else
 #ifdef CONSOLE_USB
   usb_serial_stdio(NULL);
   getch();
 #else
   serial_stdio((char *) CONSOLE_PORT);
 #endif
+#endif
 
   printf("\033[H\033[2J%s System Tick Interrupt Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
   puts(revision);
-  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", SystemCoreClock, __COMPILER__, __VERSION__, __ABI__);
+  printf("\nCPU Freq:%u Hz  Compiler:%s %s %s\n\n", (unsigned) SystemCoreClock, __COMPILER__, __VERSION__, __ABI__);
 
 // Configure LED(s)
 
@@ -58,7 +66,6 @@ int main(void)
       TimerFlag = FALSE;
 
       puts("Tick...");
-      fflush(stdout);
 
       LEDS_set(~LEDS_get());
     }
