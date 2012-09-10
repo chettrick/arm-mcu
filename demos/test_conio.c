@@ -5,9 +5,11 @@
 static const char revision[] = "$Id$";
 
 #include <cpu.h>
-#include <conio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <conio.h>
 
 int main(void)
 {
@@ -18,73 +20,73 @@ int main(void)
   cpu_init(DEFAULT_CPU_FREQ);
   conio_init(CONSOLE_PORT);
 
-  cprintf("\033[H\033[2J%s Console I/O Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
-  cputs(revision);
-  cprintf("\n\nCPU Freq:%d Hz  Compiler:%s %s %s\n\n", SystemCoreClock, __COMPILER__, __VERSION__, __ABI__);
+  printf("\033[H\033[2J%s Console I/O Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
+  puts(revision);
+  printf("\nCPU Freq:%d Hz  Compiler:%s %s %s\n\n", SystemCoreClock, __COMPILER__, __VERSION__, __ABI__);
 
-// Test putch()
+// Test putchar()
 
   for (i = 'A'; i < 'Z'; i++)
-    putch(i);
+    putchar(i);
 
-  putch('\n');
-  putch('\n');
+  putchar('\n');
+  putchar('\n');
 
-// Test cputs()
+// Test puts()
 
   for (i = 0; i < 10; i++)
   {
-    csprintf(buf, "The value of the variable i is currently, now, until the next iteration, %d\n", i);
-    cputs(buf);
+    sprintf(buf, "The value of the variable i is currently, now, until the next iteration, %d", i);
+    puts(buf);
   }
 
-// Test keypressed() and getch()
+// Test keypressed() and getchar()
 
-  cputs("\nPress ^C to continue: ");
+  printf("\nPress ^C to continue: ");
 
   for (;;)
   {
-    cputs("|\b/\b-\b\\\b");
+    printf("|\b/\b-\b\\\b");
 
     if (keypressed())
     {
-      if (getch() == 3)
+      if (getchar() == 3)
         break;
       else
-        putch('.');
+        putchar('.');
     }
   }
 
-  putch('\n');
-  putch('\n');
+  putchar('\n');
+  putchar('\n');
 
-// Test cputs() and cgets()
+// Test gets()
 
   for (;;)
   {
-    cputs("[cgets] Enter a string: ");
-    cgets(buf, sizeof(buf));
+    printf("[gets] Enter a string: ");
+    gets(buf);
     if (strlen(buf)) if (buf[strlen(buf)-1] == '\n') buf[strlen(buf)-1] = 0;
     if (!strcasecmp(buf, "next")) break;
-    cprintf("[cgets] You entered %u bytes, '%s'\n\n", (unsigned) strlen(buf), buf);
+    printf("\n[gets] You entered %u bytes, '%s'\n\n", (unsigned) strlen(buf), buf);
   }
 
-  putch('\n');
+  putchar('\n');
 
 // Test numeric input
 
   for (;;)
   {
-    cputs("Enter two numbers: ");
+    printf("Enter two numbers: ");
 
-    cgets(buf, sizeof(buf));
-    csscanf(buf, "%d %d", &x, &y);
+    gets(buf);
+    sscanf(buf, "%d %d", &x, &y);
 
-    cprintf("You entered %d and %d\n\n", x, y);
+    printf("You entered %d and %d\n\n", x, y);
 
     if ((x == 0) && (y == 0)) break;
   }
 
-  cputs("End of program\n");
+  puts("End of program");
   for (;;);
 }
