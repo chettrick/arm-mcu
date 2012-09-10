@@ -6,10 +6,21 @@
 #define _CONIO_H
 
 #include <_ansi.h>
-#include <serial.h>
 #include <stdarg.h>
 
 _BEGIN_STD_C
+
+// Undefine macros from arm.h
+
+#undef printf
+#undef fprintf
+#undef sprintf
+#undef snprintf
+#undef asprintf
+#undef asnprintf
+#undef scanf
+#undef sscanf
+#undef fscanf
 
 // Undefine macros from device.h
 
