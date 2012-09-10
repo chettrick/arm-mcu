@@ -25,6 +25,9 @@ CONTENTS: fakeroot
 	echo "@cwd /usr/local"				>>CONTENTS
 	find fakeroot/usr/local/arm-tools -type d | awk '{ printf("@dir %s\n", substr($$1, 20)); }' >>CONTENTS
 	find fakeroot -type f | cut -c 20- | sort	>>CONTENTS
+	find fakeroot -type l | awk '{ printf("echo %s `readlink %s`\n", $$1, $$1); }' | sh | \
+	awk '{ printf("@exec ln -s %s %s\n", $$2, substr($$1,9)); }'            >>CONTENTS
+	find fakeroot -type l | awk '{ printf("@unexec rm %s\n", substr($$1, 9)); }' >>CONTENTS
 
 COMMENT:
 	echo "ARM Microcontroller Toolchain"		>COMMENT
@@ -33,3 +36,9 @@ $(PACKAGENAME): CONTENTS COMMENT
 	pkg_create -A `uname -m` -f CONTENTS -D COMMENT="`cat COMMENT`" -d COMMENT -p / -B fakeroot $(PACKAGENAME)
 	@-rm CONTENTS
 	@-rm COMMENT
+
+clean:
+	 $(MAKE) clean
+
+distclean:
+	 $(MAKE) distclean
