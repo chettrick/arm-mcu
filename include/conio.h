@@ -30,6 +30,11 @@ _BEGIN_STD_C
 #undef cgets
 #undef cputs
 
+// Undefine macros from stdio.h
+
+#undef getchar
+#undef putchar
+
 void conio_init(const char *console);	// Initialize console
 
 int keypressed(void);			// Check for data ready
