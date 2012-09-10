@@ -6,6 +6,7 @@
 #define _ARM_H
 
 #include <_ansi.h>
+#include <stdarg.h>
 
 #define errno_r			(*(__errno()))
 
