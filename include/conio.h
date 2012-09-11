@@ -10,6 +10,9 @@
 
 _BEGIN_STD_C
 
+// Include this *after* cpu.h and stdio.h so that the following
+// macro undef's work properly.
+
 // Undefine macros from arm.h
 
 #undef printf
@@ -54,6 +57,8 @@ int csprintf(char *out, const char *format, ...);
 int csscanf(const char *str, const char *format, ...);
 
 // Emulate C standard I/O
+
+#define serial_stdio(x)	conio_init(x)
 
 #define getchar()	getch()
 #define putchar(x)	putch(x)
