@@ -10,6 +10,10 @@ static const char revision[] = "$Id$";
 #include <string.h>
 #include <time.h>
 
+#ifdef CONSOLE_CONIO
+#include <conio.h>
+#endif
+
 int main(void)
 {
   RTC_TIME t_rtc;
@@ -28,7 +32,8 @@ int main(void)
 
   puts("\033[H\033[2JSTR91x Real Time Clock Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
-  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", SystemCoreClock, __COMPILER__, __VERSION__, __ABI__);
+  printf("\nCPU Freq:%u Hz  Compiler:%s %s %s\n\n", (unsigned int) SystemCoreClock,
+    __COMPILER__, __VERSION__, __ABI__);
 
 // Turn on RTC peripheral clock
 
