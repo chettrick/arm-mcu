@@ -18,6 +18,7 @@ int main(void)
 {
   RTC_TIME t_rtc;
   RTC_DATE d_rtc;
+  char buf[256];
   int year, month, day, hour, minute, second;
   time_t then, now;
 
@@ -58,9 +59,8 @@ int main(void)
       {
         case 'T' :
           printf("Enter UTC time (HH:MM:SS): ");
-          fflush(stdout);
-
-          scanf("%d:%d:%d", &hour, &minute, &second);
+          gets(buf);
+          sscanf(buf, "%d:%d:%d", &hour, &minute, &second);
 
           memset(&t_rtc, 0, sizeof(t_rtc));
           t_rtc.hours = hour;
@@ -71,9 +71,8 @@ int main(void)
 
         case 'D' :
           printf("Enter UTC date (YYYY MM DD): ");
-          fflush(stdout);
-
-          scanf("%d %d %d", &year, &month, &day);
+          gets(buf);
+          sscanf(buf, "%d %d %d", &year, &month, &day);
 
           memset(&d_rtc, 0, sizeof(d_rtc));
           d_rtc.century = year / 100;
