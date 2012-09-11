@@ -13,6 +13,10 @@ static const char revision[] = "$Id$";
 #include <string.h>
 #include <unistd.h>
 
+#ifdef CONSOLE_CONIO
+#include <conio.h>
+#endif
+
 #define SPI_PORT 1
 
 #ifndef SPI_PORT
@@ -46,25 +50,25 @@ int main(void)
 
   puts("\033[H\033[2JSTM32F1 SPI Master Test (" __DATE__ " " __TIME__ ")\n");
   puts(revision);
-  printf("\nCPU Freq:%ld Hz  Compiler:%s %s %s\n\n", SystemCoreClock, __COMPILER__, __VERSION__, __ABI__);
+  printf("\nCPU Freq:%u Hz  Compiler:%s %s %s\n\n", (unsigned int) SystemCoreClock,
+    __COMPILER__, __VERSION__, __ABI__);
 
   if ((status = spimaster_init(SPI_PORT, 0, 281250, TRUE)))
   {
-    fprintf(stderr, "ERROR: spimaster_init() failed at line %d, %s\n", status, strerror(errno));
+    printf("ERROR: spimaster_init() failed at line %d, %s\n", status, strerror(errno));
     assert(FALSE);
   }
 
   for (;;)
   {
     printf("Enter a value to send: ");
-    fflush(stdout);
-    fflush(stdin);
+
     gets(buf);
     commandbyte = atoi(buf);
 
     if ((status = spimaster_transfer(SPI_PORT, &commandbyte, 1, &responsebyte, 1)))
     {
-      fprintf(stderr, "ERROR: spimaster_transfer() failed at line %d, %s\n", status, strerror(errno));
+      printf("ERROR: spimaster_transfer() failed at line %d, %s\n", status, strerror(errno));
       assert(FALSE);
     }
 
