@@ -4,7 +4,6 @@
 
 static const char revision[] = "$Id$";
 
-#include <assert.h>
 #include <cpu.h>
 #include <errno.h>
 #include <stdint.h>
@@ -56,7 +55,7 @@ int main(void)
   if ((status = spimaster_init(SPI_PORT, 0, 281250, TRUE)))
   {
     printf("ERROR: spimaster_init() failed at line %d, %s\n", status, strerror(errno));
-    assert(FALSE);
+    exit(1);
   }
 
   for (;;)
@@ -69,7 +68,7 @@ int main(void)
     if ((status = spimaster_transfer(SPI_PORT, &commandbyte, 1, &responsebyte, 1)))
     {
       printf("ERROR: spimaster_transfer() failed at line %d, %s\n", status, strerror(errno));
-      assert(FALSE);
+      exit(1);
     }
 
     printf("Response was %02X\n\n", responsebyte);
