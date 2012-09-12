@@ -48,10 +48,6 @@ int serial_name_to_port(char *name)
 
   if (!strncasecmp(name, "com1:", 5))
     return 0;
-  else if (!strncasecmp(name, "com2:", 5))
-    return 1;
-  else if (!strncasecmp(name, "com3:", 5))
-    return 2;
   else
   {
     errno_r = ENODEV;
