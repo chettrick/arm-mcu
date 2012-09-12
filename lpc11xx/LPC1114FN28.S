@@ -37,7 +37,7 @@
 
 //=============================================================================
 
-// Exception vector table--Common to all Cortex-M3
+// Exception vector table--Common to all Cortex-M0
 
 _start: 	.word		__stack_end__
 		.word		Reset_Handler

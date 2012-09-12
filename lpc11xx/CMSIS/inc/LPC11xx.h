@@ -1,5 +1,5 @@
 /****************************************************************************
- *   $Id:: LPC11xx.h 3635 2010-06-02 00:31:46Z usb00423                     $
+ *   $Id::                                                                  $
  *   Project: NXP LPC11xx software example  
  *
  *   Description:
@@ -97,7 +97,7 @@ typedef enum IRQn
  * ==========================================================================
  */
 
-/* Configuration of the Cortex-M3 Processor and Core Peripherals */
+/* Configuration of the Cortex-M0 Processor and Core Peripherals */
 #define __MPU_PRESENT             0         /*!< MPU present or not                               */
 #define __NVIC_PRIO_BITS          2         /*!< Number of Bits used for Priority Levels          */
 #define __Vendor_SysTickConfig    0         /*!< Set to 1 if different SysTick Config is used     */
