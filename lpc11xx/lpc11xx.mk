@@ -14,6 +14,7 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), LPC1114FN28)
+BOARDFLAGS	?= -DCONSOLE_PORT='"com1:115200,n,8,1"'
 MCU		= LPC1114FN28
 endif
 
