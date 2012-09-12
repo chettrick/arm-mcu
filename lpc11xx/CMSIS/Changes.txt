@@ -1,0 +1,7 @@
+Changes to LPC11xx CMSIS Library
+--------------------------------
+
+$Id$
+
+1. Imported LPC11xx CMSIS library from CMSISv2p00_LPC11xx.zip, from
+   http://http://ics.nxp.com/support/lpcxpresso.
