@@ -10,8 +10,6 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 #include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #define MAX_SERIAL_PORTS	3

@@ -10,8 +10,6 @@ static const char revision[] = "$Id: serial.c 3206 2011-10-19 13:12:40Z svn $";
 
 #include <cpu.h>
 #include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #define MAX_SERIAL_PORTS	6
