@@ -8,7 +8,12 @@
 #include <_ansi.h>
 #include <stdarg.h>
 
+#ifdef CONSOLE_CONIO
+extern int conio_errno;
+#define errno_r			conio_errno
+#else
 #define errno_r			(*(__errno()))
+#endif
 
 #ifndef TRUE
 #define TRUE			1

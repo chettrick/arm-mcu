@@ -3,6 +3,8 @@
 #include <serial.h>
 #include <string.h>
 
+int conio_errno;	// Replace newlib errno
+
 static unsigned int port;
 
 void conio_init(const char *console)
