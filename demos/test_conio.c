@@ -4,8 +4,6 @@
 
 static const char revision[] = "$Id$";
 
-#define CONSOLE_CONIO
-
 #include <cpu.h>
 #include <stdio.h>
 #include <stdlib.h>
