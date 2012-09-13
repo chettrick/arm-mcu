@@ -17,6 +17,9 @@ fakeroot:
 	$(MAKE) source.done
 	patch -b -p0 <openbsd.pch.patch
 	$(MAKE) fakeroot TAR=$(TAR) GCCEXTRACONFIG="--with-gmp=/usr/local --with-mpc=/usr/local --with-mpfr=/usr/local"
+# Why aren't these links already present on OpenBSD?
+	ln -s liblto_plugin.so.0.0 fakeroot/usr/local/arm-tools/libexec/gcc/arm-none-eabi/$(GCCVER)/liblto_plugin.so
+	ln -s liblto_plugin.so.0.0 fakeroot/usr/local/arm-tools/libexec/gcc/arm-none-eabi/$(GCCVER)/liblto_plugin.so.0
 
 CONTENTS: fakeroot
 	echo "@owner root"				>CONTENTS
