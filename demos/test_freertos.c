@@ -18,6 +18,10 @@ static const char revision[] = "$Id$";
 #include <semphr.h>
 #include <task.h>
 
+#ifdef CONSOLE_CONIO
+#error This program cannot use the lightweight console I/O library
+#endif
+
 #define MESSAGE_PERIOD	4000
 
 xSemaphoreHandle console_lock;
