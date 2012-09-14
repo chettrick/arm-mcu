@@ -18,6 +18,10 @@ static const char revision[] = "$Id$";
 #include <unistd.h>
 #include <wiznet.h>
 
+#ifdef CONSOLE_CONIO
+#error This program cannot use the lightweight console I/O library
+#endif
+
 // Hardware configuration for W5200E01-M3 board
 
 #ifdef W5200E01_M3
