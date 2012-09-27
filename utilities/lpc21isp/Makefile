@@ -3,7 +3,7 @@
 # $Id: Makefile 2963 2011-08-02 17:06:09Z svn $
 
 LPC21ISP_NAME	= lpc21isp
-LPC21ISP_VER	= 1.83
+LPC21ISP_VER	= 1.84
 LPC21ISP_DIST	= $(LPC21ISP_NAME)_$(shell echo $(LPC21ISP_VER) | awk -F '.' '{ printf("%s%s\n", $$1, $$2) }').tar.gz
 LPC21ISP_SERVER	= http://downloads.sourceforge.net/project/lpc21isp/lpc21isp/1.83
 LPC21ISP_URL	= $(LPC21ISP_SERVER)/$(LPC21ISP_DIST)
@@ -63,14 +63,15 @@ rpm: specfile
 # Clean out working files
 
 clean:
+	-$(MAKE) -C $(LPC21ISP_DIR) clean
 	-rm -rf $(LPC21ISP_PROG)
-	-rm -rf $(LPC21ISP_DIR)
 	-rm -rf fakeroot
 	-rm -rf rpmbuild
 	-rm *.rpm
 	-rm specfile
 
 reallyclean: clean
+	-rm -rf $(LPC21ISP_DIR)
 
 distclean: clean
 	-rm $(LPC21ISP_DIST)
