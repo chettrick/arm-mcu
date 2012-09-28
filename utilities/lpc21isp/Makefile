@@ -82,6 +82,6 @@ clean:
 reallyclean: clean
 	-rm -rf $(LPC21ISP_DIR)
 
-distclean: clean
+distclean: reallyclean
 	-rm $(LPC21ISP_DIST)
 	-rm $(LPC21ISP_ZIP)
