@@ -84,3 +84,4 @@ reallyclean: clean
 
 distclean: clean
 	-rm $(LPC21ISP_DIST)
+	-rm $(LPC21ISP_ZIP)
