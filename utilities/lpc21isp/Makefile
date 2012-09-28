@@ -5,6 +5,7 @@
 LPC21ISP_NAME	= lpc21isp
 LPC21ISP_VER	= 1.84
 LPC21ISP_DIST	= $(LPC21ISP_NAME)_$(shell echo $(LPC21ISP_VER) | awk -F '.' '{ printf("%s%s\n", $$1, $$2) }').tar.gz
+LPC21ISP_ZIP	= $(LPC21ISP_NAME)_$(shell echo $(LPC21ISP_VER) | awk -F '.' '{ printf("%s%s\n", $$1, $$2) }').zip
 LPC21ISP_SERVER	= http://downloads.sourceforge.net/project/lpc21isp/lpc21isp/1.83
 LPC21ISP_URL	= $(LPC21ISP_SERVER)/$(LPC21ISP_DIST)
 LPC21ISP_DIR	= $(LPC21ISP_NAME)_$(shell echo $(LPC21ISP_VER) | awk -F '.' '{ printf("%s%s\n", $$1, $$2) }')
@@ -14,9 +15,17 @@ INSTALLDIR	= /usr/local/bin
 
 TAR		= tar
 
-.PHONY: default install clean distclean
+.PHONY: default zip2tgz install clean distclean
 
 default: $(LPC21ISP_PROG)
+
+# Convert zip distribution (from Yahoo Groups) to tarball distribution
+
+zip2tgz: $(LPC21ISP_ZIP)
+	mkdir zz
+	unzip $(LPC21ISP_ZIP) -d zz
+	cd zz ; tar czf ../$(LPC21ISP_DIST) *
+	rm -rf zz
 
 # Download lpc21isp source distribution
 
