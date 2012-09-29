@@ -11,11 +11,14 @@ TEXTBASE	?= 0x00000000
 CFLAGS		+= -DLPC11XX
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
+JLINKGDBIF	= -if SWD
+
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), LPC1114FN28)
 BOARDFLAGS	?= -DCONSOLE_PORT='"com1:115200,n,8,1"' -DCONSOLE_CONIO
 MCU		= LPC1114FN28
+JLINKMCU	= LPC1114/102
 endif
 
 # Phony targets
