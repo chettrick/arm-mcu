@@ -1,0 +1,25 @@
+# GDB startup script for debugging a program in flash ROM
+
+# $Id$
+
+# Connect to the GDB server
+
+target remote localhost:3333
+
+# Reset target & gain control
+
+monitor reset
+
+# J-Link doesn't seem to provide target memory regions
+
+mem 0x00000000 0x00007FFF ro
+mem 0x10000000 0x10000FFF rw
+
+# Display memory regions
+
+info mem
+
+# Break at beginning of main()
+
+break main
+continue
