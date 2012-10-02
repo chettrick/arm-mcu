@@ -29,7 +29,7 @@ endif
 
 include $(MCUDIR)/CMSIS/CMSIS.mk
 
-LIBOBJS		= cpu.o serial.o
+LIBOBJS		= cpu.o leds.o serial.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)

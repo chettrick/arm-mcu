@@ -8,6 +8,7 @@
 #include <_ansi.h>
 #include <arm.h>
 #include <device.h>
+#include <leds.h>
 #include <serial.h>
 
 #include <LPC11xx.h>
