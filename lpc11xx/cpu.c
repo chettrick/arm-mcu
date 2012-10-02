@@ -11,4 +11,6 @@ void cpu_init(unsigned long int frequency)
 {
   SystemInit();
   SystemCoreClockUpdate();
+
+  LPC_SYSCON->SYSAHBCLKCTRL |= (1 << 16);	// Enable IOCON
 }
