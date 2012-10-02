@@ -14,7 +14,7 @@ reset_config srst_only
 
 # JTAG configuration
 
-jtag_khz 3000
+adapter_khz 3000
 jtag_nsrst_delay 200
 jtag_ntrst_delay 200
 

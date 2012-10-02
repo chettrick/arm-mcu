@@ -14,7 +14,7 @@ reset_config trst_and_srst
 
 # JTAG configuration
 
-jtag_khz 1000
+adapter_khz 1000
 jtag_nsrst_delay 100
 jtag_ntrst_delay 100
 
