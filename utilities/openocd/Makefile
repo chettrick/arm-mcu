@@ -6,7 +6,7 @@
 # $Id$
 
 OPENOCD_NAME	= openocd
-OPENOCD_VER	= 0.5.0
+OPENOCD_VER	= 0.6.0
 OPENOCD_SRC	= $(OPENOCD_NAME)-$(OPENOCD_VER)
 OPENOCD_TARBALL	= $(OPENOCD_SRC).tar.gz
 OPENOCD_DIST	= $(TEMP)/$(OPENOCD_TARBALL)
@@ -29,10 +29,7 @@ source.done: $(OPENOCD_DIST)
 # Compile OpenOCD
 
 compile.done: source.done
-	cd $(OPENOCD_SRC) ; ./configure --prefix=/usr/local						\
-	--enable-ft2232_libftdi --enable-gw16012 --disable-parport --disable-parport-ppdev		\
-	--enable-presto_libftdi --enable-amtjtagaccel --enable-arm-jtag-ew				\
-	--enable-jlink --enable-rlink --enable-usbprog --enable-vsllink --enable-usb_blaster_libftdi
+	cd $(OPENOCD_SRC) ; ./configure --prefix=/usr/local --enable-ft2232_libftdi
 	$(MAKE) -C $(OPENOCD_SRC)
 	$(MAKE) -C $(OPENOCD_SRC) docs
 	touch $@
@@ -40,12 +37,12 @@ compile.done: source.done
 # Install OpenOCD
 
 install:
-	$(MAKE) -C $(OPENOCD_SRC) install install-pdf install-html
+	$(MAKE) -C $(OPENOCD_SRC) install install-pdf
 
 # Create OpenOCD RPM package
 
 fakeroot: compile.done
-	$(MAKE) -C $(OPENOCD_SRC) install DESTDIR=`pwd`/fakeroot
+	$(MAKE) -C $(OPENOCD_SRC) install install-pdf DESTDIR=`pwd`/fakeroot
 	find fakeroot -name dir -exec rm {} ";"
 	find fakeroot -type f -exec chmod ugo-w {} ";"
 
