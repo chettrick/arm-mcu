@@ -121,7 +121,9 @@
 */
 #define CLOCK_SETUP           1
 #define SYSCLK_SETUP          1
-#define SYSOSC_SETUP          1
+#ifndef SYSOSC_SETUP
+#define SYSOSC_SETUP          0
+#endif
 #define SYSOSCCTRL_Val        0x00000000
 #define WDTOSC_SETUP          0
 #define WDTOSCCTRL_Val        0x000000A0
@@ -419,11 +421,11 @@ void SystemInit (void)
   LPC_SYSCON->SYSPLLCLKUEN  = 0x00;               /* Toggle Update Register   */
   LPC_SYSCON->SYSPLLCLKUEN  = 0x01;
   while (!(LPC_SYSCON->SYSPLLCLKUEN & 0x01));     /* Wait Until Updated       */
+#endif
 #if (SYSPLL_SETUP)                                /* System PLL Setup         */
   LPC_SYSCON->SYSPLLCTRL    = SYSPLLCTRL_Val;
   LPC_SYSCON->PDRUNCFG     &= ~(1 << 7);          /* Power-up SYSPLL          */
-  while (!(LPC_SYSCON->SYSPLLSTAT & 0x01));	      /* Wait Until PLL Locked    */
-#endif
+  while (!(LPC_SYSCON->SYSPLLSTAT & 0x01));       /* Wait Until PLL Locked    */
 #endif
 #if (WDTOSC_SETUP)                                /* Watchdog Oscillator Setup*/
   LPC_SYSCON->WDTOSCCTRL    = WDTOSCCTRL_Val;

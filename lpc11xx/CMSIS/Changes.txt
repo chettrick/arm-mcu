@@ -5,3 +5,7 @@ $Id$
 
 1. Imported LPC11xx CMSIS library from CMSISv2p00_LPC11xx.zip, from
    http://http://ics.nxp.com/support/lpcxpresso.
+
+2. Modified SystemInit() in system_LPC11xx.c to use the internal 12 MHz
+   RC oscillator by default.  Define SYSOSC_SETUP=1 to use the system
+   oscillator with a 12 MHz crystal instead.
