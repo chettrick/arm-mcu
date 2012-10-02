@@ -23,8 +23,6 @@ int main(void)
   LPC_IOCON->PIO1_8 = 0xC0;
   LPC_IOCON->PIO1_9 = 0xC0;
 
-  LPC_SYSCON->SYSAHBCLKCTRL |= (1 << 6);	// Enable GPIO subsystem
-
   LPC_GPIO1->DIR = 0x3F7;			// P1.0-P1.9 are outputs
 
   for (i = 0;; i++)
