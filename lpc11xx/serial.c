@@ -93,7 +93,7 @@ int serial_open(char *name, unsigned int *subdevice)
 
 // Configure the serial port
 
-  divisor = SystemCoreClock/108/baudrate;	// Calculate baud rate divisor
+  divisor = SystemCoreClock/104/baudrate;	// Calculate baud rate divisor
 
   UARTS[port]->FDR = 0x85;			// Set fractional divider=1 5/8
   UARTS[port]->LCR = 0x83;			// Enable access to DLL and DLM
