@@ -5,8 +5,8 @@
 # $Id$
 
 # Script arguments:
-
 #   Binary flash image file
+#   Flash write address
 #   Text base address
 
 set FILE [lindex $argv 0]
