@@ -31,22 +31,7 @@ expect $prompt
 send "flash probe 0\n"
 expect $prompt
 
-send "flash erase_sector 0 0 last\n"
-expect $prompt
-
-send "reset run\n"
-expect $prompt
-
-send "halt\n"
-expect $prompt
-
-send "wait_halt\n"
-expect $prompt
-
-send "flash probe 0\n"
-expect $prompt
-
-send "flash write_image $FILE $ADDRESS bin\n"
+send "flash write_image erase $FILE $ADDRESS bin\n"
 expect -timeout 300 $prompt
 
 send "reset run\n"
