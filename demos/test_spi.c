@@ -1,4 +1,4 @@
-/* Simple serial console I/O test program for the STM32F1 ARM MCU */
+/* Simple SPI master I/O test program */
 
 // $Id$
 
@@ -15,8 +15,6 @@ static const char revision[] = "$Id$";
 #ifdef CONSOLE_CONIO
 #include <conio.h>
 #endif
-
-#define SPI_PORT 1
 
 #ifndef SPI_PORT
 #ifdef OLIMEX_STM32_P103
@@ -47,7 +45,7 @@ int main(void)
 
   serial_stdio(CONSOLE_PORT);
 
-  puts("\033[H\033[2JSTM32F1 SPI Master Test (" __DATE__ " " __TIME__ ")\n");
+  printf("\033[H\033[2J%s SPI Master Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
   puts(revision);
   printf("\nCPU Freq:%u Hz  Compiler:%s %s %s\n\n", (unsigned int) SystemCoreClock,
     __COMPILER__, __VERSION__, __ABI__);
