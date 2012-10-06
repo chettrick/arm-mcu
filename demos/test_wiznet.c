@@ -1,4 +1,4 @@
-/* Simple serial console I/O test program for the STM32F1 ARM MCU */
+/* Simple TCP/IP I/O test program */
 
 // $Id$
 
@@ -78,7 +78,7 @@ int main(void)
 
   serial_stdio(CONSOLE_PORT);
 
-  puts("\033[H\033[2JSTM32F1 WizNet Network Test (" __DATE__ " " __TIME__ ")\n");
+  printf("\033[H\033[2J%s WizNet Network Test (" __DATE__ " " __TIME__ ")\n", MCUFAMILYNAME);
   puts(revision);
   printf("\nCPU Freq:%u Hz  Compiler:%s %s %s\n\n", (unsigned int) SystemCoreClock,
     __COMPILER__, __VERSION__, __ABI__);
