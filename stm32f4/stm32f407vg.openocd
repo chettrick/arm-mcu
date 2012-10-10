@@ -1,0 +1,39 @@
+# OpenOCD configuration for STM32F407VG Cortex-M3 ARM MCU
+
+# $Id$
+
+# TCP server configuration
+
+gdb_port 3333
+telnet_port 4444
+tcl_port 6666
+
+# Reset configuration
+
+reset_config srst_only srst_nogate
+
+# Adapter configuration
+
+transport select stlink_swd
+
+# Target configuration
+
+stlink newtap STM32F4 cpu -expected-id 0x2ba01477
+stlink newtap STM32F4 bs  -expected-id 0x06413041
+
+target create STM32F4.cpu stm32_stlink -chain-position STM32F4.cpu
+STM32F4.cpu configure -work-area-phys 0x20000000 -work-area-size 0x10000 -work-area-backup 0
+
+# Flash configuration
+
+flash bank STM32F4.flash stm32f2x 0 0 0 0 STM32F4.cpu
+
+# GDB event handlers
+
+STM32F4.cpu configure -event gdb-attach {
+  reset halt
+}
+
+STM32F4.cpu configure -event gdb-detach {
+  resume
+}

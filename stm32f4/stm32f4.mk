@@ -9,6 +9,8 @@ TEXTBASE	?= 0x00000000
 CFLAGS		+= -DSTM32F4XX
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
+OPENOCDFLASH	= $(MCUDIR)/stm32f4.flashocd
+
 ifeq ($(WITH_FPU), yes)
 CPUFLAGS	+= -mfloat-abi=hard -mfpu=fpv4-sp-d16
 endif
