@@ -29,7 +29,11 @@ source.done: $(OPENOCD_DIST)
 # Compile OpenOCD
 
 compile.done: source.done
-	cd $(OPENOCD_SRC) ; ./configure --prefix=/usr/local --enable-ft2232_libftdi $(EXTRACONFIG)
+	cd $(OPENOCD_SRC) ; ./configure --prefix=/usr/local --enable-ft2232_libftdi	\
+	--enable-usb_blaster_libftdi --enable-presto_libftdi --enable-usbprog		\
+	--enable-jlink --enable-vsllink --enable-rlink --enable-ulink			\
+	--enable-arm-jtag-ew --enable-buspirate --enable-stlink --enable-opendous	\
+	$(EXTRACONFIG)
 	$(MAKE) -C $(OPENOCD_SRC)
 	$(MAKE) -C $(OPENOCD_SRC) docs
 	touch $@
