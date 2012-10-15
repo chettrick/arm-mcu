@@ -4,7 +4,6 @@
 
 ARMSRC		?= ..
 MCUFAMILY	= str91x
-MCU		?= str912faw44
 BOARDNAME	?= STMICRO_STR910_EVAL
 
 include $(ARMSRC)/include/ARM.mk
