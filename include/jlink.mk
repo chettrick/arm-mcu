@@ -33,7 +33,10 @@ stopjlink:
 # Flash with J-Link
 
 .bin.flashjlink:
-	@echo "exec device=$(JLINKMCU)"			>$(JLINKFLASHCMDS)
+	@echo "device $(JLINKMCU)"			>$(JLINKFLASHCMDS)
+ifneq ($(JLINKSPEED),)
+	@echo "speed $(JLINKSPEED)"			>>$(JLINKFLASHCMDS)
+endif
 	@echo "h"					>>$(JLINKFLASHCMDS)
 	@echo "loadbin $<, 0x`dc -e '16o 16i $(subst 0x,,$(FLASHWRITEADDR)) $(subst 0x,,$(TEXTBASE)) + p'`"	>>$(JLINKFLASHCMDS)
 	@echo "r"					>>$(JLINKFLASHCMDS)
