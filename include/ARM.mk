@@ -141,7 +141,7 @@ endif
 clean:
 	$(FIND) * -name '*.o' -exec rm {} ";"
 	rm -f *.a *.asm *.bin *.dmp *.elf *.hex *.log *.map *.stackdump *.tmp Default.ini
-	cd $(MCUDIR) && $(MAKE) clean_$(MCU) BOARDNAME=$(BOARDNAME)
+	cd $(MCUDIR) && $(MAKE) clean_$(MCU)
 	cd $(MCUDIR) && $(FIND) * -name '*.o' -exec rm {} ";"
 	cd $(MCUDIR) && rm -f *.a *.asm *.bin *.dmp *.elf *.hex *.log *.map *.stackdump *.tmp Default.ini
 	$(MAKE) common_clean
@@ -156,10 +156,10 @@ ifeq ($(WITH_WIZNET), yes)
 endif
 
 reallyclean: clean
-	cd $(MCUDIR) && $(MAKE) reallyclean_$(MCU) BOARDNAME=$(BOARDNAME)
+	cd $(MCUDIR) && $(MAKE) reallyclean_$(MCU)
 
 distclean: reallyclean
-	cd $(MCUDIR) && $(MAKE) distclean_$(MCU) BOARDNAME=$(BOARDNAME)
+	cd $(MCUDIR) && $(MAKE) distclean_$(MCU)
 
 # Include programming and debugging makefiles
 
