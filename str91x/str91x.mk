@@ -7,10 +7,14 @@ FLASHWRITEADDR	?= 0x00000000
 TEXTBASE	?= 0x00000000
 
 FWLIB		= $(MCUDIR)/FWLib
-USBSERIAL	= $(MCUDIR)/usb_serial
 
-CFLAGS		+= -I$(FWLIB) -I$(USBSERIAL)
+CFLAGS		+= -I$(FWLIB)
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
+
+ifeq ($(WITH_USBSERIAL), yes)
+USBSERIAL	= $(MCUDIR)/usb_serial
+CFLAGS		+= -I$(USBSERIAL)
+endif
 
 # Board specific macro definitions
 
@@ -31,8 +35,10 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	for F in $(FWLIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
+ifeq ($(WITH_USBSERIAL), yes)
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
+endif
 	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
