@@ -281,11 +281,10 @@ int csscanf(const char* str, const char* format, ...)
 	int count;
 	int pos;
 	char neg, fmt_code;
-	const char* pf;
 
 	va_start(ap, format);
 
-	for (pf = format, count = 0; *format != 0 && *str != 0; format++, str++)
+	for (count = 0; *format != 0 && *str != 0; format++, str++)
 	{
 		while (*format == ' ' && *format != 0)
 			format++;
