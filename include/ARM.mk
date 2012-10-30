@@ -145,6 +145,7 @@ clean:
 	cd $(MCUDIR) && $(FIND) * -name '*.o' -exec rm {} ";"
 	cd $(MCUDIR) && rm -f *.a *.asm *.bin *.dmp *.elf *.hex *.log *.map *.stackdump *.tmp Default.ini
 	$(MAKE) common_clean
+	$(MAKE) mikropascal_clean
 ifeq ($(WITH_FREERTOS), yes)
 	$(MAKE) freertos_clean
 endif
@@ -166,6 +167,7 @@ distclean: reallyclean
 include $(ARMSRC)/include/jlink.mk
 include $(ARMSRC)/include/lpc21isp.mk
 include $(ARMSRC)/include/mbed.mk
+include $(ARMSRC)/include/mikropascal.mk
 include $(ARMSRC)/include/nxpusb.mk
 include $(ARMSRC)/include/openocd.mk
 include $(ARMSRC)/include/pg4uw.mk
