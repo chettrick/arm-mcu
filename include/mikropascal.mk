@@ -11,7 +11,7 @@ MIKROPASCAL	?= "C:/Users/Public/Documents/Mikroelektronika/mikroPascal PRO for A
 # Build project
 
 .mppar.build:
-	$(MIKROPASCAL) -BIN -PF $<
+	$(MIKROPASCAL) -RA -BIN -PF $<
 
 # Clean out working files
 
