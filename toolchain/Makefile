@@ -15,9 +15,9 @@ TEMP		= /tmp
 TAR		= tar
 FIND		= find
 
-BINUTILVER	= 2.22
+BINUTILVER	= 2.23
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
-BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
+BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 BINUTILBLD	= build/binutils-$(BINUTILVER)
@@ -75,7 +75,7 @@ download: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPD
 # Unpack all source distributions
 
 source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPDF)
-	$(TAR) xjf $(BINUTILDIST)
+	$(TAR) xzf $(BINUTILDIST)
 	$(TAR) xjf $(GCCDIST)
 	if [ -f multilibs.$(ABI).patch ]; then patch -b -p0 <multilibs.$(ABI).patch ; fi
 	$(TAR) xzf $(NEWLIBDIST)
