@@ -6,3 +6,5 @@ $Id$
 1. Imported from:
 
 http://code.google.com/p/cortex-m3-tutorials/downloads/detail?name=VCOM_lib1.3.rar
+
+2. Ran dos2unix on all files.
