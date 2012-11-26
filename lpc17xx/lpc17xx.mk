@@ -11,6 +11,11 @@ TEXTBASE	?= 0x00000000
 CFLAGS		+= -DLPC17XX
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
+ifeq ($(WITH_USBSERIAL), yes)
+USBSERIAL	= $(MCUDIR)/usb_serial
+CFLAGS		+= -I$(USBSERIAL)
+endif
+
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), MBED_LPC1768)
@@ -36,6 +41,10 @@ LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	$(MAKE) cmsis
+ifeq ($(WITH_USBSERIAL), yes)
+	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
+	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
+endif
 	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
