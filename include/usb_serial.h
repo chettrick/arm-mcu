@@ -5,6 +5,10 @@
 #ifndef __USB_SERIAL_H
 #define __USB_SERIAL_H
 
+#include <_ansi.h>
+
+_BEGIN_STD_C
+
 // Initialize USB subsystem
 
 int usb_serial_open(char *name, unsigned int *subdevice);
@@ -32,4 +36,6 @@ int usb_serial_rxready(unsigned subdevice);
 // Return TRUE if transmitter is ready for another message
 
 int usb_serial_txready(unsigned subdevice);
+
+_END_STD_C
 #endif
