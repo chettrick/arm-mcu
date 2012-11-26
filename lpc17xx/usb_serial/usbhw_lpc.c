@@ -37,51 +37,6 @@
 #include "usbdebug.h"
 #include "usbhw_lpc.h"
 #include "usbapi.h"
-//  Configure LED pin functions
-//
-//  LED pin functions
-//
-//  Function            Pin Port	Bits	Pin Select Register
-//  ------------------- --- -----	----	-------------------
-//  P2.0 GPIO Port 2.0	xx	P2.0	1:0		PINSEL4
-//  P2.1 GPIO Port 2.1	xx	P2.1	3:2		PINSEL4
-//  P2.2 GPIO Port 2.2  xx  P2.2	5:4		PINSEL4
-//  P2.3 GPIO Port 2.3  xx  P2.3	7:6		PINSEL4
-//  P2.4 GPIO Port 2.4	xx	P2.4	9:8		PINSEL4
-//  P2.5 GPIO Port 2.5	xx	P2.5  11:10		PINSEL4
-//  P2.6 GPIO Port 2.6	xx	P2.6  13:12		PINSEL4
-//  P2.7 GPIO Port 2.7	xx	P2.7  15:14		PINSEL4
-//
-// OFF - LED state 0
-// ON  - LED state 1
-//
-//  '*' as GPIO
-
-#define NO_LEDS		8
-
-#define LED_0		(1 << 0)
-#define LED_1		(1 << 1)
-#define LED_2		(1 << 2)
-#define LED_3		(1 << 3)
-#define LED_4		(1 << 4)
-#define LED_5		(1 << 5)
-#define LED_6		(1 << 6)
-#define LED_7		(1 << 7)
-
-#ifdef DEBUG
-// comment out the following line if you don't want to use debug LEDs
-//#define DEBUG_LED
-#endif
-
-#ifdef DEBUG_LED
-#define DEBUG_LED_ON(x)		FIO2SET = (1 << x);
-#define DEBUG_LED_OFF(x)	FIO2CLR = (1 << x);
-#define DEBUG_LED_INIT(x)	PINSEL2 &= ~(0x3 << (2*x)); FIO2DIR |= (1 << x); DEBUG_LED_OFF(x);
-#else
-#define DEBUG_LED_INIT(x)	/**< LED initialisation macro */
-#define DEBUG_LED_ON(x)		/**< turn LED on */
-#define DEBUG_LED_OFF(x)	/**< turn LED off */
-#endif
 
 /** Installed device interrupt handler */
 static TFnDevIntHandler *_pfnDevIntHandler = NULL;
@@ -461,9 +416,6 @@ void USBHwISR(void)
 	int i;
 	U16	wFrame;
 
-	// LED9 monitors total time in interrupt routine
-	DEBUG_LED_ON(6);
-
 	// handle device interrupts
 	dwStatus = LPC_USB->USBDevIntSt;
 	
@@ -493,9 +445,7 @@ void USBHwISR(void)
 					((bDevStat & RST) ? DEV_STATUS_RESET : 0);
 			// call handler
 			if (_pfnDevIntHandler != NULL) {
-				DEBUG_LED_ON(5);		
 				_pfnDevIntHandler(bStat);
-				DEBUG_LED_OFF(5);		
 			}
 		}
 	}
@@ -520,15 +470,11 @@ void USBHwISR(void)
 						((bEPStat & EPSTAT_PO) ? EP_STATUS_ERROR : 0);
 				// call handler
 				if (_apfnEPIntHandlers[i / 2] != NULL) {
-					DEBUG_LED_ON(7);		
 					_apfnEPIntHandlers[i / 2](IDX2EP(i), bStat);
-					DEBUG_LED_OFF(7);
 				}
 			}
 		}
 	}
-	
-	DEBUG_LED_OFF(6);		
 }
 
 
@@ -548,59 +494,20 @@ void USBHwISR(void)
  */
 BOOL USBHwInit(void)
 {
-/*	CodeRed - comment out original code
- * 
-	// configure P0.23 for Vbus sense
-	PINSEL1 = (PINSEL1 & ~(3 << 14)) | (1 << 14);	// P0.23
-	// configure P0.31 for CONNECT
-	PINSEL1 = (PINSEL1 & ~(3 << 30)) | (2 << 30);	// P0.31
-*/
-	
-	// CodeRed - set up USB pins
-	
 	// P2.9 -> USB_CONNECT
 	LPC_PINCON->PINSEL4 &= ~0x000C0000;
 	LPC_PINCON->PINSEL4 |= 0x00040000;
-
-	// P1.18 -> USB_UP_LED
-	// P1.30 -> VBUS
-	LPC_PINCON->PINSEL3 &= ~0x30000030;
-	LPC_PINCON->PINSEL3 |= 0x20000010;
 
 	// P0.29 -> USB_D+
 	// P0.30 -> USB_D-
 	LPC_PINCON->PINSEL1 &= ~0x3C000000;
 	LPC_PINCON->PINSEL1 |= 0x14000000;	
 
-	
 	// enable PUSB
 	LPC_SC->PCONP |= (1 << 31);
 
-/*  CodeRed - Comment out original PLL code
- *  PLL now set up by NXP code in target.c within example projects
- * 
-	// initialise PLL
-	PLL1CON = 1;			// enable PLL
-	PLL1CFG = (1 << 5) | 3; // P = 2, M = 4
-	PLL1FEED = 0xAA;
-	PLL1FEED = 0x55;
-	while ((PLL1STAT & (1 << 10)) == 0);
-
-	PLL1CON = 3;			// enable and connect
-	PLL1FEED = 0xAA;
-	PLL1FEED = 0x55;	
-	
-*/
-	
-
-// AWB added USB clock enable
-// These are actually the USBClkCtrl and USBClkSt registers
-//	  OTG_CLK_CTRL = 0x12;	                  /* Dev clock, AHB clock enable  */
-//	  while ((OTG_CLK_STAT & 0x12) != 0x12);
-
-	  LPC_USB->USBClkCtrl = 0x1A;	                  /* Dev clock, AHB clock enable  */
-	  while ((LPC_USB->USBClkSt & 0x1A) != 0x1A);
-
+	LPC_USB->USBClkCtrl = 0x1A;	                  /* Dev clock, AHB clock enable  */
+	while ((LPC_USB->USBClkSt & 0x1A) != 0x1A);
 	  
 	// disable/clear all interrupts for now
 	LPC_USB->USBDevIntEn = 0;
@@ -614,14 +521,5 @@ BOOL USBHwInit(void)
 	// by default, only ACKs generate interrupts
 	USBHwNakIntEnable(0);
 
-	// CodeRed - commented out LEDs - not used by current port
-	// init debug leds
-    /*
-	DEBUG_LED_INIT(5);
-	DEBUG_LED_INIT(6);
-	DEBUG_LED_INIT(7);
-	*/
-	
 	return TRUE;
 }
-
