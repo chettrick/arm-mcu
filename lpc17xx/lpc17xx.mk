@@ -13,17 +13,21 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 ifeq ($(WITH_USBSERIAL), yes)
 USBSERIAL	= $(MCUDIR)/usb_serial
-CFLAGS		+= -I$(USBSERIAL)
+CFLAGS		+= -DCONSOLE_USB -I$(USBSERIAL)
 endif
 
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), MBED_LPC1768)
+ifneq ($(WITH_USBSERIAL), yes)
 BOARDFLAGS	?= -DCONSOLE_PORT='"com1:115200,n,8,1"'
+endif
 endif
 
 ifeq ($(BOARDNAME), BLUEBOARD_LPC1768_H)
+ifneq ($(WITH_USBSERIAL), yes)
 BOARDFLAGS	?= -DCONSOLE_PORT='"com1:115200,n,8,1"'
+endif
 JLINKMCU	= lpc1768
 JLINKGDBIF	= -if SWD
 endif
