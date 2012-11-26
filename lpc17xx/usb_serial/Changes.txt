@@ -8,3 +8,6 @@ $Id$
 http://code.google.com/p/cortex-m3-tutorials/downloads/detail?name=VCOM_lib1.3.rar
 
 2. Ran dos2unix on all files.
+
+3. Changed txfifo and rxfifo in usbSerial.c from static to global, so we can
+   access them from usb_serial.c.

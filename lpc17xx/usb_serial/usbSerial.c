@@ -80,8 +80,8 @@ static U8 abClassReqData[8];
 static U8 txdata[VCOM_FIFO_SIZE];
 static U8 rxdata[VCOM_FIFO_SIZE];
 
-static fifo_t txfifo;
-static fifo_t rxfifo;
+fifo_t txfifo;
+fifo_t rxfifo;
 
 // forward declaration of interrupt handler
 void USBIntHandler(void);
