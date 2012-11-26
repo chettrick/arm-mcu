@@ -16,9 +16,12 @@
 
 _BEGIN_STD_C
 
-#include <usb_serial/usb_serial.h>
 #include <91x_lib.h>
 #include <91x_it.h>
+
+#ifdef CONSOLE_USB
+#include <usb_serial.h>
+#endif
 
 extern unsigned long int SystemCoreClock;
 extern void cpu_init(unsigned long int frequency);
