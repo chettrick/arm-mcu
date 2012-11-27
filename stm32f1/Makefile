@@ -10,3 +10,11 @@ BOARDNAME	?= OLIMEX_STM32_P107
 #BOARDNAME	?= W5200E01_M3
 
 include $(ARMSRC)/include/ARM.mk
+
+.PHONY: clean reallyclean distclean
+
+clean: ARM_mk_clean
+
+reallyclean: clean
+
+distclean: reallyclean

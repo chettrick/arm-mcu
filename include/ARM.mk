@@ -52,15 +52,9 @@ GDBSERVERPORT	= 3333
 #GDBGUI		?= ddd --gdb --debugger
 #GDBFLAGS	?= -tui
 
-# Define default target placeholder
-
-default_catch:
-	@echo ERROR: You must explicitly specify a make target!
-	@exit 1
-
 # These targets are not files
 
-.PHONY: default_catch clean
+.PHONY: ARM_mk_default ARM_mk_clean
 
 # These are the target suffixes
 
@@ -126,6 +120,12 @@ WIZNET_DIR      = $(ARMSRC)/wiznet
 include $(WIZNET_DIR)/wiznet.mk
 endif
 
+# Define default target placeholder
+
+ARM_mk_default:
+	@echo ERROR: You must explicitly specify a make target!
+	@exit 1
+
 # Build other library components
 
 otherlibs:
@@ -142,7 +142,7 @@ endif
 
 # Clean out working files
 
-clean:
+ARM_mk_clean:
 	$(FIND) * -name '*.o' -exec rm {} ";"
 	rm -f *.a *.asm *.bin *.dmp *.elf *.hex *.log *.map *.stackdump *.tmp Default.ini
 	cd $(MCUDIR) && $(MAKE) clean_$(MCU)
@@ -159,12 +159,6 @@ endif
 ifeq ($(WITH_WIZNET), yes)
 	$(MAKE) wiznet_clean
 endif
-
-reallyclean: clean
-	cd $(MCUDIR) && $(MAKE) reallyclean_$(MCU)
-
-distclean: reallyclean
-	cd $(MCUDIR) && $(MAKE) distclean_$(MCU)
 
 # Include programming and debugging makefiles
 

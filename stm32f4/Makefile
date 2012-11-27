@@ -8,3 +8,11 @@ BOARDNAME	?= STM32F4_DISCOVERY
 #BOARDNAME	?= FEZ_CERB40
 
 include $(ARMSRC)/include/ARM.mk
+
+.PHONY: clean reallyclean distclean
+
+clean: ARM_mk_clean
+
+reallyclean: clean
+
+distclean: reallyclean
