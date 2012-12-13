@@ -2,6 +2,8 @@
 
 # $Id: Makefile 2963 2011-08-02 17:06:09Z svn $
 
+CC		= $(CROSS_COMPILE)gcc
+
 LPC21ISP_NAME	= lpc21isp
 LPC21ISP_VER	= 1.84
 LPC21ISP_DIST	= $(LPC21ISP_NAME)_$(shell echo $(LPC21ISP_VER) | awk -F '.' '{ printf("%s%s\n", $$1, $$2) }').tar.gz
@@ -41,7 +43,7 @@ $(LPC21ISP_DIR): $(LPC21ISP_DIST)
 # Compile lpc21isp
 
 $(LPC21ISP_PROG): $(LPC21ISP_DIR)
-	$(MAKE) -C $(LPC21ISP_DIR) CFLAGS=-Dstrnicmp=strncasecmp clean all
+	$(MAKE) -C $(LPC21ISP_DIR) CC=$(CC)
 	cp $(LPC21ISP_DIR)/$(LPC21ISP_PROG) $(LPC21ISP_PROG)
 
 # Install lpc21isp
