@@ -2,8 +2,6 @@
 
 # $Id: Makefile 2963 2011-08-02 17:06:09Z svn $
 
-CC		= $(CROSS_COMPILE)gcc
-
 LPC21ISP_NAME	= lpc21isp
 LPC21ISP_VER	= 1.85
 LPC21ISP_ZIP	= $(LPC21ISP_NAME)_$(shell echo $(LPC21ISP_VER) | awk -F '.' '{ printf("%s%s\n", $$1, $$2) }').zip
@@ -12,9 +10,9 @@ LPC21ISP_URL	= $(LPC21ISP_SERVER)/$(LPC21ISP_ZIP)
 LPC21ISP_DIR	= $(LPC21ISP_NAME)_$(shell echo $(LPC21ISP_VER) | awk -F '.' '{ printf("%s%s\n", $$1, $$2) }')
 LPC21ISP_PROG	= $(LPC21ISP_NAME)
 
-INSTALLDIR	= /usr/local/bin
+CC		= $(CROSS_COMPILE)gcc
 
-TAR		= tar
+INSTALLDIR	= /usr/local/bin
 
 .PHONY: default install uninstall clean reallyclean distclean
 
