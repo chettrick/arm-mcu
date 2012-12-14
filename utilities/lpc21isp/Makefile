@@ -16,7 +16,7 @@ INSTALLDIR	= /usr/local/bin
 
 TAR		= tar
 
-.PHONY: default zip2tgz install clean distclean
+.PHONY: default install uninstall clean reallyclean distclean
 
 default: $(LPC21ISP_PROG)
 
