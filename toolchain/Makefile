@@ -51,18 +51,14 @@ VERSION		= $(BINUTILVER)_$(GCCVER)_$(NEWLIBVER)_$(GDBVER)
 RELEASE		= 1
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-TARBALL		= $(PKGNAME)-$(VERSION)-cygwin.tgz
+TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -o)-$(shell uname -m).tgz
 else
-TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -s)-$(shell uname -i).tgz
+TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -s)-$(shell uname -m).tgz
 endif
 
-.PHONY: download tarball rpm clean distclean
+.PHONY: default download tarball rpm clean distclean
 
-ifeq ($(shell uname), Linux)
-default: rpm
-else
-default: tarball
-endif
+default: readme.done
 
 ################################################################################
 
