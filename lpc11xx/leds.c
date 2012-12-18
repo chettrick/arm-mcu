@@ -26,7 +26,7 @@ unsigned long int LEDS_get(void)
   unsigned long int result = 0;
 
 #ifdef LPC1114FN28
-  result = LPC_GPIO0->MASKED_ACCESS[0x200] >> 7;
+  result = LPC_GPIO0->MASKED_ACCESS[0x80] >> 7;
 #endif
 
   return result;
@@ -38,6 +38,6 @@ unsigned long int LEDS_get(void)
 void LEDS_set(unsigned long int mask)
 {
 #ifdef LPC1114FN28
-  LPC_GPIO0->MASKED_ACCESS[0x200] = mask << 7;
+  LPC_GPIO0->MASKED_ACCESS[0x80] = mask << 7;
 #endif
 }
