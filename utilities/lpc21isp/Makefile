@@ -3,7 +3,7 @@
 # $Id: Makefile 2963 2011-08-02 17:06:09Z svn $
 
 LPC21ISP_NAME	= lpc21isp
-LPC21ISP_VER	= 1.85
+LPC21ISP_VER	= 1.87
 LPC21ISP_ZIP	= $(LPC21ISP_NAME)_$(shell echo $(LPC21ISP_VER) | awk -F '.' '{ printf("%s%s\n", $$1, $$2) }').zip
 LPC21ISP_SERVER	= http://downloads.sourceforge.net/project/lpc21isp/lpc21isp/$(LPC21ISP_VER)
 LPC21ISP_URL	= $(LPC21ISP_SERVER)/$(LPC21ISP_ZIP)
