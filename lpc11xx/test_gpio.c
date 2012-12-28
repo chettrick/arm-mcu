@@ -30,7 +30,7 @@ int main(void)
 
   for (i = 0;; i++)
   {
-    LPC_GPIO0->DATA = i >> 12;			// Flash LED
+    LPC_GPIO0->DATA = i >> 11;			// Flash LED
     LPC_GPIO1->DATA = i;
   }
 #endif
