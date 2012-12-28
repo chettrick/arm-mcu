@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Helper script for udev rule for NXP LPC USB boot loader
+
+# $Id$
+
+# Add device
+
+if [ "$ACTION" = "add" -a -n "$ID_FS_LABEL_ENC" ]; then
+  ln -s -f "/media/`printf $ID_FS_LABEL_ENC`" /media/$1
+fi
+
+# Remove device
+
+if [ "$ACTION" = "remove" -a -L /media/$1 ]; then
+  rm /media/$1
+fi
