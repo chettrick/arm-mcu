@@ -21,6 +21,12 @@ MCU		= LPC1114FN28
 JLINKMCU	= LPC1114/102
 endif
 
+ifeq ($(BOARDNAME), RASPBERRYPI_LPC1114)
+BOARDFLAGS	?= -DCONSOLE_PORT='"com1:115200,n,8,1"' -DCONSOLE_CONIO
+MCU		= LPC1114FN28
+JLINKMCU	= LPC1114/102
+endif
+
 # Phony targets
 
 .PHONY:		lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
