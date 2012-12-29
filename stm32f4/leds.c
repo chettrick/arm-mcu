@@ -17,13 +17,6 @@ void LEDS_initialize(void)
   gpiopin_configure(GPIOPIN63, GPIOPIN_OUTPUT);		// PD15
 #endif
 
-#ifdef FEZ_CERB40
-  gpiopin_configure(GPIOPIN38, GPIOPIN_OUTPUT);		// PC6
-  gpiopin_configure(GPIOPIN39, GPIOPIN_OUTPUT);		// PC7
-  gpiopin_configure(GPIOPIN40, GPIOPIN_OUTPUT);		// PC8
-  gpiopin_configure(GPIOPIN41, GPIOPIN_OUTPUT);		// PC9
-#endif
-
   LEDS_set(0);						// Turn off all LEDs at startup
 }
 
@@ -41,13 +34,6 @@ unsigned long int LEDS_get(void)
   result += GPIOPIN63IN << 3;
 #endif
 
-#ifdef FEZ_CERB40
-  result += GPIOPIN38IN;
-  result += GPIOPIN39IN << 1;
-  result += GPIOPIN40IN << 2;
-  result += GPIOPIN41IN << 3;
-#endif
-
   return result;
 }
 
@@ -61,12 +47,5 @@ void LEDS_set(unsigned long int mask)
   GPIOPIN61OUT = mask >> 1;
   GPIOPIN62OUT = mask >> 2;
   GPIOPIN63OUT = mask >> 3;
-#endif
-
-#ifdef FEZ_CERB40
-  GPIOPIN38OUT = mask;
-  GPIOPIN39OUT = mask >> 1;
-  GPIOPIN40OUT = mask >> 2;
-  GPIOPIN41OUT = mask >> 3;
 #endif
 }
