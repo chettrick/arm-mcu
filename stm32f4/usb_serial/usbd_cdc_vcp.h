@@ -42,26 +42,16 @@ typedef struct
   uint8_t  datatype;
 }LINE_CODING;
 
-/* Exported constants --------------------------------------------------------*/
-/* The following define is used to route the USART IRQ handler to be used.
-   The IRQ handler function is implemented in the usbd_cdc_vcp.c file. */
-#ifdef USE_STM322xG_EVAL
- #define EVAL_COM_IRQHandler            USART3_IRQHandler
-#elif defined(USE_STM3210C_EVAL)
- #define EVAL_COM_IRQHandler            USART2_IRQHandler
-#endif /* USE_STM322xG_EVAL */
-
+/* Exported functions --------------------------------------------------------*/
 void VCP_put_char(uint8_t buf);
 void VCP_send_str(uint8_t* buf);
 int VCP_get_char(uint8_t *buf);
 int VCP_get_string(uint8_t *buf);
 void VCP_send_buffer(uint8_t* buf, int len);
 
+/* Exported constants --------------------------------------------------------*/
 #define DEFAULT_CONFIG                  0
 #define OTHER_CONFIG                    1
-
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
 
 #endif /* __USBD_CDC_VCP_H */
 

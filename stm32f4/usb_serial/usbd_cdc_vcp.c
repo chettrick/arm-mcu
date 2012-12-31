@@ -266,14 +266,4 @@ int VCP_get_string(uint8_t *buf) {
 	return i;
 }
 
-/**
- * @brief  EVAL_COM_IRQHandler
- *
- * @param  None.
- * @retval None.
- */
-void EVAL_COM_IRQHandler(void) {
-
-}
-
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

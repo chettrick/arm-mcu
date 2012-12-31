@@ -8,3 +8,5 @@ $Id$
 2. Copied relevant files to usb_serial subdirectory.
 
 3. Ran dos2unix on all source files.
+
+4. Removed USART definitions from usbd_cdc_vcp.c and usbd_cdc_vcp.h
