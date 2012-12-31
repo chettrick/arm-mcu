@@ -132,7 +132,7 @@ _start: 	.word		__stack_end__
 		IRQ		USART6_IRQHandler
 		IRQ		I2C3_EV_IRQHandler
 		IRQ		I2C3_ER_IRQHandler
-		IRQ		OTG_HS_EP1_OU_IRQHandler
+		IRQ		OTG_HS_EP1_OUT_IRQHandler
 		IRQ		OTG_HS_EP1_IN_IRQHandler
 		IRQ		OTG_HS_WKUP_IRQHandler
 		IRQ		OTG_HS_IRQHandler
