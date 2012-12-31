@@ -9,6 +9,11 @@ TEXTBASE	?= 0x00000000
 CFLAGS		+= -DSTM32F4XX
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
+ifeq ($(WITH_USBSERIAL), yes)
+USBSERIAL	= $(MCUDIR)/usb_serial
+CFLAGS		+= -DCONSOLE_USB -I$(USBSERIAL)
+endif
+
 OPENOCDFLASH	= $(MCUDIR)/stm32f4.flashocd
 
 ifeq ($(WITH_FPU), yes)
@@ -50,6 +55,10 @@ LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	$(MAKE) stm32f4libs
+ifeq ($(WITH_USBSERIAL), yes)
+	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
+	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
+endif
 	$(MAKE) otherlibs
 
 lib: lib$(MCU).a
