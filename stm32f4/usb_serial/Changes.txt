@@ -1,0 +1,10 @@
+Changes to ST Microelectronics USB Serial Port Stack
+----------------------------------------------------
+
+$Id$
+
+1. Downloaded http://vedder.se/wp-content/uploads/2012/07/STM32F4_USB_CDC.zip.
+
+2. Copied relevant files to usb_serial subdirectory.
+
+3. Ran dos2unix on all source files.
