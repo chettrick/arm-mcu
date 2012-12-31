@@ -14,6 +14,10 @@
 #include <spi.h>
 #include <stm32f4xx.h>
 
+#ifdef CONSOLE_USB
+#include <usb_serial.h>
+#endif
+
 #define DEFAULT_CPU_FREQ	0
 
 _BEGIN_STD_C
