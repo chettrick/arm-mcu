@@ -13,7 +13,8 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 ifeq ($(WITH_USBSERIAL), yes)
 USBSERIAL	= $(MCUDIR)/usb_serial
-CFLAGS		+= -DCONSOLE_USB -I$(USBSERIAL)
+CFLAGS		+= -I$(USBSERIAL)
+IOFLAGS		+= -DCONSOLE_USB
 endif
 
 # Board specific macro definitions
