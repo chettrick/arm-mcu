@@ -13,14 +13,15 @@ LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
 ifeq ($(WITH_USBSERIAL), yes)
 USBSERIAL	= $(MCUDIR)/usb_serial
-CFLAGS		+= -DCONSOLE_USB -I$(USBSERIAL)
+CFLAGS		+= -I$(USBSERIAL)
+IOFLAGS		+= -DCONSOLE_USB
 endif
 
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), STMICRO_STR910_EVAL)
 ifneq ($(WITH_USBSERIAL), yes)
-BOARDFLAGS	?= -DCONSOLE_PORT='"com1:115200,n,8,1"'
+BOARDFLAGS	+= -DCONSOLE_PORT='"com1:115200,n,8,1"'
 endif
 MCU		= str912faw44
 endif
