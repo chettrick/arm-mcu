@@ -78,7 +78,7 @@ int device_register_char(char *name,
     if (device_table[fd].type == DEVICE_TYPE_UNUSED)
     {
       memset(&device_table[fd], 0, sizeof(device_t));
-      strlcpy(device_table[fd].name, name, namelen);
+      strlcpy(device_table[fd].name, name, namelen+1);
       device_table[fd].type = DEVICE_TYPE_CHAR;
       device_table[fd].subdevice = subdevice;
       device_table[fd].open = open;
@@ -186,7 +186,7 @@ int device_register_block(char *name,
     if (device_table[fd].type == DEVICE_TYPE_UNUSED)
     {
       memset(&device_table[fd], 0, sizeof(device_t));
-      strlcpy(device_table[fd].name, name, namelen);
+      strlcpy(device_table[fd].name, name, namelen+1);
       device_table[fd].type = DEVICE_TYPE_BLOCK;
       device_table[fd].open = open;
       device_table[fd].close = close;
