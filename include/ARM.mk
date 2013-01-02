@@ -34,7 +34,7 @@ OPTFLAGS	?= -O0
 ifeq ($(WITH_CONIO), yes)
 IOFLAGS		+= -DCONSOLE_CONIO
 else
-IOFLAGS		?= -DINTEGER_STDIO
+IOFLAGS		+= -DINTEGER_STDIO
 endif
 CFLAGS		+= -Wall -ffunction-sections
 CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDIR)
