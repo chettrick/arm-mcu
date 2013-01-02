@@ -51,7 +51,7 @@ typedef int (*device_seek_fn_t)		(unsigned int subdevice,
 
 typedef struct
 {
-  char name[DEVICE_NAME_SIZE];
+  char name[DEVICE_NAME_SIZE+1];
   device_type_t type;
   unsigned int subdevice;
   device_open_fn_t open;

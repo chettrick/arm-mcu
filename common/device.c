@@ -66,7 +66,9 @@ int device_register_char(char *name,
 
   namelen = strcspn(name, ":");
 
-  if (namelen > DEVICE_NAME_SIZE-1)
+  // Check device name length
+
+  if (namelen > DEVICE_NAME_SIZE)
   {
     errno_r = EINVAL;
     return -1;
@@ -156,12 +158,6 @@ int device_register_block(char *name,
     return -1;
   }
 
-  if (strlen(name) > DEVICE_NAME_SIZE-1)
-  {
-    errno_r = EINVAL;
-    return -1;
-  }
-
   // Check for duplicate device name
 
   if (device_lookup(name) >= 0)
@@ -174,7 +170,9 @@ int device_register_block(char *name,
 
   namelen = strcspn(name, ":");
 
-  if (namelen > DEVICE_NAME_SIZE-1)
+  // Check device name length
+
+  if (namelen > DEVICE_NAME_SIZE)
   {
     errno_r = EINVAL;
     return -1;
@@ -242,15 +240,17 @@ int device_lookup(char *name)
     return -1;
   }
 
-  if (strlen(name) > DEVICE_NAME_SIZE-1)
+  // Only compare before colon character
+
+  namelen = strcspn(name, ":");
+
+  // Check device name length
+
+  if (namelen > DEVICE_NAME_SIZE)
   {
     errno_r = EINVAL;
     return -1;
   }
-
-  // Only compare before colon character
-
-  namelen = strcspn(name, ":");
 
   for (fd = 0; fd < MAX_DEVICES; fd++)
     if (!strncasecmp(device_table[fd].name, name, namelen))
@@ -270,24 +270,13 @@ int device_open(char *name, int flags, int mode)
 
   errno_r = 0;
 
-  // Check for invalid device name
-
-  if (name == NULL)
-  {
-    errno_r = EINVAL;
-    return -1;
-  }
-
-  if (strlen(name) > DEVICE_NAME_SIZE-1)
-  {
-    errno_r = EINVAL;
-    return -1;
-  }
-
   // Look up the device
 
   fd = device_lookup(name);
-  if (fd < 0) return fd;
+  if (fd < 0)
+  {
+    return fd;
+  }
 
   // Save open flag
 
@@ -304,7 +293,9 @@ int device_open(char *name, int flags, int mode)
   // Initialize the device
 
   if (device_table[fd].open(name, &device_table[fd].subdevice))
+  {
     return -1;
+  }
 
   return fd;
 }
