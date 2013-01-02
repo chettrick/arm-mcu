@@ -163,7 +163,15 @@ int usb_serial_read(unsigned subdevice, char *buf, unsigned int count)
 {
   unsigned int len = 0;
 
-  while (VCP_get_char((uint8_t *) buf++) && (len++ < count));
+  if (count == 0) return 0;
+
+  while (usb_serial_rxready(0) && (len < count))
+  {
+    VCP_get_char((uint8_t *) buf);
+
+    buf++;
+    len++;
+  }
 
   return len;
 }
