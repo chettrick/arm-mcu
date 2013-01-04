@@ -11,12 +11,6 @@ TEXTBASE	?= 0x00000000
 CFLAGS		+= -DLPC17XX
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
-ifeq ($(WITH_USBSERIAL), yes)
-USBSERIAL	= $(MCUDIR)/usb_serial
-CFLAGS		+= -I$(USBSERIAL)
-IOFLAGS		+= -DCONSOLE_USB
-endif
-
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), MBED_LPC1768)
@@ -26,11 +20,21 @@ endif
 endif
 
 ifeq ($(BOARDNAME), BLUEBOARD_LPC1768_H)
+WITH_USBSERIAL	?= yes
+
 ifneq ($(WITH_USBSERIAL), yes)
 BOARDFLAGS	+= -DCONSOLE_PORT='"com1:115200,n,8,1"'
 endif
 JLINKMCU	= lpc1768
 JLINKGDBIF	= -if SWD
+endif
+
+# USB serial port console support
+
+ifeq ($(WITH_USBSERIAL), yes)
+USBSERIAL	= $(MCUDIR)/usb_serial
+CFLAGS		+= -I$(USBSERIAL)
+IOFLAGS		+= -DCONSOLE_USB
 endif
 
 # Phony targets
