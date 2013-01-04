@@ -9,12 +9,6 @@ TEXTBASE	?= 0x00000000
 CFLAGS		+= -DSTM32F4XX
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
-ifeq ($(WITH_USBSERIAL), yes)
-USBSERIAL	= $(MCUDIR)/usb_serial
-CFLAGS		+= -I$(USBSERIAL)
-IOFLAGS		+= -DCONSOLE_USB
-endif
-
 OPENOCDFLASH	= $(MCUDIR)/stm32f4.flashocd
 
 ifeq ($(WITH_FPU), yes)
@@ -25,6 +19,8 @@ endif
 
 ifeq ($(BOARDNAME), STM32F4_DISCOVERY)
 BOARDFLAGS	+= -DHSE_VALUE=8000000
+WITH_USBSERIAL	?= yes
+
 ifneq ($(WITH_USBSERIAL), yes)
 BOARDFLAGS	+= -DCONSOLE_PORT='"com2:115200,n,8,1"'
 endif
@@ -38,6 +34,8 @@ endif
 
 ifeq ($(BOARDNAME), FEZ_CERB40)
 BOARDFLAGS	+= -DHSE_VALUE=12000000
+WITH_USBSERIAL	?= yes
+
 ifneq ($(WITH_USBSERIAL), yes)
 BOARDFLAGS	+= -DCONSOLE_PORT='"com2:115200,n,8,1"'
 endif
@@ -47,6 +45,14 @@ JLINKGDBIF	= -if SWD
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 STLINKCLIIF	= -c SWD
 endif
+endif
+
+# USB serial port console support
+
+ifeq ($(WITH_USBSERIAL), yes)
+USBSERIAL	= $(MCUDIR)/usb_serial
+CFLAGS		+= -I$(USBSERIAL)
+IOFLAGS		+= -DCONSOLE_USB
 endif
 
 # Phony targets
