@@ -138,7 +138,7 @@ static int SPI_Configure_Pins(uint32_t port)
       GPIO_StructInit(&GPIO_config);
       GPIO_config.GPIO_Pin = GPIO_Pin_6;
       GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
-      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
       GPIO_Init(GPIOA, &GPIO_config);
 
       // Configure MOSI pin
@@ -172,7 +172,7 @@ static int SPI_Configure_Pins(uint32_t port)
       GPIO_StructInit(&GPIO_config);
       GPIO_config.GPIO_Pin = GPIO_Pin_14;
       GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
-      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
       GPIO_Init(GPIOB, &GPIO_config);
 
       // Configure MOSI pin
@@ -216,7 +216,7 @@ static int SPI_Configure_Pins(uint32_t port)
       GPIO_StructInit(&GPIO_config);
       GPIO_config.GPIO_Pin = GPIO_Pin_11;
       GPIO_config.GPIO_Speed = GPIO_Speed_50MHz;
-      GPIO_config.GPIO_Mode = GPIO_Mode_AF_PP;
+      GPIO_config.GPIO_Mode = GPIO_Mode_IN_FLOATING;
       GPIO_Init(GPIOC, &GPIO_config);
 
       // Configure MOSI pin
