@@ -3,11 +3,9 @@
 # $Id: Makefile 2963 2011-08-02 17:06:09Z svn $
 
 LPC21ISP_NAME	= lpc21isp
-LPC21ISP_VER	= 1.87
-LPC21ISP_ZIP	= $(LPC21ISP_NAME)_$(shell echo $(LPC21ISP_VER) | awk -F '.' '{ printf("%s%s\n", $$1, $$2) }').zip
-LPC21ISP_SERVER	= http://downloads.sourceforge.net/project/lpc21isp/lpc21isp/$(LPC21ISP_VER)
-LPC21ISP_URL	= $(LPC21ISP_SERVER)/$(LPC21ISP_ZIP)
-LPC21ISP_DIR	= $(LPC21ISP_NAME)_$(shell echo $(LPC21ISP_VER) | awk -F '.' '{ printf("%s%s\n", $$1, $$2) }')
+LPC21ISP_URL	= https://github.com/capiman/lpc21isp.git
+LPC21ISP_DIR	= lpc21isp.src
+LPC21ISP_VER	= $(shell awk '/define VERSION_STR/ { print $$3 }' $(LPC21ISP_DIR)/lpc21isp.c)
 LPC21ISP_PROG	= $(LPC21ISP_NAME)
 
 CC		= $(CROSS_COMPILE)gcc
@@ -18,20 +16,15 @@ INSTALLDIR	= /usr/local/bin
 
 default: $(LPC21ISP_PROG)
 
-# Download lpc21isp source distribution
+# Fetch lpc21isp source tree
 
-$(LPC21ISP_ZIP):
-	wget -O $(LPC21ISP_ZIP) $(LPC21ISP_URL)
-
-# Unpack lpc21isp source distribution
-
-$(LPC21ISP_DIR): $(LPC21ISP_ZIP)
-	mkdir -p $(LPC21ISP_DIR)
-	unzip $(LPC21ISP_ZIP) -d $(LPC21ISP_DIR)
+$(LPC21ISP_DIR):
+	git clone $(LPC21ISP_URL) $(LPC21ISP_DIR)
 
 # Compile lpc21isp
 
 $(LPC21ISP_PROG): $(LPC21ISP_DIR)
+	echo VERSION is $(LPC21ISP_VER)
 	$(MAKE) -C $(LPC21ISP_DIR) CC=$(CC)
 	cp $(LPC21ISP_DIR)/$(LPC21ISP_PROG) $(LPC21ISP_PROG)
 
@@ -74,5 +67,3 @@ reallyclean: clean
 	-rm -rf $(LPC21ISP_DIR)
 
 distclean: reallyclean
-	-rm $(LPC21ISP_DIST)
-	-rm $(LPC21ISP_ZIP)
