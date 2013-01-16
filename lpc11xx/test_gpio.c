@@ -42,7 +42,7 @@ int main(void)
   LPC_GPIO0->DIR = 0x80;			// P0.7 is output
 #endif
 
-#ifdef PROTOBOARD
+#ifdef PROTOBOARD_LPC1114FN28
   LPC_IOCON->R_PIO1_0 = 0xC1;			// Configure PIO1 pins for GPIO
   LPC_IOCON->R_PIO1_1 = 0xC1;
   LPC_IOCON->R_PIO1_2 = 0xC1;
@@ -61,7 +61,7 @@ int main(void)
     LPC_GPIO0->DATA = i >> 11;			// Flash LED
 #endif
 
-#ifdef PROTOBOARD
+#ifdef PROTOBOARD_LPC1114
     LPC_GPIO1->DATA = i;			// Toggle P1 GPIO's
 #endif
   }
