@@ -35,8 +35,8 @@
 
 _BEGIN_STD_C
 
-#define SPI_BIGENDIAN		1
-#define SPI_LITTLEENDIAN	0
+#define SPI_MSBFIRST		1
+#define SPI_LSBFIRST		0
 
 // Initialize SPI port for bidirection master mode
 
