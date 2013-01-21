@@ -35,6 +35,7 @@
 #include <device.h>
 #include <leds.h>
 #include <serial.h>
+#include <spi.h>
 
 #include <LPC11xx.h>
 

@@ -38,13 +38,20 @@ _BEGIN_STD_C
 #define SPI_MSBFIRST		1
 #define SPI_LSBFIRST		0
 
-// Initialize SPI port for bidirection master mode
+// Initialize SPI port for bidirectional master mode
 
 int spimaster_init(uint32_t port,
                    uint32_t wordsize,
                    uint32_t clockmode,
                    uint32_t speed,
                    uint32_t bitorder);
+
+// Initialize SPI port for bidirectional slave mode
+
+int spislave_init(uint32_t port,
+                  uint32_t wordsize,
+                  uint32_t clockmode,
+                  uint32_t bitorder);
 
 // Transmit command and/or receive result in bidirectional master mode
 
