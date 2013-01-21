@@ -273,7 +273,7 @@ int spimaster_init(uint32_t port,
                    uint32_t wordsize,
                    uint32_t clockmode,
                    uint32_t speed,
-                   uint32_t bigendian)
+                   uint32_t bitorder)
 {
   int status;
   uint32_t prescaler;
@@ -301,7 +301,7 @@ int spimaster_init(uint32_t port,
     return __LINE__ - 3;
   }
 
-  if (bigendian > 1)
+  if (bitorder > 1)
   {
     errno_r = EINVAL;
     return __LINE__ - 3;
@@ -330,7 +330,7 @@ int spimaster_init(uint32_t port,
   SPI_InitStructure.SPI_CPHA = clockmode & 0x01;
   SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
   SPI_InitStructure.SPI_BaudRatePrescaler = prescaler;
-  SPI_InitStructure.SPI_FirstBit = bigendian ? SPI_FirstBit_MSB : SPI_FirstBit_LSB;
+  SPI_InitStructure.SPI_FirstBit = bitorder ? SPI_FirstBit_MSB : SPI_FirstBit_LSB;
   SPI_InitStructure.SPI_CRCPolynomial = 7;
   SPI_Init(SPIx, &SPI_InitStructure);
 

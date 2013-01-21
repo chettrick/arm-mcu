@@ -44,7 +44,7 @@ int spimaster_init(uint32_t port,
                    uint32_t wordsize,
                    uint32_t clockmode,
                    uint32_t speed,
-                   uint32_t bigendian);
+                   uint32_t bitorder);
 
 // Transmit command and/or receive result in bidirectional master mode
 
