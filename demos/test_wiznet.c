@@ -51,6 +51,7 @@ static const char revision[] = "$Id$";
 
 #ifdef W5200E01_M3
 #define WIZNET_SPIPORT		1
+#define WIZNET_WORDSIZE		8
 #define WIZNET_SPICLOCKMODE	0
 #define WIZNET_SPISPEED		18000000
 #define WIZNET_SPIENDIAN	SPI_MSBFIRST
@@ -150,7 +151,8 @@ int main(void)
 
 // Initialize SPI hardware
 
-  if ((status = spimaster_init(WIZNET_SPIPORT, WIZNET_SPICLOCKMODE, WIZNET_SPISPEED, WIZNET_SPIENDIAN)))
+  if ((status = spimaster_init(WIZNET_SPIPORT, WIZNET_WORDSIZE, WIZNET_SPICLOCKMODE,
+                               WIZNET_SPISPEED, WIZNET_SPIENDIAN)))
   {
     printf("ERROR: spimaster_init() returned %d, %s\n", status, strerror(errno));
     exit(1);

@@ -267,9 +267,10 @@ static int SPI_Configure_Pins(uint32_t port)
 
 /*****************************************************************************/
 
-// Initialize SPI port for bidirection master mode
+// Initialize SPI port for bidirectional master mode
 
 int spimaster_init(uint32_t port,
+                   uint32_t wordsize,
                    uint32_t clockmode,
                    uint32_t speed,
                    uint32_t bigendian)
@@ -285,6 +286,12 @@ int spimaster_init(uint32_t port,
   if ((port < 1) && (port > MAX_SPI_PORTS))
   {
     errno_r = ENODEV;
+    return __LINE__ - 3;
+  }
+
+  if ((wordsize != 8) && (wordsize != 16))
+  {
+    errno_r = EINVAL;
     return __LINE__ - 3;
   }
 
@@ -318,13 +325,12 @@ int spimaster_init(uint32_t port,
 
   SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
   SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
-  SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
+  SPI_InitStructure.SPI_DataSize = (wordsize == 16) ? SPI_DataSize_16b : SPI_DataSize_8b;
   SPI_InitStructure.SPI_CPOL = clockmode & 0x02;
   SPI_InitStructure.SPI_CPHA = clockmode & 0x01;
   SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
   SPI_InitStructure.SPI_BaudRatePrescaler = prescaler;
-  SPI_InitStructure.SPI_FirstBit = 
-    bigendian ? SPI_FirstBit_MSB : SPI_FirstBit_LSB;
+  SPI_InitStructure.SPI_FirstBit = bigendian ? SPI_FirstBit_MSB : SPI_FirstBit_LSB;
   SPI_InitStructure.SPI_CRCPolynomial = 7;
   SPI_Init(SPIx, &SPI_InitStructure);
 

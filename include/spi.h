@@ -41,6 +41,7 @@ _BEGIN_STD_C
 // Initialize SPI port for bidirection master mode
 
 int spimaster_init(uint32_t port,
+                   uint32_t wordsize,
                    uint32_t clockmode,
                    uint32_t speed,
                    uint32_t bigendian);

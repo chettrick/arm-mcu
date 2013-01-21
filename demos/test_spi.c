@@ -75,7 +75,7 @@ int main(void)
   printf("\nCPU Freq:%u Hz  Compiler:%s %s %s\n\n", (unsigned int) SystemCoreClock,
     __COMPILER__, __VERSION__, __ABI__);
 
-  if ((status = spimaster_init(SPI_PORT, 0, 281250, SPI_MSBFIRST)))
+  if ((status = spimaster_init(SPI_PORT, 8, 0, 281250, SPI_MSBFIRST)))
   {
     printf("ERROR: spimaster_init() failed at line %d, %s\n", status, strerror(errno));
     exit(1);
