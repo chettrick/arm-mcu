@@ -67,6 +67,8 @@ int spi_slave_init(uint32_t port,
       break;
 
     case 1 :
+      errno_r = ENODEV;
+      return __LINE__ - 1;
       break;
   }
 
