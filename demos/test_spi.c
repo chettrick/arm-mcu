@@ -75,9 +75,9 @@ int main(void)
   printf("\nCPU Freq:%u Hz  Compiler:%s %s %s\n\n", (unsigned int) SystemCoreClock,
     __COMPILER__, __VERSION__, __ABI__);
 
-  if ((status = spimaster_init(SPI_PORT, 8, 0, 281250, SPI_MSBFIRST)))
+  if ((status = spi_master_init(SPI_PORT, 8, 0, 281250, SPI_MSBFIRST)))
   {
-    printf("ERROR: spimaster_init() failed at line %d, %s\n", status, strerror(errno));
+    printf("ERROR: spi_master_init() failed at line %d, %s\n", status, strerror(errno));
     exit(1);
   }
 
@@ -88,9 +88,9 @@ int main(void)
     gets(buf);
     commandbyte = atoi(buf);
 
-    if ((status = spimaster_transfer(SPI_PORT, &commandbyte, 1, &responsebyte, 1)))
+    if ((status = spi_master_transfer(SPI_PORT, &commandbyte, 1, &responsebyte, 1)))
     {
-      printf("ERROR: spimaster_transfer() failed at line %d, %s\n", status, strerror(errno));
+      printf("ERROR: spi_master_transfer() failed at line %d, %s\n", status, strerror(errno));
       exit(1);
     }
 

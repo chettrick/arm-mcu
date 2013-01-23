@@ -27,6 +27,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+static const char revision[] = "$Id$";
+
 #include <cpu.h>
 #include <errno.h>
 #include <stdio.h>
@@ -55,9 +57,14 @@ int main(void)
   cpu_init(DEFAULT_CPU_FREQ);
   conio_init(CONSOLE_PORT);
 
-  if (spislave_init(0, 8, 3, SPI_MSBFIRST))
+  printf("\033[H\033[2J%s SPI Slave Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
+  puts(revision);
+  printf("\nCPU Freq:%u Hz  Compiler:%s %s %s\n\n", (unsigned int) SystemCoreClock,
+    __COMPILER__, __VERSION__, __ABI__);
+
+  if (spi_slave_init(0, 8, 3, SPI_MSBFIRST))
   {
-    printf("ERROR: spislave_init() failed, %s\n", strerror(errno));
+    printf("ERROR: spi_slave_init() failed, %s\n", strerror(errno));
     exit(0);
   }
 
@@ -66,7 +73,13 @@ int main(void)
 
   for (;;)
   {
-if (keypressed()) { printf("SR is %08X\n", LPC_SSP0->SR); getch(); }
+    // Display SSP0 status register if user presses a key
+
+    if (keypressed())
+    {
+      printf("SR is %08X\n", LPC_SSP0->SR);
+      getch();
+    }
 
     // Check for data from SPI master
 
@@ -110,6 +123,8 @@ if (keypressed()) { printf("SR is %08X\n", LPC_SSP0->SR); getch(); }
           *inptr++ = c;
         break;
     }
+
+    // Continue loading the response into the SPI trasmit FIFO
 
     if (outcount)
     {

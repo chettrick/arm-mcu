@@ -85,7 +85,7 @@ int W5200_write_register(const uint16_t address,
   cmdbuf[3] = 0x01;
   cmdbuf[4] = data;
 
-  return spimaster_transfer(spiport, cmdbuf, 5, NULL, 0);
+  return spi_master_transfer(spiport, cmdbuf, 5, NULL, 0);
 }
 
 int W5200_read_register(const uint16_t address,
@@ -98,7 +98,7 @@ int W5200_read_register(const uint16_t address,
   cmdbuf[2] = 0x00;
   cmdbuf[3] = 0x01;
 
-  return spimaster_transfer(spiport, cmdbuf, 4, data, 1);
+  return spi_master_transfer(spiport, cmdbuf, 4, data, 1);
 }
 
 int W5200_read_receive_ram(const uint32_t socket,
@@ -146,7 +146,7 @@ int W5200_read_receive_ram(const uint32_t socket,
     cmdbuf[2] = maxbeforewrap >> 8;
     cmdbuf[3] = maxbeforewrap & 0xFF;
 
-    spimaster_transfer(spiport, cmdbuf, 4, buf, maxbeforewrap);
+    spi_master_transfer(spiport, cmdbuf, 4, buf, maxbeforewrap);
 
     srcaddr = socket_table[socket].RX_RAM_base;
 
@@ -155,7 +155,7 @@ int W5200_read_receive_ram(const uint32_t socket,
     cmdbuf[2] = (count - maxbeforewrap) >> 8;
     cmdbuf[3] = (count - maxbeforewrap) & 0xFF;
 
-    spimaster_transfer(spiport, cmdbuf, 4, buf + maxbeforewrap, count - maxbeforewrap);
+    spi_master_transfer(spiport, cmdbuf, 4, buf + maxbeforewrap, count - maxbeforewrap);
   }
   else
   {
@@ -164,7 +164,7 @@ int W5200_read_receive_ram(const uint32_t socket,
     cmdbuf[2] = count >> 8;
     cmdbuf[3] = count & 0xFF;
 
-    spimaster_transfer(spiport, cmdbuf, 4, buf, count);
+    spi_master_transfer(spiport, cmdbuf, 4, buf, count);
   }
 
   return status;
@@ -215,8 +215,8 @@ int W5200_write_transmit_ram(const uint32_t socket,
     cmdbuf[2] = 0x80 | (maxbeforewrap >> 8);
     cmdbuf[3] = maxbeforewrap & 0xFF;
 
-    spimaster_transfer(spiport, cmdbuf, 4, NULL, 0);
-    spimaster_transfer(spiport, buf, maxbeforewrap, NULL, 0);
+    spi_master_transfer(spiport, cmdbuf, 4, NULL, 0);
+    spi_master_transfer(spiport, buf, maxbeforewrap, NULL, 0);
 
     dstaddr = socket_table[socket].TX_RAM_base;
 
@@ -225,8 +225,8 @@ int W5200_write_transmit_ram(const uint32_t socket,
     cmdbuf[2] = 0x80 | ((count - maxbeforewrap) >> 8);
     cmdbuf[3] = (count - maxbeforewrap) & 0xFF;
 
-    spimaster_transfer(spiport, cmdbuf, 4, NULL, 0);
-    spimaster_transfer(spiport, buf + maxbeforewrap, count - maxbeforewrap, NULL, 0);
+    spi_master_transfer(spiport, cmdbuf, 4, NULL, 0);
+    spi_master_transfer(spiport, buf + maxbeforewrap, count - maxbeforewrap, NULL, 0);
   }
   else
   {
@@ -235,8 +235,8 @@ int W5200_write_transmit_ram(const uint32_t socket,
     cmdbuf[2] = 0x80 | (count >> 8);
     cmdbuf[3] = count & 0xFF;
 
-    spimaster_transfer(spiport, cmdbuf, 4, NULL, 0);
-    spimaster_transfer(spiport, buf, count, NULL, 0);
+    spi_master_transfer(spiport, cmdbuf, 4, NULL, 0);
+    spi_master_transfer(spiport, buf, count, NULL, 0);
   }
   return status;
 }

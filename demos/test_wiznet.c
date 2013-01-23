@@ -151,10 +151,10 @@ int main(void)
 
 // Initialize SPI hardware
 
-  if ((status = spimaster_init(WIZNET_SPIPORT, WIZNET_WORDSIZE, WIZNET_SPICLOCKMODE,
+  if ((status = spi_master_init(WIZNET_SPIPORT, WIZNET_WORDSIZE, WIZNET_SPICLOCKMODE,
                                WIZNET_SPISPEED, WIZNET_SPIENDIAN)))
   {
-    printf("ERROR: spimaster_init() returned %d, %s\n", status, strerror(errno));
+    printf("ERROR: spi_master_init() returned %d, %s\n", status, strerror(errno));
     exit(1);
   }
 

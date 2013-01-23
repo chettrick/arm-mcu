@@ -3,7 +3,7 @@
 
 #define MAX_SPI_PORTS		2
 
-int spislave_init(uint32_t port,
+int spi_slave_init(uint32_t port,
                   uint32_t wordsize,
                   uint32_t clockmode,
                   uint32_t bitorder)
