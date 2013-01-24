@@ -41,6 +41,24 @@ static const char revision[] = "$Id$";
 #include <conio.h>
 #endif
 
+#define SYSTICKRATE     100
+
+_BEGIN_STD_C
+
+volatile int TimerCounter = 0;
+volatile int TimerFlag = FALSE;
+
+void SysTick_Handler(void)
+{
+  if (++TimerCounter == SYSTICKRATE/5)
+  {
+    TimerCounter = 0;
+    TimerFlag = TRUE;
+  }
+}
+
+_END_STD_C
+
 #define MAX_CHANNELS	8
 
 int main(void)
@@ -57,20 +75,31 @@ int main(void)
   printf("\nCPU Freq:%u Hz  Compiler:%s %s %s\n\n", (unsigned int) SystemCoreClock,
     __COMPILER__, __VERSION__, __ABI__);
 
+// Initialize A/D inputs
+
   for (channel = 0; channel <= 7; channel++)
     if (adc_init(channel) < 0)
       printf("ERROR: adc_init() for channel %d failed, %s\n", channel, strerror(errno));
 
   putchar('\n');
 
+// Initialize System Tick
+
+  SysTick_Config(SystemCoreClock / SYSTICKRATE);
+
   for (;;)
   {
-    for (channel = 0; channel < MAX_CHANNELS; channel++)
-      results[channel] = adc_read(channel);
+    if (TimerFlag)
+    {
+      for (channel = 0; channel < MAX_CHANNELS; channel++)
+        results[channel] = adc_read(channel);
 
-    for (channel = 0; channel < MAX_CHANNELS; channel++)
-      printf("%05d ", results[channel]);
+      for (channel = 0; channel < MAX_CHANNELS; channel++)
+        printf("%05d ", results[channel]);
 
-    putchar('\r');
+      putchar('\r');
+
+      TimerFlag = FALSE;
+    }
   }
 }
