@@ -31,18 +31,19 @@
 #define _ADC_H
 
 #include <_ansi.h>
+#include <stdint.h>
 
 _BEGIN_STD_C
 
 // Initialize an A/D input pin
 //   Returns 0 on success or nonzero on failure and sets errno
 
-int adc_init(int channel);
+int adc_init(unsigned int channel);
 
 // Read an A/D input
 //   Returns unsigned 16-bit result, left-justified, or zero on error
 
-uint16_t adc_read(int channel);
+uint16_t adc_read(unsigned int channel);
 
 _END_STD_C
 #endif
