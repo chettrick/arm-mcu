@@ -58,12 +58,18 @@ _BEGIN_STD_C
 #undef cgets
 #undef cputs
 
+// Undefine macros from errno.h
+
+#undef errno
+
 // Undefine macros from stdio.h
 
 #undef getchar
 #undef putchar
 
 void conio_init(const char *console);	// Initialize console
+
+extern int conio_errno;			// Replacement errno
 
 int keypressed(void);			// Check for data ready
 
@@ -85,6 +91,7 @@ int csscanf(const char *str, const char *format, ...);
 
 #define serial_stdio(x)	conio_init(x)
 
+#define errno		conio_errno
 #define getchar()	getch()
 #define putchar(x)	putch(x)
 #define gets(x)		cgets(x, sizeof(x))
