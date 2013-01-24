@@ -31,6 +31,7 @@
 #define _CPU_H
 
 #include <_ansi.h>
+#include <adc.h>
 #include <arm.h>
 #include <device.h>
 #include <leds.h>
