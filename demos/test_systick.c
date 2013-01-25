@@ -40,8 +40,8 @@ static const char revision[] = "$Id$";
 
 _BEGIN_STD_C
 
-volatile int TimerCounter = 0;
-volatile int TimerFlag = FALSE;
+static volatile int TimerCounter = 0;
+static volatile int TimerFlag = FALSE;
 
 void SysTick_Handler(void)
 {
