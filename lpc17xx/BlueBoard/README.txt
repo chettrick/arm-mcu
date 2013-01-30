@@ -1,4 +1,3 @@
-
                       BlueBoard LPC1768-H USB Boot Loader
 
    This directory contains an optional secondary USB boot loader
@@ -41,8 +40,8 @@ References
    1. http://shop.ngxtechnologies.com/product_info.php?products_id=65
    2. http://gvworks.blogspot.com/2010/10/usb-bootloader-for-blueboard.html
    3. http://fedoraproject.org/
-   4. file://localhost/storage/home/pmunts/src/ARM/lpc17xx/BlueBoard/50-nxp-lpc-usb-boot.rules
-   5. file://localhost/storage/home/pmunts/src/ARM/lpc17xx/BlueBoard/50-nxp-lpc-usb-boot.helper
+   4. http://tech.munts.com/MCU/Frameworks/ARM/lpc17xx/BlueBoard/50-nxp-lpc-usb-boot.rules
+   5. http://tech.munts.com/MCU/Frameworks/ARM/lpc17xx/BlueBoard/50-nxp-lpc-usb-boot.helper
    6. http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html
-   7. file://localhost/storage/home/pmunts/src/ARM/utilities/udev
+   7. http://tech.munts.com/MCU/Frameworks/ARM/utilities/udev
    8. mailto:phil@munts.net
