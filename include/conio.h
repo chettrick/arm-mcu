@@ -95,6 +95,8 @@ int csscanf(const char *str, const char *format, ...);
 #define printf(...)	cprintf(__VA_ARGS__)
 #define sprintf(...)	csprintf(__VA_ARGS__)
 #define sscanf(...)	csscanf(__VA_ARGS__)
+#define atoi(x)		lightweight_atoi(x)
+#define strerror(x)	lightweight_strerror(x)
 
 _END_STD_C
 #endif

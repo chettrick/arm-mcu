@@ -420,3 +420,33 @@ int csscanf(const char* str, const char* format, ...)
 
 	return count;
 }
+
+/* Lightweight alternative to newlib atoi() */
+
+int lightweight_atoi(const char *s)
+{
+  int x = 0;
+
+  while (*s)
+  {
+    char c = *s++;
+
+    if ((c >= '0') && (c <= '9'))
+      x = x*10 + c - '0';
+    else
+      break;
+  }
+
+  return x;
+}
+
+/* Lightweight alternative to newlib strerror() */
+
+char lightweight_strerrno_buf[20];
+
+char *lightweight_strerror(int e)
+{
+  memset(lightweight_strerrno_buf, 0, sizeof(lightweight_strerrno_buf));
+  csprintf(lightweight_strerrno_buf, "errno=%d", e);
+  return lightweight_strerrno_buf;
+}
