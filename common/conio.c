@@ -450,3 +450,13 @@ char *lightweight_strerror(int e)
   csprintf(lightweight_strerrno_buf, "errno=%d", e);
   return lightweight_strerrno_buf;
 }
+
+/* Issue linker warnings for newlib memory hogs */
+
+#ifdef CONSOLE_CONIO
+static const char impure_ptr_warning[] __attribute__((section(".gnu.warning._impure_ptr"))) =
+  "\n\nDANGER: newlib reentrancy structure linked: >1K RAM consumed\n";
+
+static const char sbrk_warning[] __attribute__((section(".gnu.warning._sbrk"))) =
+  "\n\nDANGER: newlib is using the heap\n";
+#endif
