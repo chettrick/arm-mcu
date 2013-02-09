@@ -425,7 +425,14 @@ int csscanf(const char* str, const char* format, ...)
 
 int lightweight_atoi(const char *s)
 {
+  int negative = FALSE;
   int x = 0;
+
+  if (*s == '-')
+  {
+    negative = TRUE;
+    s++;
+  }
 
   while (*s)
   {
@@ -436,6 +443,9 @@ int lightweight_atoi(const char *s)
     else
       break;
   }
+
+  if (negative)
+    x = -x;
 
   return x;
 }
