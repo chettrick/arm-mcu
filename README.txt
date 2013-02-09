@@ -117,6 +117,10 @@ News
      * 25 January 2013 -- Added A/D converter support for LPC11xx. A/D
        support for other processors will follow.
      * 30 January 2013 -- Added Minimal Standard Random Number Generator.
+     * 9 February 2013 -- Added lightweight implementations of atoi() and
+       strerror() to conio.c. Also added code to issue linker warnings if
+       the newlib reentrancy structure or heap are used with the
+       lightweight console I/O facility.
 
 Git Repository
 
@@ -167,7 +171,7 @@ References
    1. http://www.arm.com/
    2. http://sourceware.org/newlib/
    3. http://openocd.sourceforge.net/
-   4. http//tech.munts.com/MCU/Frameworks/ARM/utilities
+   4. http://tech.munts.com/MCU/Frameworks/ARM/utilities
    5. http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition
    6. http://sourceforge.net/projects/devkitpro/files/devkitARM
    7. http://sourceforge.net/projects/yagarto
