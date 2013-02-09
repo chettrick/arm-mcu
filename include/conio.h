@@ -83,6 +83,10 @@ int csprintf(char *out, const char *format, ...);
 
 int csscanf(const char *str, const char *format, ...);
 
+int lightweight_atoi(const char *s);
+
+char *lightweight_strerror(int e);
+
 // Emulate C standard I/O
 
 #define serial_stdio(x)	conio_init(x)
