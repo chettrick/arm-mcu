@@ -451,7 +451,10 @@ char *lightweight_strerror(int e)
   return lightweight_strerrno_buf;
 }
 
-/* Issue linker warnings for newlib memory hogs */
+/* The following odd constructs cause the GNU linker ld to issue warnings if  */
+/* the Newlib global reentrancy structure (_impure_ptr) is linked, or if the  */
+/* heap is being used.  Either of these mean an unexpected amount of RAM will */
+/* be consumed, and may cause the system to run out of memory.                */
 
 #ifdef CONSOLE_CONIO
 static const char impure_ptr_warning[] __attribute__((section(".gnu.warning._impure_ptr"))) =
