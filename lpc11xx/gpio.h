@@ -32,6 +32,7 @@
 _BEGIN_STD_C
 
 // These are all the LPC11xx GPIO pins -- Not all are bonded out
+
 typedef enum
 {
   PIO0_0	= 0,
@@ -88,7 +89,11 @@ typedef enum
   GPIO_MODE_SENTINEL
 } GPIO_MODE_t;
 
-int gpio_configure(unsigned pin, unsigned direction);
+// GPIO service functions
+
+int gpio_configure(unsigned pin, unsigned mode);
+int gpio_read(unsigned pin);
+int gpio_write(unsigned pin, unsigned value);
 
 _END_STD_C
 #endif
