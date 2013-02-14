@@ -1,4 +1,4 @@
-/* ARM microcontroller device specific definitions and header files */
+/* Abstract services for controlling LPC11xx GPIO pins */
 
 // $Id$
 
@@ -23,25 +23,47 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _CPU_H
-#define _CPU_H
+static const char revision[] = "$Id: adc.c 4710 2013-02-06 08:47:48Z svn $";
 
-#include <_ansi.h>
-#include <adc.h>
-#include <arm.h>
-#include <device.h>
-#include <gpio.h>
-#include <leds.h>
-#include <serial.h>
-#include <spi.h>
+#include <cpu.h>
+#include <errno.h>
 
-#include <LPC11xx.h>
+static const struct
+{
+  volatile uint32_t *iocon;
+  uint32_t modes[GPIO_MODE_SENTINEL];
+} gpio_pin_table[MAX_GPIO_PINS] =
+{
+  { &LPC_IOCON->RESET_PIO0_0, 		{ 0x00, 0x00 } },
+  { &LPC_IOCON->PIO0_1,			{ 0x00, 0x00 } },
+  { &LPC_IOCON->PIO0_2,			{ 0x00, 0x00 } },
+  { &LPC_IOCON->PIO0_3,			{ 0x00, 0x00 } },
+  { &LPC_IOCON->PIO0_4,			{ 0x00, 0x00 } },
+  { &LPC_IOCON->PIO0_5,			{ 0x00, 0x00 } },
+  { &LPC_IOCON->PIO0_6,			{ 0x00, 0x00 } },
+  { &LPC_IOCON->PIO0_7,			{ 0x00, 0x00 } },
+  { &LPC_IOCON->PIO0_8,			{ 0x00, 0x00 } },
+  { &LPC_IOCON->PIO0_9,			{ 0x00, 0x00 } },
+  { &LPC_IOCON->SWCLK_PIO0_10,		{ 0x00, 0x00 } },
+  { &LPC_IOCON->R_PIO0_11,		{ 0x00, 0x00 } },
+};
 
-#define DEFAULT_CPU_FREQ	0
+int gpio_configure(unsigned pin, unsigned mode)
+{
+  errno_r = 0;
 
-_BEGIN_STD_C
+  if (pin >= MAX_GPIO_PINS)
+  {
+    errno_r = ENODEV;
+    return -ENODEV;
+  }
 
-extern void cpu_init(unsigned long int frequency);
+  if (mode >= GPIO_MODE_SENTINEL)
+  {
+    errno_r = EINVAL;
+    return -EINVAL;
+  }
 
-_END_STD_C
-#endif
+  *gpio_pin_table[pin].iocon = gpio_pin_table[pin].modes[mode];
+  return 0;
+}
