@@ -134,6 +134,7 @@ git clone http://git.code.sf.net/p/arm-mcu/code ARM
 Copyright:
 
    Original works herein are copyrighted as follows:
+
 Copyright (C)2013, Philip Munts, President, Munts AM Corp.
 All rights reserved.
 
