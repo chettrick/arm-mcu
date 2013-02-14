@@ -27,26 +27,66 @@ static const char revision[] = "$Id: adc.c 4710 2013-02-06 08:47:48Z svn $";
 
 #include <cpu.h>
 #include <errno.h>
+#include <conio.h>
+
+// The following table precalculates as much as possible of the addresses
+// and data values necessary to manipulate GPIO pins.  We trade 840 bytes of
+// flash for a major boost in run-time performance.
 
 static const struct
 {
   volatile uint32_t *iocon;
-  uint32_t modes[GPIO_MODE_SENTINEL];
+  volatile uint32_t *ddr;
+  volatile uint32_t *data;
+  uint16_t modes[GPIO_MODE_SENTINEL];
+  uint16_t ddrbit[GPIO_MODE_SENTINEL];
 } gpio_pin_table[MAX_GPIO_PINS] =
 {
-  { &LPC_IOCON->RESET_PIO0_0, 		{ 0x00, 0x00 } },
-  { &LPC_IOCON->PIO0_1,			{ 0x00, 0x00 } },
-  { &LPC_IOCON->PIO0_2,			{ 0x00, 0x00 } },
-  { &LPC_IOCON->PIO0_3,			{ 0x00, 0x00 } },
-  { &LPC_IOCON->PIO0_4,			{ 0x00, 0x00 } },
-  { &LPC_IOCON->PIO0_5,			{ 0x00, 0x00 } },
-  { &LPC_IOCON->PIO0_6,			{ 0x00, 0x00 } },
-  { &LPC_IOCON->PIO0_7,			{ 0x00, 0x00 } },
-  { &LPC_IOCON->PIO0_8,			{ 0x00, 0x00 } },
-  { &LPC_IOCON->PIO0_9,			{ 0x00, 0x00 } },
-  { &LPC_IOCON->SWCLK_PIO0_10,		{ 0x00, 0x00 } },
-  { &LPC_IOCON->R_PIO0_11,		{ 0x00, 0x00 } },
+  { &LPC_IOCON->RESET_PIO0_0,	&LPC_GPIO0->DIR, &LPC_GPIO0->MASKED_ACCESS[0x001], { 0x00, 0x00 }, { 0xFFE, 0x001 } },
+  { &LPC_IOCON->PIO0_1,		&LPC_GPIO0->DIR, &LPC_GPIO0->MASKED_ACCESS[0x002], { 0x00, 0x00 }, { 0xFFD, 0x002 } },
+  { &LPC_IOCON->PIO0_2,		&LPC_GPIO0->DIR, &LPC_GPIO0->MASKED_ACCESS[0x004], { 0x00, 0x00 }, { 0xFFB, 0x004 } },
+  { &LPC_IOCON->PIO0_3,		&LPC_GPIO0->DIR, &LPC_GPIO0->MASKED_ACCESS[0x008], { 0x00, 0x00 }, { 0xFF7, 0x008 } },
+  { &LPC_IOCON->PIO0_4,		&LPC_GPIO0->DIR, &LPC_GPIO0->MASKED_ACCESS[0x010], { 0x00, 0x00 }, { 0xFEF, 0x010 } },
+  { &LPC_IOCON->PIO0_5,		&LPC_GPIO0->DIR, &LPC_GPIO0->MASKED_ACCESS[0x020], { 0x00, 0x00 }, { 0xFDF, 0x020 } },
+  { &LPC_IOCON->PIO0_6,		&LPC_GPIO0->DIR, &LPC_GPIO0->MASKED_ACCESS[0x040], { 0x00, 0x00 }, { 0xFBF, 0x040 } },
+  { &LPC_IOCON->PIO0_7,		&LPC_GPIO0->DIR, &LPC_GPIO0->MASKED_ACCESS[0x080], { 0x00, 0x00 }, { 0xF7F, 0x080 } },
+  { &LPC_IOCON->PIO0_8,		&LPC_GPIO0->DIR, &LPC_GPIO0->MASKED_ACCESS[0x100], { 0x00, 0x00 }, { 0xEFF, 0x100 } },
+  { &LPC_IOCON->PIO0_9,		&LPC_GPIO0->DIR, &LPC_GPIO0->MASKED_ACCESS[0x200], { 0x00, 0x00 }, { 0xDFF, 0x200 } },
+  { &LPC_IOCON->SWCLK_PIO0_10,	&LPC_GPIO0->DIR, &LPC_GPIO0->MASKED_ACCESS[0x400], { 0x00, 0x00 }, { 0xBFF, 0x400 } },
+  { &LPC_IOCON->R_PIO0_11,	&LPC_GPIO0->DIR, &LPC_GPIO0->MASKED_ACCESS[0x800], { 0x00, 0x00 }, { 0x7FF, 0x800 } },
+  { &LPC_IOCON->R_PIO1_0,	&LPC_GPIO1->DIR, &LPC_GPIO1->MASKED_ACCESS[0x001], { 0x00, 0x00 }, { 0xFFE, 0x001 } },
+  { &LPC_IOCON->R_PIO1_1,	&LPC_GPIO1->DIR, &LPC_GPIO1->MASKED_ACCESS[0x002], { 0x00, 0x00 }, { 0xFFD, 0x002 } },
+  { &LPC_IOCON->R_PIO1_2,	&LPC_GPIO1->DIR, &LPC_GPIO1->MASKED_ACCESS[0x004], { 0x00, 0x00 }, { 0xFFB, 0x004 } },
+  { &LPC_IOCON->SWDIO_PIO1_3,	&LPC_GPIO1->DIR, &LPC_GPIO1->MASKED_ACCESS[0x008], { 0x00, 0x00 }, { 0xFF7, 0x008 } },
+  { &LPC_IOCON->PIO1_4,		&LPC_GPIO1->DIR, &LPC_GPIO1->MASKED_ACCESS[0x010], { 0x00, 0x00 }, { 0xFEF, 0x010 } },
+  { &LPC_IOCON->PIO1_5,		&LPC_GPIO1->DIR, &LPC_GPIO1->MASKED_ACCESS[0x020], { 0x00, 0x00 }, { 0xFDF, 0x020 } },
+  { &LPC_IOCON->PIO1_6,		&LPC_GPIO1->DIR, &LPC_GPIO1->MASKED_ACCESS[0x040], { 0x00, 0x00 }, { 0xFBF, 0x040 } },
+  { &LPC_IOCON->PIO1_7,		&LPC_GPIO1->DIR, &LPC_GPIO1->MASKED_ACCESS[0x080], { 0x00, 0x00 }, { 0xF7F, 0x080 } },
+  { &LPC_IOCON->PIO1_8,		&LPC_GPIO1->DIR, &LPC_GPIO1->MASKED_ACCESS[0x100], { 0x00, 0x00 }, { 0xEFF, 0x100 } },
+  { &LPC_IOCON->PIO1_9,		&LPC_GPIO1->DIR, &LPC_GPIO1->MASKED_ACCESS[0x200], { 0x00, 0x00 }, { 0xDFF, 0x200 } },
+  { &LPC_IOCON->PIO1_10,	&LPC_GPIO1->DIR, &LPC_GPIO1->MASKED_ACCESS[0x400], { 0x00, 0x00 }, { 0xBFF, 0x400 } },
+  { &LPC_IOCON->PIO1_11,	&LPC_GPIO1->DIR, &LPC_GPIO1->MASKED_ACCESS[0x800], { 0x00, 0x00 }, { 0x7FF, 0x800 } },
+  { &LPC_IOCON->PIO2_0,		&LPC_GPIO2->DIR, &LPC_GPIO2->MASKED_ACCESS[0x001], { 0x00, 0x00 }, { 0xFFE, 0x001 } },
+  { &LPC_IOCON->PIO2_1,		&LPC_GPIO2->DIR, &LPC_GPIO2->MASKED_ACCESS[0x002], { 0x00, 0x00 }, { 0xFFD, 0x002 } },
+  { &LPC_IOCON->PIO2_2,		&LPC_GPIO2->DIR, &LPC_GPIO2->MASKED_ACCESS[0x004], { 0x00, 0x00 }, { 0xFFB, 0x004 } },
+  { &LPC_IOCON->PIO2_3,		&LPC_GPIO2->DIR, &LPC_GPIO2->MASKED_ACCESS[0x008], { 0x00, 0x00 }, { 0xFF7, 0x008 } },
+  { &LPC_IOCON->PIO2_4,		&LPC_GPIO2->DIR, &LPC_GPIO2->MASKED_ACCESS[0x010], { 0x00, 0x00 }, { 0xFEF, 0x010 } },
+  { &LPC_IOCON->PIO2_5,		&LPC_GPIO2->DIR, &LPC_GPIO2->MASKED_ACCESS[0x020], { 0x00, 0x00 }, { 0xFDF, 0x020 } },
+  { &LPC_IOCON->PIO2_6,		&LPC_GPIO2->DIR, &LPC_GPIO2->MASKED_ACCESS[0x040], { 0x00, 0x00 }, { 0xFBF, 0x040 } },
+  { &LPC_IOCON->PIO2_7,		&LPC_GPIO2->DIR, &LPC_GPIO2->MASKED_ACCESS[0x080], { 0x00, 0x00 }, { 0xF7F, 0x080 } },
+  { &LPC_IOCON->PIO2_8,		&LPC_GPIO2->DIR, &LPC_GPIO2->MASKED_ACCESS[0x100], { 0x00, 0x00 }, { 0xEFF, 0x100 } },
+  { &LPC_IOCON->PIO2_9,		&LPC_GPIO2->DIR, &LPC_GPIO2->MASKED_ACCESS[0x200], { 0x00, 0x00 }, { 0xDFF, 0x200 } },
+  { &LPC_IOCON->PIO2_10,	&LPC_GPIO2->DIR, &LPC_GPIO2->MASKED_ACCESS[0x400], { 0x00, 0x00 }, { 0xBFF, 0x400 } },
+  { &LPC_IOCON->PIO2_11,	&LPC_GPIO2->DIR, &LPC_GPIO2->MASKED_ACCESS[0x800], { 0x00, 0x00 }, { 0x7FF, 0x800 } },
+  { &LPC_IOCON->PIO3_0,		&LPC_GPIO3->DIR, &LPC_GPIO3->MASKED_ACCESS[0x001], { 0x00, 0x00 }, { 0xFFE, 0x001 } },
+  { &LPC_IOCON->PIO3_1,		&LPC_GPIO3->DIR, &LPC_GPIO3->MASKED_ACCESS[0x002], { 0x00, 0x00 }, { 0xFFD, 0x002 } },
+  { &LPC_IOCON->PIO3_2,		&LPC_GPIO3->DIR, &LPC_GPIO3->MASKED_ACCESS[0x004], { 0x00, 0x00 }, { 0xFFB, 0x004 } },
+  { &LPC_IOCON->PIO3_3,		&LPC_GPIO3->DIR, &LPC_GPIO3->MASKED_ACCESS[0x008], { 0x00, 0x00 }, { 0xFF7, 0x008 } },
+  { &LPC_IOCON->PIO3_4,		&LPC_GPIO3->DIR, &LPC_GPIO3->MASKED_ACCESS[0x010], { 0x00, 0x00 }, { 0xFEF, 0x010 } },
+  { &LPC_IOCON->PIO3_5,		&LPC_GPIO3->DIR, &LPC_GPIO3->MASKED_ACCESS[0x020], { 0x00, 0x00 }, { 0xFDF, 0x020 } }
 };
+
+/* Configure a single GPIO pin */
 
 int gpio_configure(unsigned pin, unsigned mode)
 {
@@ -65,5 +105,49 @@ int gpio_configure(unsigned pin, unsigned mode)
   }
 
   *gpio_pin_table[pin].iocon = gpio_pin_table[pin].modes[mode];
+
+  if ((mode >= GPIO_MODE_OUTPUT) && (mode <= GPIO_MODE_OUTPUT))
+    *gpio_pin_table[pin].ddr |= gpio_pin_table[pin].ddrbit[mode];
+  else
+    *gpio_pin_table[pin].ddr &= gpio_pin_table[pin].ddrbit[mode];
+
+  return 0;
+}
+
+/* Read from a single GPIO pin */
+
+int gpio_read(unsigned pin)
+{
+  errno_r = 0;
+
+  if (pin >= MAX_GPIO_PINS)
+  {
+    errno_r = ENODEV;
+    return -ENODEV;
+  }
+
+  if (*gpio_pin_table[pin].data)
+    return 1;
+  else
+    return 0;
+}
+
+/* Write to a single GPIO pin */
+
+int gpio_write(unsigned pin, unsigned value)
+{
+  errno_r = 0;
+
+  if (pin >= MAX_GPIO_PINS)
+  {
+    errno_r = ENODEV;
+    return -ENODEV;
+  }
+
+  if (value)
+    *gpio_pin_table[pin].data = 0xFFF;
+  else
+    *gpio_pin_table[pin].data = 0x000;
+
   return 0;
 }
