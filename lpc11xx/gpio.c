@@ -29,9 +29,9 @@ static const char revision[] = "$Id: adc.c 4710 2013-02-06 08:47:48Z svn $";
 #include <errno.h>
 #include <conio.h>
 
-// The following table precalculates as much as possible of the addresses
-// and data values necessary to manipulate GPIO pins.  We trade 840 bytes of
-// flash for a major boost in run-time performance.
+// The following table calculates (at compile time) as much as possible
+// the addresses and data values necessary to manipulate GPIO pins.
+// We trade 840 bytes of flash for a major boost in run-time performance.
 
 static const struct
 {
