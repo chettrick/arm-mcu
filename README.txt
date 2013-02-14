@@ -179,7 +179,7 @@ References
    8. http://www.nxp.com/products/microcontrollers/cortex_m0/lpc1100_x_l/LPC1114FN28.html
    9. http://avnetexpress.avnet.com/store/em/EMController/_/A-5003286402656/An-0?action=part
   10. http://git-scm.com/
-  11. https://sourceforge.net/
-  12. https://sourceforge.net/
+  11. http://sourceforge.net/
+  12. http://sourceforge.net/
   13. http://sourceforge.net/p/arm-mcu/code
   14. mailto:phil@munts.net
