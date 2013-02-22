@@ -121,6 +121,8 @@ News
        strerror() to conio.c. Also added code to issue linker warnings if
        the newlib reentrancy structure or heap are used with the
        lightweight console I/O facility.
+     * 22 February 2013 -- Added a high-efficiency pinwise GPIO pin driver
+       for the LPC11xx.
 
 Git Repository
 
