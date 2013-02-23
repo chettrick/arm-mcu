@@ -58,7 +58,6 @@ unsigned long int LEDS_get(void)
 void LEDS_set(unsigned long int mask)
 {
 #ifdef LPC1114FN28
-printf("LEDS_set() writing %08X\n", mask &  0x01);
   gpio_write(PIO0_7, mask & 0x01);
 #endif
 }
