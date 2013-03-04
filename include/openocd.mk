@@ -27,7 +27,7 @@ OPENOCD		?= openocd
 OPENOCDCFG	?= $(MCUDIR)/$(MCU).openocd
 OPENOCDDEBUG	?= $(ARMSRC)/common/main.gdb
 OPENOCDFLASH	?= $(MCUDIR)/$(MCU).flashocd
-OPENOCDIF	?= olimex-arm-usb-tiny-h
+OPENOCDIF	?= jtagkey2p
 
 .PHONY: startocd stopocd
 .SUFFIXES: .debugocd .flashocd
