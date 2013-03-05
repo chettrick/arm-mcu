@@ -37,7 +37,7 @@ _BEGIN_STD_C
 int adc_init(unsigned int channel);
 
 // Read an A/D input
-//   Returns unsigned 16-bit result, left-justified, or zero on error
+//   Returns unsigned 16-bit result, right-justified, or zero on error
 
 uint16_t adc_read(unsigned int channel);
 

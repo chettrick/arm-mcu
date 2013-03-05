@@ -105,7 +105,7 @@ int adc_init(unsigned int channel)
 }
 
 // Read an A/D input
-//   Returns unsigned 16-bit result, left-justified, or zero on error
+//   Returns unsigned 16-bit result, right-justified, or zero on error
 
 uint16_t adc_read(unsigned int channel)
 {
@@ -135,5 +135,5 @@ uint16_t adc_read(unsigned int channel)
 
 // Retrieve result
 
-  return (LPC_ADC->GDR & 0x0000FFFF);
+  return (LPC_ADC->GDR & 0x0000FFFF) >> 6;
 }
