@@ -40,7 +40,7 @@ default: $(LPC21ISP_PROG)
 # Fetch lpc21isp source tree
 
 $(LPC21ISP_DIR):
-	git clone $(LPC21ISP_URL) $(LPC21ISP_DIR)
+	git clone --depth 1 $(LPC21ISP_URL) $(LPC21ISP_DIR)
 
 # Compile lpc21isp
 
