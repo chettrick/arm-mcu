@@ -130,8 +130,8 @@ Git Repository
    [13]http://sourceforge.net/p/arm-mcu/code.
 
    Use one of the following commands to clone it:
-git clone git://git.code.sf.net/p/arm-mcu/code ARM
-git clone http://git.code.sf.net/p/arm-mcu/code ARM
+git clone --depth 1 git://git.code.sf.net/p/arm-mcu/code  ARM
+git clone --depth 1 http://git.code.sf.net/p/arm-mcu/code ARM
 
 Copyright:
 
