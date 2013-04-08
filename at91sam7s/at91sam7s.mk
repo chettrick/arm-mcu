@@ -43,7 +43,7 @@ endif
 
 # Phony targets
 
-.PHONY:		lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
+.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
 
 # Build processor dependent support library
 
@@ -54,8 +54,6 @@ lib$(MCU).a: $(LIBOBJS)
 	for F in $(AT91LIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(AT91LIB)/*.o
 	$(MAKE) otherlibs
-
-lib: lib$(MCU).a
 
 # Clean out working files
 

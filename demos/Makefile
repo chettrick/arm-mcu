@@ -31,6 +31,9 @@ include $(ARMSRC)/include/ARM.mk
 
 .PHONY: clean reallyclean distclean
 
+lib:
+	$(MAKE) -C $(ARMSRC)/$(MCUFAMILY) lib$(MCU).a
+
 clean: ARM_mk_clean
 
 reallyclean: clean

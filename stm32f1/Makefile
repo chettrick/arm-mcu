@@ -32,7 +32,9 @@ BOARDNAME	?= OLIMEX_STM32_P107
 
 include $(ARMSRC)/include/ARM.mk
 
-.PHONY: clean reallyclean distclean
+.PHONY: lib clean reallyclean distclean
+
+lib: lib$(MCU).a
 
 clean: ARM_mk_clean
 

@@ -95,8 +95,6 @@ ifeq ($(WITH_USBSERIAL), yes)
 endif
 	$(MAKE) otherlibs
 
-lib: lib$(MCU).a
-
 # Clean out working files
 
 clean_$(MCU):

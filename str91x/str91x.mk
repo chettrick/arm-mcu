@@ -49,7 +49,7 @@ endif
 
 # Phony targets
 
-.PHONY:		lib clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
+.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
 
 # Build processor dependent support library
 
@@ -64,8 +64,6 @@ ifeq ($(WITH_USBSERIAL), yes)
 	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
 endif
 	$(MAKE) otherlibs
-
-lib: lib$(MCU).a
 
 # Clean out working files
 
