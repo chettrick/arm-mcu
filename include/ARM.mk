@@ -115,6 +115,12 @@ GDBSERVERPORT	= 3333
 .S.o:
 	$(CC) $(CFLAGS) -c -o $@ -c $<
 
+# Define default target placeholder
+
+ARM_mk_default:
+	@echo ERROR: You must explicitly specify a make target!
+	@exit 1
+
 # Support for common library functions
 
 COMMON_DIR	= $(ARMSRC)/common
@@ -140,12 +146,6 @@ ifeq ($(WITH_WIZNET), yes)
 WIZNET_DIR      = $(ARMSRC)/wiznet
 include $(WIZNET_DIR)/wiznet.mk
 endif
-
-# Define default target placeholder
-
-ARM_mk_default:
-	@echo ERROR: You must explicitly specify a make target!
-	@exit 1
 
 # Build other library components
 
