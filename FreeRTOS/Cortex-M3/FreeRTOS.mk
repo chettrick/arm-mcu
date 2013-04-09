@@ -46,3 +46,8 @@ freertos_lib: $(FREERTOS_OBJS)
 
 freertos_clean:
 	rm -f $(FREERTOS_OBJS)
+
+# Add to target lists
+
+LIBTARGETS	+= freertos_lib
+CLEANTARGETS	+= freertos_clean

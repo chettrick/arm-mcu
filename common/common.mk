@@ -42,3 +42,8 @@ common_lib: $(COMMON_OBJS)
 
 common_clean:
 	rm -f $(COMMON_OBJS)
+
+# Add to target lists
+
+LIBTARGETS	+= common_lib
+CLEANTARGETS	+= common_clean

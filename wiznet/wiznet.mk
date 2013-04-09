@@ -47,3 +47,8 @@ wiznet_lib: $(WIZNET_OBJS)
 
 wiznet_clean:
 	rm -f $(WIZNET_OBJS)
+
+# Add to target lists
+
+LIBTARGETS	+= wiznet_lib
+CLEANTARGETS	+= wiznet_clean

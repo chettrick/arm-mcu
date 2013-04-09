@@ -61,3 +61,8 @@ lwip_lib: $(LWIP_OBJS)
 
 lwip_clean:
 	rm -f $(LWIP_OBJS)
+
+# Add to target lists
+
+LIBTARGETS	+= lwip_lib
+CLEANTARGETS	+= lwip_clean

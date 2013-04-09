@@ -147,19 +147,10 @@ WIZNET_DIR      = $(ARMSRC)/wiznet
 include $(WIZNET_DIR)/wiznet.mk
 endif
 
-# Build other library components
+# Build library components
 
 otherlibs:
-	$(MAKE) common_lib
-ifeq ($(WITH_FREERTOS), yes)
-	$(MAKE) freertos_lib
-endif
-ifeq ($(WITH_LWIP), yes)
-	$(MAKE) lwip_lib
-endif
-ifeq ($(WITH_WIZNET), yes)
-	$(MAKE) wiznet_lib
-endif
+	$(MAKE) $(LIBTARGETS)
 
 # Clean out working files
 
@@ -169,16 +160,7 @@ ARM_mk_clean:
 	cd $(MCUDIR) && $(MAKE) clean_$(MCU)
 	cd $(MCUDIR) && $(FIND) * -name '*.o' -exec rm {} ";"
 	cd $(MCUDIR) && rm -f *.a *.asm *.bin *.dmp *.elf *.hex *.log *.map *.stackdump *.tmp Default.ini
-	$(MAKE) common_clean
-ifeq ($(WITH_FREERTOS), yes)
-	$(MAKE) freertos_clean
-endif
-ifeq ($(WITH_LWIP), yes)
-	$(MAKE) lwip_clean
-endif
-ifeq ($(WITH_WIZNET), yes)
-	$(MAKE) wiznet_clean
-endif
+	$(MAKE) $(CLEANTARGETS)
 
 # Include programming and debugging makefiles
 
