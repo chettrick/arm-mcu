@@ -26,3 +26,7 @@ ifeq ($(WITH_DSPLIB), yes)
 	for F in $(CMSIS)/DSP_Lib/Source/*/*.c ; do $(MAKE) $${F%.c}.o ; done
 endif
 	$(FIND) $(PERIPHLIBDIR) -type f -name '*.o' -exec $(AR) crs lib$(MCU).a {} ";"
+
+# Add to target lists
+
+LIBTARGETS	+= stm32f4libs

@@ -35,3 +35,7 @@ stm32f1libs:
 	$(MAKE) $(CMSIS)/CM3/DeviceSupport/ST/STM32F10x/system_stm32f10x.o
 	for F in $(DRIVERS)/src/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(FIND) $(LIBSDIR) -type f -name '*.o' -exec $(AR) crs lib$(MCU).a {} ";"
+
+# Add to target lists
+
+LIBTARGETS	+= stm32f1libs

@@ -29,8 +29,12 @@ CMSISSRC	= $(CMSISDIR)/src
 
 CFLAGS		+= -I$(CMSISDIR)/inc
 
-.PHONY: cmsis
+.PHONY: cmsis_lib
 
-cmsis:
+cmsis_lib:
 	for F in $(CMSISSRC)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(FIND) $(CMSISSRC) -type f -name '*.o' -exec $(AR) crs lib$(MCU).a {} ";"
+
+# Add to target lists
+
+LIBTARGETS	+= cmsis_lib

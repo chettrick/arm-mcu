@@ -78,7 +78,7 @@ endif
 
 # Phony targets
 
-.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
+.PHONY:		lib_$(MCU) clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU) lib
 
 # Build processor dependent support library
 
@@ -86,14 +86,16 @@ include $(MCUDIR)/libs/stm32f4libs.mk
 
 LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
 
-lib$(MCU).a: $(LIBOBJS)
+lib_$(MCU): $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-	$(MAKE) stm32f4libs
 ifeq ($(WITH_USBSERIAL), yes)
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
 endif
-	$(MAKE) otherlibs
+
+LIBTARGETS	+= lib_$(MCU)
+
+lib$(MCU).a: $(LIBTARGETS)
 
 # Clean out working files
 

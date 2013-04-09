@@ -45,15 +45,18 @@ endif
 
 # Phony targets
 
-.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
+.PHONY:		lib_$(MCU) clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
 
 # Build processor dependent support library
 
 LIBOBJS		= cpu.o leds.o serial.o
 
-lib$(MCU).a: $(LIBOBJS)
+lib_$(MCU): $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-	$(MAKE) otherlibs
+
+LIBTARGETS	+= lib_$(MCU)
+
+lib$(MCU).a: $(LIBTARGETS)
 
 # Clean out working files
 
