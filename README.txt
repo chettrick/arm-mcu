@@ -123,6 +123,10 @@ News
        lightweight console I/O facility.
      * 22 February 2013 -- Added a high-efficiency pinwise GPIO pin driver
        for the LPC11xx.
+     * 4 April 2013 -- Upgraded the STM32F4 peripheral libarary from
+       V1.0.1 to V1.1.0.
+     * 9 April 2013 -- Cleaned up the makefile structure to make it easier
+       to build applications and libraries out of tree.
 
 Git Repository
 
