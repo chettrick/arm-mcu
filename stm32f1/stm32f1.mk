@@ -76,7 +76,7 @@ include $(MCUDIR)/$(MCU).mk
 
 # Phony targets
 
-.PHONY:		lib_$(MCU) clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
+.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
 
 # Build processor dependent support library
 
@@ -84,12 +84,9 @@ include $(MCUDIR)/libs/stm32f1libs.mk
 
 LIBOBJS		= cpu.o gpiopins.o leds.o serial.o spi.o
 
-lib_$(MCU): $(LIBOBJS)
+lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-
-LIBTARGETS	+= lib_$(MCU)
-
-lib$(MCU).a: $(LIBTARGETS)
+	$(MAKE) $(LIBTARGETS)
 
 # Clean out working files
 

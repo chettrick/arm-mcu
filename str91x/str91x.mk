@@ -49,13 +49,13 @@ endif
 
 # Phony targets
 
-.PHONY:		lib_$(MCU) clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
+.PHONY:		clean_$(MCU) reallyclean_$(MCU) distclean_$(MCU)
 
 # Build processor dependent support library
 
 LIBOBJS		= cpu.o leds.o serial.o time.o
 
-lib_$(MCU): $(LIBOBJS)
+lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	for F in $(FWLIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
@@ -63,10 +63,7 @@ ifeq ($(WITH_USBSERIAL), yes)
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
 endif
-
-LIBTARGETS	+= lib_$(MCU)
-
-lib$(MCU).a: $(LIBTARGETS)
+	$(MAKE) $(LIBTARGETS)
 
 # Clean out working files
 
