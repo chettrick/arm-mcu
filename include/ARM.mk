@@ -147,11 +147,6 @@ WIZNET_DIR      = $(ARMSRC)/wiznet
 include $(WIZNET_DIR)/wiznet.mk
 endif
 
-# Build library components
-
-otherlibs:
-	$(MAKE) $(LIBTARGETS)
-
 # Clean out working files
 
 ARM_mk_clean:
