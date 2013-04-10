@@ -137,7 +137,7 @@ endif
 
 ifeq ($(WITH_LWIP), yes)
 LWIP_DIR        = $(ARMSRC)/lwip
-include $(LWIP_DIR)/LWIP.mk
+include $(LWIP_DIR)/lwip.mk
 endif
 
 # Support for WizNet device drivers
