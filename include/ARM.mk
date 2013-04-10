@@ -41,11 +41,11 @@ FIND		?= find
 
 # Framework general definitions
 
-MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
-STARTUP		?= $(MCUDIR)/$(MCU).o
-LINKERSCRIPT	?= $(MCUDIR)/$(MCU).ld
-
 MCUFAMILYNAME	:= $(shell echo $(MCUFAMILY) | tr '[a-z]' '[A-Z]')
+MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
+MCUSTARTUP	?= $(MCUDIR)/$(MCU).o
+MCULIBRARY	?= $(MCUDIR)/lib$(MCU).a
+MCULINKSCRIPT	?= $(MCUDIR)/$(MCU).ld
 
 # Compiler and linker flags
 
@@ -61,7 +61,7 @@ CFLAGS		+= -Wall -ffunction-sections
 CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDIR)
 CFLAGS		+= $(OPTFLAGS) $(CPUFLAGS) $(BOARDFLAGS) $(IOFLAGS) $(CONFIGFLAGS) $(DEBUGFLAGS) $(EXTRAFLAGS)
 CXXFLAGS	+= -fpermissive -fno-exceptions -fno-rtti -fno-use-cxa-atexit
-LDFLAGS		+= -nostartfiles -T$(LINKERSCRIPT) -L$(MCUDIR) -l$(MCU)
+LDFLAGS		+= -nostartfiles -T$(MCULINKSCRIPT) -L$(MCUDIR) -l$(MCU)
 ifeq ($(WITH_LIBSTDCPP), yes)
 LDFLAGS		+= -lstdc++
 endif
@@ -94,8 +94,8 @@ GDBSERVERPORT	= 3333
 	$(CXX) $(CXXFLAGS) $(CFLAGS) -c -o $@ $<
 
 .o.elf:
-	cd $(MCUDIR) && $(MAKE) $(MCU).o lib$(MCU).a BOARDNAME=$(BOARDNAME)
-	$(CC) $(CFLAGS) -o $@ $(STARTUP) $< $(LDFLAGS)
+	$(MAKE) -C $(MCUDIR) $(MCU).o lib$(MCU).a BOARDNAME=$(BOARDNAME)
+	$(CC) $(CFLAGS) -o $@ $(MCUSTARTUP) $< $(LDFLAGS)
 
 .elf.asm:
 	$(OBJDUMP) -S -d $< >$@
