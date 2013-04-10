@@ -1,4 +1,3 @@
-
                ST STM32F4 Cortex-M4 ARM Microcontroller Framework
 
 Credits
@@ -36,13 +35,13 @@ Other Devices
 
 Test Platform
 
-   This framework is validated on the [2]STM32F4 Discovery and [3]FEZ
-   Cerb40 development boards.
+   This framework is validated on the [2]STM32F4 Discovery, [3]FEZ Cerb40,
+   and [4]Netduino Plus 2 development boards.
 
-   Tested on 21 December 2012 with gcc 4.7.2.
+   Tested on 10 April 2013 with gcc 4.7.2.
      __________________________________________________________________
 
-   Questions or comments to Philip Munts [4]phil@munts.net
+   Questions or comments to Philip Munts [5]phil@munts.net
 
    $Id$
 
@@ -54,4 +53,5 @@ References
    1. http://www.amazon.com/Definitive-Guide-Cortex-M3-Embedded-Technology/dp/0750685344
    2. http://www.st.com/internet/evalboard/product/252419.jsp
    3. http://www.ghielectronics.com/catalog/product/353
-   4. mailto:phil@munts.net
+   4. http://netduino.com/netduinoplus2/specs.htm
+   5. mailto:phil@munts.net

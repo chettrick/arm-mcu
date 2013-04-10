@@ -127,6 +127,7 @@ News
        V1.0.1 to V1.1.0.
      * 9 April 2013 -- Cleaned up the makefile structure to make it easier
        to build applications and libraries out of tree.
+     * 10 April 2013 -- Added support for Netduino 2 and Netduino Plus 2
 
 Git Repository
 
