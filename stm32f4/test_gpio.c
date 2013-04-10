@@ -78,4 +78,23 @@ int main(void)
     GPIOPIN41OUT = i >> 21;
   }
 #endif
+
+#ifdef NETDUINO2
+  gpiopin_configure(GPIOPIN27, GPIOPIN_INPUT);		// PB11
+  gpiopin_configure(GPIOPIN10, GPIOPIN_OUTPUT);		// PA10
+
+  for (i = 0;; i++)
+  {
+    // Speed up flashing if user button is pressed
+
+    if (GPIOPIN27IN)
+    {
+      GPIOPIN10OUT = i >> 21;
+    }
+    else
+    {
+      GPIOPIN10OUT = i >> 22;
+    }
+  } 
+#endif
 }
