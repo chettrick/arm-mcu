@@ -50,6 +50,12 @@ JLINKMCU	= lpc1768
 JLINKGDBIF	= -if SWD
 endif
 
+ifeq ($(BOARDNAME), LPC1768_MINI_DK2)
+ifneq ($(WITH_USBSERIAL), yes)
+BOARDFLAGS	+= -DCONSOLE_PORT='"com1:115200,n,8,1"'
+endif
+endif
+
 # USB serial port console support
 
 ifeq ($(WITH_USBSERIAL), yes)

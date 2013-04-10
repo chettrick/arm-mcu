@@ -42,6 +42,11 @@ void LEDS_initialize(void)
   gpiopin_configure(GPIOPIN61, GPIOPIN_OUTPUT);
 #endif
 
+#ifdef LPC1768_MINI_DK2
+  gpiopin_configure(GPIOPIN121, GPIOPIN_OUTPUT);
+  gpiopin_configure(GPIOPIN122, GPIOPIN_OUTPUT);
+#endif
+
   LEDS_set(0);						// Turn off all LEDs at startup
 }
 
@@ -63,6 +68,11 @@ unsigned long int LEDS_get(void)
   result += GPIOPIN61IN;
 #endif
 
+#ifdef LPC1768_MINI_DK2
+  result += !GPIOPIN121IN;
+  result += !GPIOPIN122IN << 1;
+#endif
+
   return result;
 }
 
@@ -80,5 +90,10 @@ void LEDS_set(unsigned long int mask)
 
 #ifdef BLUEBOARD_LPC1768_H
   GPIOPIN61OUT = mask;
+#endif
+
+#ifdef LPC1768_MINI_DK2
+  GPIOPIN121OUT = ~mask;
+  GPIOPIN122OUT = ~mask >> 1;
 #endif
 }

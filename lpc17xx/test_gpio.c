@@ -73,4 +73,31 @@ int main(void)
     }
   }
 #endif
+
+// Flash BlueBoard LPC1768-Mini-DK2 test LEDs
+
+#ifdef LPC1768_MINI_DK2
+  gpiopin_configure(GPIOPIN121, GPIOPIN_OUTPUT);	// Test LED LD2
+  gpiopin_configure(GPIOPIN122, GPIOPIN_OUTPUT);	// Test LED LD3
+  gpiopin_configure(GPIOPIN75, GPIOPIN_INPUT);		// Push button KEY1
+
+  for (i = 0;; i++)
+  {
+    // Flash faster if button is pressed
+
+    if (!GPIOPIN75IN)
+    {
+      GPIOPIN121OUT = i >> 18;
+      GPIOPIN122OUT = i >> 19;
+    }
+
+    // Flash LED at normal rate
+
+    else
+    {
+      GPIOPIN121OUT = i >> 19;
+      GPIOPIN122OUT = i >> 20;
+    }
+  }
+#endif
 }
