@@ -30,7 +30,16 @@ CFLAGS		+= -DLWIP -I$(LWIP_DIR) -I$(LWIP_INC) -I$(LWIP_INC)/ipv4
 
 .PHONY: lwip_lib lwip_clean
 
-LWIP_OBJS	= $(LWIP_SRC)/core/mem.o		\
+LWIP_OBJS	= $(LWIP_SRC)/core/dhcp.o		\
+		  $(LWIP_SRC)/core/init.o		\
+		  $(LWIP_SRC)/core/ipv4/autoip.o	\
+		  $(LWIP_SRC)/core/ipv4/icmp.o		\
+		  $(LWIP_SRC)/core/ipv4/inet.o		\
+		  $(LWIP_SRC)/core/ipv4/inet_chksum.o	\
+		  $(LWIP_SRC)/core/ipv4/ip.o		\
+		  $(LWIP_SRC)/core/ipv4/ip_addr.o	\
+		  $(LWIP_SRC)/core/ipv4/ip_frag.o	\
+		  $(LWIP_SRC)/core/mem.o		\
 		  $(LWIP_SRC)/core/memp.o		\
 		  $(LWIP_SRC)/core/netif.o		\
 		  $(LWIP_SRC)/core/pbuf.o		\
@@ -41,15 +50,6 @@ LWIP_OBJS	= $(LWIP_SRC)/core/mem.o		\
 		  $(LWIP_SRC)/core/tcp_in.o		\
 		  $(LWIP_SRC)/core/tcp_out.o		\
 		  $(LWIP_SRC)/core/udp.o		\
-		  $(LWIP_SRC)/core/dhcp.o		\
-		  $(LWIP_SRC)/core/init.o		\
-		  $(LWIP_SRC)/core/ipv4/autoip.o	\
-		  $(LWIP_SRC)/core/ipv4/icmp.o		\
-		  $(LWIP_SRC)/core/ipv4/ip.o		\
-		  $(LWIP_SRC)/core/ipv4/inet.o		\
-		  $(LWIP_SRC)/core/ipv4/ip_addr.o	\
-		  $(LWIP_SRC)/core/ipv4/ip_frag.o	\
-		  $(LWIP_SRC)/core/ipv4/inet_chksum.o	\
 		  $(LWIP_SRC)/netif/etharp.o		\
 
 # Add LWIP object files to the MCU library
