@@ -76,8 +76,6 @@ int main(void)
 
   for (;;)
   {
-    cputs("|\b/\b-\b\\\b");
-
     if (keypressed())
     {
       if (getch() == 3)

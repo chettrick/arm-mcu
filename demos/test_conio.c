@@ -68,8 +68,6 @@ int main(void)
 
   for (;;)
   {
-    printf("|\b/\b-\b\\\b");
-
     if (keypressed())
     {
       if (getchar() == 3)
