@@ -68,6 +68,21 @@ STLINKCLIIF	= -c SWD
 endif
 endif
 
+ifeq ($(BOARDNAME), NETDUINO2)
+BOARDFLAGS	+= -DHSE_VALUE=25000000
+WITH_USBSERIAL	?= yes
+
+ifneq ($(WITH_USBSERIAL), yes)
+BOARDFLAGS	+= -DCONSOLE_PORT='"com2:115200,n,8,1"'
+endif
+MCU		= stm32f405rg
+JLINKGDBIF	= -if SWD
+
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+STLINKCLIIF	= -c SWD
+endif
+endif
+
 # USB serial port console support
 
 ifeq ($(WITH_USBSERIAL), yes)
