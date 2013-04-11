@@ -163,7 +163,6 @@ include $(ARMSRC)/include/lpc21isp.mk
 include $(ARMSRC)/include/mbed.mk
 include $(ARMSRC)/include/nxpusb.mk
 include $(ARMSRC)/include/openocd.mk
-include $(ARMSRC)/include/pg4uw.mk
 include $(ARMSRC)/include/stlink.mk
 include $(ARMSRC)/include/stm32flash.mk
 
