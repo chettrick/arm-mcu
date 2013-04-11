@@ -84,7 +84,7 @@ SECTIONS
 
 /* Firmware entry point */
 
-ENTRY(_start)
+ENTRY(_vectors)
 
 /*  Libraries to link against. */
 

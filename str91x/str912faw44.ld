@@ -112,7 +112,7 @@ __exidx_end = .;
 
 /* Firmware entry point */
 
-ENTRY(_start)
+ENTRY(_vectors)
 
 /* Libraries to link against. */
 
