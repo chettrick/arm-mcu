@@ -25,6 +25,8 @@
 
 CFLAGS		+= -DFREERTOS -I$(FREERTOS_DIR)
 
+RMAKEFLAGS	+= WITH_FREERTOS=$(WITH_FREERTOS)
+
 .PHONY: freertos_lib freertos_clean
 
 # These are the FreeRTOS object files

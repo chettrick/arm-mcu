@@ -32,19 +32,22 @@ FWLIB		= $(MCUDIR)/FWLib
 CFLAGS		+= -I$(FWLIB)
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
-ifeq ($(WITH_USBSERIAL), yes)
-USBSERIAL	= $(MCUDIR)/usb_serial
-CFLAGS		+= -I$(USBSERIAL)
-IOFLAGS		+= -DCONSOLE_USB
-endif
-
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), STMICRO_STR910_EVAL)
 ifneq ($(WITH_USBSERIAL), yes)
-BOARDFLAGS	+= -DCONSOLE_PORT='"com1:115200,n,8,1"'
+CONSOLEFLAGS	+= -DCONSOLE_PORT='"com1:115200,n,8,1"'
 endif
 MCU		= str912faw44
+endif
+
+# USB serial port console support
+
+ifeq ($(WITH_USBSERIAL), yes)
+USBSERIAL	= $(MCUDIR)/usb_serial
+CFLAGS		+= -I$(USBSERIAL)
+CONSOLEFLAGS	+= -DCONSOLE_USB
+RMAKEFLAGS	+= WITH_USBSERIAL=$(WITH_USBSERIAL)
 endif
 
 # Phony targets

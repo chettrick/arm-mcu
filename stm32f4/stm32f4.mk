@@ -34,17 +34,22 @@ OPENOCDFLASH	= $(MCUDIR)/stm32f4.flashocd
 
 ifeq ($(WITH_FPU), yes)
 CPUFLAGS	+= -mfloat-abi=hard -mfpu=fpv4-sp-d16
+RMAKEFLAGS	+= WITH_FPU=$(WITH_FPU)
 endif
 
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), STM32F4_DISCOVERY)
 BOARDFLAGS	+= -DHSE_VALUE=8000000
+
+ifneq ($(WITH_CONIO), yes)
 WITH_USBSERIAL	?= yes
+endif
 
 ifneq ($(WITH_USBSERIAL), yes)
-BOARDFLAGS	+= -DCONSOLE_PORT='"com2:115200,n,8,1"'
+CONSOLEFLAGS	+= -DCONSOLE_PORT='"com2:115200,n,8,1"'
 endif
+
 MCU		= stm32f407vg
 JLINKGDBIF	= -if SWD
 
@@ -55,11 +60,15 @@ endif
 
 ifeq ($(BOARDNAME), FEZ_CERB40)
 BOARDFLAGS	+= -DHSE_VALUE=12000000
+
+ifneq ($(WITH_CONIO), yes)
 WITH_USBSERIAL	?= yes
+endif
 
 ifneq ($(WITH_USBSERIAL), yes)
-BOARDFLAGS	+= -DCONSOLE_PORT='"com2:115200,n,8,1"'
+CONSOLEFLAGS	+= -DCONSOLE_PORT='"com2:115200,n,8,1"'
 endif
+
 MCU		= stm32f405rg
 JLINKGDBIF	= -if SWD
 
@@ -70,11 +79,15 @@ endif
 
 ifeq ($(BOARDNAME), NETDUINO2)
 BOARDFLAGS	+= -DHSE_VALUE=25000000
+
+ifneq ($(WITH_CONIO), yes)
 WITH_USBSERIAL	?= yes
+endif
 
 ifneq ($(WITH_USBSERIAL), yes)
-BOARDFLAGS	+= -DCONSOLE_PORT='"com2:115200,n,8,1"'
+CONSOLEFLAGS	+= -DCONSOLE_PORT='"com2:115200,n,8,1"'
 endif
+
 MCU		= stm32f405rg
 JLINKGDBIF	= -if SWD
 
@@ -88,7 +101,7 @@ endif
 ifeq ($(WITH_USBSERIAL), yes)
 USBSERIAL	= $(MCUDIR)/usb_serial
 CFLAGS		+= -I$(USBSERIAL)
-IOFLAGS		+= -DCONSOLE_USB
+CONSOLEFLAGS	+= -DCONSOLE_USB
 endif
 
 # Phony targets

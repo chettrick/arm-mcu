@@ -24,6 +24,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 CFLAGS		+= -DWIZNET -I$(WIZNET_DIR)
+RMAKEFLAGS	+= WITH_WIZNET=$(WITH_WIZNET)
 
 .PHONY: wiznet_lib wiznet_clean
 
@@ -36,6 +37,7 @@ WIZNET_OBJS	+= $(WIZNET_DIR)/wiznet.o
 ifeq ($(WITH_W5200), yes)
 CFLAGS		+= -DW5200
 WIZNET_OBJS	+= $(WIZNET_DIR)/W5200.o
+RMAKEFLAGS	+= WITH_W5200=$(WITH_W5200)
 endif
 
 # Add WizNet object files to the MCU library

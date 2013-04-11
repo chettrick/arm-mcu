@@ -26,7 +26,9 @@
 LWIP_VERSION	= 1.3.2
 LWIP_SRC	= $(LWIP_DIR)/lwip-$(LWIP_VERSION)/src
 LWIP_INC	= $(LWIP_SRC)/include
+
 CFLAGS		+= -DLWIP -I$(LWIP_DIR) -I$(LWIP_INC) -I$(LWIP_INC)/ipv4
+RMAKEFLAGS	+= WITH_LWIP=$(WITH_LWIP)
 
 .PHONY: lwip_lib lwip_clean
 

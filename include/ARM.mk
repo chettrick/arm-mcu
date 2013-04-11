@@ -46,25 +46,33 @@ MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
 MCULIBRARY	= $(MCUDIR)/lib$(MCU).a
 MCULINKSCRIPT	= $(MCUDIR)/$(MCU).ld
 
+# Recursive make flags
+
+RMAKEFLAGS	+= BOARDNAME=$(BOARDNAME)
+
 # Compiler and linker flags
 
 CPUFLAGS	+= -D$(MCU) -D$(BOARDNAME) -DMCUFAMILYNAME='"$(MCUFAMILYNAME)"'
 DEBUGFLAGS	?= -g
 OPTFLAGS	?= -O0
 ifeq ($(WITH_CONIO), yes)
-IOFLAGS		+= -DCONSOLE_CONIO
+CONSOLEFLAGS	= -DCONSOLE_CONIO
+IOFLAGS		=
+RMAKEFLAGS	+= WITH_CONIO=$(WITH_CONIO)
 else
-IOFLAGS		+= -DINTEGER_STDIO
+CONSOLEFLAGS	=
+IOFLAGS		= -DINTEGER_STDIO
 endif
 CFLAGS		+= -Wall -ffunction-sections
 CFLAGS		+= -I$(ARMSRC)/include -I$(MCUDIR)
-CFLAGS		+= $(OPTFLAGS) $(CPUFLAGS) $(BOARDFLAGS) $(IOFLAGS) $(CONFIGFLAGS) $(DEBUGFLAGS) $(EXTRAFLAGS)
+CFLAGS		+= $(OPTFLAGS) $(CPUFLAGS) $(BOARDFLAGS) $(CONSOLEFLAGS) $(IOFLAGS) $(CONFIGFLAGS) $(DEBUGFLAGS) $(EXTRAFLAGS)
 CXXFLAGS	+= -fpermissive -fno-exceptions -fno-rtti -fno-use-cxa-atexit
 LDFLAGS		+= -nostartfiles -T$(MCULINKSCRIPT) -L$(MCUDIR) -l$(MCU)
+LDFLAGS		+= -Wl,-Map=$*.map,--cref,--gc-sections $(EXTRAOBJS)
 ifeq ($(WITH_LIBSTDCPP), yes)
 LDFLAGS		+= -lstdc++
+RMAKEFLAGS	+= WITH_LIBSTDCPP=$(WITH_LIBSTDCPP)
 endif
-LDFLAGS		+= -Wl,-Map=$*.map,--cref,--gc-sections $(EXTRAOBJS)
 
 # GDB definitions
 
@@ -93,7 +101,7 @@ GDBSERVERPORT	= 3333
 	$(CXX) $(CXXFLAGS) $(CFLAGS) -c -o $@ $<
 
 .o.elf:
-	$(MAKE) -C $(MCUDIR) lib$(MCU).a BOARDNAME=$(BOARDNAME)
+	$(MAKE) -C $(MCUDIR) lib$(MCU).a $(RMAKEFLAGS)
 	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
 
 .elf.asm:
