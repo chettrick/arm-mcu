@@ -53,7 +53,7 @@ endif
 
 # Build processor dependent support library
 
-LIBOBJS		= cpu.o leds.o serial.o time.o
+LIBOBJS		= $(MCU).o cpu.o leds.o serial.o time.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)

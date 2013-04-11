@@ -128,6 +128,8 @@ News
      * 9 April 2013 -- Cleaned up the makefile structure to make it easier
        to build applications and libraries out of tree.
      * 10 April 2013 -- Added support for Netduino 2 and Netduino Plus 2
+     * 11 April 2013 -- Reworked linker scripts and makefiles to include
+       run time startup code in the MCU dependent library.
 
 Git Repository
 

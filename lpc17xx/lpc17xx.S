@@ -25,13 +25,12 @@
 
 		.syntax 	unified
 		.thumb
-		.text
+		.section	.startup
 
 // Export these symbols
 
 		.global		_start
-		.global		Reset_Handler
-		.global		Default_Handler
+		.global		_vectors
 
 // Import these symbols
 
@@ -60,8 +59,8 @@
 
 // Exception vector table--Common to all Cortex-M3
 
-_start: 	.word		__stack_end__
-		.word		Reset_Handler
+_vectors: 	.word		__stack_end__
+		.word		_start
 		IRQ		NMI_Handler
 		IRQ		HardFault_Handler
 		IRQ		MemManage_Handler
@@ -127,7 +126,7 @@ Default_Handler: bx		lr
 // Reset vector: Set up environment to call C main()
 
 		.thumb_func
-Reset_Handler:
+_start:
 
 // Copy initialized data from flash to RAM
 

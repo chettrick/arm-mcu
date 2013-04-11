@@ -99,7 +99,7 @@ endif
 
 include $(MCUDIR)/libs/stm32f4libs.mk
 
-LIBOBJS		= cpu.o gpiopins.o leds.o serial.o
+LIBOBJS		= $(MCU).o cpu.o gpiopins.o leds.o serial.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)

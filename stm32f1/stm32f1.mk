@@ -82,7 +82,7 @@ include $(MCUDIR)/$(MCU).mk
 
 include $(MCUDIR)/libs/stm32f1libs.mk
 
-LIBOBJS		= cpu.o gpiopins.o leds.o serial.o spi.o
+LIBOBJS		= $(MCU).o cpu.o gpiopins.o leds.o serial.o spi.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)

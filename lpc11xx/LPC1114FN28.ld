@@ -45,6 +45,7 @@ SECTIONS
   . = 0;
 
   .text : {
+  KEEP(*(.startup))			/* Startup code */
   *(.text*)				/* Program code */
   KEEP(*(.rodata*))			/* Read only data */
   *(.glue_7)
@@ -82,8 +83,12 @@ SECTIONS
 
 /* Calculate vector checksum for boot loader */
 
-  VectorChecksum = -(__stack_end__ + Reset_Handler + NMI_Handler + HardFault_Handler + 6);
+  VectorChecksum = -(__stack_end__ + _start + NMI_Handler + HardFault_Handler + 6);
 }  
+
+/* Firmware entry point */
+
+ENTRY(_start)
 
 /*  Libraries to link against. */
 

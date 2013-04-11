@@ -60,7 +60,7 @@ SECTIONS {
   . = 0;				/*  Start at address 0.		*/
 
   code : {
-    *(.startup)				/* Startup sections are first.  */
+    KEEP(*(.startup))			/* Startup sections are first.  */
     *(.text*)				/* Program (.text) sections     */
     *(.gnu.linkonce.t.*)
     KEEP(*(.rodata* .gnu.linkonce.r.*))	/* are next, then constant data.*/
@@ -109,6 +109,10 @@ __exidx_start = .;
   } >flash
 __exidx_end = .;
 }
+
+/* Firmware entry point */
+
+ENTRY(_start)
 
 /* Libraries to link against. */
 

@@ -48,6 +48,7 @@ SECTIONS
   . = 0;
 
   .text : {
+  KEEP(*(.startup))			/* Startup code */
   *(.text*)				/* Program code */
   KEEP(*(.rodata*))			/* Read only data */
   *(.glue_7)
@@ -83,6 +84,10 @@ SECTIONS
   .ARM.exidx : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >flash
   __exidx_end = .;
 }  
+
+/* Firmware entry point */
+
+ENTRY(_start)
 
 /*  Libraries to link against. */
 

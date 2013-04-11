@@ -43,9 +43,8 @@ FIND		?= find
 
 MCUFAMILYNAME	:= $(shell echo $(MCUFAMILY) | tr '[a-z]' '[A-Z]')
 MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
-MCUSTARTUP	?= $(MCUDIR)/$(MCU).o
-MCULIBRARY	?= $(MCUDIR)/lib$(MCU).a
-MCULINKSCRIPT	?= $(MCUDIR)/$(MCU).ld
+MCULIBRARY	= $(MCUDIR)/lib$(MCU).a
+MCULINKSCRIPT	= $(MCUDIR)/$(MCU).ld
 
 # Compiler and linker flags
 
@@ -65,7 +64,7 @@ LDFLAGS		+= -nostartfiles -T$(MCULINKSCRIPT) -L$(MCUDIR) -l$(MCU)
 ifeq ($(WITH_LIBSTDCPP), yes)
 LDFLAGS		+= -lstdc++
 endif
-LDFLAGS		+= -Wl,-Map=$*.map,--cref,--entry=_start,--gc-sections $(EXTRAOBJS)
+LDFLAGS		+= -Wl,-Map=$*.map,--cref,--gc-sections $(EXTRAOBJS)
 
 # GDB definitions
 
@@ -94,8 +93,8 @@ GDBSERVERPORT	= 3333
 	$(CXX) $(CXXFLAGS) $(CFLAGS) -c -o $@ $<
 
 .o.elf:
-	$(MAKE) -C $(MCUDIR) $(MCU).o lib$(MCU).a BOARDNAME=$(BOARDNAME)
-	$(CC) $(CFLAGS) -o $@ $(MCUSTARTUP) $< $(LDFLAGS)
+	$(MAKE) -C $(MCUDIR) lib$(MCU).a BOARDNAME=$(BOARDNAME)
+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
 
 .elf.asm:
 	$(OBJDUMP) -S -d $< >$@

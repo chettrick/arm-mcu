@@ -23,7 +23,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-	.text
+	.section .startup
 	.code 32 
 	.align 4
 
@@ -43,7 +43,8 @@
 	.extern	__ctors_start__
 	.extern	__ctors_end__
 
-	.global	_start 
+	.global	_start
+	.global _vectors
 
 	.set INIT_FIQ_MODE,		0x11
 	.set INIT_IRQ_MODE,		0x12
@@ -52,11 +53,9 @@
 	.set INIT_UNDEFINED_MODE,	0x1B
 	.set INIT_SYSTEM_MODE,		0x1F
 
-	/**** Exception/Interrupt table ****/
+	/**** Exception/Interrupt vector table ****/
 
-	/*  defaults are defined in the link script.  The reserved	*/
-	/* exception should be overridden by the download program 	*/
-
+_vectors:
 	b	_start
 	b	Undefined_Handler
 	b	SWI_Handler
@@ -69,7 +68,8 @@
 /********************* start ********************************************/
 /*  start (AKA _start, _mainCRTStartup) -- Gains control on reset and	*/
 /* set up environment before running the operating C program. 		*/
-_start: 
+
+_start:
 
 /* Configure SRAM size, based on what the linker tells us */
 

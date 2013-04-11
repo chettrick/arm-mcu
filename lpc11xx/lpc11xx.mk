@@ -23,16 +23,12 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-MCU		= $(MCUFAMILY)
-
 CPUFLAGS	+= -mcpu=cortex-m0 -mthumb -DCORTEX_M0
 FLASHWRITEADDR	?= 0x00000000
 TEXTBASE	?= 0x00000000
 
 CFLAGS		+= -DLPC11XX
 LDFLAGS		+= -Ttext $(TEXTBASE)
-
-JLINKGDBIF	= -if SWD
 
 # Board specific macro definitions
 
@@ -41,6 +37,7 @@ BOARDFLAGS	+= -DCONSOLE_PORT='"com1:115200,n,8,1"'
 IOFLAGS		+= -DCONSOLE_CONIO
 MCU		= LPC1114FN28
 JLINKMCU	= LPC1114/102
+JLINKGDBIF	= -if SWD
 endif
 
 ifeq ($(BOARDNAME), RASPBERRYPI_LPC1114)
@@ -48,6 +45,7 @@ BOARDFLAGS	+= -DCONSOLE_PORT='"com1:115200,n,8,1"'
 IOFLAGS		+= -DCONSOLE_CONIO
 MCU		= LPC1114FN28
 JLINKMCU	= LPC1114/102
+JLINKGDBIF	= -if SWD
 endif
 
 # Phony targets
@@ -58,7 +56,7 @@ endif
 
 include $(MCUDIR)/CMSIS/CMSIS.mk
 
-LIBOBJS		= adc.o cpu.o gpio.o leds.o serial.o spi.o
+LIBOBJS		= $(MCU).o adc.o cpu.o gpio.o leds.o serial.o spi.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
