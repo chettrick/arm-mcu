@@ -25,7 +25,7 @@
 
 		.syntax 	unified
 		.thumb
-		.section	.startup
+		.section	.startup, "x"
 
 // Export these symbols
 
