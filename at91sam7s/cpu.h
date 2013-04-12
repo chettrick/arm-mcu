@@ -26,13 +26,13 @@
 #ifndef _CPU_H
 #define _CPU_H
 
-#include <_ansi.h>
-#include <arm.h>
+#include <arm.h>	// Must be include first!
+
 #include <device.h>
 #include <leds.h>
 #include <serial.h>
 
-#include <AT91SAM7S.h>
+#include <at91lib/AT91SAM7S.h>
 
 #define DEFAULT_CPU_FREQ	0
 

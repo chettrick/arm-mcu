@@ -26,7 +26,6 @@
 #ifndef _INET_H
 #define _INET_H
 
-#include <_ansi.h>
 #include <sys/param.h>
 
 _BEGIN_STD_C

@@ -28,6 +28,9 @@
 
 #include <_ansi.h>
 #include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 #ifdef CONSOLE_CONIO
 _BEGIN_STD_C
@@ -36,14 +39,6 @@ _END_STD_C
 #define errno_r			conio_errno
 #else
 #define errno_r			(*(__errno()))
-#endif
-
-#ifndef TRUE
-#define TRUE			1
-#endif
-
-#ifndef FALSE
-#define FALSE			0
 #endif
 
 // Define compiler string

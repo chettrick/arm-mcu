@@ -32,8 +32,6 @@
 #ifndef _SOCKET_H
 #define _SOCKET_H
 
-#include <_ansi.h>
-
 _BEGIN_STD_C
 
 extern int socket_open(char *name, unsigned int *subdevice);

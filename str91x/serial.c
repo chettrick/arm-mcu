@@ -313,7 +313,7 @@ int serial_register(char *name)
   return device_register_char(name, port, serial_open, NULL, serial_write, serial_read, serial_txready, serial_rxready);
 }
 
-/* Return TRUE if transmitter is ready to accept data */
+/* Return true if transmitter is ready to accept data */
 
 int serial_txready(unsigned int port)
 {
@@ -352,7 +352,7 @@ int serial_write(unsigned int port, char *buf, unsigned int count)
   return 0;
 }
 
-/* Return TRUE if receive data is available */
+/* Return true if receive data is available */
 
 int serial_rxready(unsigned int port)
 {

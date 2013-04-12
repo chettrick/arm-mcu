@@ -27,7 +27,6 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 #include <errno.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -42,14 +41,14 @@ static const char revision[] = "$Id$";
 _BEGIN_STD_C
 
 static volatile int TimerCounter = 0;
-static volatile int TimerFlag = FALSE;
+static volatile int TimerFlag = false;
 
 void SysTick_Handler(void)
 {
   if (++TimerCounter == SYSTICKRATE/5)
   {
     TimerCounter = 0;
-    TimerFlag = TRUE;
+    TimerFlag = false;
   }
 }
 
@@ -95,7 +94,7 @@ int main(void)
 
       putchar('\r');
 
-      TimerFlag = FALSE;
+      TimerFlag = false;
     }
   }
 }

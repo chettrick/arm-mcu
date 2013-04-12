@@ -26,9 +26,6 @@
 #ifndef _GPIO_H
 #define _GPIO_H
 
-#include <_ansi.h>
-#include <stdint.h>
-
 _BEGIN_STD_C
 
 // These are all the LPC11xx GPIO pins -- Not all are bonded out

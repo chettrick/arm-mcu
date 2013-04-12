@@ -26,9 +26,6 @@
 #ifndef _SPI_H
 #define _SPI_H
 
-#include <_ansi.h>
-#include <stdint.h>
-
 _BEGIN_STD_C
 
 #define SPI_MSBFIRST		1

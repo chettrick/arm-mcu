@@ -101,12 +101,12 @@ void cputs(const char *s)		// Write a string
 
 int lightweight_atoi(const char *s)
 {
-  int negative = FALSE;
+  int negative = false;
   int x = 0;
 
   if (*s == '-')
   {
-    negative = TRUE;
+    negative = true;
     s++;
   }
 
@@ -179,8 +179,6 @@ static const char sbrk_warning[] __attribute__((section(".gnu.warning._sbrk"))) 
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-
-#include <stdarg.h>
 
 static void printchar(char **str, int c)
 {

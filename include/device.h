@@ -30,7 +30,6 @@
 #ifndef _DEVICE_H
 #define _DEVICE_H
 
-#include <_ansi.h>
 #include <unistd.h>
 #include <sys/stat.h>
 

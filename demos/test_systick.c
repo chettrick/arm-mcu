@@ -37,14 +37,14 @@ static const char revision[] = "$Id$";
 _BEGIN_STD_C
 
 static volatile int TimerCounter = 0;
-static volatile int TimerFlag = FALSE;
+static volatile int TimerFlag = false;
 
 void SysTick_Handler(void)
 {
   if (++TimerCounter == SYSTICKRATE)
   {
     TimerCounter = 0;
-    TimerFlag = TRUE;
+    TimerFlag = true;
   }
 }
 
@@ -81,7 +81,7 @@ int main(void)
   {
     if (TimerFlag)
     {
-      TimerFlag = FALSE;
+      TimerFlag = false;
 
       puts("Tick...");
 

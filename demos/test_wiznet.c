@@ -32,7 +32,6 @@ static const char revision[] = "$Id$";
 #include <cpu.h>
 #include <errno.h>
 #include <inet.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -88,7 +87,7 @@ int main(void)
   int status;
   macaddress_t macaddr;
   ipv4address_t ipaddr, subnet, gateway;
-  uint32_t linkstate = FALSE;
+  uint32_t linkstate = false;
   size_t count;
   ipv4address_t senderaddr;
   uint16_t senderport;

@@ -156,14 +156,14 @@ int usb_serial_register(char *name)
   return device_register_char(name, 0, usb_serial_open, NULL, usb_serial_write, usb_serial_read, usb_serial_txready, usb_serial_rxready);
 }
 
-// Return TRUE if USB system is ready to accept another transmit message
+// Return true if USB system is ready to accept another transmit message
 
 int usb_serial_txready(unsigned subdevice)
 {
-  return TRUE;
+  return true;
 }
 
-// Return TRUE if USB subsystem has receive data available
+// Return true if USB subsystem has receive data available
 
 int usb_serial_rxready(unsigned subdevice)
 {

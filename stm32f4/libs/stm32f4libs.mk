@@ -2,7 +2,7 @@
 
 # $Id$
 
-LIBSDIR		= $(ARMSRC)/stm32f4/libs
+LIBSDIR		= $(MCUDIR)/libs
 
 # Definitions for the STM32F4 Standard Peripheral Library
 

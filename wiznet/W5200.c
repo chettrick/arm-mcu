@@ -421,7 +421,7 @@ int wiznet_get_linkstate(uint32_t *linkstate)
   if ((status = W5200_read_register(W5200_PSTATUS, &data)))
     return status;
 
-  *linkstate = data & W5200_PSTATUS_LINK ? TRUE : FALSE;
+  *linkstate = data & W5200_PSTATUS_LINK ? true : false;
   return status;
 }
 
@@ -815,9 +815,9 @@ int socket_write_ready(unsigned int subdevice)
   if (status) return status;
 
   if (count)
-    return TRUE;
+    return true;
   else
-    return FALSE;
+    return false;
 }
 
 int socket_read_ready(unsigned int subdevice)
@@ -829,7 +829,7 @@ int socket_read_ready(unsigned int subdevice)
   if (status) return status;
 
   if (count)
-    return TRUE;
+    return true;
   else
-    return FALSE;
+    return false;
 }

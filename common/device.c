@@ -152,7 +152,7 @@ int device_register_char_fd(int fd,
   device_table[fd].read = read;
   device_table[fd].write_ready = write_ready;
   device_table[fd].read_ready = read_ready;
-  device_table[fd].isopen = TRUE;
+  device_table[fd].isopen = true;
 
   return 0;
 }
@@ -301,7 +301,7 @@ int device_open(char *name, int flags, int mode)
 
   // Save open flag
 
-  device_table[fd].isopen = TRUE;
+  device_table[fd].isopen = true;
 
   // Save the flags
 
@@ -356,14 +356,14 @@ int device_close(int fd)
   }
 
   device_table[fd].subdevice = 0;
-  device_table[fd].isopen = FALSE;
+  device_table[fd].isopen = false;
   device_table[fd].flags = 0;
   device_table[fd].mode = 0;
 
   return 0;
 }
 
-/* Return TRUE if the device has received data available */
+/* Return true if the device has received data available */
 
 int device_ready_read(int fd)
 {
@@ -396,7 +396,7 @@ int device_ready_read(int fd)
   return device_table[fd].read_ready(device_table[fd].subdevice);
 }
 
-/* Return TRUE if the device is ready to accept transmit data */
+/* Return true if the device is ready to accept transmit data */
 
 int device_ready_write(int fd)
 {

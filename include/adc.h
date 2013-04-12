@@ -26,9 +26,6 @@
 #ifndef _ADC_H
 #define _ADC_H
 
-#include <_ansi.h>
-#include <stdint.h>
-
 _BEGIN_STD_C
 
 // Initialize an A/D input pin

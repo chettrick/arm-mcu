@@ -140,5 +140,5 @@ int main(void)
 
 // Test assert()
 
-  assert(FALSE);
+  assert(false);
 }

@@ -26,8 +26,6 @@
 #ifndef _LEDS_H
 #define _LEDS_H
 
-#include <_ansi.h>
-
 _BEGIN_STD_C
 
 // LED masks (not all are implemented)

@@ -26,8 +26,6 @@
 #ifndef _GPIOPINS_H
 #define _GPIOPINS_H
 
-#include <_ansi.h>
-
 // These services provide a simple and efficient mechanism for software to
 // control individual GPIO pins in an asynchronous fashion, where each GPIO pin
 // is independent of any other.  This API is NOT suitable for situations where

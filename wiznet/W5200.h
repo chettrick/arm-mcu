@@ -26,9 +26,6 @@
 #ifndef _W5200_H
 #define _W5200_H
 
-#include <_ansi.h>
-#include <stdint.h>
-
 #define W5200_MAX_SOCKETS	8
 
 // Common Registers

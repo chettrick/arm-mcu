@@ -19,8 +19,6 @@
 #ifndef __LPC23xx_H
 #define __LPC23xx_H
 
-#include <_ansi.h>
-
 _BEGIN_STD_C
 
 /* Vectored Interrupt Controller (VIC) */

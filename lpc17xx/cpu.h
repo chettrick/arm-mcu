@@ -26,8 +26,8 @@
 #ifndef _CPU_H
 #define _CPU_H
 
-#include <_ansi.h>
-#include <arm.h>
+#include <arm.h>	// Must be include first!
+
 #include <device.h>
 #include <gpiopins.h>
 #include <leds.h>

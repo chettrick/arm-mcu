@@ -26,8 +26,6 @@
 #ifndef STR912FA_INTERRUPT_H
 #define STR912FA_INTERRUPT_H
 
-#include <_ansi.h>
-
 _BEGIN_STD_C
 
 // Read CPSR

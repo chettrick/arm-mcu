@@ -30,8 +30,6 @@
 #ifndef _SERIAL_H
 #define _SERIAL_H
 
-#include <_ansi.h>
-
 _BEGIN_STD_C
 
 /* Map serial port name to port number (subdevice) */
@@ -50,7 +48,7 @@ int serial_stdio(char *name);
 
 int serial_register(char *name);
 
-/* Return TRUE if transmitter is ready to accept data */
+/* Return true if transmitter is ready to accept data */
 
 int serial_txready(unsigned int port);
 
@@ -58,7 +56,7 @@ int serial_txready(unsigned int port);
 
 int serial_write(unsigned int port, char *buf, unsigned int count);
 
-/* Return TRUE if receive data is available */
+/* Return true if receive data is available */
 
 int serial_rxready(unsigned int port);
 

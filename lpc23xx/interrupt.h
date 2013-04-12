@@ -26,8 +26,6 @@
 #ifndef LPC23xx_INTERRUPT__H
 #define LPC23xx_INTERRUPT__H
 
-#include <_ansi.h>
-
 _BEGIN_STD_C
 
 // Interrupt sources

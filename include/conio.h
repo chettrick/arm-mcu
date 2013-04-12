@@ -26,9 +26,6 @@
 #ifndef _CONIO_H
 #define _CONIO_H
 
-#include <_ansi.h>
-#include <stdarg.h>
-
 _BEGIN_STD_C
 
 // Include this *after* cpu.h and stdio.h so that the following
