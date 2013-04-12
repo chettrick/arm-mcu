@@ -1,4 +1,3 @@
-
                  Atmel AT91SAM7S ARM Microcontroller Framework
 
 Credits
@@ -34,7 +33,7 @@ Test Platform
    This framework is validated on an [3]Olimex SAM7-P256 development
    board.
 
-   Tested on 21 December 2012 with gcc 4.7.2.
+   Tested on 12 April 2013 with gcc 4.7.2.
 
 Legacy Status
 
