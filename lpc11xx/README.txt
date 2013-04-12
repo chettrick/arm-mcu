@@ -1,4 +1,3 @@
-
        NXP (nee Philips) LPC11xx ARM Cortex-M0 Microcontroller Framework
 
 Credits
@@ -35,7 +34,7 @@ Test Platform
    This framework is validated on a bare [4]LPC1114FN28/102 plugged into a
    solderless breadboard.
 
-   Tested on 21 December 2012 with gcc 4.7.2.
+   Tested on 12 April 2012 with gcc 4.7.2.
      __________________________________________________________________
 
    Questions or comments to Philip Munts [5]phil@munts.net
