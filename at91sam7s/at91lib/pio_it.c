@@ -35,12 +35,12 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include <pio_it.h>
-#include <pio.h>
-#include <board.h>
-#include <aic.h>
-#include <utility/assert.h>
-#include <utility/trace.h>
+#include <at91lib/pio_it.h>
+#include <at91lib/pio.h>
+#include <at91lib/board.h>
+#include <at91lib/aic.h>
+#include <at91lib/utility/assert.h>
+#include <at91lib/utility/trace.h>
 
 //------------------------------------------------------------------------------
 //         Local definitions

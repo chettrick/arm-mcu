@@ -31,8 +31,8 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include <rtt.h>
-#include <utility/assert.h>
+#include <at91lib/rtt.h>
+#include <at91lib/utility/assert.h>
 
 //------------------------------------------------------------------------------
 //         Exported functions

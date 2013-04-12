@@ -48,7 +48,7 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include <board.h>
+#include <at91lib/board.h>
 
 #if !defined(AT91C_ID_TC0) && defined(AT91C_ID_TC012)
     #define AT91C_ID_TC0 AT91C_ID_TC012

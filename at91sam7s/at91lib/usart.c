@@ -31,9 +31,9 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include <usart.h>
-#include <utility/trace.h>
-#include <utility/assert.h>
+#include <at91lib/usart.h>
+#include <at91lib/utility/trace.h>
+#include <at91lib/utility/assert.h>
 
 //------------------------------------------------------------------------------
 //         Exported functions

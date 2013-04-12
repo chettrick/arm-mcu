@@ -31,13 +31,13 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include <pmc.h>
-#include <board.h>
-#include <utility/assert.h>
-#include <utility/trace.h>
+#include <at91lib/pmc.h>
+#include <at91lib/board.h>
+#include <at91lib/utility/assert.h>
+#include <at91lib/utility/trace.h>
 
 #ifdef CP15_PRESENT
-#include <cp15/cp15.h>
+#include <at91lib/cp15/cp15.h>
 #endif
 
 #define MASK_STATUS 0x3FFFFFFC

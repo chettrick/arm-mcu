@@ -31,10 +31,10 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include <pwmc.h>
-#include <board.h>
-#include <utility/assert.h>
-#include <utility/trace.h>
+#include <at91lib/pwmc.h>
+#include <at91lib/board.h>
+#include <at91lib/utility/assert.h>
+#include <at91lib/utility/trace.h>
 
 //------------------------------------------------------------------------------
 //         Local functions

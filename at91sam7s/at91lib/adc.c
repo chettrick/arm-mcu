@@ -31,10 +31,10 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include <board.h>
-#include <adc.h>
-#include <utility/trace.h>
-#include <utility/assert.h>
+#include <at91lib/board.h>
+#include <at91lib/adc.h>
+#include <at91lib/utility/trace.h>
+#include <at91lib/utility/assert.h>
 
 //-----------------------------------------------------------------------------
 /// Configure the Mode Register of the ADC controller

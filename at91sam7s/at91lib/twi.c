@@ -66,10 +66,10 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include <twi.h>
-#include <utility/math.h>
-#include <utility/assert.h>
-#include <utility/trace.h>
+#include <at91lib/twi.h>
+#include <at91lib/utility/math.h>
+#include <at91lib/utility/assert.h>
+#include <at91lib/utility/trace.h>
 
 //------------------------------------------------------------------------------
 //         Global functions

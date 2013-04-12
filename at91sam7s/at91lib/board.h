@@ -11,7 +11,7 @@
 
 // Include AT91SAM7S register definitions
 
-#include <AT91SAM7S.h>
+#include <at91lib/AT91SAM7S.h>
 
 // Define some constants necessary to compile at91lib
 

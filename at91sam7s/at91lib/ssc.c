@@ -31,8 +31,8 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include <ssc.h>
-#include <utility/trace.h>
+#include <at91lib/ssc.h>
+#include <at91lib/utility/trace.h>
 
 //------------------------------------------------------------------------------
 //         Exported functions
