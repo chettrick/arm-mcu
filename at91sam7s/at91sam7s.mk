@@ -51,8 +51,8 @@ LIBOBJS		= $(MCU).o cpu.o leds.o serial.o
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-	for F in $(AT91LIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
-	$(AR) crs lib$(MCU).a $(AT91LIB)/*.o
+	for F in $(AT91LIB)/*.c $(AT91LIB)/utility/*.c ; do $(MAKE) $${F%.c}.o ; done
+	$(AR) crs lib$(MCU).a $(AT91LIB)/*.o $(AT91LIB)/utility/*.o
 	$(MAKE) $(LIBTARGETS)
 
 # Clean out working files
