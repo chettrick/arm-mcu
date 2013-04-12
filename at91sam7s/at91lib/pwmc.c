@@ -31,7 +31,7 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include "pwmc.h"
+#include <pwmc.h>
 #include <board.h>
 #include <utility/assert.h>
 #include <utility/trace.h>

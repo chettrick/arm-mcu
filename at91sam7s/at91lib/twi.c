@@ -66,7 +66,7 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include "twi.h"
+#include <twi.h>
 #include <utility/math.h>
 #include <utility/assert.h>
 #include <utility/trace.h>

@@ -35,8 +35,8 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include "pio_it.h"
-#include "pio.h"
+#include <pio_it.h>
+#include <pio.h>
 #include <board.h>
 #include <aic.h>
 #include <utility/assert.h>

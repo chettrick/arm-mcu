@@ -31,7 +31,7 @@
 //         Headers
 //------------------------------------------------------------------------------
 
-#include "usart.h"
+#include <usart.h>
 #include <utility/trace.h>
 #include <utility/assert.h>
 
