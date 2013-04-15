@@ -127,14 +127,22 @@ News
        V1.0.1 to V1.1.0.
      * 9 April 2013 -- Cleaned up the makefile structure to make it easier
        to build applications and libraries out of tree.
-     * 10 April 2013 -- Added support for Netduino 2 and Netduino Plus 2
+     * 10 April 2013 -- Added support for Netduino 2 and Netduino Plus 2.
+       Added preliminary support for LPC1768-Mini-DK2.
      * 11 April 2013 -- Reworked linker scripts and makefiles to include
-       run time startup code in the MCU dependent library.
+       run time startup code in the MCU dependent library. Also did a lot
+       of general cleaning up of makefiles. Add RMAKEFLAGS and
+       CONSOLEFLAGS macros.
+     * 12 April 2013 -- Rationalize the use of stdarg.h, stdbool.h,
+       stddef.h, and stdint.h. These are now included in arm.h instead of
+       here, there, and everywhere.
+     * 15 April 2013 -- Upgraded binutils to 2.23.2 and gcc to 4.7.3. Add
+       capability for building a toolchain package for [12]OpenBSD.
 
 Git Repository
 
-   The source code is hosted on [12]SourceForge at
-   [13]http://sourceforge.net/p/arm-mcu/code.
+   The source code is hosted on [13]SourceForge at
+   [14]http://sourceforge.net/p/arm-mcu/code.
 
    Use one of the following commands to clone it:
 git clone --depth 1 git://git.code.sf.net/p/arm-mcu/code  ARM
@@ -169,7 +177,7 @@ POSSIBILITY OF SUCH DAMAGE.
    respective authors.
      __________________________________________________________________
 
-   Questions or comments to Philip Munts [14]phil@munts.net
+   Questions or comments to Philip Munts [15]phil@munts.net
 
    $Id$
 
@@ -189,6 +197,7 @@ References
    9. http://avnetexpress.avnet.com/store/em/EMController/_/A-5003286402656/An-0?action=part
   10. http://git-scm.com/
   11. http://sourceforge.net/
-  12. http://sourceforge.net/
-  13. http://sourceforge.net/p/arm-mcu/code
-  14. mailto:phil@munts.net
+  12. http://www.openbsd.org/
+  13. http://sourceforge.net/
+  14. http://sourceforge.net/p/arm-mcu/code
+  15. mailto:phil@munts.net
