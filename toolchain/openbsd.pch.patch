@@ -1,5 +1,18 @@
---- gcc-4.7.2/gcc/config/host-openbsd.c.orig	Sat May 19 13:41:11 2012
-+++ gcc-4.7.2/gcc/config/host-openbsd.c	Sat May 19 13:41:11 2012
+--- gcc/config.host.orig	2011-10-18 16:14:14.000000000 +0200
++++ gcc/config.host	2013-04-15 09:39:01.107728964 +0200
+@@ -292,6 +292,10 @@
+     out_host_hook_obj=host-solaris.o
+     host_xmake_file="${host_xmake_file} x-solaris"
+     ;;
++  *-*-openbsd*)
++    out_host_hook_obj=host-openbsd.o
++    host_xmake_file="${host_xmake_file} x-openbsd"
++    ;;
+   *-*-linux*)
+     out_host_hook_obj=host-linux.o
+     host_xmake_file="${host_xmake_file} x-linux"
+--- gcc/config/host-openbsd.c.orig	2013-04-15 09:39:01.094724112 +0200
++++ gcc/config/host-openbsd.c	2013-04-15 09:39:01.094724112 +0200
 @@ -0,0 +1,107 @@
 +/* OpenBSD host-specific hook definitions.
 +   Copyright (C) 2005 Free Software Foundation, Inc.
@@ -108,23 +121,10 @@
 +}
 +
 +const struct host_hooks host_hooks = HOST_HOOKS_INITIALIZER;
---- gcc-4.7.2/gcc/config/x-openbsd.orig	Sat May 19 13:41:11 2012
-+++ gcc-4.7.2/gcc/config/x-openbsd	Sat May 19 13:41:11 2012
+--- gcc/config/x-openbsd.orig	2013-04-15 09:39:01.095724489 +0200
++++ gcc/config/x-openbsd	2013-04-15 09:39:01.095724489 +0200
 @@ -0,0 +1,4 @@
 +host-openbsd.o : $(srcdir)/config/host-openbsd.c $(CONFIG_H) $(SYSTEM_H) \
 +  coretypes.h hosthooks.h hosthooks-def.h $(HOOKS_H)
 +	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) \
 +		$(srcdir)/config/host-openbsd.c
---- gcc-4.7.2/gcc/config.host.orig	Tue Oct 18 16:14:14 2011
-+++ gcc-4.7.2/gcc/config.host	Sat May 19 13:41:11 2012
-@@ -292,6 +292,10 @@
-     out_host_hook_obj=host-solaris.o
-     host_xmake_file="${host_xmake_file} x-solaris"
-     ;;
-+  *-*-openbsd*)
-+    out_host_hook_obj=host-openbsd.o
-+    host_xmake_file="${host_xmake_file} x-openbsd"
-+    ;;
-   *-*-linux*)
-     out_host_hook_obj=host-linux.o
-     host_xmake_file="${host_xmake_file} x-linux"

@@ -26,24 +26,24 @@
 ABI		= eabi
 ifeq ($(ABI), elf)
 TARGETNAME	= arm-elf
-PKGNAME		= arm-elf-tools
+PKGNAME		= arm-mcu-elf-tools
 else
 TARGETNAME	= arm-none-eabi
-PKGNAME		= arm-tools
+PKGNAME		= arm-mcu-tools
 endif
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 TEMP		= /tmp
 TAR		= tar
 FIND		= find
 
-BINUTILVER	= 2.23.1
+BINUTILVER	= 2.23.2
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
 BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 BINUTILBLD	= build/binutils-$(BINUTILVER)
 
-GCCVER		= 4.7.2
+GCCVER		= 4.7.3
 GCCSERVER	= http://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
 GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
 GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
@@ -94,7 +94,10 @@ download: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPD
 source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPDF)
 	$(TAR) xzf $(BINUTILDIST)
 	$(TAR) xjf $(GCCDIST)
-	if [ -f multilibs.$(ABI).patch ]; then patch -b -p0 <multilibs.$(ABI).patch ; fi
+	if [ -f multilibs.$(ABI).patch ]; then cd $(GCCSRC) ; patch -b -p0 <../multilibs.$(ABI).patch ; fi
+ifeq ($(shell uname), OpenBSD)
+	cd $(GCCSRC) ; patch -b -p0 <../openbsd.pch.patch
+endif
 	$(TAR) xzf $(NEWLIBDIST)
 	ln -s "../$(NEWLIBSRC)/newlib" $(GCCSRC)/newlib
 	$(TAR) xjf $(GDBDIST)
