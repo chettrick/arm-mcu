@@ -34,8 +34,12 @@ PKGNAME		= arm-mcu-tools
 endif
 INSTBASE	= $(shell pwd)/$(PKGNAME)
 TEMP		= /tmp
+ifeq ($(shell uname), OpenBSD)
+TAR		= gtar
+else
 TAR		= tar
 FIND		= find
+endif
 
 BINUTILVER	= 2.23.2
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
@@ -78,7 +82,12 @@ else
 TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -s)-$(shell uname -m).tgz
 endif
 
-.PHONY: default download tarball rpm clean distclean
+ifeq ($(shell uname), OpenBSD)
+GCCEXTRACONFIG	+= --with-gmp=/usr/local
+GCCEXTRACONFIG	+= --with-mpc=/usr/local
+GCCEXTRACONFIG	+= --with-mpfr=/usr/local
+PACKAGENAME	= $(PKGNAME)-$(VERSION).tgz
+endif
 
 default: readme.done
 
@@ -210,8 +219,9 @@ endif
 
 ################################################################################
 
-# Create toolchain RPM package
+# Create Linux RPM package
 
+ifeq ($(shell uname), Linux)
 fakeroot: readme.done
 	mkdir -p fakeroot/usr/local
 	cp -R -p $(PKGNAME) fakeroot/usr/local
@@ -225,19 +235,50 @@ specfile: specfile.template fakeroot
 rpm: specfile
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
 	cp rpmbuild/RPMS/*/*.rpm .
+endif
+
+################################################################################
+
+# Create OpenBSD package
+
+ifeq ($(shell uname), OpenBSD)
+
+fakeroot: readme.done
+	mkdir -p fakeroot/usr/local
+	cp -R -p $(PKGNAME) fakeroot/usr/local
+
+CONTENTS: fakeroot
+	echo "@owner root"				>CONTENTS
+	echo "@group wheel"				>>CONTENTS
+	echo "@mode -w"					>>CONTENTS
+	echo "@cwd /usr/local"				>>CONTENTS
+	find fakeroot/usr/local/$(PKGNAME) -type d | awk '{ printf("@dir %s\n", substr($$1, 20)); }' >>CONTENTS
+	find fakeroot -type f | cut -c 20- | sort	>>CONTENTS
+	find fakeroot -type l | awk '{ printf("echo %s `readlink %s`\n", $$1, $$1); }' | sh | \
+	awk '{ printf("@exec ln -s %s %s\n", $$2, substr($$1,9)); }'            >>CONTENTS
+	find fakeroot -type l | awk '{ printf("@unexec rm %s\n", substr($$1, 9)); }' >>CONTENTS
+
+COMMENT:
+	echo "ARM Microcontroller Toolchain"		>COMMENT
+
+$(PACKAGENAME): CONTENTS COMMENT
+	pkg_create -A `uname -m` -f CONTENTS -D COMMENT="`cat COMMENT`" -d COMMENT -p / -B fakeroot $(PACKAGENAME)
+	@-rm CONTENTS
+	@-rm COMMENT
+
+package: $(PACKAGENAME)
+endif
 
 ################################################################################
 
 # Clean out working files
 
 clean:
-	-rm *.done
-	-rm *.tgz
 	rm -rf $(INSTBASE)
 	rm -rf $(BINUTILSRC)
 	rm -rf $(GCCSRC)
 	rm -rf $(NEWLIBSRC)
 	rm -rf $(GDBSRC)
-	rm -rf build fakeroot specfile rpmbuild *.rpm
+	rm -rf build fakeroot specfile rpmbuild *.done *.rpm *.tgz
 
 distclean: clean
