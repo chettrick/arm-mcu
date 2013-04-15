@@ -246,6 +246,9 @@ ifeq ($(shell uname), OpenBSD)
 fakeroot: readme.done
 	mkdir -p fakeroot/usr/local
 	cp -R -p $(PKGNAME) fakeroot/usr/local
+# Why aren't these links already created on OpenBSD?
+	ln -s liblto_plugin.so.0.0 fakeroot/usr/local/$(PKGNAME)/libexec/gcc/arm-none-eabi/$(GCCVER)/liblto_plugin.so
+	ln -s liblto_plugin.so.0.0 fakeroot/usr/local/$(PKGNAME)/libexec/gcc/arm-none-eabi/$(GCCVER)/liblto_plugin.so.0
 
 CONTENTS: fakeroot
 	echo "@owner root"				>CONTENTS
