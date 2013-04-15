@@ -23,7 +23,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-ABI		= eabi
+ABI		?= eabi
 ifeq ($(ABI), elf)
 TARGETNAME	= arm-elf
 PKGNAME		= arm-mcu-elf-tools
