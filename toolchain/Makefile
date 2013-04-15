@@ -27,7 +27,7 @@ ABI		= eabi
 ifeq ($(ABI), elf)
 TARGETNAME	= arm-elf
 PKGNAME		= arm-mcu-elf-tools
-GCCEXTRAFLAGS	+= --enable-obsolete
+GCCEXTRACONFIG	+= --enable-obsolete
 else
 TARGETNAME	= arm-none-eabi
 PKGNAME		= arm-mcu-tools
