@@ -25,7 +25,7 @@
 
 # Toolchain definitions
 
-ARMTOOLS	?= /usr/local/arm-tools
+ARMTOOLS	?= /usr/local/arm-mcu-tools
 CROSS_COMPILE	?= $(ARMTOOLS)/bin/arm-none-eabi-
 
 CC		= $(CROSS_COMPILE)gcc
