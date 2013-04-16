@@ -26,7 +26,7 @@
 ABI		?= eabi
 ifeq ($(ABI), elf)
 TARGETNAME	= arm-elf
-PKGNAME		= arm-mcu-elf-tools
+PKGNAME		= arm-elf-tools
 GCCEXTRACONFIG	+= --enable-obsolete
 else
 TARGETNAME	= arm-none-eabi
@@ -102,7 +102,7 @@ download: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPD
 # Unpack all source distributions
 
 source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIBMPDF)
-	$(TAR) xzf $(BINUTILDIST)
+	$(TAR) xjf $(BINUTILDIST)
 	$(TAR) xjf $(GCCDIST)
 	if [ -f multilibs.$(ABI).patch ]; then cd $(GCCSRC) ; patch -b -p0 <../multilibs.$(ABI).patch ; fi
 ifeq ($(shell uname), OpenBSD)
