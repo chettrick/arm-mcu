@@ -43,7 +43,7 @@ endif
 
 BINUTILVER	= 2.23.2
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
-BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.gz
+BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
 BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
 BINUTILSRC	= binutils-$(BINUTILVER)
 BINUTILBLD	= build/binutils-$(BINUTILVER)
