@@ -33,13 +33,10 @@ TARGETNAME	= arm-none-eabi
 PKGNAME		= arm-mcu-tools
 endif
 INSTBASE	= $(shell pwd)/$(PKGNAME)
-TEMP		= /tmp
-ifeq ($(shell uname), OpenBSD)
-TAR		= gtar
-else
-TAR		= tar
+
 FIND		= find
-endif
+TAR		= tar
+TEMP		= /tmp
 
 BINUTILVER	= 2.23.2
 BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
@@ -87,6 +84,7 @@ GCCEXTRACONFIG	+= --with-gmp=/usr/local
 GCCEXTRACONFIG	+= --with-mpc=/usr/local
 GCCEXTRACONFIG	+= --with-mpfr=/usr/local
 PACKAGENAME	= $(PKGNAME)-$(VERSION).tgz
+TAR		= gtar
 endif
 
 default: readme.done
