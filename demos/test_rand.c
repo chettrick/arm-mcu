@@ -40,7 +40,7 @@ static const char revision[] = "$Id$";
 #define Z1		1
 #define Zn		1043618065
 
-void main(void)
+int main(void)
 {
   int i;
   unsigned int myseed;
@@ -76,4 +76,6 @@ void main(void)
   {
     printf("FAILURE! Expected z%d is %d\n", ITERATIONS + 1, Zn);
   }
+
+  exit(0);
 }

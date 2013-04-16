@@ -60,4 +60,5 @@ int main(void)
   z = x + y;
 
   printf("x is %f, y is %f, x+y is %f, z is %d\n", x, y, x+y, z);
+  exit(0);
 }
