@@ -59,6 +59,15 @@ int main(void)
   y = 2.0;
   z = x + y;
 
-  printf("x is %f, y is %f, x+y is %f, z is %d\n", x, y, x+y, z);
+  printf("x is %f, y is %f, x+y is %f, z is %d\n\n", x, y, x+y, z);
+
+  y = asinf(x);
+
+  printf("arcsin %f is %f\n", x, y);
+
+  x = sinf(y);
+
+  printf("sin    %f is %f\n", y, x);
+
   exit(0);
 }
