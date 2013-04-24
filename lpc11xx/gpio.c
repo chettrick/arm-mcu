@@ -23,7 +23,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-static const char revision[] = "$Id: adc.c 4710 2013-02-06 08:47:48Z svn $";
+static const char revision[] = "$Id$";
 
 #include <cpu.h>
 #include <errno.h>
