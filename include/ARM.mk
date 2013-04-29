@@ -46,8 +46,10 @@ MCUDIR		?= $(ARMSRC)/$(MCUFAMILY)
 MCULIBRARY	= $(MCUDIR)/lib$(MCU).a
 MCULINKSCRIPT	= $(MCUDIR)/$(MCU).ld
 
-# Recursive make flags
+# Recursive make flags, to be passed to subordinate makes
 
+RMAKEFLAGS	+= ARMSRC=$(ARMSRC)
+RMAKEFLAGS	+= ARMTOOLS=$(ARMTOOLS)
 RMAKEFLAGS	+= BOARDNAME=$(BOARDNAME)
 
 # Compiler and linker flags
