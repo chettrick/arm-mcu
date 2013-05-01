@@ -32,7 +32,7 @@ static const char revision[] = "$Id$";
 // We use match register 3 for setting the PWM period, per the user
 // manual recommendation
 
-int pwm_timer_init(unsigned timer, unsigned frequency)
+static int pwm_timer_init(unsigned timer, unsigned frequency)
 {
   errno_r = 0;
 
