@@ -1,4 +1,4 @@
-/* ARM microcontroller device specific definitions and header files */
+/* Abstract services for controlling PWM (Pulse Width Modulation) outputs */
 
 // $Id$
 
@@ -23,26 +23,14 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _CPU_H
-#define _CPU_H
-
-#include <arm.h>	// Must be included first!
-
-#include <adc.h>
-#include <device.h>
-#include <gpio.h>
-#include <leds.h>
-#include <pwm.h>
-#include <serial.h>
-#include <spi.h>
-
-#include <LPC11xx.h>
-
-#define DEFAULT_CPU_FREQ	0
+#ifndef _PWM_H
+#define _PWM_H
 
 _BEGIN_STD_C
 
-extern void cpu_init(unsigned long int frequency);
+int pwm_init(unsigned channel, unsigned frequency);
+
+int pwm_set(unsigned channel, uint32_t value);
 
 _END_STD_C
 #endif
