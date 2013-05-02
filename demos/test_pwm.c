@@ -37,7 +37,7 @@ static const char revision[] = "$Id$";
 int main(void)
 {
   char buf[256];
-  uint32_t channel, frequency, value;
+  uint32_t channel, frequency, setting;
 
   cpu_init(DEFAULT_CPU_FREQ);
 
@@ -53,30 +53,41 @@ int main(void)
   printf("\nCPU Freq:%u Hz  Compiler:%s %s %s\n\n", (unsigned int) SystemCoreClock,
     __COMPILER__, __VERSION__, __ABI__);
 
-  printf("Enter PWM channel:   ");
-  gets(buf);
-  channel = atoi(buf);
-
-  printf("Enter PWM frequency: ");
-  gets(buf);
-  frequency = atoi(buf);
-
-  if (pwm_init(channel, frequency))
-  {
-    printf("ERROR: pwm_init() failed, %s\n", strerror(errno));
-    return 1;
-  }
-
   for (;;)
   {
-    printf("Enter value:         ");
+    printf("Enter PWM channel:            ");
     gets(buf);
-    value = atoi(buf);
+    channel = atoi(buf);
 
-    if (pwm_set(channel, value))
+    printf("Enter PWM frequency:          ");
+    gets(buf);
+    frequency = atoi(buf);
+
+    if (pwm_init(channel, frequency))
     {
       printf("ERROR: pwm_init() failed, %s\n", strerror(errno));
-      return 1;
+      continue;
+    }
+
+    for (;;)
+    {
+      printf("Enter PWM setting (0-65535):  ");
+      gets(buf);
+      setting = atoi(buf);
+
+      if (setting == 0xFFFFFFFF)
+      {
+        putchar('\n');
+        break;
+      }
+
+      if (pwm_set(channel, setting))
+      {
+        printf("ERROR: pwm_init() failed, %s\n", strerror(errno));
+        continue;
+      }
+
+      printf("MR2 is %d\n", LPC_TMR32B1->MR2);
     }
   }
 }
