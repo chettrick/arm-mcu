@@ -73,7 +73,7 @@ int pwm_init(unsigned channel, unsigned frequency)
 #ifdef RASPBERRYPI_LPC1114
   if ((channel < 4) || (channel > 6))
   {
-    errno_r = EINVAL;
+    errno_r = ENODEV;
     return -1;
   }
 #endif
@@ -151,7 +151,7 @@ int pwm_set(unsigned channel, uint32_t value)
 #ifdef RASPBERRYPI_LPC1114
   if ((channel < 4) || (channel > 6))
   {
-    errno_r = EINVAL;
+    errno_r = ENODEV;
     return -1;
   }
 #endif
