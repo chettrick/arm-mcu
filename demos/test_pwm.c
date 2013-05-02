@@ -86,8 +86,6 @@ int main(void)
         printf("ERROR: pwm_init() failed, %s\n", strerror(errno));
         continue;
       }
-
-      printf("MR2 is %d\n", LPC_TMR32B1->MR2);
     }
   }
 }
