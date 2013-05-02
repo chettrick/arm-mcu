@@ -68,9 +68,19 @@ int pwm_init(unsigned channel, unsigned frequency)
 {
   errno_r = 0;
 
+// Validate parameters
+
+#ifdef RASPBERRYPI_LPC1114
+  if ((channel < 4) || (channel > 6))
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+#endif
+
   switch (channel)
   {
-    case 0 :	// CT32B1_MAT0
+    case 0 :	// CT32B1_MAT0 on P1.6
       if (pwm_timer_init(0, frequency))
         return -1;
 
@@ -79,7 +89,7 @@ int pwm_init(unsigned channel, unsigned frequency)
       LPC_IOCON->PIO1_6 = 0x000000C2;		// Enable match output
       break;
 
-    case 1 :	// CT32B1_MAT1
+    case 1 :	// CT32B1_MAT1 on P1.7
       if (pwm_timer_init(0, frequency))
         return -1;
 
@@ -88,7 +98,7 @@ int pwm_init(unsigned channel, unsigned frequency)
       LPC_IOCON->PIO1_7 = 0x000000C2;		// Enable match output
       break;
 
-    case 2 :	// CT32B1_MAT2
+    case 2 :	// CT32B1_MAT2 on P0.1
       if (pwm_timer_init(0, frequency))
         return -1;
 
@@ -97,7 +107,7 @@ int pwm_init(unsigned channel, unsigned frequency)
       LPC_IOCON->PIO0_1 = 0x000000C2;		// Enable match output
       break;
 
-    case 4 :	// CT32B1_MAT0
+    case 4 :	// CT32B1_MAT0 on P1.1
       if (pwm_timer_init(1, frequency))
         return -1;
 
@@ -106,7 +116,7 @@ int pwm_init(unsigned channel, unsigned frequency)
       LPC_IOCON->R_PIO1_1 = 0x000000C3;		// Enable match output
       break;
 
-    case 5 :	// CT32B1_MAT1
+    case 5 :	// CT32B1_MAT1 on P1.2
       if (pwm_timer_init(1, frequency))
         return -1;
 
@@ -115,7 +125,7 @@ int pwm_init(unsigned channel, unsigned frequency)
       LPC_IOCON->R_PIO1_2 = 0x000000C3;		// Enable match output
       break;
 
-    case 6 :	// CT32B1_MAT2
+    case 6 :	// CT32B1_MAT2 on P1.3
       if (pwm_timer_init(1, frequency))
         return -1;
 
@@ -136,32 +146,48 @@ int pwm_set(unsigned channel, uint32_t value)
 {
   errno_r = 0;
 
+// Validate parameters
+
+#ifdef RASPBERRYPI_LPC1114
+  if ((channel < 4) || (channel > 6))
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+#endif
+
+  if (value > 65535)
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+
   switch (channel)
   {
-    case 0 :	// CT32B0_MAT0
-      LPC_TMR32B0->MR0 = value;
+    case 0 :	// CT32B0_MAT0 on P1.6
+      LPC_TMR32B0->MR0 = LPC_TMR32B0->MR3 - 1ULL*LPC_TMR32B0->MR3*value/65536;
       break;
 
-    case 1 :	// CT32B1_MAT1
-      LPC_TMR32B0->MR1 = value;
+    case 1 :	// CT32B1_MAT1 on P1.7
+      LPC_TMR32B0->MR1 = LPC_TMR32B0->MR3 - 1ULL*LPC_TMR32B0->MR3*value/65536;
       break;
 
-    case 2 :	// CT32B2_MAT2
-      LPC_TMR32B0->MR2 = value;
+    case 2 :	// CT32B2_MAT2 on P0.1
+      LPC_TMR32B0->MR2 = LPC_TMR32B0->MR3 - 1ULL*LPC_TMR32B0->MR3*value/65536;
       break;
 
     // MR3 is used for setting the PWM period
 
-    case 4 :	// CT32B1_MAT0
-      LPC_TMR32B1->MR0 = value;
+    case 4 :	// CT32B1_MAT0 on P1.1
+      LPC_TMR32B1->MR0 = LPC_TMR32B1->MR3 - 1ULL*LPC_TMR32B1->MR3*value/65536;
       break;
 
-    case 5 :	// CT32B1_MAT1
-      LPC_TMR32B1->MR1 = value;
+    case 5 :	// CT32B1_MAT1 on P1.2
+      LPC_TMR32B1->MR1 = LPC_TMR32B1->MR3 - 1ULL*LPC_TMR32B1->MR3*value/65536;
       break;
 
-    case 6 :	// CT32B1_MAT2
-      LPC_TMR32B1->MR2 = value;
+    case 6 :	// CT32B1_MAT2 on P1.3
+      LPC_TMR32B1->MR2 = LPC_TMR32B1->MR3 - 1ULL*LPC_TMR32B1->MR3*value/65536;
       break;
 
     // MR3 is used for setting the PWM period
