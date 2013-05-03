@@ -83,7 +83,7 @@ int main(void)
 
       if (pwm_set(channel, setting))
       {
-        printf("ERROR: pwm_init() failed, %s\n", strerror(errno));
+        printf("ERROR: pwm_set() failed, %s\n", strerror(errno));
         continue;
       }
     }
