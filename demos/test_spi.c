@@ -63,7 +63,12 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
+#ifdef CONSOLE_USB
+  usb_serial_stdio(NULL);
+  getch();
+#else
   serial_stdio(CONSOLE_PORT);
+#endif
 
   printf("\033[H\033[2J%s SPI Master Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
   puts(revision);
