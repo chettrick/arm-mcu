@@ -25,9 +25,9 @@
 #define   EMI_Burst_and_PageModeRead_TL_Mask	     0xFFFFF3FF
 #define   EMI_Burst_and_PageModeRead_Sel_Mask	     0xFFFFFEFF
 #define   EMI_MemWidth_Mask     	             0xFFFFFFCF
-#define   EMI_WriteProtect_Mask	                     0xFFFFFFF7  
-#define   EMI_ByteLane_Mask	                     0xFFFFFFFE  
-#define   EMI_AccessRead_Dev_Mask	             0xFFFFFDFF  
+#define   EMI_WriteProtect_Mask	                     0xFFFFFFF7
+#define   EMI_ByteLane_Mask	                     0xFFFFFFFE
+#define   EMI_AccessRead_Dev_Mask	             0xFFFFFDFF
 #define   EMI_BurstModeWrite_Sel_Mask	             0xFFFEFFFF
 #define   EMI_AccessWrite_Dev_Mask	             0xFFFDFFFF
 #define   EMI_BurstModeWrite_TL_Mask	             0xFFF3FFFF
@@ -96,11 +96,11 @@ void EMI_StructInit( EMI_InitTypeDef *EMI_InitStruct)
   /*This member can be: 0x01,0x02,0x03, ....0xF (Reset value:0x00 "0 cycle"*/
 
   EMI_InitStruct->EMI_Bank_WSTWEN =0x00;
-  
-  /*Number of wait states for burst read accesses after the first read.*/ 
-  /* They do not apply to non-burst devices.*/ 
+
+  /*Number of wait states for burst read accesses after the first read.*/
+  /* They do not apply to non-burst devices.*/
   /*This member can be: 0x01,0x02,0x03, ....0x1F (Reset value:0x1F "31 cycles"*/
-  
+
   EMI_InitStruct->EMI_Bank_BRDCR =0x1F;
 
   /*This member Controls the memory width*/
@@ -119,39 +119,39 @@ void EMI_StructInit( EMI_InitTypeDef *EMI_InitStruct)
   /*This member can be :"EMI_Read_4Data"  or "EMI_Read_8Data" for page mode*/
   /*Read and it can be "EMI_Read_4Data","EMI_Read_8Data","EMI_Read_16Data" */
   /*or "EMI_Read_Continuous"(synchronous only) for burst mode read*/
-                                                       
+
   EMI_InitStruct->EMI_Burst_and_PageModeRead_TransferLength= EMI_Read_4Data;
 
   /*Select or deselect the Burst and page mode read*/
   /*This member can be :"EMI_NormalMode" or "EMI_BurstModeRead" */
 
   EMI_InitStruct->EMI_Burst_and_PageModeRead_Selection = EMI_NormalMode;
-  
-  
-  /* Enables the byte select signals in 16-bit PSRAM bus mode*/ 
+
+
+  /* Enables the byte select signals in 16-bit PSRAM bus mode*/
   /*(EMI_UBn and EMI_LBn) are enabled. Bit 2 in the GPIO EMI register */
   /*(SCU_EMI) must also be set to 1 */
-  
+
    EMI_InitStruct->EMI_ByteLane_Selection=EMI_Byte_Select_disabled;
-  
+
   /*Access the device using synchronous accesses for reads*/
-   
+
   EMI_InitStruct-> EMI_AccessRead_Support=EMI_Read_Asyn;
-  
+
   /*Access the device using synchronous accesses for Write*/
-   
+
   EMI_InitStruct->EMI_AccessWrite_Support=EMI_Write_Asyn;
-  
+
   /* Burst Write transfer length */
   /*This member can be :"EMI_Write_4Data", "EMI_Write_8Data" or */
   /*"EMI_Write_Continuous" for synchronous only*/
-  
+
   EMI_InitStruct->EMI_BurstModeWrite_TransferLength = EMI_Write_4Data;
-  
+
   /* Select burst or non-burst write to memory*/
-   
+
   EMI_InitStruct-> EMI_BurstModeWrite_Selection=EMI_NonBurstModeWrite;
-  
+
 
 }
 
@@ -181,34 +181,34 @@ void EMI_Init( EMI_Bank_TypeDef* EMI_Bankx, EMI_InitTypeDef* EMI_InitStruct)
   EMI_Bankx->OECR = EMI_InitStruct->EMI_Bank_WSTROEN;
 
   EMI_Bankx->WECR = EMI_InitStruct->EMI_Bank_WSTWEN ;
-  
+
   EMI_Bankx->BRDCR  = EMI_InitStruct->EMI_Bank_BRDCR ;
-  
+
   EMI_Bankx->BCR &= EMI_MemWidth_Mask;
   EMI_Bankx->BCR |= EMI_InitStruct->EMI_Bank_MemWidth;
 
   EMI_Bankx->BCR &= EMI_WriteProtect_Mask;
   EMI_Bankx->BCR |= EMI_InitStruct->EMI_Bank_WriteProtection;
 
- 
+
   EMI_Bankx->BCR &= EMI_Burst_and_PageModeRead_TL_Mask;
   EMI_Bankx->BCR |= EMI_InitStruct->EMI_Burst_and_PageModeRead_TransferLength;
-  
+
   EMI_Bankx->BCR &= EMI_Burst_and_PageModeRead_Sel_Mask;
   EMI_Bankx->BCR |=  EMI_InitStruct->EMI_Burst_and_PageModeRead_Selection;
-  
+
   EMI_Bankx->BCR &= EMI_BurstModeWrite_TL_Mask;
   EMI_Bankx->BCR |= EMI_InitStruct->EMI_BurstModeWrite_TransferLength;
- 
+
   EMI_Bankx->BCR &= EMI_BurstModeWrite_Sel_Mask;
   EMI_Bankx->BCR |=  EMI_InitStruct->EMI_BurstModeWrite_Selection;
-  
+
   EMI_Bankx->BCR &=  EMI_ByteLane_Mask;
   EMI_Bankx->BCR |=  EMI_InitStruct->EMI_ByteLane_Selection;
-  
+
   EMI_Bankx->BCR &=  EMI_AccessRead_Dev_Mask;	
   EMI_Bankx->BCR |=  EMI_InitStruct->EMI_AccessRead_Support;
-  
+
   EMI_Bankx->BCR &=   EMI_AccessWrite_Dev_Mask;	
   EMI_Bankx->BCR |=  EMI_InitStruct->EMI_AccessWrite_Support;
 

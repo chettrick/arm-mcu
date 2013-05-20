@@ -46,7 +46,7 @@ int rand_r(unsigned int *s)
     *s = test;
   else
     *s = test + M;
- 
+
   return *s/M;
 }
 

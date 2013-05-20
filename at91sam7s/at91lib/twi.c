@@ -114,7 +114,7 @@ void TWI_ConfigureMaster(AT91S_TWI *pTwi, unsigned int twck, unsigned int mck)
         cldiv = ((mck / (2 * twck)) - 3) / pow(2, ckdiv);
 #else
         cldiv = ((mck / (2 * twck)) - 3) / power(2, ckdiv);
-#endif        
+#endif
         if (cldiv <= 255) {
 
             ok = 1;

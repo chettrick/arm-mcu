@@ -91,7 +91,7 @@ void PMAToUserBufferCopy(u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes)
   {
     *pbUsrBuf++ = *(u8*)pdwVal;
     *pbUsrBuf++ = *((u8*)pdwVal + 1);
-    pdwVal ++;  
+    pdwVal ++;
   }
 
 #endif /* End of STR7xx family*/

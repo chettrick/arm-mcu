@@ -77,7 +77,7 @@ specfile: fakeroot specfile.template
 	find fakeroot -type f | cut -c 9- >>specfile
 	find fakeroot -type l | cut -c 9- >>specfile
 
-rpm: specfile 
+rpm: specfile
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
 	cp rpmbuild/RPMS/*/*.rpm .
 

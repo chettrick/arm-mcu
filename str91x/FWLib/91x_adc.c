@@ -68,37 +68,37 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
   /* Set the high threshold of the watchdog */
   ADC->HTR = ADC_InitStruct->ADC_WDG_High_Threshold;
 
-    
+
   /* Channel 0 conversion mode */
-  ADC->CCR &= 0xFFFC; 
+  ADC->CCR &= 0xFFFC;
   ADC->CCR |= ADC_InitStruct->ADC_Channel_0_Mode;
-  
+
   /* Channel 1 conversion mode */
-  ADC->CCR &= 0xFFF3; 
+  ADC->CCR &= 0xFFF3;
   ADC->CCR |= ADC_InitStruct->ADC_Channel_1_Mode << 0x2;
 
   /* Channel 2 conversion mode */
   ADC->CCR &= 0xFFCF;
   ADC->CCR |= ADC_InitStruct->ADC_Channel_2_Mode << 0x4;
- 
+
   /* Channel 3 conversion mode */
-  ADC->CCR &= 0xFF3F; 
+  ADC->CCR &= 0xFF3F;
   ADC->CCR |= ADC_InitStruct->ADC_Channel_3_Mode << 0x6;
 
   /* Channel 4 conversion mode */
-  ADC->CCR &= 0xFCFF; 
+  ADC->CCR &= 0xFCFF;
   ADC->CCR |= ADC_InitStruct->ADC_Channel_4_Mode << 0x8;
 
   /* Channel 5 conversion mode */
-  ADC->CCR &= 0xF3FF; 
+  ADC->CCR &= 0xF3FF;
   ADC->CCR |= ADC_InitStruct->ADC_Channel_5_Mode << 0xA;
 
   /* Channel 6 conversion mode */
-  ADC->CCR &= 0xCFFF; 
+  ADC->CCR &= 0xCFFF;
   ADC->CCR |= ADC_InitStruct->ADC_Channel_6_Mode << 0xC;
 
   /* Channel 7 conversion mode */
-  ADC->CCR &= 0x3FFF; 
+  ADC->CCR &= 0x3FFF;
   ADC->CCR |= ADC_InitStruct->ADC_Channel_7_Mode << 0xE;
 
   /* Select the channel to be converted */
@@ -185,7 +185,7 @@ u8 ADC_GetPrescalerValue(void)
 * Description    : Checks whether the specified ADC flag is set or not.
 * Input          : ADC_Flag: flag to check.
 *                  This parameter can be one of the following values:
-*                     - ADC_FLAG_OV_CH_0: Conversion overflow status for 
+*                     - ADC_FLAG_OV_CH_0: Conversion overflow status for
 *                                         channel 0.
 *                     - ADC_FLAG_OV_CH_1: Conversion overflow status for
 *                                         channel 1.
@@ -209,7 +209,7 @@ u8 ADC_GetPrescalerValue(void)
 FlagStatus ADC_GetFlagStatus(u16 ADC_Flag)
 {
   u8 AdcReg = 0, FlagPos = 0;
-  
+
   /* Get the ADC register index */
   AdcReg = ADC_Flag >> 5;
 
@@ -329,10 +329,10 @@ FlagStatus ADC_GetFlagStatus(u16 ADC_Flag)
 * Return         : None
 *******************************************************************************/
 void ADC_ClearFlag(u16 ADC_Flag)
-{  
+{
   vu16 tmp=0;
   /* Clear the correspondent flag */
-   if (ADC_Flag==ADC_FLAG_ORD) 
+   if (ADC_Flag==ADC_FLAG_ORD)
    tmp = ADC->DDR;
    else
    ADC->CR |= (1<<(ADC_Flag & ADC_FLAG_MASK));
@@ -342,7 +342,7 @@ void ADC_ClearFlag(u16 ADC_Flag)
 
 /*******************************************************************************
 * Function Name  : ADC_GetConversionValue
-* Description    : Read the result of conversion from the appropriate data 
+* Description    : Read the result of conversion from the appropriate data
 *                  register.
 * Input          : ADC_Channel: the correspondent channel of the ADC peripheral.
 *                  This parameter can be one of the following values:
@@ -392,7 +392,7 @@ u16 ADC_GetConversionValue(u16 ADC_Channel)
       /* Get the conversion value of the channel 5 */
       ADC_Conversion_Value = ADC->DR5 & ADC_RESULT_MASK;
       break;
- 
+
     case (ADC_Channel_6):
       /* Get the conversion value of the channel 6 */
       ADC_Conversion_Value = ADC->DR6 & ADC_RESULT_MASK;
@@ -412,7 +412,7 @@ u16 ADC_GetConversionValue(u16 ADC_Channel)
 
 /*******************************************************************************
 * Function Name  : ADC_GetAnalogWatchdogResult
-* Description    : Return the result of the comparaison on the selected Analog 
+* Description    : Return the result of the comparaison on the selected Analog
 *                  Watchdog.
 * Input          : ADC_Channel: the correspondent channel of the ADC peripheral.
 *                  This parameter can be one of the following values:
@@ -441,7 +441,7 @@ FlagStatus ADC_GetAnalogWatchdogResult(u16 ADC_Channel)
 
 /*******************************************************************************
 * Function Name  : ADC_ClearAnalogWatchdogResult
-* Description    : Clear the result of the comparaison on the selected Analog 
+* Description    : Clear the result of the comparaison on the selected Analog
 *                  Watchdog.
 * Input          : ADC_Channel: the correspondent channel of the ADC peripheral.
 *                  This parameter can be one of the following values:
@@ -498,7 +498,7 @@ u16 ADC_GetWatchdogThreshold(ADC_ThresholdType ADC_Threshold)
 /*******************************************************************************
 * Function Name  : ADC_ITConfig
 * Description    : Enables or disables the specified ADC interrupts.
-* Input          : - ADC_IT: specifies the ADC interrupts sources to be enabled 
+* Input          : - ADC_IT: specifies the ADC interrupts sources to be enabled
 *                    or disabled.
 *                    This parameter can be one of the following values:
 *                       - ADC_IT_EndOfConversion: End of conversion interrupt.
@@ -510,31 +510,31 @@ u16 ADC_GetWatchdogThreshold(ADC_ThresholdType ADC_Threshold)
 *******************************************************************************/
 void ADC_ITConfig(u16 ADC_IT, FunctionalState ADC_NewState)
 {
- if (ADC_IT==ADC_IT_ORD) 
+ if (ADC_IT==ADC_IT_ORD)
   {
    if (ADC_NewState == ENABLE)
-  
+
     /* Enable the interrupt */
      ADC->CR2 |= ADC_IT;
- 
+
   else
 
     /* Disable the interrupt */
     ADC->CR2 &= ~ADC_IT;
- 
+
   }
   else{
-  
+
    if (ADC_NewState == ENABLE)
-  
+
     /* Enable the interrupt */
     ADC->CR |= ADC_IT;
- 
+
   else
-  
+
     /* Disable the interrupt */
     ADC->CR &= ~ADC_IT;
-  
+
   }
   }
 
@@ -610,10 +610,10 @@ void ADC_ConversionCmd(u16 ADC_Conversion)
 * Description    : source and edge selection of external trigg
 * Input          : -ADC_ExtTrig_Src
 *                  This parameter can be one of the following values:
-*                     ADC_PWM_Trig    : PWM Trigger 
-*                     ADC_TIM_Trig    : Timer Trigger 
-*                     ADC_PIN_Trig    : External Trigger Pin 
-*                
+*                     ADC_PWM_Trig    : PWM Trigger
+*                     ADC_TIM_Trig    : Timer Trigger
+*                     ADC_PIN_Trig    : External Trigger Pin
+*
 *                  -ADC_ExtTrig_Edge
 *                   This parameter can be one of the following values:
 *                   Falling_ETE        :Falling edge
@@ -631,7 +631,7 @@ void ADC_ExternalTrigConfig(u16 ADC_ExtTrig_Src ,  u16 ADC_ExtTrig_Edge)
    ADC->CR2 |= 0x20;
    else
    ADC->CR2 &=~0x20; ;
-  
+
   }
 /*******************************************************************************
 * Function Name  :  ADC_ExternalTrigCmd
@@ -644,9 +644,9 @@ void ADC_ExternalTrigConfig(u16 ADC_ExtTrig_Src ,  u16 ADC_ExtTrig_Edge)
 void ADC_ExternalTrigCmd(FunctionalState ADC_NewState)
 {
 if (ADC_NewState==ENABLE)
-  ADC->CR2 |= 0x04;                    
+  ADC->CR2 |= 0x04;
   else
-  ADC->CR2  &=~0x04;  
+  ADC->CR2  &=~0x04;
 
 }
 /*******************************************************************************
@@ -656,13 +656,13 @@ if (ADC_NewState==ENABLE)
 * Output         : None
 * Return         : None
 *******************************************************************************/
- 
+
 void ADC_DMACmd(FunctionalState ADC_NewState)
 {
 if (ADC_NewState==ENABLE)
-  ADC->CR2 |= 0x08;                    
+  ADC->CR2 |= 0x08;
   else
-  ADC->CR2  &=~0x08;  
+  ADC->CR2  &=~0x08;
 }
 
 /*******************************************************************************
@@ -673,13 +673,13 @@ if (ADC_NewState==ENABLE)
 * Output         : None
 * Return         : None
 *******************************************************************************/
- 
+
 void ADC_AutomaticClockGatedCmd(FunctionalState ADC_NewState)
 {
 if (ADC_NewState==ENABLE)
-  SCU->GPIOANA |= 0x100;                    
+  SCU->GPIOANA |= 0x100;
   else
-  SCU->GPIOANA  &=~0x100;  
+  SCU->GPIOANA  &=~0x100;
 }
 
 

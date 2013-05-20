@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   type.h:  Type definition Header file for NXP LPC17xx Family 
+ *   type.h:  Type definition Header file for NXP LPC17xx Family
  *   Microprocessors
  *
  *   Copyright(C) 2008, NXP Semiconductor

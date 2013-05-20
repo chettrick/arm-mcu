@@ -65,7 +65,7 @@ SECTIONS
   __data_beg__ = .;			/* Used in crt0.S */
   *(.data)				/* Initialized data */
   __data_end__ = .;			/* Used in crt0.S */
-  } >ram AT > flash 
+  } >ram AT > flash
 
   .bss (NOLOAD) : ALIGN(16) {
   __bss_beg__ = .;			/* Used in crt0.S */
@@ -81,7 +81,7 @@ SECTIONS
   __exidx_start = .;
   .ARM.exidx : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } >flash
   __exidx_end = .;
-}  
+}
 
 /* Firmware entry point */
 

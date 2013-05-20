@@ -64,7 +64,7 @@ SECTIONS
   __data_beg__ = .;			/* Used in crt0.S */
   *(.data)				/* Initialized data */
   __data_end__ = .;			/* Used in crt0.S */
-  } >ram AT > flash 
+  } >ram AT > flash
 
   .bss (NOLOAD) : ALIGN(16) {
   __bss_beg__ = .;			/* Used in crt0.S */
@@ -84,7 +84,7 @@ SECTIONS
 /* Calculate vector checksum for boot loader */
 
   VectorChecksum = -(__stack_end__ + _start + NMI_Handler + HardFault_Handler + MemManage_Handler + BusFault_Handler + UsageFault_Handler + 6);
-}  
+}
 
 /* Firmware entry point */
 

@@ -40,15 +40,15 @@ __STACK_SIZE_ABORT__ = 0x4;
 __STACK_SIZE_UNDEFINED__ = 0x4;
 
 __stack_size__ = 16K;
-__stack_end__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__ - 
+__stack_end__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__ -
 	__STACK_SIZE_IRQ__ - __STACK_SIZE_SUPERVISOR__ - __STACK_SIZE_ABORT__ -
 	__STACK_SIZE_UNDEFINED__;
 __stack_beg__ = __stack_end__ - __stack_size__;
-__stack_end_undefined__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__ - 
+__stack_end_undefined__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__ -
 	__STACK_SIZE_IRQ__ - __STACK_SIZE_SUPERVISOR__ - __STACK_SIZE_ABORT__;
-__stack_end_abort__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__ - 
+__stack_end_abort__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__ -
 	__STACK_SIZE_IRQ__ - __STACK_SIZE_SUPERVISOR__;
-__stack_end_supervisor__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__ - 
+__stack_end_supervisor__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__ -
 	__STACK_SIZE_IRQ__;
 __stack_end_irq__ = __ram_start__ + __ram_size__ - 4 - __STACK_SIZE_FIQ__;
 __stack_end_fiq__ = __ram_start__ + __ram_size__ - 4;

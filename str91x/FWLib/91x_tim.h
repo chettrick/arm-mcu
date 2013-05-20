@@ -26,7 +26,7 @@
 
 /* TIM Init structure define */
 typedef struct
-{             
+{
   u16 TIM_Mode;            /* Timer mode                                    */
   u16 TIM_OC1_Modes;       /* Output Compare 1 Mode: Timing or Wave         */
   u16 TIM_OC2_Modes;       /* Output Compare 2 Mode: Timing or Wave         */
@@ -44,7 +44,7 @@ typedef struct
   u16 TIM_Full_Period;     /* Period Length used in PWM Mode                */
 } TIM_InitTypeDef;
 
-typedef enum 
+typedef enum
 {
   TIM_START,
   TIM_STOP,
@@ -123,7 +123,7 @@ typedef enum
 #define TIM_FLAG_OC1     0x4000 /* Output Compare Channel 1 Flag */
 #define TIM_FLAG_TO      0x2000 /* Timer OverFlow Flag           */
 #define TIM_FLAG_IC2     0x1000 /* Input Capture Channel 2 Flag  */
-#define TIM_FLAG_OC2     0x0800 /* Output Compare Channel 2 Flag */ 
+#define TIM_FLAG_OC2     0x0800 /* Output Compare Channel 2 Flag */
 
 /* Module private variables --------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/

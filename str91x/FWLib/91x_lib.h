@@ -93,8 +93,8 @@
 #endif
 
 #ifdef _ENET
-  #include "91x_enet.h"  
-#endif 
+  #include "91x_enet.h"
+#endif
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

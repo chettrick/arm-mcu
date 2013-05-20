@@ -58,7 +58,7 @@ char *inet_ntop(int af, const void *src, char *dst, int size)
 
     default :
       errno_r = EAFNOSUPPORT;
-      return NULL;      
+      return NULL;
   }
 }
 
@@ -87,6 +87,6 @@ int inet_pton(int af, const char *src, void *dst)
 
     default :
       errno_r = EAFNOSUPPORT;
-      return -1;      
+      return -1;
   }
 }

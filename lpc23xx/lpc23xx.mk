@@ -29,7 +29,7 @@ CPUFLAGS	+= -mcpu=arm7tdmi
 FLASHWRITEADDR	?= 0x00000000
 TEXTBASE	?= 0x00000000
 
-CFLAGS		+= 
+CFLAGS		+=
 LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 
 # Board specific macro definitions

@@ -122,5 +122,5 @@ int main(void)
     printf("%04d %02d %02d %02d:%02d:%02d %s", d_rtc.century*100 + d_rtc.year,
            d_rtc.month, d_rtc.day, t_rtc.hours, t_rtc.minutes, t_rtc.seconds,
            ctime(&now));
-  }  
+  }
 }

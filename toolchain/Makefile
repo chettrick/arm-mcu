@@ -156,7 +156,7 @@ $(NEWLIBDIST):
 
 # Download newlib docs
 
-$(LIBCPDF): 
+$(LIBCPDF):
 	wget -nv -P $(TEMP) $(LIBCPDFURL)
 
 $(LIBMPDF):

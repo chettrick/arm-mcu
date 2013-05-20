@@ -7,13 +7,13 @@
 * The authors hereby grant permission to use, copy, modify, distribute,
 * and license this software and its documentation for any purpose, provided
 * that existing copyright notices are retained in all copies and that this
-* notice and the following disclaimer are included verbatim in any 
+* notice and the following disclaimer are included verbatim in any
 * distributions. No written agreement, license, or royalty fee is required
 * for any of the authorized uses.
 *
 * THIS SOFTWARE IS PROVIDED BY THE CONTRIBUTORS *AS IS* AND ANY EXPRESS OR
 * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
 * IN NO EVENT SHALL THE CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
 * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
@@ -212,7 +212,7 @@ link_down(int unit)
 {
   int i;
   struct protent *protp;
-  
+
   AUTHDEBUG((LOG_INFO, "link_down: %d\n", unit));
   if (did_authup) {
     /* XXX Do link down processing. */
@@ -274,14 +274,14 @@ link_established(int unit)
       return;
     }
   }
-    
+
   lcp_phase[unit] = PHASE_AUTHENTICATE;
   auth = 0;
 #if CHAP_SUPPORT
   if (go->neg_chap) {
     ChapAuthPeer(unit, ppp_settings.our_name, go->chap_mdtype);
     auth |= CHAP_PEER;
-  } 
+  }
 #endif /* CHAP_SUPPORT */
 #if PAP_SUPPORT && CHAP_SUPPORT
   else
@@ -344,7 +344,7 @@ void
 auth_peer_success(int unit, u16_t protocol, char *name, int namelen)
 {
   int pbit;
-  
+
   AUTHDEBUG((LOG_INFO, "auth_peer_success: %d proto=%X\n", unit, protocol));
   switch (protocol) {
     case PPP_CHAP:
@@ -357,7 +357,7 @@ auth_peer_success(int unit, u16_t protocol, char *name, int namelen)
       AUTHDEBUG((LOG_WARNING, "auth_peer_success: unknown protocol %x\n", protocol));
       return;
   }
-  
+
   /*
    * Save the authenticated name of the peer for later.
    */
@@ -366,7 +366,7 @@ auth_peer_success(int unit, u16_t protocol, char *name, int namelen)
   }
   BCOPY(name, peer_authname, namelen);
   peer_authname[namelen] = 0;
-  
+
   /*
    * If there is no more authentication still to be done,
    * proceed to the network (or callback) phase.
@@ -383,14 +383,14 @@ void
 auth_withpeer_fail(int unit, u16_t protocol)
 {
   int errCode = PPPERR_AUTHFAIL;
-  
+
   LWIP_UNUSED_ARG(protocol);
 
   AUTHDEBUG((LOG_INFO, "auth_withpeer_fail: %d proto=%X\n", unit, protocol));
   if (passwd_from_file) {
     BZERO(ppp_settings.passwd, MAXSECRETLEN);
   }
-  /* 
+  /*
    * XXX Warning: the unit number indicates the interface which is
    * not necessarily the PPP connection.  It works here as long
    * as we are only supporting PPP interfaces.
@@ -411,7 +411,7 @@ void
 auth_withpeer_success(int unit, u16_t protocol)
 {
   int pbit;
-  
+
   AUTHDEBUG((LOG_INFO, "auth_withpeer_success: %d proto=%X\n", unit, protocol));
   switch (protocol) {
     case PPP_CHAP:
@@ -427,7 +427,7 @@ auth_withpeer_success(int unit, u16_t protocol)
       AUTHDEBUG((LOG_WARNING, "auth_peer_success: unknown protocol %x\n", protocol));
       pbit = 0;
   }
-  
+
   /*
    * If there is no more authentication still being done,
    * proceed to the network (or callback) phase.
@@ -457,7 +457,7 @@ np_up(int unit, u16_t proto)
     if (ppp_settings.idle_time_limit > 0) {
       TIMEOUT(check_idle, NULL, ppp_settings.idle_time_limit);
     }
-    
+
     /*
      * Set a timeout to close the connection once the maximum
      * connect time has expired.
@@ -557,7 +557,7 @@ check_passwd( int unit, char *auser, int userlen, char *apasswd, int passwdlen, 
   char passwd[256], user[256];
   char secret[MAXWORDLEN];
   static u_short attempts = 0;
-  
+
   /*
    * Make copies of apasswd and auser, then null-terminate them.
    */
@@ -569,7 +569,7 @@ check_passwd( int unit, char *auser, int userlen, char *apasswd, int passwdlen, 
 
   /* XXX Validate user name and password. */
   ret = UPAP_AUTHACK;     /* XXX Assume all entries OK. */
-      
+
   if (ret == UPAP_AUTHNAK) {
     if (*msg == (char *) 0) {
       *msg = "Login incorrect";
@@ -668,7 +668,7 @@ int get_secret( int unit, char *client, char *server, char *secret, int *secret_
   int ret = 0, len;
   struct wordlist *addrs;
   char secbuf[MAXWORDLEN];
-  
+
   addrs = NULL;
   secbuf[0] = 0;
 
@@ -723,7 +723,7 @@ auth_check_options(void)
     wo->neg_chap = 1;
     wo->neg_upap = 1;
   }
-  
+
   /*
    * Check whether we have appropriate secrets to use
    * to authenticate the peer.
@@ -753,7 +753,7 @@ network_phase(int unit)
   int i;
   struct protent *protp;
   lcp_options *go = &lcp_gotoptions[unit];
-  
+
   /*
    * If the peer had to authenticate, run the auth-up script now.
    */
@@ -798,7 +798,7 @@ check_idle(void *arg)
 {
   struct ppp_idle idle;
   u_short itime;
-  
+
   LWIP_UNUSED_ARG(arg);
   if (!get_idle_time(0, &idle)) {
     return;
@@ -937,7 +937,7 @@ set_allowed_addrs(int unit, struct wordlist *addrs)
     struct ipcp_options *wo = &ipcp_wantoptions[unit];
     u32_t a;
     struct hostent *hp;
-    
+
     if (wo->hisaddr == 0 && *p != '!' && *p != '-' && strchr(p, '/') == NULL) {
       hp = gethostbyname(p);
       if (hp != NULL && hp->h_addrtype == AF_INET) {
@@ -978,7 +978,7 @@ static void
 free_wordlist(struct wordlist *wp)
 {
   struct wordlist *next;
-  
+
   while (wp != NULL) {
     next = wp->next;
     free(wp);

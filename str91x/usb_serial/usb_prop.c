@@ -122,10 +122,10 @@ void Virtual_Com_Port_Reset(void)
   /* Set Virtual_Com_Port_DEVICE as not configured */
   pInformation->Current_Configuration = 0;
   pInformation->Current_Interface = 0;/*the default Interface*/
-  
+
   /* Current Feature initialization */
   pInformation->Current_Feature = Virtual_Com_Port_ConfigDescriptor[7];
-  
+
   SetBTABLE(BTABLE_ADDRESS);
 
   /* Initialize Endpoint 0 */
@@ -158,7 +158,7 @@ void Virtual_Com_Port_Reset(void)
 
   /* Set this device to response on default address */
   SetDeviceAddress(0);
-  bDeviceState = ATTACHED; 
+  bDeviceState = ATTACHED;
 }
 
 /*******************************************************************************
@@ -315,11 +315,11 @@ u8 *Virtual_Com_Port_GetStringDescriptor(u16 Length)
 *******************************************************************************/
 RESULT Virtual_Com_Port_Get_Interface_Setting(u8 Interface, u8 AlternateSetting)
 {
-  if (AlternateSetting > 0) 
+  if (AlternateSetting > 0)
   {
     return USB_UNSUPPORT;
   }
-  else if (Interface > 1) 
+  else if (Interface > 1)
   {
     return USB_UNSUPPORT;
   }

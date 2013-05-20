@@ -97,7 +97,7 @@ int device_register_char(char *name,
                          device_write_ready_fn_t write_ready,
                          device_read_ready_fn_t read_ready);
 
-int device_register_char_fd(int fd, 
+int device_register_char_fd(int fd,
                             unsigned int subdevice,
                             device_write_fn_t write,
                             device_read_fn_t read,

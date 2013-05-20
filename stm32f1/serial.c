@@ -154,7 +154,7 @@ int serial_open(char *name, unsigned int *subdevice)
       GPIO_Init(GPIOA, &GPIO_config);
 #endif
       break;
- 
+
     case 1 :
 #ifdef OLIMEX_STM32_P107
 // Turn on peripheral clocks
@@ -200,7 +200,7 @@ int serial_open(char *name, unsigned int *subdevice)
       GPIO_Init(GPIOA, &GPIO_config);
 #endif
       break;
- 
+
     case 2 :
 #ifdef OLIMEX_STM32_P107
 // Turn on peripheral clocks

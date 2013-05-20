@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------
- *         ATMEL Microcontroller Software Support 
+ *         ATMEL Microcontroller Software Support
  * ----------------------------------------------------------------------------
  * Copyright (c) 2008, Atmel Corporation
  *
@@ -72,7 +72,7 @@ void ADC_Initialize (AT91S_ADC *pAdc,
                      unsigned char trgEn,
                      unsigned char trgSel,
                      unsigned char sleepMode,
-                     unsigned char resolution,        
+                     unsigned char resolution,
                      unsigned int mckClock,
                      unsigned int adcClock,
                      unsigned int startupTime,
@@ -108,15 +108,15 @@ void ADC_Initialize (AT91S_ADC *pAdc,
 
     TRACE_DEBUG("adcClock:%d MasterClock:%d\n\r", (mckClock/((prescal+1)*2)), mckClock);
     TRACE_DEBUG("prescal:0x%X startup:0x%X shtim:0x%X\n\r", prescal, startup, shtim);
-    
+
     if( adcClock != (mckClock/((prescal+1)*2)) ) {
-        TRACE_WARNING("User and calculated adcClocks are different : user=%d calc=%d\n\r", 
+        TRACE_WARNING("User and calculated adcClocks are different : user=%d calc=%d\n\r",
             adcClock, (mckClock/((prescal+1)*2)));
     }
 
-    // Enable peripheral clock    
-    AT91C_BASE_PMC->PMC_PCER = 1 << idAdc;    
-    
+    // Enable peripheral clock
+    AT91C_BASE_PMC->PMC_PCER = 1 << idAdc;
+
     // Reset the controller
     ADC_SoftReset(pAdc);
 
@@ -124,10 +124,10 @@ void ADC_Initialize (AT91S_ADC *pAdc,
     ADC_CfgModeReg( pAdc,
                     ( trgEn & AT91C_ADC_TRGEN)
                   | ( trgSel & AT91C_ADC_TRGSEL)
-                  | ( resolution & AT91C_ADC_LOWRES)            
+                  | ( resolution & AT91C_ADC_LOWRES)
                   | ( sleepMode & AT91C_ADC_SLEEP)
-                  | ( (prescal<<8) & AT91C_ADC_PRESCAL) 
-                  | ( (startup<<16) & AT91C_ADC_STARTUP) 
+                  | ( (prescal<<8) & AT91C_ADC_PRESCAL)
+                  | ( (startup<<16) & AT91C_ADC_STARTUP)
                   | ( (shtim<<24) & AT91C_ADC_SHTIM) );
 }
 
@@ -138,7 +138,7 @@ void ADC_Initialize (AT91S_ADC *pAdc,
 //-----------------------------------------------------------------------------
 unsigned int ADC_GetModeReg(AT91S_ADC *pAdc)
 {
-    return pAdc->ADC_MR;    
+    return pAdc->ADC_MR;
 }
 
 //-----------------------------------------------------------------------------
@@ -174,16 +174,16 @@ void ADC_DisableChannel (AT91S_ADC *pAdc, unsigned int channel)
 //-----------------------------------------------------------------------------
 unsigned int ADC_GetChannelStatus(AT91S_ADC *pAdc)
 {
-    return pAdc->ADC_CHSR;    
+    return pAdc->ADC_CHSR;
 }
 
 //-----------------------------------------------------------------------------
-/// Software request for a analog to digital conversion 
+/// Software request for a analog to digital conversion
 /// \param pAdc Pointer to an AT91S_ADC instance.
 //-----------------------------------------------------------------------------
 void ADC_StartConversion(AT91S_ADC *pAdc)
 {
-    pAdc->ADC_CR = AT91C_ADC_START;    
+    pAdc->ADC_CR = AT91C_ADC_START;
 }
 
 //-----------------------------------------------------------------------------
@@ -192,7 +192,7 @@ void ADC_StartConversion(AT91S_ADC *pAdc)
 //-----------------------------------------------------------------------------
 void ADC_SoftReset(AT91S_ADC *pAdc)
 {
-    pAdc->ADC_CR = AT91C_ADC_SWRST;    
+    pAdc->ADC_CR = AT91C_ADC_SWRST;
 }
 
 //-----------------------------------------------------------------------------
@@ -202,7 +202,7 @@ void ADC_SoftReset(AT91S_ADC *pAdc)
 //-----------------------------------------------------------------------------
 unsigned int ADC_GetLastConvertedData(AT91S_ADC *pAdc)
 {
-    return pAdc->ADC_LCDR;    
+    return pAdc->ADC_LCDR;
 }
 
 //-----------------------------------------------------------------------------
@@ -214,9 +214,9 @@ unsigned int ADC_GetLastConvertedData(AT91S_ADC *pAdc)
 unsigned int ADC_GetConvertedData(AT91S_ADC *pAdc, unsigned int channel)
 {
     unsigned int data=0;
-    
+
     ASSERT(channel < 8, "ADC channel not exist");
-    
+
     switch(channel) {
         case 0: data = pAdc->ADC_CDR0; break;
         case 1: data = pAdc->ADC_CDR1; break;
@@ -232,10 +232,10 @@ unsigned int ADC_GetConvertedData(AT91S_ADC *pAdc, unsigned int channel)
         case 6: data = pAdc->ADC_CDR6; break;
         #endif
         #ifdef AT91C_ADC_CDR7
-        case 7: data = pAdc->ADC_CDR7; break;    
+        case 7: data = pAdc->ADC_CDR7; break;
         #endif
     }
-    return data;    
+    return data;
 }
 
 //-----------------------------------------------------------------------------
@@ -316,7 +316,7 @@ unsigned int ADC_GetInterruptMaskStatus(AT91S_ADC *pAdc)
 }
 
 //-----------------------------------------------------------------------------
-/// Test if ADC Interrupt is Masked 
+/// Test if ADC Interrupt is Masked
 /// \param pAdc Pointer to an AT91S_ADC instance.
 /// \param flag flag to be tested
 /// \return 1 if interrupt is masked, otherwise 0
@@ -344,11 +344,11 @@ unsigned int ADC_IsStatusSet(AT91S_ADC *pAdc, unsigned int flag)
 /// \param channel Channel to be tested
 /// \return 1 if interrupt status is set, otherwise 0
 //-----------------------------------------------------------------------------
-unsigned char ADC_IsChannelInterruptStatusSet(unsigned int adc_sr, 
+unsigned char ADC_IsChannelInterruptStatusSet(unsigned int adc_sr,
                                               unsigned int channel)
 {
     unsigned char status;
-    
+
     if((adc_sr & (1<<channel)) == (1<<channel)) {
         status = 1;
     }

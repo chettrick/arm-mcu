@@ -81,8 +81,8 @@ void debug(void)
 #ifdef _DMA_Channel7
  DMA_Channel7 =      (DMA_Channel_TypeDef *)DMA_Channel7_BASE;
 #endif /* _DMA_Channel7 */
- 
- 
+
+
  /************************* EMI *************************/
 
 #ifdef _EMI

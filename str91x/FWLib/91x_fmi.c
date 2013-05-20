@@ -33,7 +33,7 @@
 
 /*******************************************************************************
 * Function Name  : FMI_BankRemapConfig
-* Description    : Configure the addresses and sizes of bank 0 and bank 1. 
+* Description    : Configure the addresses and sizes of bank 0 and bank 1.
 * Input1         : FMI_BootBankSize: specifies the boot bank size.
 *                  This parameter can be one of the following values:
 *                     - 0x0: 32KBytes.
@@ -52,7 +52,7 @@
 *                     ....
 *                     - 0xD: 64MBytes.
 * Input3         : FMI_BootBankAddress: specifies the address of the boot bank.
-* Input4         : FMI_NonBootBankAddress: specifies the address of the non 
+* Input4         : FMI_NonBootBankAddress: specifies the address of the non
 *                  boot bank.
 * Output         : None
 * Return         : None
@@ -95,7 +95,7 @@ void FMI_BankRemapConfig(u8 FMI_BootBankSize, u8 FMI_NonBootBankSize, \
 * Return         : None
 *
 *NOTE:
-*This function should be executed from SRAM when booting from bank1 
+*This function should be executed from SRAM when booting from bank1
 *to avoid any conflicts(reading and writing at the same time in bank1)
 *
 *******************************************************************************/
@@ -122,9 +122,9 @@ void FMI_Config(u16 FMI_ReadWaitState, u32 FMI_WriteWaitState, u16 FMI_PWD,\
 /*******************************************************************************
 * Function Name  : FMI_EraseSector
 * Description    : Erase the needed sector.
-* Input          : FMI_Sector: specifies the sector to be erased.  
+* Input          : FMI_Sector: specifies the sector to be erased.
 *                  This parameter can be one of the following values:
-*                     - FMI_B0S0: FMI bank 0 sector 0. 
+*                     - FMI_B0S0: FMI bank 0 sector 0.
 *                       ...
 *                     - FMI_B0S31: FMI bank 0 sector 31.
 *
@@ -136,7 +136,7 @@ void FMI_Config(u16 FMI_ReadWaitState, u32 FMI_WriteWaitState, u16 FMI_PWD,\
 * Return         : None
 *******************************************************************************/
 void FMI_EraseSector(vu32 FMI_Sector)
-{ 
+{
   /* Write an erase set-up command to the sector */
   *(vu16 *)FMI_Sector = 0x20;
 
@@ -166,7 +166,7 @@ void FMI_EraseBank(vu32 FMI_Bank)
 /*******************************************************************************
 * Function Name  : FMI_WriteHalfWord
 * Description    : Write a halfword to the needed Flash memory address.
-* Input 1        : FMI_Address: specifies the address offset where the data will 
+* Input 1        : FMI_Address: specifies the address offset where the data will
 *                  be written.
 * Input 2        : FMI_Data: the needed data.
 * Output         : None
@@ -176,7 +176,7 @@ void FMI_WriteHalfWord(u32 FMI_Address, u16 FMI_Data)
 {
   /* Write a program command to the sector to be written */
   *(vu16 *)(FMI_Address & 0xFFFFFFFC) = 0x40;
-  
+
   /* Write the halfword to the destination address */
   *(vu16 *)FMI_Address = FMI_Data;
 }
@@ -184,7 +184,7 @@ void FMI_WriteHalfWord(u32 FMI_Address, u16 FMI_Data)
 /*******************************************************************************
 * Function Name  : FMI_WriteOTPHalfWord
 * Description    : Write a halfword to the needed OTP sector address.
-* Input 1        : FMI_OTPHWAddress: specifies the halfword address offset  
+* Input 1        : FMI_OTPHWAddress: specifies the halfword address offset
 *                  where the data will be written.
 *                  This parameter can be one of the following values:
 *                     - FMI_OTP_LOW_HALFWORD_0: OTP Low halfword 0.
@@ -211,7 +211,7 @@ void FMI_WriteOTPHalfWord(u8 FMI_OTPHWAddress, u16 FMI_OTPData)
 {
   /* Write a write OTP command to the needed address */
   *(vu16 *)(FMI_BANK_1) = 0xC0;
-  
+
   /* Write the halfword to the destination address */
   *(vu16 *)(FMI_BANK_1 + FMI_OTPHWAddress) = FMI_OTPData;
 }
@@ -233,13 +233,13 @@ u32 FMI_ReadWord(u32 FMI_Address)
 * Description    : Read data from the OTP sector.
 * Input          : FMI_OTPAddress: specifies the address of the data to be read.
 *                  This parameter can be one of the following values:
-*                     - FMI_OTP_WORD_0:   OTP word 0 . 
+*                     - FMI_OTP_WORD_0:   OTP word 0 .
 *                     - FMI_OTP_WORD_1:   OTP word 1 .
 *                     - FMI_OTP_WORD_2:   OTP word 2 .
 *                     - FMI_OTP_WORD_3:   OTP word 3 .
 *                     - FMI_OTP_WORD_4:   OTP word 4 .
 *                     - FMI_OTP_WORD_5:   OTP word 5 .
-*                     - FMI_OTP_WORD_6:   OTP word 6 . 
+*                     - FMI_OTP_WORD_6:   OTP word 6 .
 *                     - FMI_OTP_WORD_7:   OTP word 7 .
 * Output         : None
 * Return         : The needed OTP words.
@@ -249,7 +249,7 @@ u32 FMI_ReadOTPData(u8 FMI_OTPAddress)
   u32 OTP_Data = 0x0;
   /* write a read OTP sector command */
   *(vu16 *)(FMI_BANK_1) = 0x98;
-  
+
   /* Read the correspondent data */
   OTP_Data = (*(vu32*)(FMI_BANK_1 + FMI_OTPAddress));
 
@@ -278,7 +278,7 @@ u32 FMI_ReadOTPData(u8 FMI_OTPAddress)
 * Return         : None
 *******************************************************************************/
 FlagStatus FMI_GetFlagStatus(u8 FMI_Flag, vu32 FMI_Bank)
-{    
+{
   u16 FMI_Status_Register = 0;
 
   /* Write a read status register command */
@@ -292,7 +292,7 @@ FlagStatus FMI_GetFlagStatus(u8 FMI_Flag, vu32 FMI_Bank)
 
   /* Write a read array command */
   *(vu16 *)FMI_Bank = 0xFF;
-   
+
   if((FMI_Status_Register & FMI_Flag) != RESET)
   {
     return SET;
@@ -311,7 +311,7 @@ FlagStatus FMI_GetFlagStatus(u8 FMI_Flag, vu32 FMI_Bank)
 * Return         : The current read wait states value.
 *******************************************************************************/
 u16 FMI_GetReadWaitStateValue(void)
-{ 
+{
   u16 FMI_Configuration_Register = 0;
   /*Write a read RSIG command to any word address in Bank1*/
   *(vu16 *)FMI_BANK_1 = 0x90;
@@ -396,11 +396,11 @@ void FMI_ClearFlag(vu32 FMI_Bank)
 /*******************************************************************************
 * Function Name  : FMI_WriteProtectionCmd
 * Description    : Enable or disable the write protection for the needed sector.
-* Input1         : FMI_Sector: specifies the sector to be protected or   
-*                  unprotected. 
+* Input1         : FMI_Sector: specifies the sector to be protected or
+*                  unprotected.
 *                  This parameter can be one of the following values:
 *
-*                     - FMI_B0S0:  FMI bank 0 sector 0. 
+*                     - FMI_B0S0:  FMI bank 0 sector 0.
 *                       ...
 *                     - FMI_B0S31: FMI bank 0 sector 31.
 *
@@ -435,7 +435,7 @@ void FMI_WriteProtectionCmd(vu32 FMI_Sector, FunctionalState FMI_NewState)
 
 /*******************************************************************************
 * Function Name  : FMI_WaitForLastOperation
-* Description    : Wait until the last operation (Write halfword, Write OTP 
+* Description    : Wait until the last operation (Write halfword, Write OTP
 *                  halfword, Erase sector and Erase bank) completion.
 * Input          : FMI_Bank: specifies the bank where the operation is on going.
 *                  This parameter can be one of the following values:
@@ -450,7 +450,7 @@ void FMI_WriteProtectionCmd(vu32 FMI_Sector, FunctionalState FMI_NewState)
 u8 FMI_WaitForLastOperation(vu32 FMI_Bank)
 {
   u32 Time_Out = 0;
- 
+
   /* Write a read status register command */
   *(vu16 *)(FMI_Bank) = 0x70;
 
@@ -462,7 +462,7 @@ u8 FMI_WaitForLastOperation(vu32 FMI_Bank)
 
   /* Write a read array command */
   *(vu16 *)FMI_Bank = 0xFF;
- 
+
   if (Time_Out == TIMEOUT)
   {
     return FMI_TIME_OUT_ERROR;
@@ -475,20 +475,20 @@ u8 FMI_WaitForLastOperation(vu32 FMI_Bank)
 
 /*******************************************************************************
 * Function Name  : FMI_ReadRSIGData
-* Description    : Read the Electronic Signature stored in the user configuration 
+* Description    : Read the Electronic Signature stored in the user configuration
 *                  sector of Bank 1.
 * Input          :  FMI_LSB_RSIGAddress: specifies the low byte of the address
 *                   to select the register.
 *                  This parameter can be one of the following values:
-*                     - FMI_ReadRSIGData_0. 
-*                     - FMI_ReadRSIGData_1. 
-*                     - FMI_ReadRSIGData_2. 
-*                     - FMI_ReadRSIGData_3. 
-*                     - FMI_ReadRSIGData_4. 
+*                     - FMI_ReadRSIGData_0.
+*                     - FMI_ReadRSIGData_1.
+*                     - FMI_ReadRSIGData_2.
+*                     - FMI_ReadRSIGData_3.
+*                     - FMI_ReadRSIGData_4.
 *                     - FMI_ReadRSIGData_5.
-*                     - FMI_ReadRSIGData_6. 
-*                     - FMI_ReadRSIGData_7. 
-*                     
+*                     - FMI_ReadRSIGData_6.
+*                     - FMI_ReadRSIGData_7.
+*
 * Output         : None
 * Return         : The needed RSIG data.
 *******************************************************************************/
@@ -496,16 +496,16 @@ u8 FMI_WaitForLastOperation(vu32 FMI_Bank)
 u32 FMI_ReadRSIGData(u8 FMI_LSB_RSIGAddress)
 {
   u32 RSIG_Data = 0x0;
-  
-  /*Write a read RSIG command to any word address in Bank1*/ 
-  *(vu16 *)(FMI_BANK_1) = 0x90; 
-  
-  /*Read any RSIG register from any address in Bank1*/ 
-  RSIG_Data = (*(vu32*)(FMI_BANK_1 + (FMI_LSB_RSIGAddress<<2))); 
+
+  /*Write a read RSIG command to any word address in Bank1*/
+  *(vu16 *)(FMI_BANK_1) = 0x90;
+
+  /*Read any RSIG register from any address in Bank1*/
+  RSIG_Data = (*(vu32*)(FMI_BANK_1 + (FMI_LSB_RSIGAddress<<2)));
 
   /*write a Read Array command (FFh) to any word address in Bank 1 to*/
   /*return it to Read Array mode.*/
-  *(vu16 *)FMI_BANK_1 = 0xFF; 
+  *(vu16 *)FMI_BANK_1 = 0xFF;
 
   return RSIG_Data;
 }

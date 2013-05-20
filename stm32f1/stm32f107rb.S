@@ -207,7 +207,7 @@ ctors_loop:	ldr		r2, [r0], #4		// Load next constructor address
 call_main:	mov		r0, #0			// argc=0
 		mov		r1, #0			// argv=NULL
 
-		bl		main 
+		bl		main
 
 // main() should never return, but if it does, just do nothing forever.
 // Should probably put processor into sleep mode instead.
@@ -222,7 +222,7 @@ call_main:	mov		r0, #0			// argc=0
 TEXT_END:	.word		__text_end__
 DATA_BEG:	.word		__data_beg__
 DATA_END:	.word		__data_end__
-BSS_BEG:	.word		__bss_beg__ 
+BSS_BEG:	.word		__bss_beg__
 BSS_END:	.word		__bss_end__
 CTORS_BEG:	.word		__ctors_start__
 CTORS_END:	.word		__ctors_end__

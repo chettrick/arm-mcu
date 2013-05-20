@@ -33,27 +33,27 @@
   u32 EMI_Bank_WSTROEN;
 
   u32 EMI_Bank_WSTWEN;
-  
+
   u32 EMI_Bank_BRDCR;
-  
+
   u32 EMI_Bank_MemWidth ;
 
   u32  EMI_Bank_WriteProtection;
 
   u32 EMI_Burst_and_PageModeRead_TransferLength;
-  
+
   u32 EMI_Burst_and_PageModeRead_Selection;
-  
+
   u32 EMI_BurstModeWrite_TransferLength;
-  
+
   u32 EMI_BurstModeWrite_Selection;
- 
+
   u32 EMI_AccessRead_Support;
-  
+
   u32 EMI_AccessWrite_Support;
-  
+
   u32 EMI_ByteLane_Selection;
-  
+
  } EMI_InitTypeDef;
 
 /* Exported constants --------------------------------------------------------*/
@@ -92,12 +92,12 @@
 /*Read access feature*/
 #define EMI_Read_Asyn	                 0x00000000   /*Asynch access for read default)*/
 #define EMI_Read_Syn	                 0x00000200   /*Synch access for read*/
-                                     
+
 
 /*Write access feature*/
 #define EMI_Write_Asyn	                 0x00000000   /*Asynch access for Write(default)*/
 #define EMI_Write_Syn	                 0x00020000   /*Synch access for Write*/
-                                      
+
 
 /*Memory width*/
 #define EMI_Width_Byte	                 0x00000000   /*8 bits width*/

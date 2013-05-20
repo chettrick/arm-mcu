@@ -42,7 +42,7 @@
   ((u16)(RANGE_ID_MSK((range_start), (range_end))))
 
 #define EXT_RANGE_ID_MSK_H(range_start, range_end)	\
-  ((u16)(RANGE_ID_MSK((range_start), (range_end)) >> 16) & 0x1FFF) 
+  ((u16)(RANGE_ID_MSK((range_start), (range_end)) >> 16) & 0x1FFF)
 
 #define EXT_RANGE_ID_ARB_L(range_start, range_end)	\
   ((u16)(RANGE_ID_ARB((range_start), (range_end))))
@@ -76,30 +76,30 @@ static u32 GetFreeIF(void);
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
-* Function Name  : CAN_DeInit                                                
-* Description    : Deinitializes the CAN peripheral registers to their default     
-*                  reset values.                                     
-* Input          : None                                                      
-* Output         : None                                                      
-* Return         : None                                                      
+* Function Name  : CAN_DeInit
+* Description    : Deinitializes the CAN peripheral registers to their default
+*                  reset values.
+* Input          : None
+* Output         : None
+* Return         : None
 *******************************************************************************/
 void CAN_DeInit (void)
 {
   /* Reset the CAN registers values*/
- 
+
   SCU_APBPeriphReset(__CAN,ENABLE);         /*CAN peripheral is under Reset */
   SCU_APBPeriphReset(__CAN,DISABLE);        /*CAN peripheral Reset off*/
-   
+
 }
 
 /*******************************************************************************
-* Function Name  : CAN_Init                                                  
-* Description    : Initializes the CAN peripheral according to the specified 
-*                  parameters in the CAN_InitStruct.                                            
+* Function Name  : CAN_Init
+* Description    : Initializes the CAN peripheral according to the specified
+*                  parameters in the CAN_InitStruct.
 * Input          : CAN_InitStruct: pointer to a CAN_InitTypeDef structure that
-*                  contains the configuration information for the CAN peripheral. 
-* Output         : None                                                      
-* Return         : None                                                      
+*                  contains the configuration information for the CAN peripheral.
+* Output         : None
+* Return         : None
 *******************************************************************************/
 void CAN_Init(CAN_InitTypeDef* CAN_InitStruct)
 {
@@ -110,12 +110,12 @@ void CAN_Init(CAN_InitTypeDef* CAN_InitStruct)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_StructInit		                        
-* Description    : Fills each CAN_InitStruct member with its reset value.	      
-* Input          : CAN_InitStruct : pointer to a CAN_InitTypeDef structure which       
-*                  will be initialized. 
-* Output         : None                  
-* Return         : None.						      
+* Function Name  : CAN_StructInit		
+* Description    : Fills each CAN_InitStruct member with its reset value.	
+* Input          : CAN_InitStruct : pointer to a CAN_InitTypeDef structure which
+*                  will be initialized.
+* Output         : None
+* Return         : None.						
 *******************************************************************************/
 void CAN_StructInit(CAN_InitTypeDef* CAN_InitStruct)
 {
@@ -125,11 +125,11 @@ void CAN_StructInit(CAN_InitTypeDef* CAN_InitStruct)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_SetBitrate                                            
-* Description    : Setups a standard CAN bitrate.                              
-* Input          : bitrate: specifies the bit rate.                       
-* Output         : None                                                      
-* Return         : None                                                                         
+* Function Name  : CAN_SetBitrate
+* Description    : Setups a standard CAN bitrate.
+* Input          : bitrate: specifies the bit rate.
+* Output         : None
+* Return         : None
 *******************************************************************************/
 void CAN_SetBitrate(u32 bitrate)
 {
@@ -138,18 +138,18 @@ void CAN_SetBitrate(u32 bitrate)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_SetTiming                                             
-* Description    : Setups the CAN timing with specific parameters             
+* Function Name  : CAN_SetTiming
+* Description    : Setups the CAN timing with specific parameters
 * Input          : - tseg1: specifies Time Segment before the sample point.
-*                    This parameter must be a number between 1 and 16.       
-*                  - tseg2: Time Segment after the sample point. This parameter 
-*                    must be a number between 1 and 8.        
-*                  - sjw: Synchronisation Jump Width. This parameter must be                 
+*                    This parameter must be a number between 1 and 16.
+*                  - tseg2: Time Segment after the sample point. This parameter
+*                    must be a number between 1 and 8.
+*                  - sjw: Synchronisation Jump Width. This parameter must be
 *                     a number between 1 and 4.
 *                  - brp: Baud Rate Prescaler. This parameter must be a number
-*                    between 1 and 1024.                                         
-* Output         : None                                                      
-* Return         : None                                                                       
+*                    between 1 and 1024.
+* Output         : None
+* Return         : None
 *******************************************************************************/
 void CAN_SetTiming(u32 tseg1, u32 tseg2, u32 sjw, u32 brp)
 {
@@ -158,11 +158,11 @@ void CAN_SetTiming(u32 tseg1, u32 tseg2, u32 sjw, u32 brp)
 }
 
 /*******************************************************************************
-* Function Name  : GetFreeIF                                             
-* Description    : Searchs the first free message interface, starting from 0.  
-* Input          : None                                                      
-* Output         : None                                                      
-* Return         : A free message interface number (0 or 1) if found, else 2 
+* Function Name  : GetFreeIF
+* Description    : Searchs the first free message interface, starting from 0.
+* Input          : None
+* Output         : None
+* Return         : A free message interface number (0 or 1) if found, else 2
 *******************************************************************************/
 static u32 GetFreeIF(void)
 {
@@ -175,10 +175,10 @@ static u32 GetFreeIF(void)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_SetUnusedMsgObj                                       
-* Description    : Configures the message object as unused                   
-* Input          : msgobj: specifies the Message object number, from 0 to 31.                      
-* Output         : None                                                      
+* Function Name  : CAN_SetUnusedMsgObj
+* Description    : Configures the message object as unused
+* Input          : msgobj: specifies the Message object number, from 0 to 31.
+* Output         : None
 * Return         : An ErrorStatus enumuration value:
 *                         - SUCCESS: Interface to treat the message
 *                         - ERROR: No interface to treat the message
@@ -213,25 +213,25 @@ ErrorStatus CAN_SetUnusedMsgObj(u32 msgobj)
   CAN->sMsgObj[msg_if].DB2R = 0;
 
  CAN->sMsgObj[msg_if].CRR = 1 + msgobj;
- 
+
  return SUCCESS;
 }
 
 /*******************************************************************************
-* Function Name  : CAN_SetTxMsgObj                                           
-* Description    : Configures the message object as TX.                        
-* Input          : - msgobj: specifies the Message object number, from 0 to 31.                      
+* Function Name  : CAN_SetTxMsgObj
+* Description    : Configures the message object as TX.
+* Input          : - msgobj: specifies the Message object number, from 0 to 31.
 *                  - idType: specifies the identifier type of the frames that
 *                    will be transmitted using this message object.
 *                    This parameter can be one of the following values:
 *                          - CAN_STD_ID (standard ID, 11-bit)
-*                          - CAN_EXT_ID (extended ID, 29-bit) 
+*                          - CAN_EXT_ID (extended ID, 29-bit)
 *                  - RemoteEN : specifies if the CAN message will answer remote
-*                   frames with exactly matching ID; It can be 
+*                   frames with exactly matching ID; It can be
 *                          - ENABLE : remote frame with matching ID is answered
-*                          - DISABLE : remote frames with matching ID is not 
+*                          - DISABLE : remote frames with matching ID is not
 *                            answered
-* Output         : None                                                      
+* Output         : None
 * Return         : An ErrorStatus enumuration value:
 *                         - SUCCESS: Interface to treat the message
 *                         - ERROR: No interface to treat the message
@@ -244,7 +244,7 @@ ErrorStatus CAN_SetTxMsgObj(u32 msgobj, u32 idType, FunctionalState RemoteEN)
   {
     return ERROR;
   }
-  
+
   CAN->sMsgObj[msg_if].CMR = CAN_CMR_WRRD
                            | CAN_CMR_MASK
                            | CAN_CMR_ARB
@@ -275,30 +275,30 @@ ErrorStatus CAN_SetTxMsgObj(u32 msgobj, u32 idType, FunctionalState RemoteEN)
   CAN->sMsgObj[msg_if].DB2R = 0;
 
   CAN->sMsgObj[msg_if].CRR = 1 + msgobj;
-  
+
   return SUCCESS;
 }
 
 /*******************************************************************************
-* Function Name  : CAN_SetRxMsgObj                                           
-* Description    : Configures the message object as RX.                        
-* Input          : - msgobj: specifies the Message object number, from 0 to 31.                    
+* Function Name  : CAN_SetRxMsgObj
+* Description    : Configures the message object as RX.
+* Input          : - msgobj: specifies the Message object number, from 0 to 31.
 *                  - idType: specifies the identifier type of the frames that
 *                    will be transmitted using this message object.
 *                    This parameter can be one of the following values:
 *                          - CAN_STD_ID (standard ID, 11-bit)
-*                          - CAN_EXT_ID (extended ID, 29-bit)                               
-*                  - idLow: specifies the low part of the identifier range used      
+*                          - CAN_EXT_ID (extended ID, 29-bit)
+*                  - idLow: specifies the low part of the identifier range used
 *                    for acceptance filtering.
-*                  - idHigh: specifies the high part of the identifier range    
+*                  - idHigh: specifies the high part of the identifier range
 *                    used for acceptance filtering.
 *                  - singleOrFifoLast: specifies the end-of-buffer indicator.
 *                    This parameter can be one of the following values:
 *                          - TRUE: for a single receive object or a FIFO receive
-*                            object that is the last one of the FIFO. 
-*                          - FALSE: for a FIFO receive object that is not the 
-*                            last one. 
-* Output         : None                                                      
+*                            object that is the last one of the FIFO.
+*                          - FALSE: for a FIFO receive object that is not the
+*                            last one.
+* Output         : None
 * Return         : An ErrorStatus enumuration value:
 *                         - SUCCESS: Interface to treat the message
 *                         - ERROR: No interface to treat the message
@@ -311,7 +311,7 @@ ErrorStatus CAN_SetRxMsgObj(u32 msgobj, u32 idType, u32 idLow, u32 idHigh, boole
   {
     return ERROR;
   }
-  
+
   CAN->sMsgObj[msg_if].CMR = CAN_CMR_WRRD
                            | CAN_CMR_MASK
                            | CAN_CMR_ARB
@@ -344,18 +344,18 @@ ErrorStatus CAN_SetRxMsgObj(u32 msgobj, u32 idType, u32 idLow, u32 idHigh, boole
   CAN->sMsgObj[msg_if].DB2R = 0;
 
   CAN->sMsgObj[msg_if].CRR = 1 + msgobj;
-  
+
   return SUCCESS;
 }
 
 /*******************************************************************************
-* Function Name  : CAN_SetUnusedAllMsgObj				      
-* Description    : Configures all the message objects as unused.               
-* Input          : None                                                      
-* Output         : None                                                      
+* Function Name  : CAN_SetUnusedAllMsgObj				
+* Description    : Configures all the message objects as unused.
+* Input          : None
+* Output         : None
 * Return         : An ErrorStatus enumuration value:
 *                         - SUCCESS: Interface to treat the message
-*                         - ERROR: No interface to treat the messageNone                                                      
+*                         - ERROR: No interface to treat the messageNone
 *******************************************************************************/
 ErrorStatus CAN_SetUnusedAllMsgObj(void)
 {
@@ -369,10 +369,10 @@ ErrorStatus CAN_SetUnusedAllMsgObj(void)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_ReleaseMessage					      
-* Description    : Releases the message object                                
-* Input          : - msgobj: specifies the Message object number, from 0 to 31.                     
-* Output         : None                                                      
+* Function Name  : CAN_ReleaseMessage					
+* Description    : Releases the message object
+* Input          : - msgobj: specifies the Message object number, from 0 to 31.
+* Output         : None
 * Return         : An ErrorStatus enumuration value:
 *                         - SUCCESS: Interface to treat the message
 *                         - ERROR: No interface to treat the message
@@ -388,14 +388,14 @@ ErrorStatus CAN_ReleaseMessage(u32 msgobj)
 
   CAN->sMsgObj[msg_if].CMR = CAN_CMR_CLRINTPND | CAN_CMR_TXRQSTNEWDAT;
   CAN->sMsgObj[msg_if].CRR = 1 + msgobj;
-  
+
   return SUCCESS;
 }
 
 
 /*******************************************************************************
 * Function Name  : CAN_UpdateMsgObj
-* Description    : Updates the CAN message object with the pCanMsg fields, it 
+* Description    : Updates the CAN message object with the pCanMsg fields, it
 *                  does not start the transmission of the CAN message object
 * Input 1        : message object number, from 0 to 31
 * Input 2        : pointer to the message structure containing data to transmit
@@ -450,28 +450,28 @@ ErrorStatus CAN_UpdateMsgObj(u32 msgobj, canmsg* pCanMsg)
   CAN->sMsgObj[0].DB2R = ((u16)pCanMsg->Data[7] << 8) | pCanMsg->Data[6];
 
   CAN->sMsgObj[0].CRR = 1 + msgobj;
-  
+
   while ( CAN->sMsgObj[0].CRR & CAN_CRR_BUSY)
   {
      /* wait */
-  } 
+  }
   return SUCCESS;
 }
 
 /*******************************************************************************
-* Function Name  : CAN_SendMessage                                           
-* Description    : Start transmission of a message                           
-* Input          : - msgobj: specifies the Message object number, from 0 to 31.                    
-*                : - pCanMsg: pointer to the message structure containing data     
+* Function Name  : CAN_SendMessage
+* Description    : Start transmission of a message
+* Input          : - msgobj: specifies the Message object number, from 0 to 31.
+*                : - pCanMsg: pointer to the message structure containing data
 *                    to transmit.
-* Output         : None                                                      
+* Output         : None
 * Return         : An ErrorStatus enumuration value:
 *                         - SUCCESS: Transmission OK
 *                         - ERROR: No transmission
 *******************************************************************************/
 ErrorStatus CAN_SendMessage(u32 msgobj, canmsg* pCanMsg)
 {
-   
+
   if (CAN_UpdateMsgObj(msgobj, pCanMsg) == ERROR)
   return ERROR;
 
@@ -481,11 +481,11 @@ ErrorStatus CAN_SendMessage(u32 msgobj, canmsg* pCanMsg)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_TransmitRequest                                            
-* Description    : This function requests the transmission of a message object 			                
-* Input          : msgobj: number of the message object that should be 
-*                  transmitted  
-* Output         : None                                                      
+* Function Name  : CAN_TransmitRequest
+* Description    : This function requests the transmission of a message object 			
+* Input          : msgobj: number of the message object that should be
+*                  transmitted
+* Output         : None
 * Return         :  An ErrorStatus enumuration value:
 *                         - SUCCESS: Transmission OK
 *                         - ERROR: No transmission started
@@ -493,11 +493,11 @@ ErrorStatus CAN_SendMessage(u32 msgobj, canmsg* pCanMsg)
 ErrorStatus CAN_TransmitRequest( u32 msgobj )
 {
     u16 msg_if;
-   
-    if ((msg_if = GetFreeIF()) == 2) 
+
+    if ((msg_if = GetFreeIF()) == 2)
     return ERROR;
 
-     /* Set the transmit request in the command mask register */ 
+     /* Set the transmit request in the command mask register */
      CAN->sMsgObj[msg_if].CMR = CAN_CMR_WRRD | CAN_CMR_TXRQSTNEWDAT;
 
     /* Write the message object number in the command request register */
@@ -507,25 +507,25 @@ ErrorStatus CAN_TransmitRequest( u32 msgobj )
 }
 
 /*******************************************************************************
-* Function Name  : CAN_ReceiveMessage                                        
+* Function Name  : CAN_ReceiveMessage
 * Description    : Gets the message, if received.
-* Input          : - msgobj: specifies the Message object number, from 0 to 31.                     
+* Input          : - msgobj: specifies the Message object number, from 0 to 31.
 *                  - release: specifies the message release indicator.
 *                    This parameter can be one of the following values:
-*                          - TRUE: the message object is released when getting  
+*                          - TRUE: the message object is released when getting
 *                            the data.
 *                          - FALSE: the message object is not released.
-*                  - pCanMsg: pointer to the message structure where received   
+*                  - pCanMsg: pointer to the message structure where received
 *                    data is copied.
-* Output         : None                                                      
+* Output         : None
 * Return         : An ErrorStatus enumuration value:
 *                         - SUCCESS: Reception OK
 *                         - ERROR: No message pending
 *******************************************************************************/
 ErrorStatus CAN_ReceiveMessage(u32 msgobj, boolean release, canmsg* pCanMsg)
-{ 
+{
   u32 tempId;
-  
+
   if (!CAN_GetMsgReceiveStatus(msgobj))
   {
     return ERROR;
@@ -546,9 +546,9 @@ ErrorStatus CAN_ReceiveMessage(u32 msgobj, boolean release, canmsg* pCanMsg)
 
   if (CAN->sMsgObj[1].CRR & CAN_CRR_BUSY)
   {
-    return ERROR;                    
+    return ERROR;
   }
-  
+
   if ((CAN->sMsgObj[1].A2R & CAN_A2R_XTD) == 0)
   {
     /* standard ID*/
@@ -578,10 +578,10 @@ ErrorStatus CAN_ReceiveMessage(u32 msgobj, boolean release, canmsg* pCanMsg)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_WaitEndOfTx                                           
-* Description    : Waits until current transmission is finished.               
-* Input          : None                                                      
-* Output         : None                                                      
+* Function Name  : CAN_WaitEndOfTx
+* Description    : Waits until current transmission is finished.
+* Input          : None
+* Output         : None
 * Return         : None
 *******************************************************************************/
 void CAN_WaitEndOfTx(void)
@@ -594,12 +594,12 @@ void CAN_WaitEndOfTx(void)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_BasicSendMessage                                      
-* Description    : Starts transmission of a message in BASIC mode. This mode 
-*                  does not use the message RAM.             
-* Input          : pCanMsg: Pointer to the message structure containing data to       
-*                  transmit.                                                  
-* Output         : None                                                      
+* Function Name  : CAN_BasicSendMessage
+* Description    : Starts transmission of a message in BASIC mode. This mode
+*                  does not use the message RAM.
+* Input          : pCanMsg: Pointer to the message structure containing data to
+*                  transmit.
+* Output         : None
 * Return         : An ErrorStatus enumuration value:
 *                         - SUCCESS: Transmission OK
 *                         - ERROR: No transmission
@@ -610,7 +610,7 @@ ErrorStatus CAN_BasicSendMessage(canmsg* pCanMsg)
   CAN->sMsgObj[1].MCR &= ~CAN_MCR_NEWDAT;
 
   CAN->SR &= ~CAN_SR_TXOK;
-  
+
   CAN->sMsgObj[0].CMR = CAN_CMR_WRRD
                       | CAN_CMR_ARB
                       | CAN_CMR_CONTROL
@@ -639,16 +639,16 @@ ErrorStatus CAN_BasicSendMessage(canmsg* pCanMsg)
 
   /* request the transmission*/
   CAN->sMsgObj[0].CRR = CAN_CRR_BUSY;
-  
+
   return SUCCESS;
 }
 
 /*******************************************************************************
-* Function Name  : CAN_BasicReceiveMessage                                   
+* Function Name  : CAN_BasicReceiveMessage
 * Description    : Gets the message in BASIC mode, if received. This mode does
-*                  not use the message RAM.                
-* Input          : pCanMsg: pointer to the message structure where message is copied.    
-* Output         : None                                                      
+*                  not use the message RAM.
+* Input          : pCanMsg: pointer to the message structure where message is copied.
+* Output         : None
 * Return         : An ErrorStatus enumuration value:
 *                         - SUCCESS: Reception OK
 *                         - ERROR: No message pending
@@ -656,7 +656,7 @@ ErrorStatus CAN_BasicSendMessage(canmsg* pCanMsg)
 ErrorStatus CAN_BasicReceiveMessage(canmsg* pCanMsg)
 {
   u32 tmpId;
-  
+
   if ((CAN->sMsgObj[1].MCR & CAN_MCR_NEWDAT) == 0)
   {
     return ERROR;
@@ -698,12 +698,12 @@ ErrorStatus CAN_BasicReceiveMessage(canmsg* pCanMsg)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_EnterInitMode                                         
+* Function Name  : CAN_EnterInitMode
 * Description    : Switchs the CAN into initialization mode. This function must
-*                  be used in conjunction with CAN_LeaveInitMode().                 
-* Input          : InitMask: specifies the CAN configuration in normal mode.      
-* Output         : None                                                      
-* Return         : None                                                          
+*                  be used in conjunction with CAN_LeaveInitMode().
+* Input          : InitMask: specifies the CAN configuration in normal mode.
+* Output         : None
+* Return         : None
 *******************************************************************************/
 void CAN_EnterInitMode(u8 InitMask)
 {
@@ -712,12 +712,12 @@ void CAN_EnterInitMode(u8 InitMask)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_LeaveInitMode                                         
+* Function Name  : CAN_LeaveInitMode
 * Description    : Leaves the initialization mode (switch into normal mode).
-*                  This function must be used in conjunction with CAN_EnterInitMode().  
-* Input          : None                                                      
-* Output         : None                                                      
-* Return         : None                                                      
+*                  This function must be used in conjunction with CAN_EnterInitMode().
+* Input          : None
+* Output         : None
+* Return         : None
 *******************************************************************************/
 void CAN_LeaveInitMode(void)
 {
@@ -725,12 +725,12 @@ void CAN_LeaveInitMode(void)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_EnterTestMode                                         
+* Function Name  : CAN_EnterTestMode
 * Description    : Switchs the CAN into test mode. This function must be used in
-*                  conjunction with CAN_LeaveTestMode().                            
-* Input          : TestMask: specifies the configuration in test modes.     
-* Output         : None                                                      
-* Return         : None                                                            
+*                  conjunction with CAN_LeaveTestMode().
+* Input          : TestMask: specifies the configuration in test modes.
+* Output         : None
+* Return         : None
 *******************************************************************************/
 void CAN_EnterTestMode(u8 TestMask)
 {
@@ -739,12 +739,12 @@ void CAN_EnterTestMode(u8 TestMask)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_LeaveTestMode                                         
+* Function Name  : CAN_LeaveTestMode
 * Description    : Leaves the current test mode (switch into normal mode).
-*                  This function must be used in conjunction with CAN_EnterTestMode().    
-* Input          : None                                                      
-* Output         : None                                                      
-* Return         : None                                                      
+*                  This function must be used in conjunction with CAN_EnterTestMode().
+* Input          : None
+* Output         : None
+* Return         : None
 *******************************************************************************/
 void CAN_LeaveTestMode(void)
 {
@@ -754,11 +754,11 @@ void CAN_LeaveTestMode(void)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_ReleaseTxMessage                                      
+* Function Name  : CAN_ReleaseTxMessage
 * Description    : Releases the transmit message object.
-* Input          : - msgobj: specifies the Message object number, from 0 to 31.                     
-* Output         : None                                                      
-* Return         : None                                                                        
+* Input          : - msgobj: specifies the Message object number, from 0 to 31.
+* Output         : None
+* Return         : None
 *******************************************************************************/
 void CAN_ReleaseTxMessage(u32 msgobj)
 {
@@ -767,11 +767,11 @@ void CAN_ReleaseTxMessage(u32 msgobj)
 }
 
 /*******************************************************************************
-* Function Name  : CAN_ReleaseRxMessage                                      
-* Description    : Releases the receive message object.                        
-* Input          : - msgobj: specifies the Message object number, from 0 to 31.                      
-* Output         : None                                                      
-* Return         : None                                                                      
+* Function Name  : CAN_ReleaseRxMessage
+* Description    : Releases the receive message object.
+* Input          : - msgobj: specifies the Message object number, from 0 to 31.
+* Output         : None
+* Return         : None
 *******************************************************************************/
 void CAN_ReleaseRxMessage(u32 msgobj)
 {
@@ -791,18 +791,18 @@ FlagStatus CAN_GetMsgReceiveStatus(u32 msgobj)
 {
   if( msgobj < 16 )
   {
-    if ( CAN->ND1R & (1 << msgobj) ) 
+    if ( CAN->ND1R & (1 << msgobj) )
         return SET;
     else
         return RESET;
-  } 
+  }
   else
   {
      if ( CAN->ND2R & (1 << (msgobj - 16) ) )
          return SET;
      else
          return RESET;
-  } 
+  }
 }
 
 /*******************************************************************************
@@ -817,18 +817,18 @@ FlagStatus CAN_GetMsgTransmitRequestStatus(u32 msgobj)
 {
    if( msgobj < 16 )
   {
-    if ( CAN->TXR1R & (1 << msgobj) ) 
+    if ( CAN->TXR1R & (1 << msgobj) )
         return SET;
     else
         return RESET;
-  } 
+  }
   else
   {
      if ( CAN->TXR2R & (1 << (msgobj - 16) ) )
          return SET;
      else
          return RESET;
-  }  
+  }
 }
 
 /*******************************************************************************
@@ -843,18 +843,18 @@ FlagStatus CAN_GetMsgInterruptStatus(u32 msgobj)
 {
    if( msgobj < 16 )
   {
-    if ( CAN->IP1R & (1 << msgobj) ) 
+    if ( CAN->IP1R & (1 << msgobj) )
         return SET;
     else
         return RESET;
-  } 
+  }
   else
   {
-     if ( CAN->IP2R & (1 << (msgobj - 16) ) ) 
+     if ( CAN->IP2R & (1 << (msgobj - 16) ) )
          return SET;
      else
          return RESET;
-  }   
+  }
 }
 
 /*******************************************************************************
@@ -869,48 +869,48 @@ FlagStatus CAN_GetMsgValidStatus(u32 msgobj)
 {
   if( msgobj < 16 )
   {
-    if ( CAN->MV1R & (1 << msgobj) ) 
+    if ( CAN->MV1R & (1 << msgobj) )
         return SET;
     else
         return RESET;
-  } 
+  }
   else
   {
-     if ( CAN->MV2R & (1 << (msgobj - 16) ) ) 
+     if ( CAN->MV2R & (1 << (msgobj - 16) ) )
          return SET;
      else
          return RESET;
-  }   
+  }
 }
 
 /*******************************************************************************
-* Function Name  : CAN_GetFlagStatus                                          
-* Description    : Returns the flasg status of the flag passed in parameter       
+* Function Name  : CAN_GetFlagStatus
+* Description    : Returns the flasg status of the flag passed in parameter
 * Input          : One of the following parameters:
 *                  - CAN_SR_TXOK
 *                  - CAN_SR_RXOK
 *                  - CAN_SR_EPASS
 *                  - CAN_SR_EWARN
-*                  - CAN_SR_BOFF          
-* Output         : None                                                      
-* Return         : 1 if the flag is set else 0                                           
+*                  - CAN_SR_BOFF
+* Output         : None
+* Return         : 1 if the flag is set else 0
 *******************************************************************************/
 FlagStatus CAN_GetFlagStatus ( u32 CAN_Flag )
 {
-  if( CAN->SR & CAN_Flag) 
+  if( CAN->SR & CAN_Flag)
    {
      return SET;
    }
-     else 
+     else
       return RESET;
 }
 
 /*******************************************************************************
-* Function Name  : CAN_GetTransmitErrorCounter                                            
-* Description    : Reads the CAN cell transmit error counter        
-* Input          : None                      
-* Output         : None                                                      
-* Return         : Transmit Error Counter value between 0..255                                            
+* Function Name  : CAN_GetTransmitErrorCounter
+* Description    : Reads the CAN cell transmit error counter
+* Input          : None
+* Output         : None
+* Return         : Transmit Error Counter value between 0..255
 *******************************************************************************/
 u32 CAN_GetTransmitErrorCounter ( void )
 {
@@ -918,11 +918,11 @@ u32 CAN_GetTransmitErrorCounter ( void )
 }
 
 /*******************************************************************************
-* Function Name  : CAN_GetReceiveErrorCounter                                            
-* Description    : Reads the CAN cell receive error counter        
-* Input          : None                      
-* Output         : None                                                      
-* Return         : Receive Error Counter value between 0..127                                            
+* Function Name  : CAN_GetReceiveErrorCounter
+* Description    : Reads the CAN cell receive error counter
+* Input          : None
+* Output         : None
+* Return         : Receive Error Counter value between 0..127
 *******************************************************************************/
 u32 CAN_GetReceiveErrorCounter ( void )
 {

@@ -147,7 +147,7 @@ zero_bss: 	ldr 		r1, BSS_BEG
 		subs 		r3, r1			// Length of uninitialized data
 		beq		call_ctors		// Skip if none
 
-		eors 		r2, r2 
+		eors 		r2, r2
 
 zero_bss_loop: 	strb		r2, [r1]		// Store zero
 		adds		r1, #1			// Increment pointer
@@ -175,7 +175,7 @@ ctors_loop:	ldr		r2, [r0]		// Load next constructor address
 call_main:	eors		r0, r0			// argc=0
 		eors		r1, r1			// argv=NULL
 
-		bl		main 
+		bl		main
 
 // main() should never return, but if it does, just do nothing forever.
 // Should probably put processor into sleep mode instead.
@@ -190,7 +190,7 @@ call_main:	eors		r0, r0			// argc=0
 TEXT_END:	.word		__text_end__
 DATA_BEG:	.word		__data_beg__
 DATA_END:	.word		__data_end__
-BSS_BEG:	.word		__bss_beg__ 
+BSS_BEG:	.word		__bss_beg__
 BSS_END:	.word		__bss_end__
 CTORS_BEG:	.word		__ctors_start__
 CTORS_END:	.word		__ctors_end__

@@ -7,13 +7,13 @@
 * The authors hereby grant permission to use, copy, modify, distribute,
 * and license this software and its documentation for any purpose, provided
 * that existing copyright notices are retained in all copies and that this
-* notice and the following disclaimer are included verbatim in any 
+* notice and the following disclaimer are included verbatim in any
 * distributions. No written agreement, license, or royalty fee is required
 * for any of the authorized uses.
 *
 * THIS SOFTWARE IS PROVIDED BY THE CONTRIBUTORS *AS IS* AND ANY EXPRESS OR
 * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
 * IN NO EVENT SHALL THE CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
 * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
@@ -522,9 +522,9 @@ pppOverSerialOpen(sio_fd_t fd, void (*linkStatusCB)(void *ctx, int errCode, void
     vj_compress_init(&pc->vjComp);
 #endif /* VJ_SUPPORT */
 
-    /* 
+    /*
      * Default the in and out accm so that escape and flag characters
-     * are always escaped. 
+     * are always escaped.
      */
     memset(pc->inACCM, 0, sizeof(ext_accm));
     pc->inACCM[15] = 0x60;
@@ -651,7 +651,7 @@ int pppOverEthernetOpen(struct netif *ethif, const char *service_name, const cha
 #endif /* PPPOE_SUPPORT */
 
 
-/* Close a PPP connection and release the descriptor. 
+/* Close a PPP connection and release the descriptor.
  * Any outstanding packets in the queues are dropped.
  * Return 0 on success, an error code on failure. */
 int
@@ -727,7 +727,7 @@ nPut(PPPControl *pc, struct pbuf *nb)
   LINK_STATS_INC(link.xmit);
 }
 
-/* 
+/*
  * pppAppend - append given character to end of given pbuf.  If outACCM
  * is not NULL and the character needs to be escaped, do so.
  * If pbuf is full, append another.
@@ -737,7 +737,7 @@ static struct pbuf *
 pppAppend(u_char c, struct pbuf *nb, ext_accm *outACCM)
 {
   struct pbuf *tb = nb;
-  
+
   /* Make sure there is room for the character and an escape code.
    * Sure we don't quite fill the buffer if the character doesn't
    * get escaped but is one character worth complicating this? */
@@ -853,9 +853,9 @@ pppifOutput(struct netif *netif, struct pbuf *pb, struct ip_addr *ipaddr)
   }
 
 #if VJ_SUPPORT
-  /* 
+  /*
    * Attempt Van Jacobson header compression if VJ is configured and
-   * this is an IP packet. 
+   * this is an IP packet.
    */
   if (protocol == PPP_IP && pc->vjEnabled) {
     switch (vj_compress_tcp(&pc->vjComp, pb)) {
@@ -914,7 +914,7 @@ pppifOutput(struct netif *netif, struct pbuf *pb, struct ip_addr *ipaddr)
 
       /* Update FCS before checking for special characters. */
       fcsOut = PPP_FCS(fcsOut, c);
-      
+
       /* Copy to output buffer escaping special characters. */
       tailMB = pppAppend(c, tailMB, &pc->outACCM);
     }
@@ -930,7 +930,7 @@ pppifOutput(struct netif *netif, struct pbuf *pb, struct ip_addr *ipaddr)
   /* If we failed to complete the packet, throw it away. */
   if (!tailMB) {
     PPPDEBUG((LOG_WARNING,
-             "pppifOutput[%d]: Alloc err - dropping proto=%d\n", 
+             "pppifOutput[%d]: Alloc err - dropping proto=%d\n",
               pd, protocol));
     pbuf_free(headMB);
     LINK_STATS_INC(link.memerr);
@@ -1100,7 +1100,7 @@ pppWrite(int pd, const u_char *s, int n)
     /* Copy to output buffer escaping special characters. */
     tailMB = pppAppend(c, tailMB, &pc->outACCM);
   }
-    
+
   /* Add FCS and trailing flag. */
   c = ~fcsOut & 0xFF;
   tailMB = pppAppend(c, tailMB, &pc->outACCM);
@@ -1137,11 +1137,11 @@ ppp_send_config( int unit, int mtu, u32_t asyncmap, int pcomp, int accomp)
 {
   PPPControl *pc = &pppControl[unit];
   int i;
-  
+
   pc->mtu = mtu;
   pc->pcomp = pcomp;
   pc->accomp = accomp;
-  
+
   /* Load the ACCM bits for the 32 control codes. */
   for (i = 0; i < 32/8; i++) {
     pc->outACCM[i] = (u_char)((asyncmap >> (8 * i)) & 0xFF);
@@ -1258,13 +1258,13 @@ GetMask(u32_t addr)
     nmask = IN_CLASSA_NET;
   } else if (IN_CLASSB(addr)) {
     nmask = IN_CLASSB_NET;
-  } else { 
+  } else {
     nmask = IN_CLASSC_NET;
   }
 
   /* class D nets are disallowed by bad_ip_adrs */
   mask = subnetMask | htonl(nmask);
-  
+
   /* XXX
    * Scan through the system's network interfaces.
    * Get each netmask and OR them into our mask.
@@ -1281,7 +1281,7 @@ sifvjcomp(int pd, int vjcomp, int cidcomp, int maxcid)
 {
 #if PPPOS_SUPPORT && VJ_SUPPORT
   PPPControl *pc = &pppControl[pd];
-  
+
   pc->vjEnabled = vjcomp;
   pc->vjComp.compressSlot = cidcomp;
   pc->vjComp.maxSlotIndex = maxcid;
@@ -1319,7 +1319,7 @@ sifup(int pd)
 {
   PPPControl *pc = &pppControl[pd];
   int st = 1;
-  
+
   if (pd < 0 || pd >= NUM_PPP || !pc->openFlag) {
     st = 0;
     PPPDEBUG((LOG_WARNING, "sifup[%d]: bad parms\n", pd));
@@ -1363,7 +1363,7 @@ sifdown(int pd)
 {
   PPPControl *pc = &pppControl[pd];
   int st = 1;
-  
+
   if (pd < 0 || pd >= NUM_PPP || !pc->openFlag) {
     st = 0;
     PPPDEBUG((LOG_WARNING, "sifdown[%d]: bad parms\n", pd));
@@ -1394,7 +1394,7 @@ sifaddr( int pd, u32_t o, u32_t h, u32_t m, u32_t ns1, u32_t ns2)
 {
   PPPControl *pc = &pppControl[pd];
   int st = 1;
-  
+
   if (pd < 0 || pd >= NUM_PPP || !pc->openFlag) {
     st = 0;
     PPPDEBUG((LOG_WARNING, "sifup[%d]: bad parms\n", pd));
@@ -1420,7 +1420,7 @@ cifaddr( int pd, u32_t o, u32_t h)
 {
   PPPControl *pc = &pppControl[pd];
   int st = 1;
-  
+
   LWIP_UNUSED_ARG(o);
   LWIP_UNUSED_ARG(h);
   if (pd < 0 || pd >= NUM_PPP || !pc->openFlag) {
@@ -1625,7 +1625,7 @@ pppInput(void *arg)
 
   pd = ((struct pppInputHeader *)nb->payload)->unit;
   protocol = ((struct pppInputHeader *)nb->payload)->proto;
-    
+
   if(pbuf_header(nb, -(int)sizeof(struct pppInputHeader))) {
     LWIP_ASSERT("pbuf_header failed\n", 0);
     goto drop;
@@ -1682,7 +1682,7 @@ pppInput(void *arg)
 #else  /* PPPOS_SUPPORT && VJ_SUPPORT */
       /* No handler for this protocol so drop the packet. */
       PPPDEBUG((LOG_INFO,
-               "pppInput[%d]: drop VJ UnComp in %d:.*H\n", 
+               "pppInput[%d]: drop VJ UnComp in %d:.*H\n",
                 pd, nb->len, LWIP_MIN(nb->len * 2, 40), nb->payload));
 #endif /* PPPOS_SUPPORT && VJ_SUPPORT */
       break;
@@ -1773,7 +1773,7 @@ pppInProc(int pd, u_char *s, int l)
   PPPDEBUG((LOG_DEBUG, "pppInProc[%d]: got %d bytes\n", pd, l));
   while (l-- > 0) {
     curChar = *s++;
-    
+
     /* Handle special characters. */
     if (ESCAPE_P(pc->inACCM, curChar)) {
       /* Check for escape sequences. */
@@ -1791,14 +1791,14 @@ pppInProc(int pd, u_char *s, int l)
          /* If we haven't received the packet header, drop what has come in. */
          } else if (pc->inState < PDDATA) {
            PPPDEBUG((LOG_WARNING,
-                    "pppInProc[%d]: Dropping incomplete packet %d\n", 
+                    "pppInProc[%d]: Dropping incomplete packet %d\n",
                      pd, pc->inState));
            LINK_STATS_INC(link.lenerr);
            pppDrop(pc);
          /* If the fcs is invalid, drop the packet. */
          } else if (pc->inFCS != PPP_GOODFCS) {
            PPPDEBUG((LOG_INFO,
-                    "pppInProc[%d]: Dropping bad fcs 0x%04X proto=0x%04X\n", 
+                    "pppInProc[%d]: Dropping bad fcs 0x%04X proto=0x%04X\n",
                      pd, pc->inFCS, pc->inProtocol));
            LINK_STATS_INC(link.chkerr);
            pppDrop(pc);

@@ -191,14 +191,14 @@ void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct)
             SCU->GPIOIN[GPIO_Number] |= 0x1 << Counter;
           }
         }
-        
+
        /*Type configuration: PushPull or Open Collector*/
         SCU->GPIOTYPE[GPIO_Number] &= ~(0x1 << Counter) ;
        if(GPIO_InitStruct->GPIO_Type == GPIO_Type_OpenCollector)
        {
          /*Open Drain configuration*/
         SCU->GPIOTYPE[GPIO_Number] |= 0x1 << Counter;
-       }     
+       }
     }
  }
 }
@@ -211,7 +211,7 @@ void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void GPIO_StructInit(GPIO_InitTypeDef* GPIO_InitStruct) 
+void GPIO_StructInit(GPIO_InitTypeDef* GPIO_InitStruct)
 {
   /* Reset GPIO init structure parameters values */
   GPIO_InitStruct->GPIO_Pin  = GPIO_Pin_All;
@@ -230,7 +230,7 @@ void GPIO_StructInit(GPIO_InitTypeDef* GPIO_InitStruct)
 * Return         : The port pin value
 *******************************************************************************/
 u8 GPIO_ReadBit(GPIO_TypeDef* GPIOx, u8 GPIO_Pin)
-{ 
+{
   if ((((GPIOx->DR[GPIO_Pin<<2])) & GPIO_Pin) != Bit_RESET )
   {
     return Bit_SET;
@@ -288,7 +288,7 @@ void GPIO_WriteBit(GPIO_TypeDef* GPIOx, u8 GPIO_Pin, BitAction BitVal)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void GPIO_Write(GPIO_TypeDef* GPIOx, u8 PortVal) 
+void GPIO_Write(GPIO_TypeDef* GPIOx, u8 PortVal)
 {
   GPIOx->DR[0x3FC] = PortVal;
 }
@@ -301,7 +301,7 @@ void GPIO_Write(GPIO_TypeDef* GPIOx, u8 PortVal)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void GPIO_EMIConfig(FunctionalState NewState) 
+void GPIO_EMIConfig(FunctionalState NewState)
 {
   if(NewState == ENABLE)
   {
@@ -332,7 +332,7 @@ void GPIO_EMIConfig(FunctionalState NewState)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void GPIO_ANAPinConfig(u8 GPIO_ANAChannel, FunctionalState NewState) 
+void GPIO_ANAPinConfig(u8 GPIO_ANAChannel, FunctionalState NewState)
 {
   if(NewState == ENABLE)
   {
@@ -353,7 +353,7 @@ void GPIO_ANAPinConfig(u8 GPIO_ANAChannel, FunctionalState NewState)
 * Output         : None
 * Return         : GPIO number
 *******************************************************************************/
-u8 GPIO_GetGPIONumber(GPIO_TypeDef* GPIOx) 
+u8 GPIO_GetGPIONumber(GPIO_TypeDef* GPIOx)
 {
   if(GPIOx == GPIO1)
   {
@@ -410,7 +410,7 @@ u8 GPIO_GetGPIONumber(GPIO_TypeDef* GPIOx)
 * Output         : None
 * Return         : reset value in SCU_OUT register
 *******************************************************************************/
-u16 GPIO_GetAnaloClearBits(u8 GPIO_ANAChannel) 
+u16 GPIO_GetAnaloClearBits(u8 GPIO_ANAChannel)
 {
   if(GPIO_ANAChannel == GPIO_ANAChannel0)
   {

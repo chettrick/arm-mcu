@@ -128,10 +128,10 @@ void WDG_TimerModeCmd(FunctionalState NewState)
 *******************************************************************************/
 void WDG_StartWatchdogMode(void)
 {
-   /*reload watchdog*/ 
+   /*reload watchdog*/
    WDG->KR = WDG_KeyValue1;
    WDG->KR = WDG_KeyValue2;
-  
+
    /*start watchdog*/
    WDG->CR |= WDG_Mode_Wdg;
 }

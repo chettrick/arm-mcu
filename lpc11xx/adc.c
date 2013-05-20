@@ -71,31 +71,31 @@ int adc_init(unsigned int channel)
     case 0 :
       LPC_IOCON->R_PIO0_11 = 0x00000002;	// AD0
       break;
-     
+
     case 1 :
       LPC_IOCON->R_PIO1_0 = 0x00000002;		// AD1
       break;
-     
+
     case 2 :
       LPC_IOCON->R_PIO1_1 = 0x00000002;		// AD2
       break;
-     
+
     case 3 :
       LPC_IOCON->R_PIO1_2 = 0x00000002;		// AD3
       break;
-     
+
     case 4 :
       LPC_IOCON->SWDIO_PIO1_3 = 0x00000002;	// AD4
       break;
-     
+
     case 5 :
       LPC_IOCON->PIO1_4 = 0x00000001;		// AD5
       break;
-     
+
     case 6 :
       LPC_IOCON->PIO1_10 = 0x00000001;		// AD6
       break;
-     
+
     case 7 :
       LPC_IOCON->PIO1_11 = 0x00000001;		// AD7
       break;

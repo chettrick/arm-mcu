@@ -71,7 +71,7 @@ typedef enum
 #define   ADC_FLAG_ECV         0x002F      /* End of Conversion Flag      */
 #define   ADC_FLAG_AWD         0x002E      /* Analog WatchDog Flag        */
 #define   ADC_FLAG_ORD         0x0           /* DMA overrun Flag        */
-            
+
 #define   ADC_FLAG_OV_CH_0     0x00CF      /* Overflow Flag for channel 0 */
 #define   ADC_FLAG_OV_CH_1     0x00EF      /* Overflow Flag for channel 1 */
 #define   ADC_FLAG_OV_CH_2     0x010F      /* Overflow Flag for channel 2 */

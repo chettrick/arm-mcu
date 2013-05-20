@@ -70,7 +70,7 @@ int gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
     return __LINE__ - 3;
   }
 
-// Configure peripheral clocks 
+// Configure peripheral clocks
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
   RCC_APB2PeriphClockCmd(PORTS[port].peripheral, ENABLE);

@@ -364,7 +364,7 @@ void RTC_ITConfig(u32 RTC_IT, FunctionalState NewState)
 
 /*******************************************************************************
 * Function Name  : RTC_GetFlagStatus
-* Description    : Gets a RTC flag status 
+* Description    : Gets a RTC flag status
 * Input          : RTC_FLAG
 * Output         : None
 * Return         : FlagStatus :SET or RESET
@@ -381,14 +381,14 @@ FlagStatus RTC_GetFlagStatus(u32 RTC_FLAG)
 * Input          : RTC_FLAG
 * Output         : None
 * Return         : None
-* Note           : Before clearing the RTC Periodic Flag you need to disable the 
-*                  Periodic interrupt generation, to do this use function 
+* Note           : Before clearing the RTC Periodic Flag you need to disable the
+*                  Periodic interrupt generation, to do this use function
 *                  RTC_PeriodicIntConfig(RTC_Per_DISABLE)
 *******************************************************************************/
 void RTC_ClearFlag(u32 RTC_FLAG)
 {
   vu32 tmp=0;
-  if (RTC_FLAG == RTC_FLAG_Per)  tmp=RTC->SR; 
+  if (RTC_FLAG == RTC_FLAG_Per)  tmp=RTC->SR;
   else if (RTC_FLAG == RTC_FLAG_Alarm) RTC->CR&=~0x100000;
   else if (RTC_FLAG == RTC_FLAG_Tamper) RTC->CR&=~0x1;
 

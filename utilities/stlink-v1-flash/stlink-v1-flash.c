@@ -186,7 +186,7 @@ struct stm_chip_params {			/* Unused/placeholder parameter table. */
 
 /* The maximum data transfer seems to be about 6KB, likely limited by
  * the RAM on the STLink 32F103 chip.  This is not a painful limit.  There
- * is usually only 4KB or 8KB of RAM on the target chip.  The only 
+ * is usually only 4KB or 8KB of RAM on the target chip.  The only
  * use for larger transfer is reading or verifying flash.
  * When we iterate for large transfers, we are often conservative and
  * avoid pushing the size limits.  There is little point to finding the
@@ -459,7 +459,7 @@ int stlink_cmd(struct stlink *sl, uint8_t st_cmd1, uint8_t st_cmd2, int q_len)
 /* Basic target memory read and write functions.
  * Both bulk and single 32 bit word functions are here.
  * The bulk version has the caller uses the SCSI buffer.
- * The 32 bit versions use function parameter and return data. 
+ * The 32 bit versions use function parameter and return data.
  */
 /* Write to the ARM memory starting at ADDR for LEN bytes.
  * The *_mem8 variant has a maximum LEN of 64 bytes.

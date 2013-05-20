@@ -81,7 +81,7 @@ typedef enum { DOWN = 0, UP  = !DOWN} CountingStatus;
 #define MC_TachoOneShot_Mode     0x0001		/*One Shot Tacho Mode*/
 #define MC_TachoContinuous_Mode  0x0002		/*Continuous Tacho Mode*/
 
- 
+
 /* MC tacho polarity */
 #define MC_TachoEventEdge_None           0x0000		/* Edge None */
 #define MC_TachoEventEdge_Falling        0x0001		/* Falling Edge  */

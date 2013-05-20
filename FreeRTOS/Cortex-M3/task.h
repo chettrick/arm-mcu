@@ -1166,7 +1166,7 @@ constant. */
 portBASE_TYPE xTaskCallApplicationTaskHook( xTaskHandle xTask, void *pvParameter ) PRIVILEGED_FUNCTION;
 
 /**
- * xTaskGetIdleTaskHandle() is only available if 
+ * xTaskGetIdleTaskHandle() is only available if
  * INCLUDE_xTaskGetIdleTaskHandle is set to 1 in FreeRTOSConfig.h.
  *
  * Simply returns the handle of the idle task.  It is not valid to call

@@ -63,7 +63,7 @@
 #define MC_C0SE_Reset  0x00FB
 
 #define MC_CUSE_Set    0x0008
-#define MC_CUSE_Reset  0x00F7 
+#define MC_CUSE_Reset  0x00F7
 
 #define MC_CVSE_Set    0x0010
 #define MC_CVSE_Reset  0x00EF
@@ -98,7 +98,7 @@
 #define MC_ESC_Clear  0x4321
 
 #define MC_PCR1_TIN_MASK 0xFFFC
-#define MC_OPR_Mask      0x0040 
+#define MC_OPR_Mask      0x0040
 #define MC_UDCS_Mask     0x0002
 
 
@@ -116,12 +116,12 @@
 * Return         : None
 *******************************************************************************/
 void MC_DeInit(void)
-{      
+{
   /* MC peripheral is under Reset */
   SCU_APBPeriphReset(__MC, ENABLE);
 
   /* MC peripheral Reset off */
-  SCU_APBPeriphReset(__MC, DISABLE);           
+  SCU_APBPeriphReset(__MC, DISABLE);
 }
 /*******************************************************************************
 * Function Name  : MC_Init
@@ -141,17 +141,17 @@ void MC_Init(MC_InitTypeDef* MC_InitStruct)
      MC->PCR2 |= MC_DTS_Set;
 
      /* Enable the registers Software Data Transfer */
-     MC->PCR2 |= MC_C0SE_Set | MC_CUSE_Set | MC_CVSE_Set | MC_CWSE_Set 
+     MC->PCR2 |= MC_C0SE_Set | MC_CUSE_Set | MC_CVSE_Set | MC_CWSE_Set
                  |MC_RSE_Set;
-     
+
    }
    else
    {
      /* Select the Data transfer Mode */
-     MC->PCR2 &= MC_DTS_Reset;   
+     MC->PCR2 &= MC_DTS_Reset;
 
      /* Disable the registers Software Data Transfer */
-     MC->PCR2 &= MC_C0SE_Reset | MC_CUSE_Reset | MC_CVSE_Reset | MC_CWSE_Reset 
+     MC->PCR2 &= MC_C0SE_Reset | MC_CUSE_Reset | MC_CVSE_Reset | MC_CWSE_Reset
                  |MC_RSE_Reset;
     }
 
@@ -185,8 +185,8 @@ void MC_Init(MC_InitTypeDef* MC_InitStruct)
 
    /* Set the MC PWM Forced State */
    MC->OPR |= MC_ODS_Set;
-   MC->OPR = (MC->OPR & MC_OPR_Mask) | MC_InitStruct->MC_ForcedPWMState; 
-   
+   MC->OPR = (MC->OPR & MC_OPR_Mask) | MC_InitStruct->MC_ForcedPWMState;
+
    /* Select the Tacho Mode */
    if(MC_InitStruct->MC_TachoMode == MC_TachoOneShot_Mode)
    {
@@ -242,7 +242,7 @@ void MC_Init(MC_InitTypeDef* MC_InitStruct)
    {
      /* Channel U configuration */
      case MC_Channel_U:
-     {   
+     {
        MC->CMPU = MC_InitStruct->MC_PulseU;
 
        if(MC_InitStruct->MC_PolarityUL == MC_Polarity_Inverted)
@@ -292,7 +292,7 @@ void MC_Init(MC_InitTypeDef* MC_InitStruct)
      case MC_Channel_W:
      {
        MC->CMPW = MC_InitStruct->MC_PulseW;
-       
+
        if(MC_InitStruct->MC_PolarityWL == MC_Polarity_Inverted)
        {
        	 MC->PSR |= MC_PWL_Set;
@@ -317,7 +317,7 @@ void MC_Init(MC_InitTypeDef* MC_InitStruct)
        MC->CMPU = MC_InitStruct->MC_PulseU;
        MC->CMPV = MC_InitStruct->MC_PulseV;
        MC->CMPW = MC_InitStruct->MC_PulseW;
-       
+
        if(MC_InitStruct->MC_PolarityUL == MC_Polarity_Inverted)
        {
        	 MC->PSR |= MC_PUL_Set;
@@ -379,7 +379,7 @@ void MC_Init(MC_InitTypeDef* MC_InitStruct)
 * Description    : Fills each MC_InitStruct member with its default value.
 * Input          : MC_InitStruct : pointer to a MC_InitTypeDef structure which
 *                  will be initialized.
-* Output         : None                        
+* Output         : None
 * Return         : None.
 *******************************************************************************/
 void MC_StructInit(MC_InitTypeDef* MC_InitStruct)
@@ -388,7 +388,7 @@ void MC_StructInit(MC_InitTypeDef* MC_InitStruct)
   u16 temp;
   temp=MC->ECR;
   temp &= MC_PWM_Counter  ;
-  
+
   MC_InitStruct->MC_OperatingMode = MC_HardwareOperating_Mode;
   MC_InitStruct->MC_TachoMode = MC_TachoContinuous_Mode;
   MC_InitStruct->MC_TachoEvent_Mode = MC_TachoEvent_Hardware_Mode;
@@ -411,7 +411,7 @@ void MC_StructInit(MC_InitTypeDef* MC_InitStruct)
   MC_InitStruct->MC_PolarityWL = MC_Polarity_NonInverted;
   MC_InitStruct->MC_PolarityWH = MC_Polarity_NonInverted;
   MC_InitStruct->MC_TachoPolarity = MC_TachoEventEdge_RisingFalling;
- 
+
   if(temp==0)
   {
     MC_InitStruct->MC_DeadTime = 0x003F;
@@ -420,7 +420,7 @@ void MC_StructInit(MC_InitTypeDef* MC_InitStruct)
   {
     MC_InitStruct->MC_DeadTime = 0x03FF;
   }
-  
+
  MC_InitStruct->MC_RepetitionCounter = 0x0000;
 }
 
@@ -438,10 +438,10 @@ void MC_Cmd(FunctionalState NewState)
   {
   /* Enable the PWM counter */
     MC->PCR0 |= MC_PCE_Set;
-  
+
   /* Enable the Tacho counter */
     MC->PCR0 |= MC_TCE_Set;
-  
+
   /* Enable the Dead Time counter */
     MC->PCR0 |= MC_DTE_Set;
   }
@@ -449,10 +449,10 @@ void MC_Cmd(FunctionalState NewState)
   {
   /* Disable the PWM counter */
     MC->PCR0 &= MC_PCE_Reset;
-    
+
   /* Disable the Tacho counter */
     MC->PCR0 &= MC_TCE_Reset;
-    
+
   /* Disable the Dead counter */
     MC->PCR0 &= MC_DTE_Reset;
   }
@@ -536,7 +536,7 @@ void MC_ITConfig(u16 MC_IT, FunctionalState NewState)
     MC->PCR2 |= MC_GPI_Set;
   }
   else
-  {   
+  {
     /* Disable the specific interrupt source */
     MC->IMR &= ~MC_IT;
 
@@ -687,9 +687,9 @@ void MC_EmergencyCmd(FunctionalState NewState)
 void MC_EmergencyClear(void)
 {
    MC->ECR |= 0x0100;
- 
+
    /* Clear EST bit */
-   MC->ESC = MC_ESC_Clear; 
+   MC->ESC = MC_ESC_Clear;
 }
 
 /*******************************************************************************
@@ -773,7 +773,7 @@ void MC_ClearOnTachoCapture(FunctionalState NewState)
     MC->PCR1 |= MC_CCPT_Set;
   }
   else
-  {   
+  {
     /* Disable the Clear on capture of tacho counter */
     MC->PCR1 &= MC_CCPT_Reset;
   }
@@ -934,14 +934,14 @@ ITStatus MC_GetITStatus(u16 MC_IT)
 *******************************************************************************/
 void MC_ClearITPendingBit(u16 MC_IT)
 {
-/* Clear the corresponding interrupt pending bit */ 
+/* Clear the corresponding interrupt pending bit */
   MC->IPR &= ~MC_IT;
 }
 
 
 /*******************************************************************************
 * Function Name  : MC_Lock
-* Description    : Enables the lock of certain control register bits 
+* Description    : Enables the lock of certain control register bits
 * Input          : - MC_LockLevel: Specifies the level to be locked.
 *                  This parameter can be any combination of the following values:
 *                         - MC_LockLevel4: Lock Dead Time Generator register.
@@ -955,7 +955,7 @@ void MC_ClearITPendingBit(u16 MC_IT)
 *******************************************************************************/
 void  MC_Lock(u16 MC_LockLevel)
 {
-  MC->LOK &= ~MC_LockLevel; 
+  MC->LOK &= ~MC_LockLevel;
   MC->LOK |= MC_LockLevel;
 }
 
@@ -971,9 +971,9 @@ void  MC_Lock(u16 MC_LockLevel)
 * Return         : None
 *******************************************************************************/
 void MC_CounterModeConfig(u16 MC_Counter)
-{ 
-  MC->ECR &= ~MC_Counter; 
-  MC->ECR |=  MC_Counter;               
+{
+  MC->ECR &= ~MC_Counter;
+  MC->ECR |=  MC_Counter;
 }
 
 /*******************************************************************************
@@ -987,24 +987,24 @@ void MC_CounterModeConfig(u16 MC_Counter)
 void MC_DoubleUpdateMode(FunctionalState NewState)
 {
   if( NewState==ENABLE)
-  { 
+  {
     MC->ECR |= MC_DUM;
   }
   else
-  { 
-    MC->ECR &= ~MC_DUM; 
+  {
+    MC->ECR &= ~MC_DUM;
   }
 }
 
 /*******************************************************************************
 * Function Name  : MC_ADCTrigger
-* Description    : Enables or disables the Triggers to the ADC conversion 
+* Description    : Enables or disables the Triggers to the ADC conversion
 * Input          : IMC event : The IMC event to trigger the ADC conversion
 *                  This parameter can be one of the following values:
 *                          - MC_ZPC : When the PWM counter reaches zero.
-*                          - MC_CM0 : When the PWM counter reaches its maximum 
+*                          - MC_CM0 : When the PWM counter reaches its maximum
 *                                     count.
-*                          - MC_ADT : When the PWM counter equals zero and the 
+*                          - MC_ADT : When the PWM counter equals zero and the
 *                                     Repetition Down counter equals zero.
 *                  - Newstate: New state of the ADC trigger event.
 *                  This parameter can be: ENABLE or DISABLE.
@@ -1014,15 +1014,15 @@ void MC_DoubleUpdateMode(FunctionalState NewState)
 void MC_ADCTrigger(u16 IMC_Event, FunctionalState NewState)
 {
   MC->ECR &= 0x01F3;
-  
+
   if( NewState==ENABLE)
   {
     MC->ECR |= IMC_Event;
   }
   else
   {
-    MC->ECR &= ~IMC_Event; 
-  }    
+    MC->ECR &= ~IMC_Event;
+  }
 }
 
 
@@ -1034,33 +1034,33 @@ void MC_ADCTrigger(u16 IMC_Event, FunctionalState NewState)
 * Return         : None
 *******************************************************************************/
 void MC_EnhancedStop(FunctionalState NewState)
-{ 
+{
   if( NewState==ENABLE)
   {
     MC->ECR |=  0x0040;
   }
   else
   {
-    MC->ECR &= ~ 0x0040; 
+    MC->ECR &= ~ 0x0040;
   }
 }
 /*******************************************************************************
 * Function Name  : MC_DebugOutputProtection
-* Description    : Allows the output phases to follow the polarity set by PSR if 
+* Description    : Allows the output phases to follow the polarity set by PSR if
 *		   enabled or they remain in their last known state if disabled.
 * Input          : NewState : This pararameter can be ENABLE or DISABLE.
 * Output         : None
 * Return         : None
 *******************************************************************************/
 void MC_DebugOutputProtection(FunctionalState NewState)
-{ 
+{
   if( NewState==ENABLE)
   {
     MC->ECR |= 0x0080;
   }
   else
   {
-    MC->ECR &= ~0x0080; 
+    MC->ECR &= ~0x0080;
   }
 }
 
@@ -1072,14 +1072,14 @@ void MC_DebugOutputProtection(FunctionalState NewState)
 * Return         : None
 *******************************************************************************/
 void MC_EmergencyStopPolarity(FunctionalState NewState)
-{ 
+{
   if( NewState==ENABLE)
   {
     MC->ECR |= 0x0002;
   }
   else
   {
-    MC->ECR &= ~0x0002; 
+    MC->ECR &= ~0x0002;
   }
 }
 /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

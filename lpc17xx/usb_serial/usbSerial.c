@@ -19,7 +19,7 @@
 	THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
 	IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
 	OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-	IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, 
+	IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
 	INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
 	NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
 	DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
@@ -50,7 +50,7 @@
 /* Modified by Sagar G V, Feb 2011
 Used the USB CDC example to create a library. Added the following functions
 
-void VCOM_puts(const char* str); //writes a null terminated string. 
+void VCOM_puts(const char* str); //writes a null terminated string.
 void VCOM_putc(char c); // writes a character.
 void VCOM_putHex(uint8_t hex); // writes 0x.. hex value on the terminal.
 char VCOM_getc(); // returns character entered in the terminal. blocking function
@@ -405,7 +405,7 @@ int usbSerialInit()
 
 #ifndef POLLED_USBSERIAL
 	//enable_USB_interrupts();
-	NVIC_EnableIRQ(USB_IRQn); 
+	NVIC_EnableIRQ(USB_IRQn);
 	
 #endif
 		
@@ -446,7 +446,7 @@ void VCOM_putHex(uint8_t hex)
 	temp = ((hex >> 4) & 0x0F) + 0x30;// add 0x30 to get ASCII value
 	if(temp > 0x39)
 		temp += 7; // alphabet, not numeral
-	VCOM_putc((char)temp); 
+	VCOM_putc((char)temp);
 	
 	temp = ((hex) & 0x0F) + 0x30;
 	if(temp > 0x39)

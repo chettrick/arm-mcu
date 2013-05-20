@@ -49,7 +49,7 @@ void LEDS_initialize(void)
     *AT91C_PIOA_OER	= 1 << LED_PINS[i];	// LED pin is output
     *AT91C_PIOA_OWER	= 1 << LED_PINS[i];	// LED pin is synchronous output
     *AT91C_PIOA_MDER	= 1 << LED_PINS[i];	// LED pin is open drain output
-  } 
+  }
 #endif
 
   LEDS_set(0);					// Turn off all LEDs at startup
@@ -75,7 +75,7 @@ unsigned long int LEDS_get(void)
   return result;
 }
 
-// Set LED states.  A 1 bit in the mask indicates the LED should be turned on. 
+// Set LED states.  A 1 bit in the mask indicates the LED should be turned on.
 // A 0 bit in the mask indicates the LED should be turned off.
 
 void LEDS_set(unsigned long int mask)

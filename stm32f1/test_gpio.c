@@ -36,7 +36,7 @@ int main(void)
 #ifdef OLIMEX_STM32_P103
   gpiopin_configure(GPIOPIN0, GPIOPIN_INPUT);
   gpiopin_configure(GPIOPIN44, GPIOPIN_OUTPUT);
-  
+
   for (i = 0;; i++)
   {
     // Flash faster if WAKE-UP button is pressed

@@ -95,6 +95,6 @@ int main(void)
     {
       GPIOPIN10OUT = i >> 22;
     }
-  } 
+  }
 #endif
 }

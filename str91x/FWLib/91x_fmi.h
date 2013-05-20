@@ -140,7 +140,7 @@
 #define    FMI_FREQ_LOW         0x0000    /* FMI Low bus working frequency   */
 #define    FMI_FREQ_HIGH        0x0040    /* FMI High bus working gfrequency */
                                           /* Above 66 MHz*/
-/* FMI OTP word addresses */      
+/* FMI OTP word addresses */
 
 #define    FMI_OTP_WORD_0       0x00   /* OTP word 0 */
 #define    FMI_OTP_WORD_1       0x04   /* OTP word 1 */
@@ -150,7 +150,7 @@
 #define    FMI_OTP_WORD_5       0x14   /* OTP word 5 */
 #define    FMI_OTP_WORD_6       0x18   /* OTP word 6 */
 #define    FMI_OTP_WORD_7       0x1C   /* OTP word 7 */
-                                    
+
 /* FMI OTP halfword addresses */
 
 #define    FMI_OTP_LOW_HALFWORD_0       0x00   /* OTP Low halfword 0  */
@@ -190,11 +190,11 @@
                                                 /*available only for 2MB flash*/
 #define    FMI_ReadRSIGData_7           0x07    /*Flash Configuration Register*/
                                                 /*available only for 2MB flash*/
-                    
+
 
 /* Timeout error */
 
-#define FMI_TIME_OUT_ERROR      0x00       /* Timeout error    */     
+#define FMI_TIME_OUT_ERROR      0x00       /* Timeout error    */
 #define FMI_NO_TIME_OUT_ERROR   0x01       /* No Timeout error */
 
 /* Module private variables --------------------------------------------------*/

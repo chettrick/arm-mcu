@@ -450,7 +450,7 @@ err_t
 tcpip_apimsg(struct api_msg *apimsg)
 {
   struct tcpip_msg msg;
-  
+
   if (mbox != SYS_MBOX_NULL) {
     msg.type = TCPIP_MSG_API;
     msg.msg.apimsg = apimsg;
@@ -495,14 +495,14 @@ err_t
 tcpip_netifapi(struct netifapi_msg* netifapimsg)
 {
   struct tcpip_msg msg;
-  
+
   if (mbox != SYS_MBOX_NULL) {
     netifapimsg->msg.sem = sys_sem_new(0);
     if (netifapimsg->msg.sem == SYS_SEM_NULL) {
       netifapimsg->msg.err = ERR_MEM;
       return netifapimsg->msg.err;
     }
-    
+
     msg.type = TCPIP_MSG_NETIFAPI;
     msg.msg.netifapimsg = netifapimsg;
     sys_mbox_post(mbox, &msg);
@@ -524,7 +524,7 @@ tcpip_netifapi(struct netifapi_msg* netifapimsg)
 err_t
 tcpip_netifapi_lock(struct netifapi_msg* netifapimsg)
 {
-  LOCK_TCPIP_CORE();  
+  LOCK_TCPIP_CORE();
   netifapimsg->function(&(netifapimsg->msg));
   UNLOCK_TCPIP_CORE();
   return netifapimsg->msg.err;

@@ -107,7 +107,7 @@ int W5200_read_receive_ram(const uint32_t socket,
   uint16_t srcaddr;
   uint16_t maxbeforewrap;
   uint8_t cmdbuf[4];
-  
+
   // Validate parameters
 
   if (socket >= numsockets)

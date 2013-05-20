@@ -60,7 +60,7 @@
 *                  reset values.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
-*					 - I2C1  
+*					 - I2C1
 * Output         : None
 * Return         : None
 *******************************************************************************/
@@ -86,7 +86,7 @@ void I2C_DeInit(I2C_TypeDef* I2Cx)
 *                  parameters in the I2C_InitTypeDef structure.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
-*					 - I2C1  
+*					 - I2C1
 *
 *                  - I2C_InitStruct: pointer to an I2C_InitTypeDef structure that
 *                  contains the configuration information for the specified I2C
@@ -200,7 +200,7 @@ void I2C_StructInit(I2C_InitTypeDef* I2C_InitStruct)
 * Description    : Enables or disables the specified I2C peripheral.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
-*					 - I2C1  
+*					 - I2C1
 *                 - NewState: new state of the I2C peripheral. This parameter
 *                    can be: ENABLE or DISABLE.
 * Output         : None
@@ -226,7 +226,7 @@ void I2C_Cmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
 * Description    : Generates I2C communication START condition.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
-*					 - I2C1  
+*					 - I2C1
 *
 *                 - NewState: new state of the Start condition. This parameter
 *                    can be: ENABLE or DISABLE.
@@ -252,7 +252,7 @@ void I2C_GenerateStart(I2C_TypeDef* I2Cx, FunctionalState NewState)
 * Description    : Generates I2C communication STOP condition.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
-*					 - I2C1  
+*					 - I2C1
 *
 *                  - NewState: new state of the Stop condition. This parameter
 *                    can be: ENABLE or DISABLE.
@@ -278,7 +278,7 @@ void I2C_GenerateSTOP(I2C_TypeDef* I2Cx, FunctionalState NewState)
 * Description    : Enables or disables I2C acknowledge feature.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
-*					 - I2C1  
+*					 - I2C1
 *                 - NewState: new state of the Acknowledgement. This parameter
 *                    can be: ENABLE or DISABLE.
 * Output         : None
@@ -303,7 +303,7 @@ void I2C_AcknowledgeConfig(I2C_TypeDef *I2Cx, FunctionalState NewState)
 * Description    : Enables or disables I2C interrupt feature.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
-*					 - I2C1  
+*					 - I2C1
 *                  - NewState: new state of the specified I2C interrupt.
 *                    This parameter can be: ENABLE or DISABLE.
 * Output         : None
@@ -328,7 +328,7 @@ void I2C_ITConfig(I2C_TypeDef *I2Cx, FunctionalState NewState)
 * Description    : Reads any I2C register and returns its value.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
-*					 - I2C1     
+*					 - I2C1
 *                 - I2C_Register: the I2C register to be read. This parameter
 *                    can be one of the following values:
 *                         - I2C_CR:   CR register.
@@ -361,7 +361,7 @@ u8 I2C_ReadRegister(I2C_TypeDef* I2Cx, u8 I2C_Register)
 * Description    : Checks whether the specified I2C flag is set or not.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
-*					 - I2C1  
+*					 - I2C1
 *                 - I2C_FLAG: flag to check. This parameter can be one of the
 *                    following values:
 *                         - I2C_FLAG_SB: Start bit flag
@@ -408,7 +408,7 @@ FlagStatus I2C_GetFlagStatus(I2C_TypeDef* I2Cx, u16 I2C_FLAG)
 
 /*******************************************************************************
 * Function Name  : I2C_ClearFlag
-* Description    : Clears the I2C Flag passed as a parameter 
+* Description    : Clears the I2C Flag passed as a parameter
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
 *					 - I2C1
@@ -487,19 +487,19 @@ void I2C_ClearFlag(I2C_TypeDef* I2Cx, u16 I2C_FLAG, ...)
 }
 
 /*******************************************************************************
-* Function Name  : I2C_Send7bitAddress                                             
-* Description    : Transmits the address byte to select the slave device.      
+* Function Name  : I2C_Send7bitAddress
+* Description    : Transmits the address byte to select the slave device.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
 *					 - I2C1
-*                 - Address: specifies the slave address which will be transmitted    
-*                 - Direction: specifies whether the I2C device will be a 
-*                    Transmitter or a Receiver. This parameter can be one of the 
+*                 - Address: specifies the slave address which will be transmitted
+*                 - Direction: specifies whether the I2C device will be a
+*                    Transmitter or a Receiver. This parameter can be one of the
 *                    following values
 *                         - I2C_MODE_TRANSMITTER: Transmitter mode
-*                         - I2C_MODE_RECEIVER: Receiver mode  
+*                         - I2C_MODE_RECEIVER: Receiver mode
 * Output         : None	
-* Return         : None.                                                       
+* Return         : None.
 *******************************************************************************/
 void I2C_Send7bitAddress(I2C_TypeDef* I2Cx, u8 Address, u8 Direction)
 {
@@ -523,7 +523,7 @@ void I2C_Send7bitAddress(I2C_TypeDef* I2Cx, u8 Address, u8 Direction)
 * Description    : Send a data byte.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
-*					 - I2C1  
+*					 - I2C1
 *                   - bData : the byte to be sent
 * Output         : None	
 * Return         : None.
@@ -554,7 +554,7 @@ u8 I2C_ReceiveData(I2C_TypeDef* I2Cx)
 * Description    : Get the Last happened I2C Event.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
-*					 - I2C1  
+*					 - I2C1
 * Output         : None	
 * Return         : The Last happened Event.
 *******************************************************************************/
@@ -576,7 +576,7 @@ u16 I2C_GetLastEvent(I2C_TypeDef* I2Cx)
 *                  as parameter.
 * Input          :- I2Cx: I2C peripheral can be:
 *                    - I2C0
-*					 - I2C1   
+*					 - I2C1
 *                  - I2C_EVENT: the event to check. This parameter can be one of
 *                    the following values:
 *                         - I2C_EVENT_SLAVE_ADDRESS_MATCHED
@@ -589,7 +589,7 @@ u16 I2C_GetLastEvent(I2C_TypeDef* I2Cx)
 *                         - I2C_EVENT_MASTER_MODE_ADDRESS10
 *                         - I2C_EVENT_SLAVE_STOP_DETECTED
 *                         - I2C_EVENT_SLAVE_ACK_FAILURE
-                          - I2C_EV31 
+                          - I2C_EV31
 * Output         : None	
 * Return         : An ErrorStatus enumuration value:
 *                         - SUCCESS: Last event is equal to the I2C_Event

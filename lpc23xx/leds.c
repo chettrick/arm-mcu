@@ -83,7 +83,7 @@ unsigned long int LEDS_get(void)
   return result;
 }
 
-// Set LED states.  A 1 bit in the mask indicates the LED should be turned on. 
+// Set LED states.  A 1 bit in the mask indicates the LED should be turned on.
 // A 0 bit in the mask indicates the LED should be turned off.
 
 void LEDS_set(unsigned long int mask)

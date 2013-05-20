@@ -70,7 +70,7 @@ int gpiopin_configure(unsigned int pin, gpiopin_direction_t direction)
     return __LINE__ - 3;
   }
 
-// Configure peripheral clock 
+// Configure peripheral clock
 
   RCC_AHB1PeriphClockCmd(PORTS[port].peripheral, ENABLE);
 

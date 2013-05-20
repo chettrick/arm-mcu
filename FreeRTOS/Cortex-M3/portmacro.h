@@ -60,7 +60,7 @@ extern "C" {
 #endif
 
 /*-----------------------------------------------------------
- * Port specific definitions.  
+ * Port specific definitions.
  *
  * The settings in this file configure FreeRTOS correctly for the
  * given hardware and compiler.
@@ -105,10 +105,10 @@ extern void vPortYieldFromISR( void );
 
 /* Critical section management. */
 
-/* 
+/*
  * Set basepri to portMAX_SYSCALL_INTERRUPT_PRIORITY without effecting other
  * registers.  r0 is clobbered.
- */ 
+ */
 #define portSET_INTERRUPT_MASK()						\
 	__asm volatile										\
 	(													\

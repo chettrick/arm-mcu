@@ -24,7 +24,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 	.section .startup, "x"
-	.code 32 
+	.code 32
 	.align 4
 
 	.extern	main 		/*  Usual C startup.			*/
@@ -40,7 +40,7 @@
 	.extern __data_beg_src__
 	.extern	__ctors_start__
 	.extern	__ctors_end__
- 
+
 	.global	_start
 	.global _vectors
 
@@ -85,16 +85,16 @@ _start:
 	ldr	sl, =__stack_beg__
 
 	mov 	a2, #0		/* Fill value 				*/
-	mov	fp, a2		/* Null frame pointer 			*/ 
+	mov	fp, a2		/* Null frame pointer 			*/
 	mov	r7, a2		/* Null frame pointer for Thumb 	*/
 	
 	ldr 	r1, .LC1	/*  __bss_beg__ set in link script to 	*/
 				/* point at beginning of uninitialized	*/
-				/* ram.					*/ 
+				/* ram.					*/
 	ldr 	r3, .LC2	/*  __bss_beg__ set in link script to 	*/
-				/* point at end of uninitialized ram.	*/ 
+				/* point at end of uninitialized ram.	*/
 	subs 	r3, r3, r1	/*  Subtract two to find length of 	*/
-				/* uninitialized ram.			*/ 
+				/* uninitialized ram.			*/
 	beq	.end_clear_loop	/*  If no uninitialzed ram skip init.	*/
 
 	mov 	r2, #0		/*  Value used to init ram.		*/
@@ -111,20 +111,20 @@ _start:
 	ldr 	r2, .LC4	/*  __data_beg_src__ set in link script	*/
 				/* to point to beginning of flash copy 	*/
 				/* of the initial values of initialized	*/
-				/* variables.				*/ 
+				/* variables.				*/
 	ldr 	r3, .LC5	/*  __data_end__ set in link script to 	*/
 				/* point at end of initialized ram	*/
 	subs	r3, r3, r1	/*  Calculate length of area in ram	*/
 				/* holding initialzed variables.	*/
 	beq	.end_set_loop	/*  If no initialized vars skip init.	*/
 
-.set_loop: 
+.set_loop:
 	ldrb	r4, [r2], #1	/* Read byte from flash (increment ptr),*/
 	strb	r4, [r1], #1  	/* store it in ram (increment ptr) and, */
 	subs	r3, r3, #1  	/* reduce bytes to copy by 1.		*/
 	bgt 	.set_loop	/* Continue until all copied.		*/
 
-.end_set_loop: 
+.end_set_loop:
 
 // Call C++ constructors.  The compiler and linker together populate the .ctors
 // code section with the addresses of the constructor functions.
@@ -145,23 +145,23 @@ ctors_done:
 
 	/*  Set up arguments to main and call.				*/
 
-	mov		r0, #0		/*  no arguments  */ 
+	mov		r0, #0		/*  no arguments  */
 	mov		r1, #0		/* no argv either */
 
-	bl		main 
+	bl		main
 
 	/*  Returning from main in this environment is really an error.	*/
 	/* Go into a dead loop.						*/
 endless_loop:
 	b		endless_loop
 
-	/* For Thumb, constants must be after the code since only 
+	/* For Thumb, constants must be after the code since only
 	positive offsets are supported for PC relative addresses. */
 	
 	.align 4
-.LC1: 
-.word	__bss_beg__ 
-.LC2:   
+.LC1:
+.word	__bss_beg__
+.LC2:
 .word	__bss_end__
 .LC3:
 .word	__data_beg__

@@ -334,7 +334,7 @@ int device_close(int fd)
     errno_r = EINVAL;
     return -1;
   }
- 
+
   if (device_table[fd].type == DEVICE_TYPE_UNUSED)
   {
     errno_r = ENODEV;
@@ -374,7 +374,7 @@ int device_ready_read(int fd)
     errno_r = EINVAL;
     return -1;
   }
- 
+
   if (device_table[fd].type == DEVICE_TYPE_UNUSED)
   {
     errno_r = ENODEV;
@@ -407,7 +407,7 @@ int device_ready_write(int fd)
     errno_r = EINVAL;
     return -1;
   }
- 
+
   if (device_table[fd].type == DEVICE_TYPE_UNUSED)
   {
     errno_r = ENODEV;
@@ -810,7 +810,7 @@ int device_write(int fd, char *s, unsigned int count)
   else
     return device_write_cooked(fd, s, count);
 }
-  
+
 /* Write a single character to a device */
 
 int device_putc(int fd, char c)

@@ -648,12 +648,12 @@ void SCU_PFQBCCmd(FunctionalState NewState)
 void SCU_EMIByte_Select_Pinconfig(FunctionalState NewState)
 {
  if (NewState==ENABLE)
-  SCU->GPIOEMI |= 0x04;                    
+  SCU->GPIOEMI |= 0x04;
   else
-  SCU->GPIOEMI &=~0x04;  
- 
+  SCU->GPIOEMI &=~0x04;
+
  }
- 
+
 /*******************************************************************************
 * Function Name  : SCU_EMIclock_Pinconfig
 * Description    : Enable or Disable the BCLK pin clock driving (LFBGA only)
@@ -665,10 +665,10 @@ void SCU_EMIByte_Select_Pinconfig(FunctionalState NewState)
 void SCU_EMIclock_Pinconfig(FunctionalState NewState)
 {
  if (NewState==DISABLE)
-  SCU->GPIOEMI |= 0x02;                    
+  SCU->GPIOEMI |= 0x02;
   else
-  SCU->GPIOEMI &=~0x02;  
- 
+  SCU->GPIOEMI &=~0x02;
+
  }
 
 

@@ -43,7 +43,7 @@ int getch(void)				// Get next character
   char c = 0;
 
   while (serial_read(port, &c, 1) == 0);
-  return c;  
+  return c;
 }
 
 void putch(char c)			// Write a character
@@ -335,7 +335,7 @@ static int print(char **out, const char *format, va_list args )
 int cprintf(const char *format, ...)
 {
         va_list args;
-        
+
         va_start( args, format );
         return print( 0, format, args );
 }
@@ -343,7 +343,7 @@ int cprintf(const char *format, ...)
 int csprintf(char *out, const char *format, ...)
 {
         va_list args;
-        
+
         va_start( args, format );
         return print( &out, format, args );
 }

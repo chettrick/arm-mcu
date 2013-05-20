@@ -52,8 +52,8 @@ typedef struct
 
 typedef struct
 {
- 
- 
+
+
  u32 LLI_TrsfSize;   /* Transfer size which indicates the size of the transfer when the DMA controller is the flow controller*/
  u32 LLI_SrcBstSize; /* The source burst size.Indicates the number of transfers that make up a source burst */
  u32 LLI_DesBstSize; /* The destination burst size which indicates the number of transfers that make up a destination burst transfer request.*/
@@ -61,11 +61,11 @@ typedef struct
  u32 LLI_DesWidth;    /* Destination transfer width. */
  u32 LLI_SrcIncrement; /*Source increment*/
  u32 LLI_DesIncrement; /*Destination increment*/
- u32 LLI_PROT0;        /*Cacheable Access*/ 
- u32 LLI_PROT1;        /*Bufferable Access*/ 
+ u32 LLI_PROT0;        /*Cacheable Access*/
+ u32 LLI_PROT1;        /*Bufferable Access*/
  u32 LLI_PROT2;        /*Privileged mode activation*/
- u32 LLI_TCInterrupt;  /*Terminal count interrupt activation*/ 
-   
+ u32 LLI_TCInterrupt;  /*Terminal count interrupt activation*/
+
 } LLI_CCR_InitTypeDef;
 
 typedef struct
@@ -252,7 +252,7 @@ typedef struct
 #define   DMA_NonTCInterrupt              0x00000000   /* Terminal count interrupt disabled*/
 
 
-   
+
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 

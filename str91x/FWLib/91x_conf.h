@@ -21,19 +21,19 @@
 //#define Buffered
 
 /*Uncomment the line below to compile the library in DEBUG mode */
-//#define DEBUG    1  
+//#define DEBUG    1
 
 /*Uncomment the following line to boot from Bank0*/
-#define Boot_Bank_0   
+#define Boot_Bank_0
 
 /*Uncomment the following line to boot from Bank1*/
-//#define Boot_Bank_1  
+//#define Boot_Bank_1
 
 /*Uncomment the following line if the Flash size is 256KB or 512KB*/
 #define Flash_512KB_256KB
 
 /*Uncomment the following line if the Flash size is 1MB or 2MB */
-//#define Flash_2MB_1MB 
+//#define Flash_2MB_1MB
 
 
 /************************* AHBAPB *************************/

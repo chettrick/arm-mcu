@@ -56,7 +56,7 @@
 * Return         : None
 *******************************************************************************/
 void TIM_DeInit(TIM_TypeDef *TIMx)
-{ 
+{
   if((TIMx == TIM0)||(TIMx == TIM1))
   {
     SCU_APBPeriphReset(__TIM01, DISABLE);    /* TIM0 & TIM1 Reset's off */
@@ -65,8 +65,8 @@ void TIM_DeInit(TIM_TypeDef *TIMx)
   {
     SCU_APBPeriphReset(__TIM23, DISABLE);    /* TIM2 & TIM3 Reset's off */
   }
-  
-  /* Set all the TIMx registers to thier default values */ 
+
+  /* Set all the TIMx registers to thier default values */
   TIMx->OC1R = 0x8000;
   TIMx->OC2R = 0x8000;
   TIMx->CR1  = 0x0;
@@ -144,7 +144,7 @@ void TIM_Init(TIM_TypeDef *TIMx, TIM_InitTypeDef *TIM_InitStruct)
 /************************** Prescaler configuration ***************************/
 
   TIMx->CR2 =( TIMx->CR2 & 0xFF00 )|TIM_InitStruct->TIM_Prescaler ;
-  
+
 /********************************** TIM Modes *********************************/
 
   switch ( TIM_InitStruct->TIM_Mode)
@@ -190,7 +190,7 @@ void TIM_Init(TIM_TypeDef *TIMx, TIM_InitTypeDef *TIM_InitStruct)
       {
         TIMx->CR1 &= TIM_OLVL1_RESET_MASK;
       }
-      
+
       TIMx->OC1R = TIM_InitStruct->TIM_Pulse_Length_1;
 
       if (TIM_InitStruct->TIM_OC1_Modes == TIM_TIMING)
@@ -216,7 +216,7 @@ void TIM_Init(TIM_TypeDef *TIMx, TIM_InitTypeDef *TIM_InitStruct)
       {
         TIMx->CR1 &= TIM_OLVL2_RESET_MASK;
       }
-       
+
       TIMx->OC2R = TIM_InitStruct->TIM_Pulse_Length_2;
 
       if (TIM_InitStruct->TIM_OC2_Modes == TIM_TIMING)
@@ -254,7 +254,7 @@ void TIM_Init(TIM_TypeDef *TIMx, TIM_InitTypeDef *TIM_InitStruct)
     {
       TIMx->CR1 |= TIM_OC1_ENABLE_MASK;
     }
-    
+
     if (TIM_InitStruct->TIM_Pulse_Level_1 == TIM_HIGH)
     {
       TIMx->CR1 |= TIM_OLVL1_SET_MASK;
@@ -298,7 +298,7 @@ void TIM_Init(TIM_TypeDef *TIMx, TIM_InitTypeDef *TIM_InitStruct)
       {
         TIMx->CR1 &= TIM_OLVL1_RESET_MASK;
       }
-      
+
       /* Set the OCAE */
       TIMx->CR1 |= TIM_OC1_ENABLE_MASK;
 
@@ -306,11 +306,11 @@ void TIM_Init(TIM_TypeDef *TIMx, TIM_InitTypeDef *TIM_InitStruct)
       TIMx->CR1 |= TIM_PWM_MASK;
 
       /* Set the Duty Cycle value */
-      
+
       TIMx->OC1R = TIM_InitStruct->TIM_Pulse_Length_1 ;
 
       /* Set the Full Period */
-      
+
       TIMx->OC2R = TIM_InitStruct->TIM_Full_Period ;
 
       break;
@@ -330,7 +330,7 @@ void TIM_Init(TIM_TypeDef *TIMx, TIM_InitTypeDef *TIM_InitStruct)
       {
         TIMx->CR1 |= TIM_OLVL1_SET_MASK;
       }
-      
+
       /* Set the Activation Edge on the ICAP 1 */
       if (TIM_InitStruct->TIM_OPM_INPUT_Edge == TIM_OPM_EDGE_RISING)
       {
@@ -434,7 +434,7 @@ void TIM_CounterCmd(TIM_TypeDef *TIMx, TIM_CounterOperations TIM_operation)
     case TIM_CLEAR:
       TIMx->CNTR = 0x0000;
       break;
-    
+
     default:
       break;
   }
@@ -543,7 +543,7 @@ void TIM_SetPulse(TIM_TypeDef *TIMx,u16 TIM_Channel ,u16 TIM_Pulse)
 *                  This parameter can be one of the following values:
 *                       - TIM_FLAG_IC1: Input Capture Channel 1 Flag
 *                       - TIM_FLAG_IC2: Input Capture Channel 2 Flag
-*                       - TIM_FLAG_TO : Timer Overflow Flag 
+*                       - TIM_FLAG_TO : Timer Overflow Flag
 *                       - TIM_FLAG_OC1: Output Compare Channel 1 Flag
 *                       - TIM_FLAG_OC2: Output Compare Channel 2 Flag
 * Output         : None
@@ -631,7 +631,7 @@ void TIM_ITConfig(TIM_TypeDef *TIMx, u16 TIM_IT, FunctionalState TIM_Newstate)
 {
   if(TIM_Newstate == ENABLE)
   {
-    TIMx->CR2 = (TIMx->CR2 & 0x00FF) | TIM_IT; 
+    TIMx->CR2 = (TIMx->CR2 & 0x00FF) | TIM_IT;
   }
   else
   {
@@ -659,7 +659,7 @@ void TIM_DMAConfig(TIM_TypeDef *TIMx, u16 TIM_DMA_Sources)
   /* Reset the DMAS[1:0] bits */
   TIMx->CR1 &= TIM_DMA_CLEAR_MASK;
   /* Set the DMAS[1:0] bits according to TIM_DMA_Sources parameter */
-  TIMx->CR1 |= TIM_DMA_Sources; 
+  TIMx->CR1 |= TIM_DMA_Sources;
 }
 
 /*******************************************************************************
@@ -667,7 +667,7 @@ void TIM_DMAConfig(TIM_TypeDef *TIMx, u16 TIM_DMA_Sources)
 * Description    : Enables or disables TIMx DMA peripheral.
 * Input1         : TIMx: where x can be from 0 to 3 to select the TIM
 *                  peripheral.
-* Input2         : TIM_Newstate: new state of the  TIMx DMA peripheral 
+* Input2         : TIM_Newstate: new state of the  TIMx DMA peripheral
 *                  This parameter can be one of the following values:
 *                       - ENABLE : Enable the TIMx DMA.
 *                       - DISABLE: Disable the TIMx DMA.

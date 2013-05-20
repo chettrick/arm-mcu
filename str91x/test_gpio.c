@@ -42,7 +42,7 @@ int main(void)
   SCU_APBPeriphReset(__GPIO9, DISABLE);		// Let GPIO9 out of reset
 
   // Initialize LED output pins
- 
+
   GPIO_StructInit(&config);
   config.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1|GPIO_Pin_2|GPIO_Pin_3;
   config.GPIO_Direction = GPIO_PinOutput;	// LED pins are outputs
