@@ -44,6 +44,7 @@ static int pwm_timer_init(unsigned timer, unsigned frequency)
       LPC_TMR32B0->MCR = 0x00000400;		// Reset on match register 3
       LPC_TMR32B0->MR3 = SystemCoreClock/frequency;
       LPC_TMR32B0->CTCR = 0;			// Timer mode
+      LPC_TMR32B0->TC = 0;			// Reset the counter
       LPC_TMR32B0->TCR = 1;			// Enable counter/timer
       break;
 
@@ -53,6 +54,7 @@ static int pwm_timer_init(unsigned timer, unsigned frequency)
       LPC_TMR32B1->MCR = 0x00000400;		// Reset on match register 3
       LPC_TMR32B1->MR3 = SystemCoreClock/frequency;
       LPC_TMR32B1->CTCR = 0;			// Timer mode
+      LPC_TMR32B1->TC = 0;			// Reset the counter
       LPC_TMR32B1->TCR = 1;			// Enable counter/timer
       break;
 
