@@ -24,7 +24,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 LPC21ISP_NAME	= lpc21isp
-LPC21ISP_URL	= https://github.com/capiman/lpc21isp.git
+LPC21ISP_URL	= http://github.com/capiman/lpc21isp.git
 LPC21ISP_DIR	= lpc21isp.src
 LPC21ISP_VER	= $(shell awk '/define VERSION_STR/ { print $$3 }' $(LPC21ISP_DIR)/lpc21isp.c)
 LPC21ISP_PROG	= $(LPC21ISP_NAME)
