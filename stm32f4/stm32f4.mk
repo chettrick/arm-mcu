@@ -30,6 +30,7 @@ TEXTBASE	?= 0x00000000
 CFLAGS		+= -DSTM32F4XX
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
+OPENOCDCFG	= $(MCUDIR)/stm32f4.openocd
 OPENOCDFLASH	= $(MCUDIR)/stm32f4.flashocd
 
 ifeq ($(WITH_FPU), yes)
