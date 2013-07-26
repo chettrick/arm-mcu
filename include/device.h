@@ -138,11 +138,11 @@ int device_stat(int fd, struct stat *st);
 
 // Convenience macros, vaguely inspired by Turbo C and Turbo Pascal
 
-#define keypressed(...)	(device_ready_read(fileno(stdin)))
-#define getch(...)	(device_getc(fileno(stdin)))
-#define putch(c)	(device_putc(fileno(stdout), c))
-#define cgets(s, count)	(device_read(fileno(stdin), s, count))
-#define cputs(s)	(device_write(fileno(stdout), s, strlen(s)))
+#define keypressed(...)	device_ready_read(0)
+#define getch(...)	device_getc(0)
+#define putch(c)	device_putc(1, c)
+#define cgets(s, count)	device_read(0, s, count)
+#define cputs(s)	device_write(1, s, strlen(s))
 
 _END_STD_C
 #endif
