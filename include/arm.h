@@ -26,7 +26,10 @@
 #ifndef _ARM_H
 #define _ARM_H
 
+// Include some important system header files
+
 #include <_ansi.h>
+#include <errno.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
