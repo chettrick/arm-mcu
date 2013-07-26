@@ -29,9 +29,10 @@
 
 static const char revision[] = "$Id$";
 
-#include <cpu.h>
-#include <errno.h>
+#include <stdlib.h>
 #include <string.h>
+
+#include <cpu.h>
 
 #define MAX_SERIAL_PORTS	1
 
@@ -39,25 +40,6 @@ static LPC_UART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
 {
   (LPC_UART_TypeDef *) LPC_UART,
 };
-
-/* Lightweight alternative to newlib atoi() */
-
-static int lightweight_atoi(const char *s)
-{
-  int x = 0;
-
-  while (*s)
-  {
-    char c = *s++;
-
-    if ((c >= '0') && (c <= '9'))
-      x = x*10 + c - '0';
-    else
-      break;
-  }
-
-  return x;
-}
 
 /* Map serial port device name to port number */
 
@@ -96,7 +78,7 @@ int serial_open(char *name, unsigned int *subdevice)
 
 // Extract baud rate from device name
 
-  baudrate = lightweight_atoi(name+5);
+  baudrate = atoi(name+5);
 
   switch (port)
   {

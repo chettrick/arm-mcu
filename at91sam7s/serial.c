@@ -29,9 +29,10 @@
 
 static const char revision[] = "$Id$";
 
-#include <cpu.h>
-#include <errno.h>
+#include <stdlib.h>
 #include <string.h>
+
+#include <cpu.h>
 
 #define MAX_SERIAL_PORTS	2
 
@@ -49,25 +50,6 @@ static const unsigned long int UARTS[MAX_SERIAL_PORTS] =
 #define US_RHR	(*(volatile unsigned long int *)(UARTS[port] + 0x18))
 #define US_THR	(*(volatile unsigned long int *)(UARTS[port] + 0x1C))
 #define US_BRGR	(*(volatile unsigned long int *)(UARTS[port] + 0x20))
-
-/* Lightweight alternative to newlib atoi() */
-
-static int lightweight_atoi(const char *s)
-{
-  int x = 0;
-
-  while (*s)
-  {
-    char c = *s++;
-
-    if ((c >= '0') && (c <= '9'))
-      x = x*10 + c - '0';
-    else
-      break;
-  }
-
-  return x;
-}
 
 /* Map serial port device name to port number */
 
@@ -107,7 +89,7 @@ int serial_open(char *name, unsigned int *subdevice)
 
 // Extract baud rate from device name
 
-  baudrate = lightweight_atoi(name+5);
+  baudrate = atoi(name+5);
 
 // Configure peripheral clock and I/O pins for UART
 

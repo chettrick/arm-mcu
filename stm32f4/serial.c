@@ -29,9 +29,10 @@
 
 static const char revision[] = "$Id: serial.c 3206 2011-10-19 13:12:40Z svn $";
 
-#include <cpu.h>
-#include <errno.h>
+#include <stdlib.h>
 #include <string.h>
+
+#include <cpu.h>
 
 #define MAX_SERIAL_PORTS	6
 
@@ -44,25 +45,6 @@ static USART_TypeDef * const UARTS[MAX_SERIAL_PORTS] =
   UART5,
   USART6,
 };
-
-/* Lightweight alternative to newlib atoi() */
-
-static int lightweight_atoi(const char *s)
-{
-  int x = 0;
-
-  while (*s)
-  {
-    char c = *s++;
-
-    if ((c >= '0') && (c <= '9'))
-      x = x*10 + c - '0';
-    else
-      break;
-  }
-
-  return x;
-}
 
 /* Map serial port device name to port number */
 
@@ -112,7 +94,7 @@ int serial_open(char *name, unsigned int *subdevice)
 
 // Extract baud rate from device name
 
-  baudrate = lightweight_atoi(name+5);
+  baudrate = atoi(name+5);
 
 // Turn on USART
 
