@@ -26,12 +26,19 @@
 #ifndef _CPU_H
 #define _CPU_H
 
-#include <arm.h>	// Must be included first!
-
+#include <arm.h>
 #include <device.h>
 #include <interrupt.h>
 #include <leds.h>
 #include <serial.h>
+
+#ifdef CONSOLE_CONIO
+#include <conio.h>
+#endif
+
+#ifdef CONSOLE_USB
+#include <usb_serial.h>
+#endif
 
 #define DEFAULT_CPU_FREQ	0
 
@@ -39,10 +46,6 @@ _BEGIN_STD_C
 
 #include <91x_lib.h>
 #include <91x_it.h>
-
-#ifdef CONSOLE_USB
-#include <usb_serial.h>
-#endif
 
 extern unsigned long int SystemCoreClock;
 extern void cpu_init(unsigned long int frequency);

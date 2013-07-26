@@ -26,13 +26,19 @@
 #ifndef _CPU_H
 #define _CPU_H
 
-#include <arm.h>	// Must be include first!
-
+#include <arm.h>
 #include <device.h>
 #include <leds.h>
 #include <serial.h>
-
 #include <at91lib/AT91SAM7S.h>
+
+#ifdef CONSOLE_CONIO
+#include <conio.h>
+#endif
+
+#ifdef CONSOLE_USB
+#include <usbserial.h>
+#endif
 
 #define DEFAULT_CPU_FREQ	0
 

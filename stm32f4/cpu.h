@@ -26,14 +26,17 @@
 #ifndef _CPU_H
 #define _CPU_H
 
-#include <arm.h>	// Must be included first!
-
+#include <arm.h>
 #include <device.h>
 #include <gpiopins.h>
 #include <leds.h>
 #include <serial.h>
 #include <spi.h>
 #include <stm32f4xx.h>
+
+#ifdef CONSOLE_CONIO
+#include <conio.h>
+#endif
 
 #ifdef CONSOLE_USB
 #include <usb_serial.h>
