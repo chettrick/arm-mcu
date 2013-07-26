@@ -1,8 +1,3 @@
-#include <cpu.h>
-#include <conio.h>
-#include <serial.h>
-#include <string.h>
-
 // Copyright (C)2013, Philip Munts, President, Munts AM Corp.
 // All rights reserved.
 //
@@ -24,78 +19,13 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#include <string.h>
+
+#include <cpu.h>
+
+int csprintf(char *out, const char *format, ...);
+
 int conio_errno;	// Replace newlib errno
-
-static unsigned int port;
-
-void conio_init(const char *console)
-{
-  serial_open((char *) console, &port);
-}
-
-int keypressed(void)			// Check for data ready
-{
-  return serial_rxready(port);
-}
-
-int getch(void)				// Get next character
-{
-  char c = 0;
-
-  while (serial_read(port, &c, 1) == 0);
-  return c;
-}
-
-void putch(char c)			// Write a character
-{
-  if (c == '\n') putch('\r');
-
-  while (serial_write(port, &c, 1) == 0);
-}
-
-int cgets(char *s, int size)		// Get a line of text
-{
-  char *p = s;
-  char c;
-
-  memset(s, 0, size);
-
-  for (;;)
-  {
-    c = getch();
-
-    switch (c)
-    {
-      case '\r' :
-      case '\n' :
-        cputs("\r\n");
-        *p++ = '\n';
-        return p - s;
-        break;
-
-      case '\b' :
-      case 127 :
-        if (p > s)
-        {
-          *p-- = 0;
-          cputs("\b \b");
-        }
-        break;
-
-      default :
-        putch(c);
-        *p++ = c;
-        if ((p - s) >= size)
-          return size;
-        break;
-    }
-  }
-}
-
-void cputs(const char *s)		// Write a string
-{
-  while (*s) putch(*s++);
-}
 
 /* Lightweight alternative to newlib atoi() */
 

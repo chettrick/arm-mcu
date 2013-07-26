@@ -43,14 +43,6 @@ _BEGIN_STD_C
 #undef sscanf
 #undef fscanf
 
-// Undefine macros from device.h
-
-#undef keypressed
-#undef getch
-#undef putch
-#undef cgets
-#undef cputs
-
 // Undefine macros from errno.h
 
 #undef errno
@@ -59,20 +51,11 @@ _BEGIN_STD_C
 
 #undef getchar
 #undef putchar
-
-void conio_init(const char *console);	// Initialize console
+#undef gets
+#undef puts
 
 extern int conio_errno;			// Replacement errno
 
-int keypressed(void);			// Check for data ready
-
-int getch(void);			// Get a character (cooked)
-
-void putch(char c);			// Write a character
-
-int cgets(char *s, int size);		// Get a line of text
-
-void cputs(const char *s);		// Write a string
 
 int cprintf(const char *format, ...);	// Write formatted text
 
@@ -86,13 +69,11 @@ char *lightweight_strerror(int e);
 
 // Emulate C standard I/O
 
-#define serial_stdio(x)	conio_init(x)
-
 #define errno		conio_errno
 #define getchar()	getch()
 #define putchar(x)	putch(x)
 #define gets(x)		cgets(x, sizeof(x))
-#define puts(x)		{ cputs(x); putch('\n'); }
+#define puts(x)		{ cputs((char *) x); putch('\n'); }
 #define printf(...)	cprintf(__VA_ARGS__)
 #define sprintf(...)	csprintf(__VA_ARGS__)
 #define sscanf(...)	csscanf(__VA_ARGS__)
