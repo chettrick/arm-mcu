@@ -138,6 +138,11 @@ News
        here, there, and everywhere.
      * 15 April 2013 -- Upgraded binutils to 2.23.2 and gcc to 4.7.3. Add
        capability for building a toolchain package for [12]OpenBSD.
+     * 26 July 2013 -- Major rework of the lightweight console library. It
+       now uses services from device.c instead of duplicating them. Also
+       cleaned up and rationalized header file includes throught.
+       Eliminated some compiler warnings from LPC17xx and STM32F4
+       peripheral libraries.
 
 Git Repository
 
