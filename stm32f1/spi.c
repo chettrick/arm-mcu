@@ -26,7 +26,6 @@
 static const char revision[] = "$Id$";
 
 #include <cpu.h>
-#include <errno.h>
 
 #define MAX_SPI_PORTS		3
 
