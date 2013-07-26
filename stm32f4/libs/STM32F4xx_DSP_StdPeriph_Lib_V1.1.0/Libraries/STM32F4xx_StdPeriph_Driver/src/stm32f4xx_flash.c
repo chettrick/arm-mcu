@@ -433,7 +433,9 @@ FLASH_Status FLASH_EraseAllSectors(uint8_t VoltageRange)
 {
   uint32_t tmp_psize = 0x0;
   FLASH_Status status = FLASH_COMPLETE;
-  
+
+  (void) tmp_psize;
+
   /* Wait for last operation to be completed */
   status = FLASH_WaitForLastOperation();
   assert_param(IS_VOLTAGERANGE(VoltageRange));
