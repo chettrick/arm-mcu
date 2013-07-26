@@ -25,6 +25,10 @@
 
 static const char revision[] = "$Id$";
 
+#ifndef CONSOLE_CONIO
+#error This program requires the lightweight console I/O library
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
