@@ -8,10 +8,11 @@
 
 static const char revision[] = "$Id$";
 
-#include <cpu.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/time.h>
+
+#include <cpu.h>
 
 /*
  * Copyright (c) 1997 Kungliga Tekniska Höolan
