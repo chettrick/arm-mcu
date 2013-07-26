@@ -25,13 +25,13 @@
 
 static const char revision[] = "$Id$";
 
-#include <cpu.h>
-#include <errno.h>
-#include <inet.h>
-#include <socket.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <cpu.h>
+#include <inet.h>
+#include <socket.h>
 #include <wiznet.h>
 #include <W5200.h>
 
