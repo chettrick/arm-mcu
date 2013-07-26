@@ -35,11 +35,18 @@
 
 _BEGIN_STD_C
 
+#ifdef CONSOLE_CONIO
+#define MAX_DEVICES		2
+#else
+#ifndef MAX_DEVICES
 #define MAX_DEVICES		16
+#endif
+#endif
+
 #define DEVICE_NAME_SIZE	8
 
 // Device names are of form <DEVICE>:<PARAMETER1><,PARAMETER2>...<,PARAMETERn>
-
+// Only the first field is saved in the device table
 typedef enum
 {
   DEVICE_TYPE_UNUSED		= 0,
@@ -68,7 +75,7 @@ typedef int (*device_read_ready_fn_t)	(unsigned int subdevice);
 typedef int (*device_seek_fn_t)		(unsigned int subdevice,
                                          off_t pos,
                                          int whence);
-
+
 typedef struct
 {
   char name[DEVICE_NAME_SIZE+1];
