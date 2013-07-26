@@ -26,7 +26,6 @@
 static const char revision[] = "$Id$";
 
 #include <cpu.h>
-#include <errno.h>
 
 #define MAX_GPIO_PORTS		7
 #define PINS_PER_GPIO_PORT	16

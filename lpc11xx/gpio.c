@@ -26,8 +26,6 @@
 static const char revision[] = "$Id$";
 
 #include <cpu.h>
-#include <errno.h>
-#include <conio.h>
 
 // The following table calculates (at compile time) as much as possible
 // the addresses and data values necessary to manipulate GPIO pins.
