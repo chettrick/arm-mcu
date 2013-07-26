@@ -29,10 +29,10 @@
 
 static const char revision[] = "$Id$";
 
-#include <cpu.h>
-#include <errno.h>
 #include <fcntl.h>
 #include <string.h>
+
+#include <cpu.h>
 
 // Compile support for FreeRTOS
 

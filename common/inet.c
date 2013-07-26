@@ -25,11 +25,11 @@
 
 static const char revision[] = "$Id$";
 
-#include <cpu.h>
-#include <errno.h>
-#include <inet.h>
 #include <stdio.h>
 #include <string.h>
+
+#include <cpu.h>
+#include <inet.h>
 
 char *inet_ntop(int af, const void *src, char *dst, int size)
 {

@@ -29,11 +29,11 @@
 
 static const char revision[] = "$Id$";
 
-#include <cpu.h>
-#include <errno.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/times.h>
+
+#include <cpu.h>
 
 extern char __heap_start__[];	// Beginning of heap, address set by linker
 extern char __heap_end__[];	// End of heap, address set by linker
