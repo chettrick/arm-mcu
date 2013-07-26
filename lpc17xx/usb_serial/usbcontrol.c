@@ -115,6 +115,8 @@ static void StallControlPipe(U8 bEPStat)
 	bEPStat = bEPStat;
 	USBHwEPStall(0x80, TRUE);
 
+	(void) pb;
+
 // dump setup packet
 	DBG("STALL on [");
 	pb = (U8 *)&Setup;
