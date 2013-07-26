@@ -25,22 +25,21 @@
 
 static const char revision[] = "$Id$";
 
+#ifdef CONSOLE_CONIO
+#error This program cannot use the lightweight console I/O library
+#endif
+
 #ifndef WIZNET
 #error You must define WIZNET to compile this application
 #endif
 
-#include <cpu.h>
-#include <errno.h>
-#include <inet.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <wiznet.h>
 
-#ifdef CONSOLE_CONIO
-#error This program cannot use the lightweight console I/O library
-#endif
+#include <cpu.h>
+#include <inet.h>
+#include <wiznet.h>
 
 // Hardware configuration for W5200E01-M3 board
 

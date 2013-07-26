@@ -25,23 +25,24 @@
 
 static const char revision[] = "$Id$";
 
+#ifdef CONSOLE_CONIO
+#error This program cannot use the lightweight console I/O library
+#endif
+
 #ifndef FREERTOS
 #error You must define FREERTOS to compile this FreeRTOS application
 #endif
 
 #include <assert.h>
-#include <cpu.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include <cpu.h>
+
 #include <FreeRTOS.h>
 #include <semphr.h>
 #include <task.h>
-
-#ifdef CONSOLE_CONIO
-#error This program cannot use the lightweight console I/O library
-#endif
 
 #define MESSAGE_PERIOD	4000
 

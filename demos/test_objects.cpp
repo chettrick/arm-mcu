@@ -25,12 +25,10 @@
 
 static const char revision[] = "$Id$";
 
-#include <cpu.h>
 #include <stdio.h>
+#include <string.h>
 
-#ifdef CONSOLE_CONIO
-#include <conio.h>
-#endif
+#include <cpu.h>
 
 // Define an object class
 

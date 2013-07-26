@@ -25,17 +25,18 @@
 
 static const char revision[] = "$Id$";
 
+#ifdef CONSOLE_CONIO
+#error This program cannot use the lightweight console I/O library
+#endif
+
 #undef INTEGER_STDIO
 
-#include <cpu.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef CONSOLE_CONIO
-#error This program cannot use the lightweight console I/O library
-#endif
+#include <cpu.h>
 
 int main(void)
 {

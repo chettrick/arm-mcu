@@ -25,12 +25,11 @@
 
 static const char revision[] = "$Id$";
 
-#include <cpu.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include <conio.h>
+#include <cpu.h>
 
 int main(void)
 {
@@ -39,7 +38,7 @@ int main(void)
   int x, y;
 
   cpu_init(DEFAULT_CPU_FREQ);
-  conio_init(CONSOLE_PORT);
+  serial_stdio(CONSOLE_PORT);
 
   printf("\033[H\033[2J%s Console I/O Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
   puts(revision);

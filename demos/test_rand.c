@@ -25,16 +25,11 @@
 
 static const char revision[] = "$Id$";
 
-#include <cpu.h>
-#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
-#ifdef CONSOLE_CONIO
-#include <conio.h>
-#endif
+#include <cpu.h>
 
 #define ITERATIONS	10000
 #define Z1		1
