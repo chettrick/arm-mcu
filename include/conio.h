@@ -54,10 +54,7 @@ _BEGIN_STD_C
 #undef gets
 #undef puts
 
-extern int conio_errno;			// Replacement errno
-
-
-int cprintf(const char *format, ...);	// Write formatted text
+int cprintf(const char *format, ...);
 
 int csprintf(char *out, const char *format, ...);
 
@@ -67,9 +64,10 @@ int lightweight_atoi(const char *s);
 
 char *lightweight_strerror(int e);
 
+extern int lightweight_errno;
+
 // Emulate C standard I/O
 
-#define errno		conio_errno
 #define getchar()	getch()
 #define putchar(x)	putch(x)
 #define gets(x)		cgets(x, sizeof(x))
@@ -79,6 +77,7 @@ char *lightweight_strerror(int e);
 #define sscanf(...)	csscanf(__VA_ARGS__)
 #define atoi(x)		lightweight_atoi(x)
 #define strerror(x)	lightweight_strerror(x)
+#define errno		lightweight_errno
 
 _END_STD_C
 #endif

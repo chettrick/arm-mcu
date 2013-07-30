@@ -37,9 +37,9 @@
 
 #ifdef CONSOLE_CONIO
 _BEGIN_STD_C
-extern int conio_errno;
+extern int lightweight_errno;
 _END_STD_C
-#define errno_r			conio_errno
+#define errno_r			lightweight_errno
 #else
 #define errno_r			(*(__errno()))
 #endif

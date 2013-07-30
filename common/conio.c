@@ -23,9 +23,9 @@
 
 #include <cpu.h>
 
-int csprintf(char *out, const char *format, ...);
+/* Lightweight alternative to newlib errno structure */
 
-int conio_errno;	// Replace newlib errno
+int lightweight_errno;
 
 /* Lightweight alternative to newlib atoi() */
 
