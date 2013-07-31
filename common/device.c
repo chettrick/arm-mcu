@@ -941,3 +941,54 @@ off_t device_seek(int fd, off_t pos, int whence)
 
   return device_table[fd].seek(device_table[fd].subdevice, pos, whence);
 }
+
+int fcntl(int fd, int cmd, ...)
+{
+  va_list argptr;
+
+  errno_r = 0;
+
+// Validate file descriptor
+
+  if ((fd < 0) || (fd >= MAX_DEVICES))
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+
+  if (device_table[fd].type == DEVICE_TYPE_UNUSED)
+  {
+    errno_r = ENODEV;
+    return -1;
+  }
+
+  if (device_table[fd].type != DEVICE_TYPE_CHAR)
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+
+  if (!device_table[fd].isopen)
+  {
+    errno_r = EIO;
+    return -1;
+  }
+
+// Perform file operations
+
+  switch (cmd)
+  {
+    case F_GETFL :
+      return device_table[fd].flags;
+
+    case F_SETFL :
+      va_start(argptr, cmd);
+      device_table[fd].flags = va_arg(argptr, int);
+      va_end(argptr);
+      return 0;
+
+    default :
+      errno_r = EINVAL;
+      return -1;
+  }
+}
