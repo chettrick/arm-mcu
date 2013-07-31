@@ -23,11 +23,14 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-// Semi-hosting operations -- From "ARM Compiler toolchain Developing
-// Software for ARM Processors,Version 5.03"
+// These services ONLY work in debug mode.  If your program calls any of these,
+// it will NOT work unless you are debugging.
 
 // Be sure to issue "monitor arm semihosting enable" in gdb before starting
 // your program.
+
+// Semi-hosting operations -- From "ARM Compiler toolchain Developing
+// Software for ARM Processors,Version 5.03"
 
 #define SYS_OPEN		0x01
 #define SYS_CLOSE		0x02
