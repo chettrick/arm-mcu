@@ -35,6 +35,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <semihosting.h>
+
 #ifdef CONSOLE_CONIO
 _BEGIN_STD_C
 extern int lightweight_errno;
