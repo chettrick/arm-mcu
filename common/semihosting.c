@@ -35,7 +35,11 @@
 
 void *__semihosting(uint32_t op, void *arg)
 {
+#ifdef __thumb2__
   asm("push {LR}; bkpt 0xAB; pop {PC}");
+#else
+  asm("push {LR}; svc 0xAB; pop {PC}");
+#endif
 }
 
 int semihosting_register(char *name)
