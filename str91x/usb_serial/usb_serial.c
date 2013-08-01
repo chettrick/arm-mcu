@@ -24,9 +24,6 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include <cpu.h>
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <91x_lib.h>
 #include <usb_lib.h>

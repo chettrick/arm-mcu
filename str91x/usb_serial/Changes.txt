@@ -27,3 +27,6 @@ $Id$
 10. Renamed stmcdc.inf to usb_serial.inf.
 
 11. Renamed bool to boolean to prevent clash with C++ type.
+
+12. Removed unnecessary #include <errno.h>, #include <stdio.h>, and
+    #include <stdlib.h> from usb_serial.c.
