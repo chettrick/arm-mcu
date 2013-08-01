@@ -49,6 +49,7 @@ _BEGIN_STD_C
 
 // Undefine macros from stdio.h
 
+#undef fflush
 #undef getchar
 #undef putchar
 #undef gets
@@ -68,6 +69,7 @@ extern int lightweight_errno;
 
 // Emulate C standard I/O
 
+#define fflush(x)
 #define getchar()	getch()
 #define putchar(x)	putch(x)
 #define gets(x)		cgets(x, sizeof(x))
