@@ -25,15 +25,13 @@
 	THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// CodeRed - comment out this printf, as will use real one from stdio.h
-// to implement output via semihosting
+#ifdef CONIO_STDIO
+#include <_ansi.h>
+#include <conio.h>
+#else
+#include <stdio.h>
+#endif
 
-//int printf(const char *format, ...);
-# include <stdio.h>
-
-// CodeRed - added DEBUG_MESSAGES, so still get output for Release builds
-//#define DEBUG_MESSAGES 1
-//#ifdef DEBUG
 #ifdef DEBUG_MESSAGES
 #define DBG	printf
 #define ASSERT(x)	if(!(x)){DBG("\nAssertion '%s' failed in %s:%s#%d!\n",#x,__FILE__,__FUNCTION__,__LINE__);while(1);}
@@ -41,4 +39,3 @@
 #define DBG(x ...)
 #define ASSERT(x)
 #endif
-

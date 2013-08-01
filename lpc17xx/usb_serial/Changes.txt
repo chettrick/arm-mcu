@@ -13,3 +13,5 @@ http://code.google.com/p/cortex-m3-tutorials/downloads/detail?name=VCOM_lib1.3.r
    access them from usb_serial.c.
 
 4. Removed the platform dependent LED code from usbhw_lpc.c.
+
+5. Added #ifdef CONIO_STDIO section to usbdebug.h.
