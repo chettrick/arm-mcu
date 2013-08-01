@@ -73,7 +73,6 @@ endif
 
 USBSERIAL	= $(MCUDIR)/usb_serial
 CFLAGS		+= -I$(USBSERIAL)
-CONSOLEFLAGS	+= -DCONSOLE_USB
 
 # Phony targets
 
