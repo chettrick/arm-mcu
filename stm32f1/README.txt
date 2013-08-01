@@ -1,4 +1,3 @@
-
                ST STM32F1 Cortex-M3 ARM Microcontroller Framework
 
 Credits
@@ -35,7 +34,7 @@ Notes
 
    The limited amount of RAM available in the STM32F100RB on the STM32
    Value Line Discovery board requires using the conio facility instead of
-   stdio, so -DCONSOLE_CONIO is defined in stm32f1.mk.
+   stdio, so -DCONIO_STDIO is defined in stm32f1.mk.
 
 Test Platform
 

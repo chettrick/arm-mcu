@@ -35,41 +35,25 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), MBED_LPC1768)
-ifneq ($(WITH_USBSERIAL), yes)
-CONSOLEFLAGS	+= -DCONSOLE_PORT='"com1:115200,n,8,1"'
-endif
+CONSOLEFLAGS	?= -DCONSOLE_SERIAL -DCONSOLE_PORT='"com1:115200,n,8,1"'
 endif
 
 ifeq ($(BOARDNAME), BLUEBOARD_LPC1768_H)
-ifneq ($(WITH_CONIO), yes)
-WITH_USBSERIAL	?= yes
-endif
-
-ifneq ($(WITH_USBSERIAL), yes)
-CONSOLEFLAGS	+= -DCONSOLE_PORT='"com1:115200,n,8,1"'
-endif
-
+CONSOLEFLAGS	?= -DCONSOLE_USB
 JLINKMCU	= lpc1768
 JLINKGDBIF	= -if SWD
 endif
 
 ifeq ($(BOARDNAME), LPC1768_MINI_DK2)
-ifneq ($(WITH_USBSERIAL), yes)
-CONSOLEFLAGS	+= -DCONSOLE_PORT='"com1:115200,n,8,1"'
-endif
-
+CONSOLEFLAGS	?= -DCONSOLE_SERIAL -DCONSOLE_PORT='"com1:115200,n,8,1"'
 JLINKMCU	= lpc1768
 JLINKGDBIF	= -if SWD
 endif
 
-# USB serial port console support
+# USB serial port support
 
-ifeq ($(WITH_USBSERIAL), yes)
 USBSERIAL	= $(MCUDIR)/usb_serial
 CFLAGS		+= -I$(USBSERIAL)
-CONSOLEFLAGS	+= -DCONSOLE_USB
-RMAKEFLAGS	+= WITH_USBSERIAL=$(WITH_USBSERIAL)
-endif
 
 # Phony targets
 
@@ -83,10 +67,8 @@ LIBOBJS		= $(MCU).o cpu.o gpiopins.o leds.o serial.o $(EXTRALIBOBJS)
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-ifeq ($(WITH_USBSERIAL), yes)
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
-endif
 	$(MAKE) $(LIBTARGETS)
 
 # Clean out working files

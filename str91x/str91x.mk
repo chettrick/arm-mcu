@@ -35,20 +35,14 @@ LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), STMICRO_STR910_EVAL)
-ifneq ($(WITH_USBSERIAL), yes)
-CONSOLEFLAGS	+= -DCONSOLE_PORT='"com1:115200,n,8,1"'
-endif
+CONSOLEFLAGS	?= -DCONSOLE_SERIAL -DCONSOLE_PORT='"com1:115200,n,8,1"'
 MCU		= str912faw44
 endif
 
-# USB serial port console support
+# USB serial port support
 
-ifeq ($(WITH_USBSERIAL), yes)
 USBSERIAL	= $(MCUDIR)/usb_serial
 CFLAGS		+= -I$(USBSERIAL)
-CONSOLEFLAGS	+= -DCONSOLE_USB
-RMAKEFLAGS	+= WITH_USBSERIAL=$(WITH_USBSERIAL)
-endif
 
 # Phony targets
 
@@ -62,10 +56,8 @@ lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
 	for F in $(FWLIB)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(FWLIB)/*.o
-ifeq ($(WITH_USBSERIAL), yes)
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
-endif
 	$(MAKE) $(LIBTARGETS)
 
 # Clean out working files

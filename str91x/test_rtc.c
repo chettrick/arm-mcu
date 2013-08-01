@@ -43,11 +43,17 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
+#ifdef CONSOLE_SERIAL
+  serial_stdio(CONSOLE_PORT);
+#endif
+
+#ifdef CONSOLE_SEMIHOSTING
+  semihosting_stdio(CONSOLE_PORT)
+#endif
+
 #ifdef CONSOLE_USB
   usb_serial_stdio(NULL);
   getch();
-#else
-  serial_stdio(CONSOLE_PORT);
 #endif
 
   puts("\033[H\033[2JSTR91x Real Time Clock Test (" __DATE__ " " __TIME__ ")\n");

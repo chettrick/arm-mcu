@@ -33,13 +33,10 @@
 #include <serial.h>
 #include <spi.h>
 #include <stm32f4xx.h>
-
-#ifdef CONSOLE_CONIO
-#include <conio.h>
-#endif
-
-#ifdef CONSOLE_USB
 #include <usb_serial.h>
+
+#ifdef CONIO_STDIO
+#include <conio.h>
 #endif
 
 #define DEFAULT_CPU_FREQ	0

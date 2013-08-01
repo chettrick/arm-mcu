@@ -26,7 +26,7 @@ Other Devices
 Notes
 
    The limited amount of RAM available in these devices requires using the
-   conio I/O facility instead of stdio, so -DCONSOLE_CONIO is defined in
+   conio I/O facility instead of stdio, so -DCONIO_STDIO is defined in
    lpc11xx.mk.
 
 Test Platform

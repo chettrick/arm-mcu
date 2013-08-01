@@ -32,12 +32,8 @@
 #include <serial.h>
 #include <at91lib/AT91SAM7S.h>
 
-#ifdef CONSOLE_CONIO
+#ifdef CONIO_STDIO
 #include <conio.h>
-#endif
-
-#ifdef CONSOLE_USB
-#include <usbserial.h>
 #endif
 
 #define DEFAULT_CPU_FREQ	0

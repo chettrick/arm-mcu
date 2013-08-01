@@ -34,12 +34,8 @@
 #include <spi.h>
 #include <stm32f10x.h>
 
-#ifdef CONSOLE_CONIO
+#ifdef CONIO_STDIO
 #include <conio.h>
-#endif
-
-#ifdef CONSOLE_USB
-#include <usb_serial.h>
 #endif
 
 #define DEFAULT_CPU_FREQ	0

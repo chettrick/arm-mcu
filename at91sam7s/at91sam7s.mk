@@ -35,10 +35,9 @@ LDFLAGS		+= -Wl,--section-start=startup=$(TEXTBASE)
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), OLIMEX_SAM7_P256)
-BOARDFLAGS	?= -DCONSOLE_PORT='"com1:115200,n,8,1"'
+CONSOLEFLAGS	?= -DCONSOLE_SERIAL -DCONSOLE_PORT='"com1:115200,n,8,1"'
 MCU		= at91sam7s
 JLINKMCU	= at91sam7s512
-PG4UWPRJ	= at91sam7s256.eprj
 endif
 
 # Phony targets

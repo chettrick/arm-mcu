@@ -25,7 +25,7 @@
 
 static const char revision[] = "$Id$";
 
-#ifdef CONSOLE_CONIO
+#ifdef CONIO_STDIO
 #error This program cannot use the lightweight console I/O library
 #endif
 
@@ -89,11 +89,17 @@ int main(void)
 
   cpu_init(DEFAULT_CPU_FREQ);
 
+#ifdef CONSOLE_SERIAL
+  serial_stdio(CONSOLE_PORT);
+#endif
+
+#ifdef CONSOLE_SEMIHOSTING
+  semihosting_stdio(CONSOLE_PORT)
+#endif
+
 #ifdef CONSOLE_USB
   usb_serial_stdio(NULL);
   getch();
-#else
-  serial_stdio(CONSOLE_PORT);
 #endif
 
 // Display version information

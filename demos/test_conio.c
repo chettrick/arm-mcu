@@ -25,7 +25,7 @@
 
 static const char revision[] = "$Id$";
 
-#ifndef CONSOLE_CONIO
+#ifndef CONIO_STDIO
 #error This program requires the lightweight console I/O library
 #endif
 
@@ -42,7 +42,19 @@ int main(void)
   int x, y;
 
   cpu_init(DEFAULT_CPU_FREQ);
+
+#ifdef CONSOLE_SERIAL
   serial_stdio(CONSOLE_PORT);
+#endif
+
+#ifdef CONSOLE_SEMIHOSTING
+  semihosting_stdio(CONSOLE_PORT)
+#endif
+
+#ifdef CONSOLE_USB
+  usb_serial_stdio(NULL);
+  getch();
+#endif
 
   printf("\033[H\033[2J%s Console I/O Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);
   puts(revision);

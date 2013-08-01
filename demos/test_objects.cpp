@@ -73,11 +73,17 @@ int main(void)
 {
   cpu_init(DEFAULT_CPU_FREQ);
 
+#ifdef CONSOLE_SERIAL
+  serial_stdio(CONSOLE_PORT);
+#endif
+
+#ifdef CONSOLE_SEMIHOSTING
+  semihosting_stdio(CONSOLE_PORT)
+#endif
+
 #ifdef CONSOLE_USB
   usb_serial_stdio(NULL);
   getch();
-#else
-  serial_stdio((char *) CONSOLE_PORT);
 #endif
 
   printf("\033[H\033[2J%s C++ Object Test (" __DATE__ " " __TIME__ ")\n\n", MCUFAMILYNAME);

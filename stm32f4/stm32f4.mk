@@ -42,68 +42,38 @@ endif
 
 ifeq ($(BOARDNAME), STM32F4_DISCOVERY)
 BOARDFLAGS	+= -DHSE_VALUE=8000000
-
-ifneq ($(WITH_CONIO), yes)
-WITH_USBSERIAL	?= yes
-endif
-
-ifneq ($(WITH_USBSERIAL), yes)
-CONSOLEFLAGS	+= -DCONSOLE_PORT='"com2:115200,n,8,1"'
-endif
-
+CONSOLEFLAGS	?= -DCONSOLE_USB
+#CONSOLEFLAGS	?= -DCONSOLE_SERIAL -DCONSOLE_PORT='"com2:115200,n,8,1"'
 MCU		= stm32f407vg
-JLINKGDBIF	= -if SWD
-
-ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-STLINKCLIIF	= -c SWD
-endif
 endif
 
 ifeq ($(BOARDNAME), FEZ_CERB40)
 BOARDFLAGS	+= -DHSE_VALUE=12000000
-
-ifneq ($(WITH_CONIO), yes)
-WITH_USBSERIAL	?= yes
-endif
-
-ifneq ($(WITH_USBSERIAL), yes)
-CONSOLEFLAGS	+= -DCONSOLE_PORT='"com2:115200,n,8,1"'
-endif
-
+CONSOLEFLAGS	?= -DCONSOLE_USB
+#CONSOLEFLAGS	?= -DCONSOLE_SERIAL -DCONSOLE_PORT='"com2:115200,n,8,1"'
 MCU		= stm32f405rg
-JLINKGDBIF	= -if SWD
-
-ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-STLINKCLIIF	= -c SWD
-endif
 endif
 
 ifeq ($(BOARDNAME), NETDUINO2)
 BOARDFLAGS	+= -DHSE_VALUE=25000000
-
-ifneq ($(WITH_CONIO), yes)
-WITH_USBSERIAL	?= yes
-endif
-
-ifneq ($(WITH_USBSERIAL), yes)
-CONSOLEFLAGS	+= -DCONSOLE_PORT='"com2:115200,n,8,1"'
-endif
-
+CONSOLEFLAGS	?= -DCONSOLE_USB
+#CONSOLEFLAGS	?= -DCONSOLE_SERIAL -DCONSOLE_PORT='"com2:115200,n,8,1"'
 MCU		= stm32f405rg
+endif
+
+# Use SWD, not JTAG
+
 JLINKGDBIF	= -if SWD
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 STLINKCLIIF	= -c SWD
 endif
-endif
 
-# USB serial port console support
+# USB serial port support
 
-ifeq ($(WITH_USBSERIAL), yes)
 USBSERIAL	= $(MCUDIR)/usb_serial
 CFLAGS		+= -I$(USBSERIAL)
 CONSOLEFLAGS	+= -DCONSOLE_USB
-endif
 
 # Phony targets
 
@@ -117,10 +87,8 @@ LIBOBJS		= $(MCU).o cpu.o gpiopins.o leds.o serial.o $(EXTRALIBOBJS)
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
-ifeq ($(WITH_USBSERIAL), yes)
 	for F in $(USBSERIAL)/*.c ; do $(MAKE) $${F%.c}.o ; done
 	$(AR) crs lib$(MCU).a $(USBSERIAL)/*.o
-endif
 	$(MAKE) $(LIBTARGETS)
 
 # Clean out working files

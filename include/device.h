@@ -35,7 +35,7 @@
 
 _BEGIN_STD_C
 
-#ifdef CONSOLE_CONIO
+#ifdef CONIO_STDIO
 #define MAX_DEVICES		2
 #else
 #ifndef MAX_DEVICES

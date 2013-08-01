@@ -34,14 +34,11 @@
 #include <pwm.h>
 #include <serial.h>
 #include <spi.h>
+#include <usb_serial.h>
 #include <LPC11xx.h>
 
-#ifdef CONSOLE_CONIO
+#ifdef CONIO_STDIO
 #include <conio.h>
-#endif
-
-#ifdef CONSOLE_USB
-#include <usb_serial.h>
 #endif
 
 #define DEFAULT_CPU_FREQ	0
