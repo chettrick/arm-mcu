@@ -79,5 +79,9 @@ extern int lightweight_errno;
 #define strerror(x)	lightweight_strerror(x)
 #define errno		lightweight_errno
 
+#ifndef EOF
+#define EOF		(-1)
+#endif
+
 _END_STD_C
 #endif
