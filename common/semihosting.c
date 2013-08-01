@@ -29,6 +29,7 @@
 // Be sure to issue "monitor arm semihosting enable" in gdb before starting
 // your program.
 
+#include <fcntl.h>
 #include <string.h>
 
 #include <cpu.h>
@@ -67,6 +68,11 @@ int semihosting_stdio(char *name)
   device_register_char_fd(0, subdevice, NULL, semihosting_read, NULL, semihosting_read_ready);
   device_register_char_fd(1, subdevice, semihosting_write, NULL, semihosting_write_ready, NULL);
   device_register_char_fd(2, subdevice, semihosting_write, NULL, semihosting_write_ready, NULL);
+
+  // Put stdin in binary mode, because of the limitations of semihosting in OpenOCD.
+  // We need to use the input line editor in OpenOCD instead of ours in device.c
+
+  fcntl(0, F_SETFL, O_BINARY);
 
   return 0;
 }
@@ -143,9 +149,8 @@ int semihosting_read(unsigned int fd, char *buf, unsigned int count)
 
   if (status < 0)
   {
-    return 0;
-//    errno_r = EIO;
-//    return status;
+    errno_r = EIO;
+    return status;
   }
   else
     return count - status;
