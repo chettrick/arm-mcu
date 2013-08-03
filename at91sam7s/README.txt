@@ -33,7 +33,7 @@ Test Platform
    This framework is validated on an [3]Olimex SAM7-P256 development
    board.
 
-   Tested on 12 April 2013 with gcc 4.7.2.
+   Tested on 3 August 2013 with gcc 4.7.3.
 
 Legacy Status
 
