@@ -34,7 +34,7 @@ Test Platform
    This framework is validated on a bare [4]LPC1114FN28/102 plugged into a
    solderless breadboard.
 
-   Tested on 12 April 2012 with gcc 4.7.2.
+   Tested on 3 August 2013 with gcc 4.7.3.
      __________________________________________________________________
 
    Questions or comments to Philip Munts [5]phil@munts.net
