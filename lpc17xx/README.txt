@@ -1,4 +1,3 @@
-
        NXP (nee Philips) LPC17xx ARM Cortex-M3 Microcontroller Framework
 
 Credits
@@ -26,13 +25,13 @@ Other Devices
 
 Test Platform
 
-   This framework is validated on the [4]mbed LPC1768 and [5]NGX BlueBoard
-   LPC1768-H development boards.
+   This framework is validated on the [4]mbed LPC1768, [5]NGX BlueBoard
+   LPC1768-H, and [6]LPC1768-Mini-DK2 development boards.
 
-   Tested on 21 December 2012 with gcc 4.7.2.
+   Tested on 3 August 2013 with gcc 4.7.3.
      __________________________________________________________________
 
-   Questions or comments to Philip Munts [6]phil@munts.net
+   Questions or comments to Philip Munts [7]phil@munts.net
 
    $Id$
 
@@ -46,4 +45,5 @@ References
    3. http://ics.nxp.com/support/lpcxpresso
    4. http://mbed.org/handbook/mbed-NXP-LPC1768
    5. http://shop.ngxtechnologies.com/product_info.php?products_id=65
-   6. mailto:phil@munts.net
+   6. http://www.hotmcu.com/lpc1768minidk2-development-board-p-55.html
+   7. mailto:phil@munts.net
