@@ -146,6 +146,8 @@ News
      * 1 August 2013 -- More major rework of the console libraries. Added
        support for OpenOCD semihosting console. Added support for using
        the conio lightweight I/O library with USB and semihosting.
+     * 6 August 2013 -- Upgraded OpenOCD to 0.7.0. Upgraded GCC to 4.8.1.
+       Upgraded GDB to 7.6.
 
 Git Repository
 
