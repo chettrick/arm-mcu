@@ -32,6 +32,7 @@ LDFLAGS		+= -Ttext $(TEXTBASE)
 
 OPENOCDCFG	= $(MCUDIR)/stm32f4.openocd
 OPENOCDFLASH	= $(MCUDIR)/stm32f4.flashocd
+OPENOCDIF	= stlink-v2
 
 ifeq ($(WITH_FPU), yes)
 CPUFLAGS	+= -mfloat-abi=hard -mfpu=fpv4-sp-d16
