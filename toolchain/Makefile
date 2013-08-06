@@ -103,9 +103,6 @@ source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIB
 	$(TAR) xjf $(BINUTILDIST)
 	$(TAR) xjf $(GCCDIST)
 	if [ -f multilibs.$(ABI).patch ]; then cd $(GCCSRC) ; patch -b -p0 <../multilibs.$(ABI).patch ; fi
-ifeq ($(shell uname), OpenBSD)
-	cd $(GCCSRC) ; patch -b -p0 <../openbsd.pch.patch
-endif
 	$(TAR) xzf $(NEWLIBDIST)
 	ln -s "../$(NEWLIBSRC)/newlib" $(GCCSRC)/newlib
 	$(TAR) xjf $(GDBDIST)
