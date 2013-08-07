@@ -49,9 +49,6 @@ expect $prompt
 send "wait_halt\n"
 expect $prompt
 
-send "adapter_khz 3000\n"
-expect $prompt
-
 send "str9x flash_config 0 4 2 0 0x80000\n"
 expect $prompt
 

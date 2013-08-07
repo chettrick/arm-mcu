@@ -35,7 +35,7 @@ reset_config trst_and_srst
 
 # Adapter configuration
 
-adapter_khz 16
+jtag_rclk 3000
 adapter_nsrst_delay 200
 
 # Target configuration
