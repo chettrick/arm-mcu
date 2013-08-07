@@ -167,8 +167,6 @@ include $(ARMSRC)/include/jlink.mk
 include $(ARMSRC)/include/lpc21isp.mk
 include $(ARMSRC)/include/mbed.mk
 include $(ARMSRC)/include/openocd.mk
-include $(ARMSRC)/include/stlink.mk
-include $(ARMSRC)/include/stm32flash.mk
 
 # Include MCU dependent makefile
 
