@@ -29,22 +29,17 @@ gdb_port 3333
 telnet_port 4444
 tcl_port 6666
 
-# Reset configuration
-
-reset_config trst_and_srst
-
 # Adapter configuration
 
-adapter_khz 1000
-adapter_nsrst_delay 100
+transport select hla_swd
 
 # Target configuration
 
-jtag newtap STM32F1 cpu -irlen 4 -ircapture 0x1 -expected-id 0x3ba00477
-jtag newtap STM32F1 bs  -irlen 5 -ircapture 0x1 -expected-id 0x06420041
+hla newtap STM32F1 cpu -expected-id 0x1ba01477
+hla newtap STM32F1 bs  -expected-id 0x06420041
 
-target create STM32F1.cpu cortex_m3 -endian little -chain-position STM32F1.cpu
-STM32F1.cpu configure -work-area-phys 0x20000000 -work-area-size 0x5000 -work-area-backup 0
+target create STM32F1.cpu hla_target -endian little -chain-position STM32F1.cpu
+STM32F1.cpu configure -work-area-phys 0x20000000 -work-area-size 0x2000 -work-area-backup 0
 
 # Flash configuration
 
