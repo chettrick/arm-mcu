@@ -148,6 +148,8 @@ News
        the conio lightweight I/O library with USB and semihosting.
      * 6 August 2013 -- Upgraded OpenOCD to 0.7.0. Upgraded GCC to 4.8.1.
        Upgraded GDB to 7.6.
+     * 7 August 2013 -- Removed support for the obsolete BlueBoard USB
+       boot loader.
 
 Git Repository
 

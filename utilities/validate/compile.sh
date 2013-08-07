@@ -18,8 +18,6 @@ fi
 
 export MCUFAMILY=at91sam7s
 export BOARDNAME=OLIMEX_SAM7_P256
-export WITH_CONIO=no
-export WITH_USBSERIAL=no
 
 cd ${ARMSRC}/${MCUFAMILY}
 make test_gpio.bin clean
@@ -40,8 +38,7 @@ if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
 
 export MCUFAMILY=at91sam7s
 export BOARDNAME=OLIMEX_SAM7_P256
-export WITH_CONIO=yes
-export WITH_USBSERIAL=no
+export IOFLAGS=-DCONIO_STDIO
 
 cd ${ARMSRC}/${MCUFAMILY}
 make test_gpio.bin clean
@@ -56,12 +53,12 @@ if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
 make test_systick.bin clean
 if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
 
+unset IOFLAGS
+
 ##########################################################################
 
 export MCUFAMILY=lpc11xx
 export BOARDNAME=PROTOBOARD_LPC1114FN28
-export WITH_CONIO=yes
-export WITH_USBSERIAL=no
 
 cd ${ARMSRC}/${MCUFAMILY}
 make test_gpio.bin clean
@@ -82,8 +79,6 @@ if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
 
 export MCUFAMILY=lpc11xx
 export BOARDNAME=RASPBERRYPI_LPC1114
-export WITH_CONIO=yes
-export WITH_USBSERIAL=no
 
 cd ${ARMSRC}/${MCUFAMILY}
 make test_gpio.bin clean
@@ -104,8 +99,6 @@ if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
 
 export MCUFAMILY=lpc17xx
 export BOARDNAME=MBED_LPC1768
-export WITH_CONIO=no
-export WITH_USBSERIAL=no
 
 cd ${ARMSRC}/${MCUFAMILY}
 make test_gpio.bin clean
@@ -128,8 +121,7 @@ if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
 
 export MCUFAMILY=lpc17xx
 export BOARDNAME=MBED_LPC1768
-export WITH_CONIO=no
-export WITH_USBSERIAL=yes
+export CONSOLEFLAGS=-DCONSOLE_USB
 
 cd ${ARMSRC}/${MCUFAMILY}
 make test_gpio.bin clean
@@ -148,12 +140,40 @@ if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
 make test_systick.bin clean WITH_LWIP=yes
 if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
 
+unset CONSOLEFLAGS
+
 ##########################################################################
 
 export MCUFAMILY=lpc17xx
 export BOARDNAME=MBED_LPC1768
-export WITH_CONIO=yes
-export WITH_USBSERIAL=no
+export CONSOLEFLAGS=-DCONSOLE_USB
+export IOFLAGS=-DCONIO_STDIO
+
+cd ${ARMSRC}/${MCUFAMILY}
+make test_gpio.bin clean
+if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
+cd ${ARMSRC}/demos
+make test_float.bin clean
+if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
+make test_freertos.bin clean WITH_FREERTOS=yes
+if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
+make test_objects.bin clean
+if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
+make test_rand.bin clean
+if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
+make test_stdio.bin clean
+if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
+make test_systick.bin clean WITH_LWIP=yes
+if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
+
+unset CONSOLEFLAGS
+unset IOFLAGS
+
+##########################################################################
+
+export MCUFAMILY=lpc17xx
+export BOARDNAME=MBED_LPC1768
+export IOFLAGS=-DCONIO_STDIO
 
 cd ${ARMSRC}/${MCUFAMILY}
 make test_gpio.bin clean
@@ -167,6 +187,8 @@ make test_rand.bin clean
 if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
 make test_systick.bin clean
 if [ $? -ne 0 ]; then echo "BARF" ; exit ; fi
+
+unset IOFLAGS
 
 ##########################################################################
 
