@@ -74,7 +74,7 @@ VERSION		= $(BINUTILVER)_$(GCCVER)_$(NEWLIBVER)_$(GDBVER)
 RELEASE		= 1
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -o)-$(shell uname -m).tgz
+TARBALL		= $(PKGNAME)-$(VERSION)-cygwin.tgz
 else
 TARBALL		= $(PKGNAME)-$(VERSION)-$(shell uname -s)-$(shell uname -m).tgz
 endif
