@@ -37,8 +37,8 @@ transport select hla_swd
 
 hla newtap STM32F1 cpu -expected-id 0x1ba01477
 
-target create STM32F1.cpu hla_target -endian little -chain-position STM32F1.cpu
-STM32F1.cpu configure -work-area-phys 0x20000000 -work-area-size 0x5000 -work-area-backup 0
+target create STM32F1.cpu hla_target -chain-position STM32F1.cpu
+STM32F1.cpu configure -work-area-phys 0x20000000 -work-area-size 8192 -work-area-backup 0
 
 # Flash configuration
 
