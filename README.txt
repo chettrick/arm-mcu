@@ -151,7 +151,7 @@ News
      * 7 August 2013 -- Removed support for the obsolete BlueBoard USB
        boot loader. Removed support for the various STM32 programming
        utilities, since OpenOCD works better on the ST-Link adapters
-       anyway.
+       anyway. Use OpenOCD on ST-Link V2 for all STM32 targets.
 
 Git Repository
 
