@@ -30,7 +30,11 @@ TEXTBASE	?= 0x00000000
 CFLAGS		+= -DSTM32F10X
 LDFLAGS		+= -Ttext $(TEXTBASE)
 
+JLINKGDBIF	= -if SWD
+
+OPENOCDCFG	= $(MCUDIR)/stm32f1.openocd
 OPENOCDFLASH	= $(MCUDIR)/stm32f1.flashocd
+OPENOCDIF	= stlink-v2
 
 # Board specific macro definitions
 
@@ -48,15 +52,13 @@ ifeq ($(BOARDNAME), STM32_VALUE_LINE_DISCOVERY)
 MCU		= stm32f100rb
 CONSOLEFLAGS	?= -DCONSOLE_SERIAL -DCONSOLE_PORT='"com1:115200,n,8,1"'
 IOFLAGS		= -DCONIO_STDIO
-JLINKGDBIF	= -if SWD
+OPENOCDCFG	= $(MCUDIR)/stm32f100rb.openocd
 OPENOCDIF	= stlink-v1
 endif
 
 ifeq ($(BOARDNAME), W5200E01_M3)
 MCU		= stm32f103c8
 CONSOLEFLAGS	?= -DCONSOLE_SERIAL -DCONSOLE_PORT='"com1:115200,n,8,1"'
-JLINKGDBIF	= -if SWD
-OPENOCDIF	= stlink-v2
 endif
 
 # Include MCU specific make file
