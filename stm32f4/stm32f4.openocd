@@ -1,4 +1,4 @@
-# OpenOCD configuration for STM32Fxx Cortex-M4 ARM MCU
+# OpenOCD configuration for STM32Fxx Cortex-M4 ARM MCU Using ST-Link
 
 # $Id$
 
