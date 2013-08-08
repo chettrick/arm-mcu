@@ -1,4 +1,4 @@
-# OpenOCD configuration for STM32Fxx Cortex-M4 ARM MCU Using ST-Link
+# OpenOCD configuration for STM32F4xx Cortex-M4 ARM MCU Using ST-Link
 
 # $Id$
 
@@ -38,7 +38,7 @@ transport select hla_swd
 hla newtap STM32F4 cpu -expected-id 0x2ba01477
 
 target create STM32F4.cpu hla_target -chain-position STM32F4.cpu
-STM32F4.cpu configure -work-area-phys 0x20000000 -work-area-size 0x10000 -work-area-backup 0
+STM32F4.cpu configure -work-area-phys 0x20000000 -work-area-size 8192 -work-area-backup 0
 
 # Flash configuration
 
