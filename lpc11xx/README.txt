@@ -31,13 +31,14 @@ Notes
 
 Test Platform
 
-   This framework is validated on a bare [4]LPC1114FN28/102 plugged into a
+   This framework is validated on the [4]Raspberry Pi LPC1114 I/O
+   Processor expansion board and a bare [5]LPC1114FN28/102 plugged into a
    solderless breadboard.
 
-   Tested on 3 August 2013 with gcc 4.7.3.
+   Tested on 9 August 2013 with gcc 4.8.1.
      __________________________________________________________________
 
-   Questions or comments to Philip Munts [5]phil@munts.net
+   Questions or comments to Philip Munts [6]phil@munts.net
 
    $Id$
 
@@ -49,5 +50,6 @@ References
    1. http://www.amazon.com/Definitive-Guide-Cortex-M3-Embedded-Technology/dp/0750685344
    2. http://www.arm.com/products/processors/cortex-m/cortex-microcontroller-software-interface-standard.php
    3. http://ics.nxp.com/support/lpcxpresso
-   4. http://www.nxp.com/products/microcontrollers/cortex_m0/lpc1100_x_l/LPC1114FN28.html
-   5. mailto:phil@munts.net
+   4. http://tech.munts.com/MCU/Frameworks/RaspberryPi/expansion/LPC1114
+   5. http://www.nxp.com/products/microcontrollers/cortex_m0/lpc1100_x_l/LPC1114FN28.html
+   6. mailto:phil@munts.net
