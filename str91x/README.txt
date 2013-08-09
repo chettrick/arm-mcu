@@ -40,7 +40,7 @@ Test Platform
    This framework is validated on the [4]STMicro STR910-EVAL development
    board.
 
-   Tested on 21 December 2012 with gcc 4.7.2.
+   Tested on 9 August 2013 with gcc 4.8.1.
 
    ARM9 devices like the STR91x are now considered legacy devices. The
    newer Cortex-M3 devices are much faster, cheaper, and easier to use. I
