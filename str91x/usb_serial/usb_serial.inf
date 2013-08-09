@@ -1,66 +1,49 @@
-;------------------------------------------------------------------------------
-; STMicroelectronics Comunication Device Class driver (CDC) INF FILE
-; (C)2010 Copyright STMicroelectronics
-;------------------------------------------------------------------------------
+; Windows INF to load usbser driver for all CDC-ACM USB Serial Ports
+; Copyright (C) 2008 PJRC.COM, LLC.
 
 ; $Id$
 
-[Version]
-Signature="$Windows NT$"
+[Version] 
+Signature="$Windows NT$" 
 Class=Ports
-ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
-Provider=%PRVDR%
-CatalogFile=stmcdc.cat
-DriverVer=04/25/2010,1.3.1
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318} 
+Provider=%MFGNAME% 
+DriverVer=01/01/2008,1.0.0.0
+;CatalogFile=cdc_acm_class.cat
+
+[Manufacturer] 
+%MFGNAME%=DeviceList, NTamd64
+
+[DeviceList]
+%DEVNAME%=DriverInstall,USB\Class_02&SubClass_02&Prot_01
+
+[DeviceList.NTamd64]
+%DEVNAME%=DriverInstall,USB\Class_02&SubClass_02&Prot_01
+
+[DeviceList.NTia64]
+%DEVNAME%=DriverInstall,USB\Class_02&SubClass_02&Prot_01
 
 [SourceDisksNames]
-1=%DriversDisk%,,,
+1=%CD1NAME%
 
 [SourceDisksFiles]
 
-[Manufacturer]
-%MFGNAME%=DeviceList,NT,NTamd64
+[DestinationDirs] 
+DefaultDestDir=12 
 
-[DestinationDirs]
-DefaultDestDir = 12
-
-;------------------------------------------------------------------------------
-;            VID/PID Settings
-;------------------------------------------------------------------------------
-[DeviceList.NT]
-%DESCRIPTION%=DriverInstall,USB\VID_0483&PID_5740
-
-[DeviceList.NTamd64]
-%DESCRIPTION%=DriverInstall,USB\VID_0483&PID_5740
-
-[DriverInstall.NT]
+[DriverInstall]
 Include=mdmcpq.inf
 CopyFiles=FakeModemCopyFileSection
-AddReg=DriverInstall.NT.AddReg
+AddReg=DriverAddReg
 
-[DriverInstall.NT.AddReg]
-HKR,,DevLoader,,*ntkern
-HKR,,NTMPDriver,,usbser.sys
-HKR,,EnumPropPages32,,"MsPorts.dll,SerialPortPropPageProvider"
+[DriverAddReg]
+HKR,,EnumPropPages32,,"msports.dll,SerialPortPropPageProvider"
 
-[DriverInstall.NT.Services]
-AddService=usbser, 0x00000002, DriverServiceInst
+[DriverInstall.Services]
+Include=mdmcpq.inf
+AddService=usbser,0x00000002,LowerFilter_Service_Inst 
 
-[DriverServiceInst]
-DisplayName=%SERVICE%
-ServiceType = 1 ; SERVICE_KERNEL_DRIVER
-StartType = 3 ; SERVICE_DEMAND_START
-ErrorControl = 1 ; SERVICE_ERROR_NORMAL
-ServiceBinary= %12%\usbser.sys
-LoadOrderGroup = Base
-
-;------------------------------------------------------------------------------
-;              String Definitions
-;------------------------------------------------------------------------------
-
-[Strings]
-PRVDR = "STMicroelectronics"
-MFGNAME = "STMicroelectronics."
-DESCRIPTION = "STMicroelectronics Virtual COM Port"
-SERVICE = "STM Virtual COM Port"
-DriversDisk = "STM Drivers Disk" 
+[Strings] 
+MFGNAME="PJRC.COM, LLC."
+DEVNAME="USB Serial Port (Communication Class, Abstract Control Model)"
+CD1NAME="No CDROM required, usbser.sys is provided by Windows"
