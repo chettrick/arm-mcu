@@ -28,7 +28,7 @@ Test Platform
    This framework is validated on the [4]mbed LPC1768, [5]NGX BlueBoard
    LPC1768-H, and [6]LPC1768-Mini-DK2 development boards.
 
-   Tested on 3 August 2013 with gcc 4.7.3.
+   Tested on 9 August 2013 with gcc 4.8.1.
      __________________________________________________________________
 
    Questions or comments to Philip Munts [7]phil@munts.net
