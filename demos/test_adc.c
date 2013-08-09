@@ -43,7 +43,7 @@ void SysTick_Handler(void)
   if (++TimerCounter == SYSTICKRATE/5)
   {
     TimerCounter = 0;
-    TimerFlag = false;
+    TimerFlag = true;
   }
 }
 
