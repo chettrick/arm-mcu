@@ -38,7 +38,7 @@ Test Platform
    This framework is validated on the [2]STM32F4 Discovery, [3]FEZ Cerb40,
    and [4]Netduino Plus 2 development boards.
 
-   Tested on 10 April 2013 with gcc 4.7.2.
+   Tested on 9 August 2013 with gcc 4.8.1.
      __________________________________________________________________
 
    Questions or comments to Philip Munts [5]phil@munts.net
