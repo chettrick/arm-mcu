@@ -44,6 +44,6 @@ Include=mdmcpq.inf
 AddService=usbser,0x00000002,LowerFilter_Service_Inst 
 
 [Strings] 
-MFGNAME="PJRC.COM, LLC."
-DEVNAME="USB Serial Port (Communication Class, Abstract Control Model)"
+MFGNAME="Munts Technologies"
+DEVNAME="Microcontroller USB Serial Port"
 CD1NAME="No CDROM required, usbser.sys is provided by Windows"
