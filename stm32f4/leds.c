@@ -42,6 +42,11 @@ void LEDS_initialize(void)
   gpiopin_configure(GPIOPIN10, GPIOPIN_OUTPUT);		// PA10
 #endif
 
+#ifdef MINI_M4_STM32
+  gpiopin_configure(GPIOPIN44, GPIOPIN_OUTPUT);		// PC12, yellow
+  gpiopin_configure(GPIOPIN45, GPIOPIN_OUTPUT);		// PC13, red
+#endif
+
   LEDS_set(0);						// Turn off all LEDs at startup
 }
 
@@ -63,6 +68,11 @@ unsigned long int LEDS_get(void)
   result += GPIOPIN10IN;
 #endif
 
+#ifdef MINI_M4_STM32
+  result += GPIOPIN44IN;
+  result += GPIOPIN45IN << 1;
+#endif
+
   return result;
 }
 
@@ -80,5 +90,10 @@ void LEDS_set(unsigned long int mask)
 
 #ifdef NETDUINO2
   GPIOPIN10OUT = mask;
+#endif
+
+#ifdef MINI_M4_STM32
+  GPIOPIN44OUT = mask;
+  GPIOPIN45OUT = mask >> 1;
 #endif
 }
