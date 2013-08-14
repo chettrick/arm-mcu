@@ -36,12 +36,12 @@ Other Devices
 Test Platform
 
    This framework is validated on the [2]STM32F4 Discovery, [3]FEZ Cerb40,
-   and [4]Netduino Plus 2 development boards.
+   [4]Netduino Plus 2, and [5]MINI-M4-STM32 development boards.
 
    Tested on 9 August 2013 with gcc 4.8.1.
      __________________________________________________________________
 
-   Questions or comments to Philip Munts [5]phil@munts.net
+   Questions or comments to Philip Munts [6]phil@munts.net
 
    $Id$
 
@@ -54,4 +54,5 @@ References
    2. http://www.st.com/internet/evalboard/product/252419.jsp
    3. http://www.ghielectronics.com/catalog/product/353
    4. http://netduino.com/netduinoplus2/specs.htm
-   5. mailto:phil@munts.net
+   5. http://www.mikroe.com/mini/stm32
+   6. mailto:phil@munts.net

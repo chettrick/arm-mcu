@@ -152,11 +152,13 @@ News
        boot loader. Removed support for the various STM32 programming
        utilities, since OpenOCD works better on the ST-Link adapters
        anyway. Use OpenOCD on ST-Link V2 for all STM32 targets.
+     * 14 August 2013 -- Added support for the Mikroelektronika
+       [13]MINI-M4-STM32.
 
 Git Repository
 
-   The source code is hosted on [13]SourceForge at
-   [14]http://sourceforge.net/p/arm-mcu/code.
+   The source code is hosted on [14]SourceForge at
+   [15]http://sourceforge.net/p/arm-mcu/code.
 
    Use one of the following commands to clone it:
 git clone --depth 1 git://git.code.sf.net/p/arm-mcu/code  ARM
@@ -191,7 +193,7 @@ POSSIBILITY OF SUCH DAMAGE.
    respective authors.
      __________________________________________________________________
 
-   Questions or comments to Philip Munts [15]phil@munts.net
+   Questions or comments to Philip Munts [16]phil@munts.net
 
    $Id$
 
@@ -212,6 +214,7 @@ References
   10. http://git-scm.com/
   11. http://sourceforge.net/
   12. http://www.openbsd.org/
-  13. http://sourceforge.net/
-  14. http://sourceforge.net/p/arm-mcu/code
-  15. mailto:phil@munts.net
+  13. http://www.mikroe.com/mini/stm32
+  14. http://sourceforge.net/
+  15. http://sourceforge.net/p/arm-mcu/code
+  16. mailto:phil@munts.net
