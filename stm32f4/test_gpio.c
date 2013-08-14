@@ -104,8 +104,8 @@ int main(void)
 
   for (i = 0;; i++)
   {
-    GPIOPIN44OUT = i >> 18;
-    GPIOPIN45OUT = i >> 19;
+    GPIOPIN44OUT = i >> 20;
+    GPIOPIN45OUT = i >> 21;
   }
 #endif
 }
