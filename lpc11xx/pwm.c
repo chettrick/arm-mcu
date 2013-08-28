@@ -27,7 +27,8 @@ static const char revision[] = "$Id$";
 
 #include <cpu.h>
 
-// Initialize on of the 32-bit timers for PWM service
+// Initialize one of the 32-bit timers for PWM service
+
 // We use match register 3 for setting the PWM period, per the user
 // manual recommendation
 
