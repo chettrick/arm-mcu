@@ -63,6 +63,8 @@ int csscanf(const char *str, const char *format, ...);
 
 int lightweight_atoi(const char *s);
 
+void lightweight_exit(int status);
+
 char *lightweight_strerror(int e);
 
 extern int lightweight_errno;
