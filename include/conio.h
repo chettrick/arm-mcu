@@ -80,6 +80,7 @@ extern int lightweight_errno;
 #define atoi(x)		lightweight_atoi(x)
 #define strerror(x)	lightweight_strerror(x)
 #define errno		lightweight_errno
+#define exit(x)		lightweight_exit(x)
 
 #ifndef EOF
 #define EOF		(-1)

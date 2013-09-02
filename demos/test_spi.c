@@ -79,7 +79,7 @@ int main(void)
   if ((status = spi_master_init(SPI_PORT, 8, 0, 281250, SPI_MSBFIRST)))
   {
     printf("ERROR: spi_master_init() failed at line %d, %s\n", status, strerror(errno));
-    return 1;
+    exit(1);
   }
 
   for (;;)
@@ -92,7 +92,7 @@ int main(void)
     if ((status = spi_master_transfer(SPI_PORT, &commandbyte, 1, &responsebyte, 1)))
     {
       printf("ERROR: spi_master_transfer() failed at line %d, %s\n", status, strerror(errno));
-      return 1;
+      exit(1);
     }
 
     printf("Response was %02X\n\n", responsebyte);

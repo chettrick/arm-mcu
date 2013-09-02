@@ -160,7 +160,7 @@ int main(void)
                                WIZNET_SPISPEED, WIZNET_SPIENDIAN)))
   {
     printf("ERROR: spi_master_init() returned %d, %s\n", status, strerror(errno));
-    return 1;
+    exit(1);
   }
 
 // Initialize the WizNet device
@@ -168,19 +168,19 @@ int main(void)
   if ((status = wiznet_initialize(WIZNET_SPIPORT, 4)))
   {
     printf("ERROR: wiznet_initialize() returned %d, %s\n", status, strerror(errno));
-    return 1;
+    exit(1);
   }
 
   if ((status = wiznet_set_hardware_address(macaddress)))
   {
     printf("ERROR: wiznet_set_hardware_address() returned %d, %s\n", status, strerror(errno));
-    return 1;
+    exit(1);
   }
 
   if ((status = wiznet_get_hardware_address(macaddr)))
   {
     printf("ERROR: wiznet_get_hardware_address() returned %d, %s\n", status, strerror(errno));
-    return 1;
+    exit(1);
   }
 
   printf("\033[6;1HMAC address is %02X:%02X:%02X:%02X:%02X:%02X\n",
@@ -189,25 +189,25 @@ int main(void)
   if (inet_pton(AF_INET, "10.0.0.100", ipaddr) != 1)
   {
     printf("ERROR: inet_pton() failed, %s\n", strerror(errno));
-    return 1;
+    exit(1);
   }
 
   if (inet_pton(AF_INET, "255.255.255.0", subnet) != 1)
   {
     printf("ERROR: inet_pton() failed, %s\n", strerror(errno));
-    return 1;
+    exit(1);
   }
 
   if (inet_pton(AF_INET, "10.0.0.1", gateway) != 1)
   {
     printf("ERROR: inet_pton() failed, %s\n", strerror(errno));
-    return 1;
+    exit(1);
   }
 
   if ((status = wiznet_configure_network(ipaddr, subnet, gateway)))
   {
     printf("ERROR: wiznet_configure_network() returned %d, %s\n", status, strerror(errno));
-    return 1;
+    exit(1);
   }
 
   memset(ipaddr, 0, sizeof(ipaddr));
@@ -215,13 +215,13 @@ int main(void)
   if ((status = wiznet_get_ipaddress(ipaddr)))
   {
     printf("ERROR: wiznet_get_ip_address() returned %d, %s\n", status, strerror(errno));
-    return 1;
+    exit(1);
   }
 
   if (inet_ntop(AF_INET, ipaddr, ipaddrbuf, sizeof(ipaddrbuf)) == NULL)
   {
     printf("ERROR: inet_ntop() failed, %s\n", strerror(errno));
-    return 1;
+    exit(1);
   }
 
   printf("IP address is %s\n", ipaddrbuf);
@@ -233,7 +233,7 @@ int main(void)
     if ((status = wiznet_get_linkstate(&linkstate)))
     {
       printf("ERROR: wiznet_get_linkstate() returned %d, %s\n", status, strerror(errno));
-      return 1;
+      exit(1);
     }
 
     printf("\033[8;1HLink state: %s", linkstate ? "YES" : "NO ");
@@ -241,7 +241,7 @@ int main(void)
     if ((status = wiznet_get_receive_ready(0, &count)))
     {
       printf("ERROR: wiznet_get_receive_ready() returned %d, %s\n", status, strerror(errno));
-      return 1;
+      exit(1);
     }
 
     printf("\033[9;1HReceive bytes available: %-5u", (unsigned) count);
@@ -257,7 +257,7 @@ int main(void)
       if (status)
       {
         printf("ERROR: wiznet_udp_receive_from() returned %d, %s\n", status, strerror(errno));
-        return 1;
+        exit(1);
       }
 
       memset(ipaddrbuf, 0, sizeof(ipaddrbuf));
@@ -276,7 +276,7 @@ int main(void)
       if (status)
       {
         printf("ERROR: wiznet_udp_send_to() returned %d, %s\n", status, strerror(errno));
-        return 1;
+        exit(1);
       }
     }
 

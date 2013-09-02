@@ -58,6 +58,13 @@ int lightweight_atoi(const char *s)
   return x;
 }
 
+/* Lightweight alternative to newlib exit() */
+
+void lightweight_exit(int status)
+{
+  for (;;);
+}
+
 /* Lightweight alternative to newlib strerror() */
 
 char lightweight_strerrno_buf[20];
