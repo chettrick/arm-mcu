@@ -81,16 +81,33 @@ typedef enum
 
 typedef enum
 {
-  GPIO_MODE_INPUT,	// Input with pull-up resistor
-  GPIO_MODE_OUTPUT,	// Push-pull output
-  GPIO_MODE_SENTINEL
+  GPIO_MODE_INPUT,		// High impedance input
+  GPIO_MODE_INPUT_PULLDOWN, 
+  GPIO_MODE_INPUT_PULLUP,
+  GPIO_MODE_OUTPUT,		// Push-pull output
+  GPIO_MODE_OUTPUT_OPENDRAIN,
+  MAX_GPIO_MODES
 } GPIO_MODE_t;
+
+// GPIO input pins can be configured for one of the following interrupt modes:
+
+typedef enum
+{
+  GPIO_INTERRUPT_DISABLED,
+  GPIO_INTERRUPT_FALLING,
+  GPIO_INTERRUPT_RISING,
+  GPIO_INTERRUPT_BOTH,
+  GPIO_INTERRUPT_LOW,
+  GPIO_INTERRUPT_HIGH,
+  MAX_GPIO_INTERRUPT_CONFIGS
+} GPIO_INTERRUPT_CONFIG_t;
 
 // GPIO service functions
 
-int gpio_configure(unsigned pin, unsigned mode);
+int gpio_configure(unsigned pin, GPIO_MODE_t mode);
+int gpio_configure_interrupt(unsigned pin, GPIO_INTERRUPT_CONFIG_t config);
 int gpio_read(unsigned pin);
-int gpio_write(unsigned pin, unsigned value);
+int gpio_write(unsigned pin, bool state);
 
 _END_STD_C
 #endif
