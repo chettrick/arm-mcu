@@ -25,12 +25,11 @@
 
 static const char revision[] = "$Id$";
 
-#include <stdio.h>
 #include <cpu.h>
 
 // The following table calculates (at compile time) as much as possible
 // the addresses and data values necessary to manipulate GPIO pins.
-// We trade 840 bytes of flash for a major boost in run-time performance.
+// We trade 1008 bytes of flash for a major boost in run-time performance.
 
 static const struct
 {
@@ -132,10 +131,6 @@ int gpio_configure(unsigned pin, GPIO_MODE_t mode)
       return -EINVAL;
   };
 
-printf("DEBUG: Pin number is %d\n", pin);
-printf("DEBUG: port at  %08X\n", gpio_pin_table[pin].port);
-printf("DEBUG: iocon at %08X is %08X\n", gpio_pin_table[pin].iocon, *gpio_pin_table[pin].iocon);
-printf("DEBUG: DDR at   %08X is %08X\n", &gpio_pin_table[pin].port->DIR, gpio_pin_table[pin].port->DIR);
   return 0;
 }
 
