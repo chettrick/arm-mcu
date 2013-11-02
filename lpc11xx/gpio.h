@@ -82,7 +82,7 @@ typedef enum
 typedef enum
 {
   GPIO_MODE_INPUT,		// High impedance input
-  GPIO_MODE_INPUT_PULLDOWN, 
+  GPIO_MODE_INPUT_PULLDOWN,
   GPIO_MODE_INPUT_PULLUP,
   GPIO_MODE_OUTPUT,		// Push-pull output
   GPIO_MODE_OUTPUT_OPENDRAIN,
