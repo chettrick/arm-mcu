@@ -154,6 +154,8 @@ News
        anyway. Use OpenOCD on ST-Link V2 for all STM32 targets.
      * 14 August 2013 -- Added support for the Mikroelektronika
        [13]MINI-M4-STM32.
+     * 24 December 2013 -- Upgraded to binutils 2.24, gcc 4.8.2, newlib
+       2.1.0, and gdb 7.6.2. Merry Christmas!
 
 Git Repository
 
