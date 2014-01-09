@@ -43,6 +43,14 @@
 
 #define DEFAULT_CPU_FREQ	0
 
+// The following constants _should_ be defined in LPC11xx.h
+
+#define MR0INT			0x01
+#define MR1INT			0x02
+#define MR2INT			0x04
+#define MR3INT			0x08
+#define CR0INT			0x10
+
 _BEGIN_STD_C
 
 extern void cpu_init(unsigned long int frequency);
