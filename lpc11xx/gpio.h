@@ -106,6 +106,7 @@ typedef enum
 
 int gpio_configure(unsigned pin, GPIO_MODE_t mode);
 int gpio_configure_interrupt(unsigned pin, GPIO_INTERRUPT_CONFIG_t config);
+int gpio_configure_function(unsigned pin, unsigned function);
 int gpio_read(unsigned pin);
 int gpio_write(unsigned pin, bool state);
 

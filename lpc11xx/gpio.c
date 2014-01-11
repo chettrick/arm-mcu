@@ -210,6 +210,31 @@ int gpio_configure_interrupt(unsigned pin, GPIO_INTERRUPT_CONFIG_t config)
   return 0;
 }
 
+/* Configure a GPIO pin function (call after gpio_configure()) */
+
+int gpio_configure_function(unsigned pin, unsigned function)
+{
+  errno_r = 0;
+
+  // Validate parameters
+
+  if (pin >= MAX_GPIO_PINS)
+  {
+    errno_r = ENODEV;
+    return -ENODEV;
+  }
+
+  if (function > 7)
+  {
+    errno_r = EINVAL;
+    return -EINVAL;
+  }
+
+  *gpio_pin_table[pin].iocon &= 0xFFFFFFF8;
+  *gpio_pin_table[pin].iocon |= function;
+  return 0;
+}
+
 /* Read from a single GPIO pin */
 
 int gpio_read(unsigned pin)
