@@ -33,6 +33,7 @@
 #include <leds.h>
 #include <pwm.h>
 #include <serial.h>
+#include <timer.h>
 #include <spi.h>
 #include <usb_serial.h>
 #include <LPC11xx.h>

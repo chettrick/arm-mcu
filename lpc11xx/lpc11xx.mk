@@ -56,7 +56,7 @@ endif
 
 include $(MCUDIR)/CMSIS/CMSIS.mk
 
-LIBOBJS		= $(MCU).o adc.o cpu.o gpio.o leds.o pwm.o serial.o spi.o $(EXTRALIBOBJS)
+LIBOBJS		= $(MCU).o adc.o cpu.o gpio.o leds.o pwm.o serial.o timer.o spi.o $(EXTRALIBOBJS)
 
 lib$(MCU).a: $(LIBOBJS)
 	$(AR) crs lib$(MCU).a $(LIBOBJS)
