@@ -2,7 +2,7 @@
 
 # $Id: stm32.mk 3236 2011-11-03 11:31:27Z svn $
 
-# Copyright (C)2013, Philip Munts, President, Munts AM Corp.
+# Copyright (C)2013-2014, Philip Munts, President, Munts AM Corp.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without

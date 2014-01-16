@@ -2,7 +2,7 @@
 
 // $Id: leds.c 2988 2011-09-06 08:28:59Z svn $
 
-// Copyright (C)2013, Philip Munts, President, Munts AM Corp.
+// Copyright (C)2013-2014, Philip Munts, President, Munts AM Corp.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
