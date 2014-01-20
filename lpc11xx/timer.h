@@ -35,8 +35,8 @@ _BEGIN_STD_C
 
 typedef enum
 {
-  C32B0,
-  C32B1,
+  CT32B0,
+  CT32B1,
   TIMER_ID_SENTINEL
 } timer_id_t;
 
