@@ -191,6 +191,7 @@ int timer_configure_mode(unsigned id, unsigned mode)
 
   TIMERS[id][TIMER_TCR] = MODE_TO_TCR[mode];
   TIMERS[id][TIMER_CTCR] = MODE_TO_CTCR[mode];
+
   errno_r = 0;
   return 0;
 }
@@ -204,6 +205,7 @@ int timer_configure_prescaler(unsigned id, unsigned divisor)
   CHECK_PARAMETER(id, TIMER_ID_SENTINEL);
 
   TIMERS[id][TIMER_PR] = divisor - 1;
+
   errno_r = 0;
   return 0;
 }
@@ -219,10 +221,24 @@ int timer_configure_capture(unsigned id, unsigned cap, unsigned edge, bool intr)
   CHECK_PARAMETER(edge, TIMER_CAPTURE_EDGE_SENTINEL);
   CHECK_PARAMETER(intr, 2);
 
-  gpio_configure_function(CAP_TO_PIN[id][cap], CAP_TO_FUNC[id][cap]);
+  // Only allow the interrupt if an edge is enabled
+
+  if ((edge == TIMER_CAPTURE_EDGE_DISABLED) && intr)
+  {
+    errno_r = EINVAL;
+    return -1;
+  }
+
+  // Configure the capture input
+
+  if (edge > TIMER_CAPTURE_EDGE_DISABLED)
+  {
+    gpio_configure_function(CAP_TO_PIN[id][cap], CAP_TO_FUNC[id][cap]);
+  }
 
   TIMERS[id][TIMER_CCR] &= ~(7 << (cap*3));
   TIMERS[id][TIMER_CCR] |= ((intr << 2) | edge) << (cap*3);
+
   errno_r = 0;
   return 0;
 }
@@ -243,6 +259,7 @@ int timer_configure_capture_clear(unsigned id, unsigned mode)
 
   TIMERS[id][TIMER_CTCR] &= 0xFFFFFF0F;
   TIMERS[id][TIMER_CTCR] |= CAPTURE_CLEAR_TO_CTCR[mode];
+
   errno_r = 0;
   return 0;
 }
@@ -269,6 +286,7 @@ int timer_configure_match(unsigned id, unsigned m, unsigned action,
 
   TIMERS[id][TIMER_MCR] &= ~(7 << (m*3));
   TIMERS[id][TIMER_MCR] |= (intr|(reset << 1)|(stop << 2)) << (m*3);
+
   errno_r = 0;
   return 0;
 }
@@ -281,6 +299,7 @@ int timer_configure_match_value(unsigned id, unsigned m, unsigned n)
   CHECK_PARAMETER(m, TIMER_MATCH_OUTPUTS);
 
   TIMERS[id][TIMER_MR0 + m] = n;
+
   errno_r = 0;
   return 0;
 }
