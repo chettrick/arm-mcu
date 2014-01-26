@@ -61,7 +61,7 @@ static uint32_t * const TIMERS[TIMER_ID_SENTINEL] =
 static const unsigned PWRBITS[TIMER_ID_SENTINEL] =
 {
   1 << 9,
-  1 << 10
+  1 << 10,
 };
 
 // This table maps a timer mode to a TCR register value
@@ -74,9 +74,6 @@ static const unsigned MODE_TO_TCR[TIMER_MODE_SENTINEL] =
   0x01,	// TIMER_MODE_CAP0_RISING
   0x01,	// TIMER_MODE_CAP0_FALLING
   0x01,	// TIMER_MODE_CAP0_BOTH
-  0x01,	// TIMER_MODE_CAP1_RISING
-  0x01,	// TIMER_MODE_CAP1_FALLING
-  0x01,	// TIMER_MODE_CAP1_BOTH
 };
 
 // This table maps a timer mode to a CTCR register value
@@ -89,85 +86,36 @@ static const unsigned MODE_TO_CTCR[TIMER_MODE_SENTINEL] =
   0x01,	// TIMER_MODE_CAP0_RISING
   0x02,	// TIMER_MODE_CAP0_FALLING
   0x03,	// TIMER_MODE_CAP0_BOTH
-  0x05,	// TIMER_MODE_CAP1_RISING
-  0x06,	// TIMER_MODE_CAP1_FALLING
-  0x07,	// TIMER_MODE_CAP1_BOTH
 };
 
-// This table maps a capture clear setting to a CTCR register value
+// This table maps a timer ID to a GPIO pin for CAP0
 
-static const unsigned CAPTURE_CLEAR_TO_CTCR[TIMER_CAPTURE_CLEAR_SENTINEL] =
+static const unsigned TIMER_TO_INPUT_PIN[TIMER_ID_SENTINEL] =
 {
-  0x00, // TIMER_CAPTURE_CLEAR_DISABLED
-  0x10, // TIMER_CAPTURE_CLEAR_CAP0_RISING
-  0x30, // TIMER_CAPTURE_CLEAR_CAP0_FALLING
-  0x50, // TIMER_CAPTURE_CLEAR_CAP1_RISING
-  0x70, // TIMER_CAPTURE_CLEAR_CAP1_FALLING
+  PIO1_5,
+  PIO1_0,
 };
 
-// This table maps a timer ID and mode to a GPIO pin
+// This table maps a timer ID to an IOCON function setting for CAP0
 
-static const unsigned MODE_TO_PIN[TIMER_ID_SENTINEL][TIMER_MODE_SENTINEL] =
+static const unsigned TIMER_TO_INPUT_PIN_FUNC[TIMER_ID_SENTINEL] =
 {
-  { 0, 0, 0, PIO1_5, PIO1_5, PIO1_5, PIO2_11, PIO2_11, PIO2_11 },
-  { 0, 0, 0, PIO1_0, PIO1_0, PIO1_0, PIO1_11, PIO1_11, PIO1_11 }
+  2,
+  3,
 };
 
-// This table maps a timer ID and mode to an IOCON function setting for the
-// GPIO pin
+// This table maps a timer ID and match register to a GPIO pin for the MATn output
 
-static const unsigned MODE_TO_FUNC[TIMER_ID_SENTINEL][TIMER_MODE_SENTINEL] =
-{
-  { 0, 0, 0, 2, 2, 2, 2, 2, 2 },
-  { 0, 0, 0, 3, 3, 3, 2, 2, 2 }
-};
-
-// This table maps a timer ID and capture input to a GPIO pin
-
-static const unsigned CAP_TO_PIN[TIMER_ID_SENTINEL][TIMER_CAPTURE_INPUTS] =
-{
-  { PIO1_5, PIO2_11 },
-  { PIO1_0, PIO1_11 }
-};
-
-// This table maps a timer ID and capture input to an IOCON function setting
-// for the GPIO pin
-
-static const unsigned CAP_TO_FUNC[TIMER_ID_SENTINEL][TIMER_CAPTURE_INPUTS] =
-{
-  { 2, 2 },
-  { 3, 2 }
-};
-
-// This table maps a timer ID and capture clear mode to a GPIO pin
-
-static const unsigned CLR_TO_PIN[TIMER_ID_SENTINEL][TIMER_CAPTURE_CLEAR_SENTINEL] =
-{
-  { 0, PIO1_5, PIO1_5, PIO2_11, PIO2_11 },
-  { 0, PIO1_0, PIO1_0, PIO1_11, PIO1_11 }
-};
-
-// This table maps a timer ID and capture clear mode to an IOCON function
-// setting for the GPIO pin
-
-static const unsigned CLR_TO_FUNC[TIMER_ID_SENTINEL][TIMER_CAPTURE_CLEAR_SENTINEL] =
-{
-  { 0, 2, 2, 2, 2 },
-  { 0, 3, 3, 2, 2 }
-};
-
-// This table maps a timer ID and match output to a GPIO pin
-
-static const unsigned MATCH_TO_PIN[TIMER_ID_SENTINEL][TIMER_MATCH_OUTPUTS] =
+static const unsigned MATCH_TO_OUTPUT_PIN[TIMER_ID_SENTINEL][TIMER_MATCH_OUTPUTS] =
 {
   { PIO1_6, PIO1_7, PIO0_1, PIO1_11 },
   { PIO1_1, PIO1_2, PIO1_3, PIO1_4  }
 };
 
-// This table maps a timer ID and match output to an IOCON function setting
-// for the GPIO pin
+// This table maps a timer ID and match register to an IOCON function setting
+// for the MATn output
 
-static const unsigned MATCH_TO_FUNC[TIMER_ID_SENTINEL][TIMER_MATCH_OUTPUTS] =
+static const unsigned MATCH_TO_OUTPUT_PIN_FUNC[TIMER_ID_SENTINEL][TIMER_MATCH_OUTPUTS] =
 {
   { 2, 2, 2, 3 },
   { 3, 3, 3, 2 }
@@ -186,7 +134,7 @@ int timer_configure_mode(unsigned id, unsigned mode)
 
   if (mode >= TIMER_MODE_CAP0_RISING)
   {
-    gpio_configure_function(MODE_TO_PIN[id][mode], MODE_TO_FUNC[id][mode]);
+    gpio_configure_function(TIMER_TO_INPUT_PIN[id], TIMER_TO_INPUT_PIN_FUNC[id]);
   }
 
   TIMERS[id][TIMER_TCR] = MODE_TO_TCR[mode];
@@ -214,10 +162,9 @@ int timer_configure_prescaler(unsigned id, unsigned divisor)
 
 // Configure a capture input
 
-int timer_configure_capture(unsigned id, unsigned cap, unsigned edge, bool intr)
+int timer_configure_capture(unsigned id, unsigned edge, bool intr)
 {
   CHECK_PARAMETER(id, TIMER_ID_SENTINEL);
-  CHECK_PARAMETER(cap, TIMER_CAPTURE_INPUTS);
   CHECK_PARAMETER(edge, TIMER_CAPTURE_EDGE_SENTINEL);
   CHECK_PARAMETER(intr, 2);
 
@@ -233,32 +180,10 @@ int timer_configure_capture(unsigned id, unsigned cap, unsigned edge, bool intr)
 
   if (edge > TIMER_CAPTURE_EDGE_DISABLED)
   {
-    gpio_configure_function(CAP_TO_PIN[id][cap], CAP_TO_FUNC[id][cap]);
+    gpio_configure_function(TIMER_TO_INPUT_PIN[id], TIMER_TO_INPUT_PIN_FUNC[id]);
   }
 
-  TIMERS[id][TIMER_CCR] &= ~(7 << (cap*3));
-  TIMERS[id][TIMER_CCR] |= ((intr << 2) | edge) << (cap*3);
-
-  errno_r = 0;
-  return 0;
-}
-
-/******************************************************************************/
-
-// Configure the capture clear mode
-
-int timer_configure_capture_clear(unsigned id, unsigned mode)
-{
-  CHECK_PARAMETER(id, TIMER_ID_SENTINEL);
-  CHECK_PARAMETER(mode, TIMER_CAPTURE_CLEAR_SENTINEL);
-
-  if (mode > TIMER_CAPTURE_CLEAR_DISABLED)
-  {
-    gpio_configure_function(CLR_TO_PIN[id][mode], CLR_TO_FUNC[id][mode]);
-  }
-
-  TIMERS[id][TIMER_CTCR] &= 0xFFFFFF0F;
-  TIMERS[id][TIMER_CTCR] |= CAPTURE_CLEAR_TO_CTCR[mode];
+  TIMERS[id][TIMER_CCR] = edge | (intr << 2);
 
   errno_r = 0;
   return 0;
@@ -278,7 +203,8 @@ int timer_configure_match(unsigned id, unsigned m, unsigned action,
 
   if (action > TIMER_MATCH_OUTPUT_DISABLED)
   {
-    gpio_configure_function(MATCH_TO_PIN[id][m], MATCH_TO_FUNC[id][m]);
+    gpio_configure_function(MATCH_TO_OUTPUT_PIN[id][m],
+      MATCH_TO_OUTPUT_PIN_FUNC[id][m]);
   }
 
   TIMERS[id][TIMER_EMR] &= ~(3 << (m*2 + 4));

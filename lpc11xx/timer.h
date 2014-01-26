@@ -28,7 +28,6 @@
 
 _BEGIN_STD_C
 
-#define TIMER_CAPTURE_INPUTS	2
 #define TIMER_MATCH_OUTPUTS	4
 
 // Enumeration types
@@ -48,30 +47,17 @@ typedef enum
   TIMER_MODE_CAP0_RISING,
   TIMER_MODE_CAP0_FALLING,
   TIMER_MODE_CAP0_BOTH,
-  TIMER_MODE_CAP1_RISING,
-  TIMER_MODE_CAP1_FALLING,
-  TIMER_MODE_CAP1_BOTH,
   TIMER_MODE_SENTINEL
 } timer_mode_t;
 
 typedef enum
 {
   TIMER_CAPTURE_EDGE_DISABLED,
-  TIMER_CAPTURE_EDGE_RISING,
-  TIMER_CAPTURE_EDGE_FALLING,
-  TIMER_CAPTURE_EDGE_BOTH,
+  TIMER_CAPTURE_EDGE_CAP0_RISING,
+  TIMER_CAPTURE_EDGE_CAP0_FALLING,
+  TIMER_CAPTURE_EDGE_CAP0_BOTH,
   TIMER_CAPTURE_EDGE_SENTINEL
 } timer_capture_edge_t;
-
-typedef enum
-{
-  TIMER_CAPTURE_CLEAR_DISABLED,
-  TIMER_CAPTURE_CLEAR_CAP0_RISING,
-  TIMER_CAPTURE_CLEAR_CAP0_FALLING,
-  TIMER_CAPTURE_CLEAR_CAP1_RISING,
-  TIMER_CAPTURE_CLEAR_CAP1_FALLING,
-  TIMER_CAPTURE_CLEAR_SENTINEL
-} timer_capture_clear_t;
 
 typedef enum
 {
@@ -88,9 +74,7 @@ int timer_configure_mode(unsigned id, unsigned mode);
 
 int timer_configure_prescaler(unsigned id, unsigned divisor);
 
-int timer_configure_capture(unsigned id, unsigned cap, unsigned edge, bool intr);
-
-int timer_configure_capture_clear(unsigned id, unsigned mode);
+int timer_configure_capture(unsigned id, unsigned edge, bool intr);
 
 int timer_configure_match(unsigned id, unsigned m, unsigned action,
   bool intr, bool reset, bool stop);
