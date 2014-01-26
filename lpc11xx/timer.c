@@ -137,8 +137,8 @@ int timer_configure_mode(unsigned id, unsigned mode)
     gpio_configure_function(TIMER_TO_INPUT_PIN[id], TIMER_TO_INPUT_PIN_FUNC[id]);
   }
 
-  TIMERS[id][TIMER_TCR] = MODE_TO_TCR[mode];
   TIMERS[id][TIMER_CTCR] = MODE_TO_CTCR[mode];
+  TIMERS[id][TIMER_TCR] = MODE_TO_TCR[mode];
 
   errno_r = 0;
   return 0;
