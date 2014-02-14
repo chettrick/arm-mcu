@@ -298,6 +298,6 @@ clean:
 	rm -rf $(GCCSRC)
 	rm -rf $(NEWLIBSRC)
 	rm -rf $(GDBSRC)
-	rm -rf build fakeroot specfile rpmbuild *.done *.rpm *.tgz
+	rm -rf build fakeroot specfile rpmbuild *.done *.deb *.rpm *.tgz $(PKGDIR)
 
 distclean: clean
