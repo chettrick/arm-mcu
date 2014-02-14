@@ -24,7 +24,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 UDEVRULESDIR	= /etc/udev/rules.d
-LIBEXECDIR	= /usr/local/libexec
 
 install:
 	for F in *.rules ; do install -cm 0444 $$F $(UDEVRULESDIR) ; done
