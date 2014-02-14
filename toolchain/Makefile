@@ -87,6 +87,10 @@ PACKAGENAME	= $(PKGNAME)-$(VERSION).tgz
 TAR		= gtar
 endif
 
+PKGARCH		= `dpkg --print-architecture`
+PKGDIR		= $(PKGNAME)-$(VERSION)-debian7-$(PKGARCH)
+PKGFILE		= $(PKGDIR).deb
+
 default: readme.done
 
 ################################################################################
@@ -137,7 +141,7 @@ $(GCCDIST):
 gcc.done: binutils.done
 	rm -rf $(GCCBLD)
 	mkdir -p $(GCCBLD)
-	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-lto --disable-nls --disable-shared --with-float=soft --disable-werror --enable-languages=c,c++ --disable-libssp --disable-libgomp --with-newlib --disable-libgloss --disable-newlib-supplied-syscalls $(GCCEXTRACONFIG)
+	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-lto --disable-nls --disable-shared --with-float=soft --disable-werror --enable-languages=c,c++ --disable-libssp --disable-libgomp --with-newlib --disable-libgloss --disable-newlib-supplied-syscalls --with-system-zlib $(GCCEXTRACONFIG)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) $(MAKEJOBS) -C $(GCCBLD)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCBLD) install
 	touch gcc.done
@@ -214,12 +218,29 @@ endif
 
 ################################################################################
 
+# Create Linux .deb package
+
+ifeq ($(shell uname), Linux)
+deb: readme.done
+	mkdir -p $(PKGDIR)/DEBIAN
+	mkdir -p $(PKGDIR)/usr/local
+	install -cm 0444 control.template		$(PKGDIR)/DEBIAN/control
+	sed -i s/@@ARCH@@/$(PKGARCH)/g			$(PKGDIR)/DEBIAN/control
+	sed -i s/@@NAME@@/$(PKGNAME)/g			$(PKGDIR)/DEBIAN/control
+	sed -i s/@@VERSION@@/$(VERSION)/g		$(PKGDIR)/DEBIAN/control
+	sed -i /Version:/s/_/-/g			$(PKGDIR)/DEBIAN/control
+	cp -R -P -p $(PKGNAME) $(PKGDIR)/usr/local
+	fakeroot dpkg-deb --build $(PKGDIR)
+endif
+
+################################################################################
+
 # Create Linux RPM package
 
 ifeq ($(shell uname), Linux)
 fakeroot: readme.done
 	mkdir -p fakeroot/usr/local
-	cp -R -p $(PKGNAME) fakeroot/usr/local
+	cp -R -P -p $(PKGNAME) fakeroot/usr/local
 
 specfile: specfile.template fakeroot
 	sed s/@@PKGNAME@@/$(PKGNAME)/g <specfile.template | sed s/@@VERSION@@/$(VERSION)/g | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
@@ -240,7 +261,7 @@ ifeq ($(shell uname), OpenBSD)
 
 fakeroot: readme.done
 	mkdir -p fakeroot/usr/local
-	cp -R -p $(PKGNAME) fakeroot/usr/local
+	cp -R -P -p $(PKGNAME) fakeroot/usr/local
 # Why aren't these links already created on OpenBSD?
 	ln -s liblto_plugin.so.0.0 fakeroot/usr/local/$(PKGNAME)/libexec/gcc/arm-none-eabi/$(GCCVER)/liblto_plugin.so
 	ln -s liblto_plugin.so.0.0 fakeroot/usr/local/$(PKGNAME)/libexec/gcc/arm-none-eabi/$(GCCVER)/liblto_plugin.so.0
