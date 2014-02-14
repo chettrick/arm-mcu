@@ -29,7 +29,14 @@ LPC21ISP_DIR	= lpc21isp.src
 LPC21ISP_VER	= $(shell awk '/define VERSION_STR/ { print $$3 }' $(LPC21ISP_DIR)/lpc21isp.c)
 LPC21ISP_PROG	= $(LPC21ISP_NAME)
 
+PKGNAME		= $(LPC21ISP_NAME)
+PKGVERSION	= $(LPC21ISP_VER)
+PKGARCH		= `dpkg --print-architecture`
+PKGDIR		= $(PKGNAME)-$(PKGVERSION)-debian7-$(PKGARCH)
+PKGFILE		= $(PKGDIR).deb
+
 CC		= $(CROSS_COMPILE)gcc
+CFLAGS		= -Wall
 
 INSTALLDIR	= /usr/local/bin
 
@@ -46,7 +53,7 @@ $(LPC21ISP_DIR):
 
 $(LPC21ISP_PROG): $(LPC21ISP_DIR)
 	echo VERSION is $(LPC21ISP_VER)
-	$(MAKE) -C $(LPC21ISP_DIR) CC=$(CC)
+	$(MAKE) -C $(LPC21ISP_DIR) CC=$(CC) CFLAGS=$(CFLAGS)
 	cp $(LPC21ISP_DIR)/$(LPC21ISP_PROG) $(LPC21ISP_PROG)
 
 # Install lpc21isp
@@ -65,7 +72,7 @@ fakeroot: $(LPC21ISP_PROG)
 	mkdir -p fakeroot/$(INSTALLDIR)
 	install -csm 0555 $(LPC21ISP_PROG) fakeroot/$(INSTALLDIR)
 
-# Create RPM spec file
+# Create RPM package
 
 specfile: fakeroot specfile.template
 	sed s#@@VERSION@@#$(LPC21ISP_VER)#g <specfile.template >specfile
@@ -74,6 +81,17 @@ rpm: specfile
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
 	cp rpmbuild/RPMS/*/*.rpm .
 
+# Create Deb package
+
+deb: fakeroot
+	mkdir -p $(PKGDIR)/DEBIAN
+	install -cm 0444 control.template		$(PKGDIR)/DEBIAN/control
+	sed -i s/@@ARCH@@/$(PKGARCH)/g			$(PKGDIR)/DEBIAN/control
+	sed -i s/@@NAME@@/$(PKGNAME)/g			$(PKGDIR)/DEBIAN/control
+	sed -i s/@@VERSION@@/$(PKGVERSION)/g		$(PKGDIR)/DEBIAN/control
+	cp -R -P -p fakeroot/* $(PKGDIR)
+	fakeroot dpkg-deb --build $(PKGDIR)
+
 # Clean out working files
 
 clean:
@@ -81,6 +99,8 @@ clean:
 	-rm -rf $(LPC21ISP_PROG)
 	-rm -rf fakeroot
 	-rm -rf rpmbuild
+	-rm -rf $(PKGDIR)
+	-rm *.deb
 	-rm *.rpm
 	-rm specfile
 
