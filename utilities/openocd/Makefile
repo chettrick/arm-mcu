@@ -34,6 +34,12 @@ OPENOCD_DIST	= $(TEMP)/$(OPENOCD_TARBALL)
 OPENOCD_SERVER	= http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VER)
 OPENOCD_URL	= $(OPENOCD_SERVER)/$(OPENOCD_TARBALL)
 
+PKGNAME		= $(OPENOCD_NAME)
+PKGVERSION	= $(OPENOCD_VER)
+PKGARCH		= `dpkg --print-architecture`
+PKGDIR		= $(PKGNAME)-$(PKGVERSION)-debian7-$(PKGARCH)
+PKGFILE		= $(PKGDIR).deb
+
 default: compile.done
 
 # Download OpenOCD source distribution
@@ -64,7 +70,7 @@ compile.done: source.done
 install:
 	$(MAKE) -C $(OPENOCD_SRC) install install-pdf
 
-# Create OpenOCD RPM package
+# Build RPM package
 
 fakeroot: compile.done
 	$(MAKE) -C $(OPENOCD_SRC) install install-pdf DESTDIR=`pwd`/fakeroot
@@ -81,14 +87,27 @@ rpm: specfile
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
 	cp rpmbuild/RPMS/*/*.rpm .
 
+# Build Deb package
+
+deb: fakeroot
+	mkdir -p $(PKGDIR)/DEBIAN
+	install -cm 0444 control.template		$(PKGDIR)/DEBIAN/control
+	sed -i s/@@ARCH@@/$(PKGARCH)/g			$(PKGDIR)/DEBIAN/control
+	sed -i s/@@NAME@@/$(PKGNAME)/g			$(PKGDIR)/DEBIAN/control
+	sed -i s/@@VERSION@@/$(PKGVERSION)/g		$(PKGDIR)/DEBIAN/control
+	cp -R -P -p fakeroot/* $(PKGDIR)
+	fakeroot dpkg-deb --build $(PKGDIR)
+
 # Clean out working files
 
 clean:
 	-$(MAKE) -C $(OPENOCD_SRC) clean
 	-rm compile.done
+	-rm *.deb
 	-rm *.rpm
 	-rm specfile
 	-rm -rf fakeroot rpmbuild
+	-rm -rf $(PKGDIR)
 
 reallyclean: clean
 	-rm -rf $(OPENOCD_SRC)
