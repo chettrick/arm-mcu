@@ -4,4 +4,4 @@ Priority: extra
 Maintainer: Philip Munts <phil@munts.net>
 Architecture: @@ARCH@@
 Version: @@VERSION@@
-Description: OpenOCD Open On-Chip Debugger
+Description: GCC toolchain for bare-machine ARM microcontrollers
