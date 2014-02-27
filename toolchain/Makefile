@@ -222,15 +222,17 @@ endif
 
 ifeq ($(shell uname), Linux)
 deb: readme.done
-	mkdir -p $(PKGDIR)/DEBIAN
-	mkdir -p $(PKGDIR)/usr/local
+	mkdir -p					$(PKGDIR)/DEBIAN
+	mkdir -p					$(PKGDIR)/usr/local
 	install -cm 0444 control.template		$(PKGDIR)/DEBIAN/control
 	sed -i s/@@ARCH@@/$(PKGARCH)/g			$(PKGDIR)/DEBIAN/control
 	sed -i s/@@NAME@@/$(PKGNAME)/g			$(PKGDIR)/DEBIAN/control
 	sed -i s/@@VERSION@@/$(VERSION)/g		$(PKGDIR)/DEBIAN/control
 	sed -i /Version:/s/_/-/g			$(PKGDIR)/DEBIAN/control
-	cp -R -P -p $(PKGNAME) $(PKGDIR)/usr/local
-	fakeroot dpkg-deb --build $(PKGDIR)
+	cp -R -P -p $(PKGNAME)				$(PKGDIR)/usr/local
+	chmod -R ugo-w					$(PKGDIR)/usr/local
+	fakeroot dpkg-deb --build			$(PKGDIR)
+	chmod -R ugo+w					$(PKGDIR)/usr/local
 endif
 
 ################################################################################
