@@ -1,8 +1,8 @@
-# Makefile for building a Mikropascal ARM application
+# Makefile for building a Mikropascal ARM application program
 
 # $Id$
 
-# Copyright (C)2013-2014, Philip Munts, President, Munts AM Corp.
+# Copyright (C)2014, Philip Munts, President, Munts AM Corp.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -25,7 +25,7 @@
 
 MIKROPASCAL	?= "C:/Users/Public/Documents/Mikroelektronika/mikroPascal PRO for ARM/mPARM.exe"
 
-# Build application project
+# Define a pattern rule to build a Mikropascal ARM project
 
 %.bin: %.mppar
 	$(MIKROPASCAL) -RA -BIN -PF $<
@@ -36,7 +36,7 @@ mikropascal_mk_default:
 	@echo ERROR: You must explicitly specify a make target!
 	@exit 1
 
-# Clean out working files
+# Remove working files
 
 mikropascal_mk_clean:
 	-rm -f *.asm *.bin *.bmk *.brk *.dbg *.dct *.dlt *.emcl *.hex *.log *.lst *callertable.txt *.mpas.ini *.user.dic

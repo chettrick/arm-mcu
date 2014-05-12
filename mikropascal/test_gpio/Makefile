@@ -1,8 +1,8 @@
-# Makefile for building a Mikropascal ARM application
+# Makefile for building a Mikropascal ARM application program
 
 # $Id$
 
-# Copyright (C)2013-2014, Philip Munts, President, Munts AM Corp.
+# Copyright (C)2014, Philip Munts, President, Munts AM Corp.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -27,15 +27,15 @@
 
 ARMSRC		?= $(HOME)/src/ARM
 
-# Build the project
+# Build the program
 
 default: test_gpio.bin
 
 # Write program to code flash
 
-flash: test_gpio.flash
+install: test_gpio.flash
 
-# Clean out working files
+# Remove working files
 
 clean: mikropascal_mk_clean
 
