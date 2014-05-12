@@ -1,0 +1,7 @@
+program test_gpio;
+
+{ Declarations section }
+
+begin
+  { Main program }
+end.

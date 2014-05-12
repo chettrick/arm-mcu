@@ -1,4 +1,4 @@
-# Makefile for building a Mikropascal ARM application
+# Makefile for building an Mikropascal ARM application
 
 # $Id$
 
@@ -23,20 +23,12 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-MIKROPASCAL	?= "C:/Users/Public/Documents/Mikroelektronika/mikroPascal PRO for ARM/mPARM.exe"
+STLINKCLI	?= "C:/Program Files (x86)/STMicroelectronics/STM32 ST-LINK Utility/ST-LINK Utility/ST-LINK_CLI.exe"
+STLINKCLIIF	?= -c SWD
 
-# Build application project
+FLASHWRITEADDR	?= 0x08000000
 
-%.bin: %.mppar
-	$(MIKROPASCAL) -RA -BIN -PF $<
+# Write binary program image to STM32 code flash
 
-# Default target
-
-mikropascal_mk_default:
-	@echo ERROR: You must explicitly specify a make target!
-	@exit 1
-
-# Clean out working files
-
-mikropascal_mk_clean:
-	-rm -f *.asm *.bin *.bmk *.brk *.dbg *.dct *.dlt *.emcl *.hex *.log *.lst *callertable.txt *.mpas.ini *.user.dic
+%.flash: %.bin
+	$(STLINKCLI) $(STLINKCLIIF) -ME -P $< $(FLASHWRITEADDR) -V -Rst

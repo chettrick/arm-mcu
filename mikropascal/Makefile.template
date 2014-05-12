@@ -23,20 +23,20 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-MIKROPASCAL	?= "C:/Users/Public/Documents/Mikroelektronika/mikroPascal PRO for ARM/mPARM.exe"
+# Override the following macro to build out of tree
 
-# Build application project
+ARMSRC		?= $(HOME)/src/ARM
 
-%.bin: %.mppar
-	$(MIKROPASCAL) -RA -BIN -PF $<
+# Build the project
 
-# Default target
-
-mikropascal_mk_default:
-	@echo ERROR: You must explicitly specify a make target!
-	@exit 1
+default: mikropascal_mk_default
 
 # Clean out working files
 
-mikropascal_mk_clean:
-	-rm -f *.asm *.bin *.bmk *.brk *.dbg *.dct *.dlt *.emcl *.hex *.log *.lst *callertable.txt *.mpas.ini *.user.dic
+clean: mikropascal_mk_clean
+
+# Include subordinate makefiles
+
+include $(ARMSRC)/mikropascal/mikropascal.mk
+include $(ARMSRC)/mikropascal/stm32.mk
+sinclude $(HOME)/src/include/subversion.mk
