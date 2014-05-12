@@ -3,5 +3,14 @@ program test_gpio;
 { Declarations section }
 
 begin
-  { Main program }
+  GPIO_Digital_Output(@GPIOD_BASE, _GPIO_PINMASK_12);
+  GPIO_Digital_Output(@GPIOD_BASE, _GPIO_PINMASK_13);
+  GPIO_Digital_Output(@GPIOD_BASE, _GPIO_PINMASK_14);
+  GPIO_Digital_Output(@GPIOD_BASE, _GPIO_PINMASK_15);
+
+  WHILE true DO
+    BEGIN
+      GPIOD_ODR := NOT GPIOD_ODR; // Toggle PORTD
+      Delay_ms(1000);
+    END
 end.
