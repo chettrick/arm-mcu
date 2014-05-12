@@ -32,4 +32,4 @@ FLASHWRITEADDR	?= 0x08000000
 
 %.flash: %.bin
 	$(STLINKCLI) $(STLINKCLIIF) -ME -P $< $(FLASHWRITEADDR) -V -Rst
-	@rm -rf $HOME/STMicroelectronics
+	@rm -rf $(HOME)/STMicroelectronics
