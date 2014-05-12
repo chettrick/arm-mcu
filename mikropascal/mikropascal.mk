@@ -25,10 +25,20 @@
 
 MIKROPASCAL	?= "C:/Users/Public/Documents/Mikroelektronika/mikroPascal PRO for ARM/mPARM.exe"
 
+PTOP		?= ptop
+PTOP_CFG	= $(ARMSRC)/mikropascal/ptop.cfg
+PTOP_FLAGS	= -i -c $(PTOP_CFG)
+
 # Define a pattern rule to build a Mikropascal ARM project
 
 %.bin: %.mppar
 	$(MIKROPASCAL) -RA -BIN -PF $<
+
+# Define a pattern rule to format a Pascal source program using the the ptop
+# utility from Free Pascal
+
+%.prettyprint: %.mpas
+	$(PTOP) $(PTOP_FLAGS) $< $<.tmp && mv $<.tmp $<
 
 # Default target
 
