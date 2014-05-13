@@ -39,7 +39,6 @@ BEGIN
   WHILE true DO
     BEGIN
       GPIOD_ODR := NOT GPIOD_ODR;
-      // Toggle PORTD
       Delay_ms(1000);
     END
 END.
