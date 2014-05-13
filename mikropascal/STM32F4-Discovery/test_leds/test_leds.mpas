@@ -25,6 +25,13 @@
 
 PROGRAM test_leds;
 
+VAR
+  LD3_ORANGE : sbit AT GPIOD_ODR.B13;
+  LD4_GREEN  : sbit AT GPIOD_ODR.B12;
+  LD5_RED    : sbit AT GPIOD_ODR.B14;
+  LD6_BLUE   : sbit AT GPIOD_ODR.B15;
+  orange     : boolean;
+
 BEGIN
 
   { Configure LED outputs }
@@ -34,11 +41,23 @@ BEGIN
   GPIO_Digital_Output(@GPIOD_BASE, _GPIO_PINMASK_14);
   GPIO_Digital_Output(@GPIOD_BASE, _GPIO_PINMASK_15);
 
+  { Initialize LED outputs }
+
+  LD3_ORANGE := TRUE;
+  LD4_GREEN  := FALSE;
+  LD5_RED    := FALSE;
+  LD6_BLUE   := FALSE;
+
   { Togle LED outputs }
 
   WHILE true DO
     BEGIN
-      GPIOD_ODR := NOT GPIOD_ODR;
-      Delay_ms(1000);
+      orange := LD3_ORANGE;
+      LD3_ORANGE := LD4_GREEN;
+      LD4_GREEN := LD6_BLUE;
+      LD6_BLUE := LD5_RED;
+      LD5_RED := orange;
+
+      Delay_ms(100);
     END
 END.
