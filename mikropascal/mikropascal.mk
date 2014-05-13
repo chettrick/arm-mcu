@@ -23,7 +23,15 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+# Keep intermediate (especially .hex) files
+
+.SECONDARY:
+
+# Compiler definitions
+
 MIKROPASCAL	?= "C:/Users/Public/Documents/Mikroelektronika/mikroPascal PRO for ARM/mPARM.exe"
+
+# Pretty printer definitions
 
 PTOP		?= ptop
 PTOP_CFG	= $(ARMSRC)/mikropascal/ptop.cfg
