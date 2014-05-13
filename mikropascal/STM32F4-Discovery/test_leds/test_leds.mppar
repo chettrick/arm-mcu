@@ -35,8 +35,9 @@ Count=0
 [SEARCH_PATH]
 Count=4
 Path0=C:\Users\Public\Documents\Mikroelektronika\mikroPascal PRO for ARM\defs\
-Path1=C:\Users\Public\Documents\Mikroelektronika\mikroPascal PRO for ARM\Uses\ST M4\
-Path2=C:\Users\pmunts\src\ARM\mikropascal\STM32F4-Discovery\test_leds\
+Path1=C:\Users\pmunts\Documents\home\src\ARM\mikropascal\STM32F4-Discovery\test_leds\
+Path2=C:\Users\Public\Documents\Mikroelektronika\mikroPascal PRO for ARM\Uses\ST M4\
+Path3=C:\Users\pmunts\src\ARM\mikropascal\STM32F4-Discovery\test_leds\
 [HEADER_PATH]
 Count=0
 [HEADERS]
