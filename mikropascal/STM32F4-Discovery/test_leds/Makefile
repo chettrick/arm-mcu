@@ -29,11 +29,11 @@ ARMSRC		?= $(HOME)/src/ARM
 
 # Build the program
 
-default: test_gpio.bin
+default: test_leds.bin
 
 # Write program to code flash
 
-install: test_gpio.flash
+install: test_leds.flash
 
 # Remove working files
 
