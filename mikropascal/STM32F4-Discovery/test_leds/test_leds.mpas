@@ -43,10 +43,10 @@ BEGIN
 
   { Initialize LED outputs }
 
-  LD3_ORANGE := TRUE;
-  LD4_GREEN  := FALSE;
-  LD5_RED    := FALSE;
-  LD6_BLUE   := FALSE;
+  LD3_ORANGE := true;
+  LD4_GREEN  := false;
+  LD5_RED    := false;
+  LD6_BLUE   := false;
 
   { Togle LED outputs }
 
