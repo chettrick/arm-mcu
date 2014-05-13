@@ -26,10 +26,8 @@
 STLINKCLI	?= "C:/Program Files (x86)/STMicroelectronics/STM32 ST-LINK Utility/ST-LINK Utility/ST-LINK_CLI.exe"
 STLINKCLIIF	?= -c SWD
 
-FLASHWRITEADDR	?= 0x08000000
+# Write program image to STM32 code flash
 
-# Write binary program image to STM32 code flash
-
-%.flash: %.bin
-	$(STLINKCLI) $(STLINKCLIIF) -ME -P $< $(FLASHWRITEADDR) -V -Rst
+%.flash: %.hex
+	$(STLINKCLI) $(STLINKCLIIF) -ME -P $< -V -Rst
 	@rm -rf $(HOME)/STMicroelectronics

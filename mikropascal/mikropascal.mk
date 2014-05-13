@@ -31,8 +31,8 @@ PTOP_FLAGS	= -i -c $(PTOP_CFG)
 
 # Define a pattern rule to build a Mikropascal ARM project
 
-%.bin: %.mppar
-	$(MIKROPASCAL) -RA -BIN -PF $<
+%.hex: %.mppar
+	$(MIKROPASCAL) -RA -PF $<
 
 # Define a pattern rule to format a Pascal source program using the the ptop
 # utility from Free Pascal
