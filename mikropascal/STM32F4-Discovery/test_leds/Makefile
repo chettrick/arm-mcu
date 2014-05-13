@@ -29,7 +29,7 @@ ARMSRC		?= $(HOME)/src/ARM
 
 # Build the program
 
-default: test_leds.bin
+default: test_leds.hex
 
 # Write program to code flash
 
