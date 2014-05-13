@@ -42,5 +42,5 @@ clean: mikropascal_mk_clean
 # Include subordinate makefiles
 
 include $(ARMSRC)/mikropascal/mikropascal.mk
-include $(ARMSRC)/mikropascal/stm32.mk
+include $(ARMSRC)/mikropascal/stlink.mk
 sinclude $(HOME)/src/include/subversion.mk

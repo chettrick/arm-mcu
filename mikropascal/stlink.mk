@@ -1,4 +1,4 @@
-# Makefile for building an Mikropascal ARM application
+# Makefile for flashing an STM32 microcontroller with ST-Link
 
 # $Id$
 
