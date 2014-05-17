@@ -70,6 +70,8 @@ typedef enum
 
 // Function prototypes
 
+int timer_init(unsigned id);
+
 int timer_configure_mode(unsigned id, unsigned mode);
 
 int timer_configure_prescaler(unsigned id, unsigned divisor);

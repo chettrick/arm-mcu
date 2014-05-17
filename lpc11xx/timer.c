@@ -41,10 +41,28 @@
 #define TIMER_MR3	0x009
 #define TIMER_CCR	0x00A
 #define TIMER_CR0	0x00B
-#define TIMER_CR1	0x00C
 #define TIMER_EMR	0x00F
 #define TIMER_CTCR	0x01C
 #define TIMER_PWMC	0x01D
+
+// Timer register macros
+
+#define IR		TIMERS[id][TIMER_IR]
+#define TCR		TIMERS[id][TIMER_TCR]
+#define TC		TIMERS[id][TIMER_TC]
+#define PR		TIMERS[id][TIMER_PR]
+#define PC		TIMERS[id][TIMER_PC]
+#define MCR		TIMERS[id][TIMER_MCR]
+#define MR0		TIMERS[id][TIMER_MR0]
+#define MR1		TIMERS[id][TIMER_MR1]
+#define MR2		TIMERS[id][TIMER_MR2]
+#define MR3		TIMERS[id][TIMER_MR3]
+#define MRn(n)		TIMERS[id][TIMER_MR0+n]
+#define CCR		TIMERS[id][TIMER_CCR]
+#define CR0		TIMERS[id][TIMER_CR0]
+#define EMR		TIMERS[id][TIMER_EMR]
+#define CTCR		TIMERS[id][TIMER_CTCR]
+#define PWMC		TIMERS[id][TIMER_PWMC]
 
 /******************************************************************************/
 
@@ -123,6 +141,38 @@ static const unsigned MATCH_TO_OUTPUT_PIN_FUNC[TIMER_ID_SENTINEL][TIMER_MATCH_OU
 
 /******************************************************************************/
 
+// Initialize the timer to a known state
+
+int timer_init(unsigned id)
+{
+  CHECK_PARAMETER(id, TIMER_ID_SENTINEL);
+
+  LPC_SYSCON->SYSAHBCLKCTRL |= PWRBITS[id];
+
+  TCR = MODE_TO_TCR[TIMER_MODE_RESET];
+
+  IR = 0;
+  TCR = 0;
+  TC = 0;
+  PR = 0;
+  PC = 0;
+  MCR = 0;
+  MR0 = 0;
+  MR1 = 0;
+  MR2 = 0;
+  MR3 = 0;
+  CCR = 0;
+  CR0 = 0;
+  EMR = 0;
+  CTCR = 0;
+  PWMC = 0;
+
+  errno_r = 0;
+  return 0;
+}
+
+/******************************************************************************/
+
 // Configure the timer mode
 
 int timer_configure_mode(unsigned id, unsigned mode)
@@ -130,15 +180,13 @@ int timer_configure_mode(unsigned id, unsigned mode)
   CHECK_PARAMETER(id, TIMER_ID_SENTINEL);
   CHECK_PARAMETER(mode, TIMER_MODE_SENTINEL);
 
-  LPC_SYSCON->SYSAHBCLKCTRL |= PWRBITS[id];
-
   if (mode >= TIMER_MODE_CAP0_RISING)
   {
     gpio_configure_function(TIMER_TO_INPUT_PIN[id], TIMER_TO_INPUT_PIN_FUNC[id]);
   }
 
-  TIMERS[id][TIMER_CTCR] = MODE_TO_CTCR[mode];
-  TIMERS[id][TIMER_TCR] = MODE_TO_TCR[mode];
+  CTCR = MODE_TO_CTCR[mode];
+  TCR = MODE_TO_TCR[mode];
 
   errno_r = 0;
   return 0;
@@ -152,7 +200,8 @@ int timer_configure_prescaler(unsigned id, unsigned divisor)
 {
   CHECK_PARAMETER(id, TIMER_ID_SENTINEL);
 
-  TIMERS[id][TIMER_PR] = divisor - 1;
+  PR = divisor - 1;
+  PC = 0;
 
   errno_r = 0;
   return 0;
@@ -183,7 +232,7 @@ int timer_configure_capture(unsigned id, unsigned edge, bool intr)
     gpio_configure_function(TIMER_TO_INPUT_PIN[id], TIMER_TO_INPUT_PIN_FUNC[id]);
   }
 
-  TIMERS[id][TIMER_CCR] = edge | (intr << 2);
+  CCR = edge | (intr << 2);
 
   errno_r = 0;
   return 0;
@@ -207,11 +256,11 @@ int timer_configure_match(unsigned id, unsigned m, unsigned action,
       MATCH_TO_OUTPUT_PIN_FUNC[id][m]);
   }
 
-  TIMERS[id][TIMER_EMR] &= ~(3 << (m*2 + 4));
-  TIMERS[id][TIMER_EMR] |= (action << (m*2 + 4));
+  EMR &= ~(3 << (m*2 + 4));
+  EMR |= (action << (m*2 + 4));
 
-  TIMERS[id][TIMER_MCR] &= ~(7 << (m*3));
-  TIMERS[id][TIMER_MCR] |= (intr|(reset << 1)|(stop << 2)) << (m*3);
+  MCR &= ~(7 << (m*3));
+  MCR |= (intr|(reset << 1)|(stop << 2)) << (m*3);
 
   errno_r = 0;
   return 0;
@@ -224,7 +273,7 @@ int timer_configure_match_value(unsigned id, unsigned m, unsigned n)
   CHECK_PARAMETER(id, TIMER_ID_SENTINEL);
   CHECK_PARAMETER(m, TIMER_MATCH_OUTPUTS);
 
-  TIMERS[id][TIMER_MR0 + m] = n;
+  MRn(m) = n;
 
   errno_r = 0;
   return 0;
