@@ -36,6 +36,8 @@ OPENOCDCFG	= $(MCUDIR)/stm32f1.openocd
 OPENOCDFLASH	= $(MCUDIR)/stm32f1.flashocd
 OPENOCDIF	= stlink-v2
 
+STLINKCLIIF	= -c SWD
+
 # Board specific macro definitions
 
 ifeq ($(BOARDNAME), OLIMEX_STM32_P103)

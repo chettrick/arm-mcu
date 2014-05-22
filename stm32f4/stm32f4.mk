@@ -36,6 +36,8 @@ OPENOCDCFG	= $(MCUDIR)/stm32f4.openocd
 OPENOCDFLASH	= $(MCUDIR)/stm32f4.flashocd
 OPENOCDIF	= stlink-v2
 
+STLINKCLIIF	= -c SWD
+
 ifeq ($(WITH_FPU), yes)
 CPUFLAGS	+= -mfloat-abi=hard -mfpu=fpv4-sp-d16
 RMAKEFLAGS	+= WITH_FPU=$(WITH_FPU)
