@@ -63,7 +63,7 @@ stopstlink:
 
 .bin.flashstlink:
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-	$(STLINKFLASH) $(STLINKIF) -ME -P $< $(FLASHWRITEADDR) -Rst
+	"$(STLINKFLASH)" $(STLINKIF) -ME -P $< $(FLASHWRITEADDR) -Rst
 else
 	$(STLINKFLASH) --reset write $(STLINKIF) $< $(FLASHWRITEADDR)
 endif
