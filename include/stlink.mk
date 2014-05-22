@@ -24,16 +24,16 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-STLINKCLI	?= ST-LINK_CLI.exe
-STLINKCLIIF	?= -c JTAG
+STLINKFLASH	?= ST-LINK_CLI.exe
+STLINKIF	?= -c SWD
 endif
 
 ifeq ($(shell uname), Linux)
-STLINKV2FLASH	?= stlink-flash
+STLINKFLASH	?= stlink-flash
 endif
 
 ifeq ($(shell uname), OpenBSD)
-STLINKV2FLASH	?= stlink-flash
+STLINKFLASH	?= stlink-flash
 endif
 
 STLINKDEBUG	?= $(ARMSRC)/common/main.gdb
@@ -42,28 +42,28 @@ STLINKGDBOPTS	?= -p $(GDBSERVERPORT)
 
 .SUFFIXES: .debugstlink .flashstlink
 
-# Start ST-Link/V2 GDB server
+# Start ST-Link GDB server
 
 startstlink:
 	$(STLINKGDB) $(STLINKGDBIF) $(STLINKGDBOPTS) >debug.log 2>&1 &
 
-# Stop ST-Link/V2 GDB server
+# Stop ST-Link GDB server
 
 stopstlink:
 	-skill `basename $(STLINKGDB) .exe`
 
-# Debug with ST-Link/V2 GDB server
+# Debug with ST-Link GDB server
 
 .elf.debugstlink:
 	$(MAKE) startstlink
 	$(GDBGUI) $(GDB) $(GDBFLAGS) -x $(STLINKDEBUG) $<
 	$(MAKE) stopstlink
 
-# Program flash with ST-Link/V2
+# Program flash with ST-Link
 
 .bin.flashstlink:
 ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
-	$(STLINKCLI) $(STLINKCLIIF) -ME -P $< $(FLASHWRITEADDR) -Rst
+	$(STLINKFLASH) $(STLINKIF) -ME -P $< $(FLASHWRITEADDR) -Rst
 else
-	$(STLINKV2FLASH) write $(STLINKIF) $< $(FLASHWRITEADDR)
+	$(STLINKFLASH) --reset write $(STLINKIF) $< $(FLASHWRITEADDR)
 endif
