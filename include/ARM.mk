@@ -108,7 +108,7 @@ GDBSERVERPORT	= 3333
 	$(OBJCOPY) -S -O binary --gap-fill=0 $< $@
 
 .elf.hex:
-	$(OBJCOPY) -S -O ihex --gap-fill=0 $< $@
+	$(OBJCOPY) -S -O ihex --change-addresses=$(FLASHWRITEADDR) --gap-fill=0 $< $@
 
 .bin.dmp:
 	hexdump -C $< > $@
