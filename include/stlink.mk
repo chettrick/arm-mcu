@@ -40,7 +40,7 @@ STLINKDEBUG	?= $(ARMSRC)/common/main.gdb
 STLINKGDB	?= stlink-gdbserver
 STLINKGDBOPTS	?= -p $(GDBSERVERPORT)
 
-.SUFFIXES: .debugstlink .flashstlink
+.SUFFIXES: .bin .debugstlink .elf .flashstlink
 
 # Start ST-Link GDB server
 

@@ -30,7 +30,7 @@ OPENOCDFLASH	?= $(MCUDIR)/$(MCU).flashocd
 OPENOCDIF	?= jtagkey2p
 
 .PHONY: startocd stopocd
-.SUFFIXES: .debugocd .flashocd
+.SUFFIXES: .bin .debugocd .elf .flashocd
 
 # Start OpenOCD
 

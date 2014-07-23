@@ -27,7 +27,7 @@
 
 MBEDDIR		?= /media/MBED
 
-.SUFFIXES: .flashmbed
+.SUFFIXES: .bin .flashmbed
 
 # Install firmware to mbed firmware directory
 

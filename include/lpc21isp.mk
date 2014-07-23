@@ -29,7 +29,7 @@ LPC21ISPBAUD	?= 115200
 LPC21ISPCLOCK	?= 12000
 LPC21ISPFLAGS	?=
 
-.SUFFIXES: .flashisp
+.SUFFIXES: .flashisp .hex
 
 # Program flash with lpc21isp
 

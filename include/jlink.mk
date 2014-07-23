@@ -32,7 +32,7 @@ JLINKGDBIF	?= -if JTAG
 JLINKGDBOPTS	?= -port $(GDBSERVERPORT)
 
 .PHONY: startjlink stopjlink
-.SUFFIXES: .debugjlink .flashjlink
+.SUFFIXES: .bin .debugjlink .elf .flashjlink
 
 # Start J-Link GDB server
 
