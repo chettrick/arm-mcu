@@ -40,7 +40,7 @@ STLINKDEBUG	?= $(ARMSRC)/common/main.gdb
 STLINKGDB	?= stlink-gdbserver
 STLINKGDBOPTS	?= -p $(GDBSERVERPORT)
 
-.SUFFIXES: .bin .debugstlink .elf .flashstlink
+.SUFFIXES: .bin .debugstlink .elf .flashstlink .hex
 
 # Start ST-Link GDB server
 
@@ -66,4 +66,9 @@ ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
 	"$(STLINKFLASH)" $(STLINKIF) -ME -P $< $(FLASHWRITEADDR) -Rst
 else
 	$(STLINKFLASH) --reset write $(STLINKIF) $< $(FLASHWRITEADDR)
+endif
+
+ifeq ($(findstring CYGWIN, $(shell uname)), CYGWIN)
+.hex.flashstlink:
+	"$(STLINKFLASH)" $(STLINKIF) -ME -P $< -V -RST
 endif
