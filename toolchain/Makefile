@@ -36,39 +36,52 @@ INSTBASE	= $(shell pwd)/$(PKGNAME)
 
 FIND		= find
 TAR		= tar
-TEMP		= /tmp
+TEMP		= $(shell pwd)
 
+ifeq ($(shell uname), OpenBSD)
+FTP		= ftp
+else
+FTP		= wget
+endif
+
+GNUSERVER	= http://ftp.gnu.org/pub/gnu
+
+BINUTILS	= binutils
 BINUTILVER	= 2.24
-BINUTILSERVER	= http://ftp.gnu.org/pub/gnu/binutils
-BINUTILDIST	= $(TEMP)/binutils-$(BINUTILVER).tar.bz2
-BINUTILURL	= $(BINUTILSERVER)/`basename $(BINUTILDIST)`
-BINUTILSRC	= binutils-$(BINUTILVER)
-BINUTILBLD	= build/binutils-$(BINUTILVER)
+BINUTILSRC	= $(BINUTILS)-$(BINUTILVER)
+BINUTILSERVER	= $(GNUSERVER)/$(BINUTILS)
+BINUTILDIST	= $(TEMP)/$(BINUTILSRC).tar.bz2
+BINUTILURL	= $(BINUTILSERVER)/$(BINUTILSRC).tar.bz2
+BINUTILBLD	= build/$(BINUTILSRC)
 
+GCC		= gcc
 GCCVER		= 4.8.2
-GCCSERVER	= http://ftp.gnu.org/pub/gnu/gcc/gcc-$(GCCVER)
-GCCDIST		= $(TEMP)/gcc-$(GCCVER).tar.bz2
-GCCURL		= $(GCCSERVER)/`basename $(GCCDIST)`
-GCCSRC		= gcc-$(GCCVER)
-GCCBLD		= build/gcc-$(GCCVER)
+GCCSRC		= $(GCC)-$(GCCVER)
+GCCSERVER	= $(GNUSERVER)/$(GCC)/$(GCCSRC)
+GCCDIST		= $(TEMP)/$(GCCSRC).tar.bz2
+GCCURL		= $(GCCSERVER)/$(GCCSRC).tar.bz2
+GCCBLD		= build/$(GCCSRC)
 
+NEWLIB		= newlib
 NEWLIBVER	= 2.1.0
-NEWLIBSERVER	= http://mirrors.kernel.org/sources.redhat.com/newlib
-NEWLIBDIST	= $(TEMP)/newlib-$(NEWLIBVER).tar.gz
-NEWLIBURL	= $(NEWLIBSERVER)/`basename $(NEWLIBDIST)`
-NEWLIBSRC	= newlib-$(NEWLIBVER)
-NEWLIBBLD	= build/newlib-$(NEWLIBVER)
+NEWLIBSRC	= $(NEWLIB)-$(NEWLIBVER)
+NEWLIBSERVER	= http://mirrors.kernel.org/sources.redhat.com/$(NEWLIB)
+NEWLIBDIST	= $(TEMP)/$(NEWLIBSRC).tar.gz
+NEWLIBURL	= $(NEWLIBSERVER)/$(NEWLIBSRC).tar.gz
+NEWLIBBLD	= build/$(NEWLIBSRC)
+
 LIBCPDFURL	= $(NEWLIBSERVER)/libc.pdf
 LIBMPDFURL	= $(NEWLIBSERVER)/libm.pdf
 LIBCPDF		= $(TEMP)/libc.pdf
 LIBMPDF		= $(TEMP)/libm.pdf
 
+GDB		= gdb
 GDBVER		= 7.7
-GDBSERVER	= http://ftp.gnu.org/gnu/gdb
-GDBDIST		= $(TEMP)/gdb-$(GDBVER).tar.bz2
-GDBURL		= $(GDBSERVER)/`basename $(GDBDIST)`
-GDBSRC		= gdb-$(GDBVER)
-GDBBLD		= build/gdb-$(GDBVER)
+GDBSRC		= $(GDB)-$(GDBVER)
+GDBSERVER	= $(GNUSERVER)/$(GDB)
+GDBDIST		= $(TEMP)/$(GDBSRC).tar.bz2
+GDBURL		= $(GDBSERVER)/$(GDBSRC).tar.bz2
+GDBBLD		= build/$(GDBSRC)
 
 VERSION		= $(BINUTILVER)_$(GCCVER)_$(NEWLIBVER)_$(GDBVER)
 RELEASE		= 1
@@ -84,7 +97,6 @@ GCCEXTRACONFIG	+= --with-gmp=/usr/local
 GCCEXTRACONFIG	+= --with-mpc=/usr/local
 GCCEXTRACONFIG	+= --with-mpfr=/usr/local
 PACKAGENAME	= $(PKGNAME)-$(VERSION).tgz
-TAR		= gtar
 endif
 
 PKGARCH		= `dpkg --print-architecture`
@@ -117,7 +129,7 @@ source.done: $(BINUTILDIST) $(GCCDIST) $(NEWLIBDIST) $(GDBDIST) $(LIBCPDF) $(LIB
 # Download binutils
 
 $(BINUTILDIST):
-	wget -nv -P $(TEMP) $(BINUTILURL)
+	$(FTP) $(BINUTILURL)
 
 # Compile binutils
 
@@ -127,14 +139,14 @@ binutils.done: source.done
 	cd $(BINUTILBLD) && ../../$(BINUTILSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-lto --disable-nls --disable-shared --with-float=soft --disable-werror
 	$(MAKE) $(MAKEJOBS) -C $(BINUTILBLD)
 	$(MAKE) -C $(BINUTILBLD) install
-	touch binutils.done
+	touch $@
 
 ################################################################################
 
 # Download gcc
 
 $(GCCDIST):
-	wget -nv -P $(TEMP) $(GCCURL)
+	$(FTP) $(GCCURL)
 
 # Compile gcc
 
@@ -144,24 +156,24 @@ gcc.done: binutils.done
 	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-lto --disable-nls --disable-shared --with-float=soft --disable-werror --enable-languages=c,c++ --disable-libssp --disable-libgomp --with-newlib --disable-libgloss --disable-newlib-supplied-syscalls --with-system-zlib $(GCCEXTRACONFIG)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) $(MAKEJOBS) -C $(GCCBLD)
 	export PATH=$$PATH':'$(INSTBASE)/bin && $(MAKE) -C $(GCCBLD) install
-	touch gcc.done
+	touch $@
 
 ################################################################################
 
 # Download newlib
 
 $(NEWLIBDIST):
-	wget -nv -P $(TEMP) $(NEWLIBURL)
+	$(FTP) $(NEWLIBURL)
 
 # Note: newlib is built by gcc
 
 # Download newlib docs
 
 $(LIBCPDF):
-	wget -nv -P $(TEMP) $(LIBCPDFURL)
+	$(FTP) $(LIBCPDFURL)
 
 $(LIBMPDF):
-	wget -nv -P $(TEMP) $(LIBMPDFURL)
+	$(FTP) $(LIBMPDFURL)
 
 # Install newlib docs
 
@@ -169,14 +181,14 @@ newlibdocs.done: $(LIBCPDF) $(LIBMPDF)
 	mkdir -p $(INSTBASE)/doc
 	install -cm 0444 $(LIBCPDF) $(INSTBASE)/doc
 	install -cm 0444 $(LIBMPDF) $(INSTBASE)/doc
-	touch newlibdocs.done
+	touch $@
 
 ################################################################################
 
 # Download gdb
 
 $(GDBDIST):
-	wget -nv -P $(TEMP) $(GDBURL)
+	$(FTP) $(GDBURL)
 
 # Compile gdb
 
@@ -187,23 +199,23 @@ gdb.done: $(GDBDIST)
 	cd $(GDBBLD) && ../../$(GDBSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared --disable-werror
 	$(MAKE) $(MAKEJOBS) -C $(GDBBLD)
 	$(MAKE) -C $(GDBBLD) install
-	touch gdb.done
+	touch $@
 
 ################################################################################
 
 # Create README.txt
 
 readme.done: binutils.done gcc.done newlibdocs.done gdb.done
-	echo "GNU ARM microcontroller toolchain"	>$(INSTBASE)/README.txt
+	echo "GNU ARM Microcontroller Toolchain"	>$(INSTBASE)/README.txt
 	echo " "					>>$(INSTBASE)/README.txt
-	echo "Built on `date` from:"			>>$(INSTBASE)/README.txt
+	echo "Built on `uname -a`"			>>$(INSTBASE)/README.txt
+	echo "On `date` from:"				>>$(INSTBASE)/README.txt
 	echo " "					>>$(INSTBASE)/README.txt
 	echo "$(BINUTILSRC)"				>>$(INSTBASE)/README.txt
 	echo "$(GCCSRC)"				>>$(INSTBASE)/README.txt
 	echo "$(NEWLIBSRC)"				>>$(INSTBASE)/README.txt
 	echo "$(GDBSRC)"				>>$(INSTBASE)/README.txt
-	unix2dos $(INSTBASE)/README.txt
-	touch readme.done
+	touch $@
 
 ################################################################################
 
@@ -241,14 +253,14 @@ endif
 
 ifeq ($(shell uname), Linux)
 fakeroot: readme.done
-	mkdir -p fakeroot/usr/local
-	cp -R -P -p $(PKGNAME) fakeroot/usr/local
+	mkdir -p $@/usr/local
+	cp -R -P -p $(PKGNAME) $@/usr/local
 
-specfile: specfile.template fakeroot
-	sed s/@@PKGNAME@@/$(PKGNAME)/g <specfile.template | sed s/@@VERSION@@/$(VERSION)/g | sed s/@@RELEASE@@/$(RELEASE)/g >specfile
-	$(FIND) fakeroot/usr/local/$(PKGNAME) -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >>specfile
-	$(FIND) fakeroot/usr/local/$(PKGNAME) -type f | cut -c 9- >>specfile
-	$(FIND) fakeroot/usr/local/$(PKGNAME) -type l | cut -c 9- >>specfile
+specfile: $@.template fakeroot
+	sed s/@@PKGNAME@@/$(PKGNAME)/g <$@.template | sed s/@@VERSION@@/$(VERSION)/g | sed s/@@RELEASE@@/$(RELEASE)/g > $@
+	$(FIND) fakeroot/usr/local/$(PKGNAME) -type d | awk '{ printf("%%dir /%s\n", substr($$1, 10)); }' >> $@
+	$(FIND) fakeroot/usr/local/$(PKGNAME) -type f | cut -c 9- >> $@
+	$(FIND) fakeroot/usr/local/$(PKGNAME) -type l | cut -c 9- >> $@
 
 rpm: specfile
 	rpmbuild --buildroot=`pwd`/fakeroot --define="_topdir `pwd`/rpmbuild" -bb specfile
@@ -262,25 +274,25 @@ endif
 ifeq ($(shell uname), OpenBSD)
 
 fakeroot: readme.done
-	mkdir -p fakeroot/usr/local
-	cp -R -P -p $(PKGNAME) fakeroot/usr/local
+	mkdir -p $@/usr/local
+	cp -R -P -p $(PKGNAME) $@/usr/local
 # Why aren't these links already created on OpenBSD?
-	ln -s liblto_plugin.so.0.0 fakeroot/usr/local/$(PKGNAME)/libexec/gcc/arm-none-eabi/$(GCCVER)/liblto_plugin.so
-	ln -s liblto_plugin.so.0.0 fakeroot/usr/local/$(PKGNAME)/libexec/gcc/arm-none-eabi/$(GCCVER)/liblto_plugin.so.0
+	ln -s liblto_plugin.so.0.0 $@/usr/local/$(PKGNAME)/libexec/gcc/arm-none-eabi/$(GCCVER)/liblto_plugin.so
+	ln -s liblto_plugin.so.0.0 $@/usr/local/$(PKGNAME)/libexec/gcc/arm-none-eabi/$(GCCVER)/liblto_plugin.so.0
 
 CONTENTS: fakeroot
-	echo "@owner root"				>CONTENTS
-	echo "@group wheel"				>>CONTENTS
-	echo "@mode -w"					>>CONTENTS
-	echo "@cwd /usr/local"				>>CONTENTS
-	find fakeroot/usr/local/$(PKGNAME) -type d | awk '{ printf("@dir %s\n", substr($$1, 20)); }' >>CONTENTS
-	find fakeroot -type f | cut -c 20- | sort	>>CONTENTS
+	echo "@owner root"				> $@
+	echo "@group wheel"				>> $@
+	echo "@mode -w"					>> $@
+	echo "@cwd /usr/local"				>> $@
+	find fakeroot/usr/local/$(PKGNAME) -type d | awk '{ printf("@dir %s\n", substr($$1, 20)); }' >> $@
+	find fakeroot -type f | cut -c 20- | sort	>> $@
 	find fakeroot -type l | awk '{ printf("echo %s `readlink %s`\n", $$1, $$1); }' | sh | \
-	awk '{ printf("@exec ln -s %s %s\n", $$2, substr($$1,9)); }'            >>CONTENTS
-	find fakeroot -type l | awk '{ printf("@unexec rm %s\n", substr($$1, 9)); }' >>CONTENTS
+	awk '{ printf("@exec ln -s %s %s\n", $$2, substr($$1,9)); }'            >> $@
+	find fakeroot -type l | awk '{ printf("@unexec rm %s\n", substr($$1, 9)); }' >> $@
 
 COMMENT:
-	echo "ARM Microcontroller Toolchain"		>COMMENT
+	echo "GNU ARM Microcontroller Toolchain"	> $@
 
 $(PACKAGENAME): CONTENTS COMMENT
 	pkg_create -A `uname -m` -f CONTENTS -D COMMENT="`cat COMMENT`" -d COMMENT -p / -B fakeroot $(PACKAGENAME)
@@ -300,6 +312,9 @@ clean:
 	rm -rf $(GCCSRC)
 	rm -rf $(NEWLIBSRC)
 	rm -rf $(GDBSRC)
-	rm -rf build fakeroot specfile rpmbuild *.done *.deb *.rpm *.tgz $(PKGDIR)
+	rm -rf build fakeroot specfile rpmbuild *.done *.deb *.rpm *.tgz *.tar.bz2 *.tar.gz *.pdf $(PKGDIR)
 
 distclean: clean
+
+.PHONY: all clean deb default download fakeroot package specfile rpm tarball \
+	binutils.done gcc.done gdb.done newlibdocs.done readme.done source.done
