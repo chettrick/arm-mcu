@@ -34,6 +34,10 @@ TARGETNAME	= arm-none-eabi
 PKGNAME		= arm-mcu-tools
 .endif
 
+GCCEXTRACONFIG	+= --with-gmp=/usr/local
+GCCEXTRACONFIG	+= --with-mpc=/usr/local
+GCCEXTRACONFIG	+= --with-mpfr=/usr/local
+
 INSTBASE	= ${.CURDIR}/${PKGNAME}
 
 GNUSERVER	= http://ftp.gnu.org/pub/gnu
@@ -75,17 +79,13 @@ GDBDIST		= ${.CURDIR}/${GDBSRC}.tar.bz2
 GDBURL		= $(GDBSERVER)/$(GDBSRC).tar.bz2
 GDBBLD		= build/$(GDBSRC)
 
+PACKAGENAME	= $(PKGNAME)-$(VERSION).tgz
 VERSION		= $(BINUTILVER)_$(GCCVER)_$(NEWLIBVER)_$(GDBVER)
 RELEASE		= 1
 
 TARBALL		= ${PKGNAME}-${VERSION}-`uname -s`-`uname -m`.tgz
 
-GCCEXTRACONFIG	+= --with-gmp=/usr/local
-GCCEXTRACONFIG	+= --with-mpc=/usr/local
-GCCEXTRACONFIG	+= --with-mpfr=/usr/local
-PACKAGENAME	= $(PKGNAME)-$(VERSION).tgz
-
-default: readme.done
+all: readme.done
 
 ################################################################################
 
@@ -116,9 +116,13 @@ $(BINUTILDIST):
 # Compile binutils
 
 binutils.done: source.done
-	rm -rf $(BINUTILBLD)
+#	rm -rf $(BINUTILBLD)
 	mkdir -p $(BINUTILBLD)
-	cd $(BINUTILBLD) && ../../$(BINUTILSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-lto --disable-nls --disable-shared --with-float=soft --disable-werror
+	cd $(BINUTILBLD)
+	../../$(BINUTILSRC)/configure --prefix=$(INSTBASE)		\
+	    --target=$(TARGETNAME) --enable-interwork --enable-multilib	\
+	    --enable-lto --disable-nls --disable-shared			\
+	    --with-float=soft --disable-werror
 	make
 	make install
 	touch $@
@@ -133,11 +137,19 @@ $(GCCDIST):
 # Compile gcc
 
 gcc.done: binutils.done
-	rm -rf $(GCCBLD)
+#	rm -rf $(GCCBLD)
 	mkdir -p $(GCCBLD)
-	cd $(GCCBLD) && ../../$(GCCSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --enable-lto --disable-nls --disable-shared --with-float=soft --disable-werror --enable-languages=c,c++ --disable-libssp --disable-libgomp --with-newlib --disable-libgloss --disable-newlib-supplied-syscalls --with-system-zlib $(GCCEXTRACONFIG)
-	export PATH=$$PATH':'$(INSTBASE)/bin && make
-	export PATH=$$PATH':'$(INSTBASE)/bin && make install
+	cd $(GCCBLD)
+	../../$(GCCSRC)/configure --prefix=$(INSTBASE)			\
+	    --target=$(TARGETNAME) --enable-interwork --enable-multilib	\
+	    --enable-lto --disable-nls --disable-shared			\
+	    --with-float=soft --disable-werror --enable-languages=c,c++	\
+	    --disable-libssp --disable-libgomp --with-newlib		\
+	    --disable-libgloss --disable-newlib-supplied-syscalls	\
+	    --with-system-zlib $(GCCEXTRACONFIG)
+	export PATH=$$PATH':'$(INSTBASE)/bin
+	make
+	make install
 	touch $@
 
 ################################################################################
@@ -176,9 +188,12 @@ $(GDBDIST):
 
 gdb.done: $(GDBDIST)
 	test -f /usr/include/expat.h
-	rm -rf $(GDBBLD)
+#	rm -rf $(GDBBLD)
 	mkdir -p $(GDBBLD)
-	cd $(GDBBLD) && ../../$(GDBSRC)/configure --prefix=$(INSTBASE) --target=$(TARGETNAME) --enable-interwork --enable-multilib --disable-libssp --disable-nls --disable-shared --disable-werror
+	cd $(GDBBLD)
+	../../$(GDBSRC)/configure --prefix=$(INSTBASE)			\
+	    --target=$(TARGETNAME) --enable-interwork --enable-multilib	\
+	    --disable-libssp --disable-nls --disable-shared --disable-werror
 	make
 	make install
 	touch $@
@@ -204,7 +219,8 @@ readme.done: binutils.done gcc.done newlibdocs.done gdb.done
 # Create toolchain tarball
 
 tarball: readme.done
-	tar czf $(TARBALL) `basename $(INSTBASE)` --owner=root --group=root --mode=ugo-w
+	tar czf $(TARBALL) `basename $(INSTBASE)` --owner=root		\
+	    --group=root --mode=ugo-w
 
 ################################################################################
 
@@ -222,17 +238,21 @@ CONTENTS: fakeroot
 	echo "@group wheel"				>> $@
 	echo "@mode -w"					>> $@
 	echo "@cwd /usr/local"				>> $@
-	find fakeroot/usr/local/$(PKGNAME) -type d | awk '{ printf("@dir %s\n", substr($$1, 20)); }' >> $@
+	find fakeroot/usr/local/$(PKGNAME) -type d |			\
+	    awk '{ printf("@dir %s\n", substr($$1, 20)); }' >> $@
 	find fakeroot -type f | cut -c 20- | sort	>> $@
-	find fakeroot -type l | awk '{ printf("echo %s `readlink %s`\n", $$1, $$1); }' | sh | \
-	awk '{ printf("@exec ln -s %s %s\n", $$2, substr($$1,9)); }'            >> $@
-	find fakeroot -type l | awk '{ printf("@unexec rm %s\n", substr($$1, 9)); }' >> $@
+	find fakeroot -type l |						\
+	    awk '{ printf("echo %s `readlink %s`\n", $$1, $$1); }' | sh | \
+	    awk '{ printf("@exec ln -s %s %s\n", $$2, substr($$1,9)); }' >> $@
+	find fakeroot -type l |						\
+	    awk '{ printf("@unexec rm %s\n", substr($$1, 9)); }' >> $@
 
 COMMENT:
 	echo "GNU ARM Microcontroller Toolchain"	> $@
 
 $(PACKAGENAME): CONTENTS COMMENT
-	pkg_create -A `uname -m` -f CONTENTS -D COMMENT="`cat COMMENT`" -d COMMENT -p / -B fakeroot $(PACKAGENAME)
+	pkg_create -A `uname -m` -f CONTENTS -D COMMENT="`cat COMMENT`"	\
+	    -d COMMENT -p / -B fakeroot $(PACKAGENAME)
 	@-rm CONTENTS
 	@-rm COMMENT
 
@@ -252,5 +272,7 @@ clean:
 
 distclean: clean
 
-.PHONY: all clean default download fakeroot package specfile tarball \
+.PHONY: all clean distclean download fakeroot package specfile tarball	\
 	binutils.done gcc.done gdb.done newlibdocs.done readme.done source.done
+
+.include <bsd.prog.mk>
